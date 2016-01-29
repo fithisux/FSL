@@ -1,0 +1,328 @@
+#!/bin/sh
+
+# Verbena: Perfusion quantification from DSC-MRI using the Vascular Model
+#
+# Michael Chappell, QuBIc & FMRIB Image Analysis Group
+#
+# Copyright (c) 2012-13 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage() {
+    echo "Verbena"
+    echo "Perfusion quantification from DSC-MRI using the Vascular Model"
+    echo ""
+    echo "Usage (optional parameters in {}):"
+    echo " -i         : specify data file"
+    echo " -a         : specify aif data"
+    echo " {-o}       : specify output directory"
+    echo " -m         : specify brain mask file"
+    echo " {-tr}     : TR (in s) {default: 1.5 s}"
+    echo " {-te}     : TE (in s) {default: 0.065 s}"
+    echo ""
+    echo "Options:"
+    echo " -mv            : Add a macro vascular component"
+    echo "  -sigadd       : Add MV component in signal domain (rather than concentrations)"
+    echo " -modelfree     : Run a 'model free' SVD analysis"
+    echo " -modelfreeinit : Use a 'model free' analysis as initialization for the VM"
+    echo ""
+}
+
+# deal with options
+
+if [ -z $1 ]; then
+    Usage
+    exit 1
+fi
+
+until [ -z $1 ]; do
+    case $1 in
+	-o) outflag=1 outdir=$2
+	    shift;;
+	-i) inflag=1 infile=$2 #input/data file
+	    shift;;
+	-m) mask=$2
+	    shift;;
+	-a) aif=$2
+	    shift;;
+	-tr) tr=$2
+	    shift;;
+	-te) te=$2
+	    shift;;
+	-sigadd) sigadd=1
+	    ;;
+	-modelfree) modelfree=1
+	    ;;
+	-mv) mv=1
+	    ;;
+	-modelfreeinit) modelfreeinit=1
+	    ;;
+	-debug) debug=1;; #debugging option
+	*)  Usage
+	    echo "Error! Unrecognised option on command line: $1"
+	    echo ""
+	    exit 1;;
+    esac
+    shift
+done
+
+#### --- Procedural ---
+fabber=${FSLDIR}/bin/fabber
+asl_mfree=${FSLDIR}/bin/asl_mfree ###~/cproject/asl_mfree/asl_mfree
+mvntool=${FSLDIR}/bin/mvntool
+
+# save the starting directory
+stdir=`pwd`
+
+#### --- Housekeeping ---
+# set the output directory here if not specified
+if [ -z $outflag ]; then
+    outdir=$stdir/verbena;
+    echo "Ouput being placed in $outdir"
+fi
+
+# Start by looking for the output directory (and create if need be)
+if [ ! -d $outdir ]; then
+echo "Creating output directory: $outdir"
+mkdir $outdir;
+fi
+
+
+
+# make a temp directory to work in
+if [ ! -z $debug ]; then
+    tempdir=`pwd`/temp
+else
+    tmpbase=`$FSLDIR/bin/tmpnam`
+    tempdir=${tmpbase}_verbena
+fi
+mkdir $tempdir
+cd $tempdir
+
+# parameters
+#TR
+if [ -z $tr ]; then
+tr=1.5;
+fi
+
+#TE
+if [ -z $te ]; then
+te=0.065;
+fi
+
+#### --- Pre-processing ---
+if [ -z $mask ]; then
+# auto generate mask
+    fslmaths $infile -Tmean datamean
+    bet datamean brain -m
+    immv brain_mask mask
+else
+    cd "$stdir"
+    imcp $mask $tempdir/mask
+    cd $tempdir
+fi
+
+cd "$stdir" 
+# copy mask to output for future reference
+imcp $tempdir/mask $outdir/mask
+# copy in data and aif
+imcp $infile $tempdir/data
+imcp $aif $tempdir/aif
+cd $tempdir
+
+# calcualte concentration time curves
+nzero=1 # number of time points to use from start of data to calculate S0
+#data
+fslroi data szero 0 $nzero
+fslmaths szero -Tmean szero
+fslmaths data -div szero -log -div $te -mul -1 concdata
+#aif
+fslroi aif szero_aif 0 $nzero
+fslmaths szero_aif -Tmean szero_aif
+fslmaths aif -div szero_aif -log -div $te -mul -1 concaif
+
+### --- Analysis ---
+# --- [Model Free] ---
+if [ ! -z $modelfree ] || [ ! -z $modelfreeinit ]; then
+    echo "Begin model-free analysis"
+    
+    # do deconvolution
+    $asl_mfree --data=concdata --mask=mask --out=modfree --aif=concaif --dt=$tr
+    
+    #calculate cbv
+    fslmaths concdata -Tmean -mul `${FSLDIR}/bin/fslnvols concdata` concsum
+    fslmaths concaif -Tmean -mul `${FSLDIR}/bin/fslnvols concaif` aifsum
+    fslmaths concdata -div aifsum cbv
+    
+    # calcualte MTT
+    fslmaths cbv -div modfree_magntiude mtt
+    
+    #copy results to output directory
+    cd "$stdir"
+    mkdir $outdir/modelfree
+    fslmaths $tempdir/modfree_magntiude $outdir/modelfree/rcbf
+    fslmaths $tempdir/cbv $outdir/modelfree/cbv
+    fslmaths $tempdir/mtt $outdir/modelfree/mtt
+    cd $tempdir
+fi
+
+# --- [Vascular Model] ---
+if [ -z $modelfree ]; then 
+    echo "Begin VM analysis"
+    
+#core options
+    echo "#Verbena analysis CORE options" > core_options.txt
+    echo "--mask=mask" >> core_options.txt
+    echo "--noise=white" >> core_options.txt
+    echo "--model=dsc" >> core_options.txt
+    echo "--te=$te" >> core_options.txt
+    echo "--delt=$tr" >> core_options.txt
+    echo "--inferdelay" >> core_options.txt
+    echo "--infermtt" >> core_options.txt
+    echo "--inferlambda" >> core_options.txt
+    
+    echo "#Verbena analysis options (VM)" > options.txt
+    cat core_options.txt >> options.txt
+    echo "--method=spatialvb" >> options.txt
+    echo "--param-spatial-priors=N+M" >> options.txt
+    echo "--max-iterations=20" >> options.txt 
+    
+    if [ ! -z $modelfreeinit ]; then
+# make inital parameter estimates from model-free analysis
+# run fabber to get the right sized MVN
+	rm -r init*
+	$fabber --data=data --data-order=singlefile --output=init --suppdata=aif --method=vb --max-iterations=1 -@ core_options.txt
+	
+# assemble the intial MVN for fabber
+	$mvntool --input=init/finalMVN --output=init_MVN --param=1 --valim=modfree_magntiude --var=100 --mask=mask --write
+	fslmaths mtt -thr 0.0001 -log mtt_log
+	$mvntool --input=init_MVN --output=init_MVN --param=2 --valim=mtt_log --var=10 --mask=mask --write
+	$mvntool --input=init_MVN --output=init_MVN --param=3 --val=2 --var=1 --mask=mask --write
+	$mvntool --input=init_MVN --output=init_MVN --param=4 --val=5 --var=1 --mask=mask --write
+	$mvntool --input=init_MVN --output=init_MVN --param=5 --valim=szero --var=1 --mask=mask --write
+	
+	echo "--continue-from-mvn=init_MVN --continue-fwd-only" >> options.txt
+    fi
+    
+    rm -r vm*
+    $fabber --data=data --data-order=singlefile --output=vm --suppdata=aif  -@ options.txt
+    
+#copy results to output directory
+    cd "$stdir"
+    mkdir $outdir/vm
+    imcp $tempdir/vm/mean_cbf $outdir/vm/rcbf
+    fslmaths $tempdir/vm/mean_transitm -exp -mas $tempdir/mask $outdir/vm/mtt
+    fslmaths $tempdir/vm/mean_lambda -exp -mas $tempdir/mask $outdir/vm/lambda
+    cd $tempdir
+    
+# --- [ VM plus MV ] ---
+    if [ ! -z $mv ]; then
+	echo "Begin VM + MV analysis"
+
+        #calculate cbv - used for intitalisation (this is just a model-free calculation)
+	fslmaths concdata -Tmean -mul `${FSLDIR}/bin/fslnvols concdata` concsum
+	fslmaths concaif -Tmean -mul `${FSLDIR}/bin/fslnvols concaif` aifsum
+	fslmaths concdata -div aifsum cbv
+    
+        # sort out intial MVN
+	$mvntool --input=vm/finalMVN.nii.gz --param=1 --output=init_cbf --val --mask=mask
+	fslmaths init_cbf -div 10 init_cbf
+	$mvntool --input=vm/finalMVN.nii.gz --param=1 --output=tempmvn --valim=init_cbf --write --mask=mask
+	$mvntool --input=tempmvn --param=6 --output=tempmvn --valim=cbv --var=0.1 --new --mask=mask
+	$mvntool --input=tempmvn.nii.gz --param=7 --output=tempmvn --val=5 --var=1 --new --mask=mask
+	
+	echo "#Verneba analysis options (VM+MV)" > mvoptions.txt
+	cat core_options.txt >> mvoptions.txt
+	echo "--method=spatialvb" >> mvoptions.txt
+	echo "--param-spatial-priors=MNNNMAN" >> mvoptions.txt
+	echo "--max-iterations=20" >> mvoptions.txt 
+	echo "--inferart" >> mvoptions.txt
+	if [ ! -z $sigadd ]; then
+	echo "--artoption" >> mvoptions.txt
+	fi
+	
+	rm -r vm_mv*
+	$fabber --data=data --data-order=singlefile --suppdata=aif --output=vm_mv --continue-from-mvn=tempmvn -@ mvoptions.txt
+	
+    #copy results to output directory
+	cd "$stdir"
+	mkdir $outdir/vm_mv
+	fslmaths $tempdir/vm_mv/mean_cbf -thr 0 $outdir/vm_mv/rcbf
+	fslmaths $tempdir/vm_mv/mean_transitm -exp -mas $tempdir/mask $outdir/vm_mv/mtt
+	fslmaths $tempdir/vm_mv/mean_lambda -exp -mas $tempdir/mask $outdir/vm_mv/lambda
+	fslmaths $tempdir/vm_mv/mean_abv -thr 0 $outdir/vm_mv/rabv
+	cd $tempdir
+    fi
+fi
+
+# clearup
+cd "$stdir" # make sure we are back where we started
+if [ -z $debug ]; then
+    echo "Tidying up"
+    rm -r $tempdir
+else
+mv $tempdir .
+fi
+
+echo "Verbena done"

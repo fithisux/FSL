@@ -1,0 +1,222 @@
+#!/bin/sh
+
+# ASL_REG: Registration for GRASE-ASL data
+#
+# Michael Chappell & Brad MacIntosh, FMRIB Image Analysis & Physics Groups
+#
+# Copyright (c) 2008 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage() {
+    echo "ASL_REG"
+    echo "Version: 1.0"
+    echo "Registration for ASL data"
+    echo ""
+    echo "Usage (optional parameters in {}):"
+    echo " -i         : specify input image"
+    echo " {-o}       : specify output directory - {default: pwd}"
+    echo " -s         : specify structural brain image"
+    echo " Extended options (all optional):"
+    echo " -t         : specify structural-->standard brain transformation matrix"
+    echo " -r         : specify extra low resolution structural image"
+    echo " --imat     : specify initial transformation matrix for input to structural image"
+    echo "                if supplying a low res. strctural this matrix should refer to that image"
+    echo " --inweight : specify weights for input image"
+    echo "                same functionality as the flirt -inweight option"
+    echo " --zblur    : Try and account for z-blurring"
+    echo ""
+}
+
+#deal with options
+
+if [ -z $1 ]; then
+   Usage
+   exit 1
+fi
+
+until [ -z $1 ]; do
+    case $1 in
+	-o) outflag=1 outdir=$2
+	    shift;;
+	-i) inflag=1 infile=$2
+	    shift;;
+	-s) strucflag=1 struc=$2
+	    shift;;
+	-t) transflag=1 trans=$2
+	    shift;;
+	-r) lowstrucflag=1 lowstruc=$2
+	    shift;;
+	--imat) init=1 inmat=$2
+	    shift;;
+	--inweight) inweight=$2
+	    shift;;
+	--zblur) unblur=1
+	    ;;
+	--flirtsch) flirtsch=$2
+	    shift;;
+	--debug) debug=1
+	    ;;
+	*)  Usage
+	    echo "Error! Unrecognised option on command line: $1"
+	    echo ""
+	    exit 1;;
+    esac
+    shift
+done
+
+echo "ASL_REG"
+echo "Input file is: $infile"
+
+# set the output name here if not specified
+if [ -z $outflag ]; then
+    echo "Ouput being placed in input directory"
+    outdir=`pwd`;
+fi
+
+# Start by looking for the output directory (and create if need be)
+if [ ! -d $outdir ]; then
+  echo "Creating output directory"
+  mkdir $outdir;
+fi
+
+# make a temporary directory to work in - delete at end
+tmpbase=`$FSLDIR/bin/tmpnam`
+if [ -z $debug ]; then
+    tempdir=${tmpbase}_asl_reg
+else
+    tempdir=$outdir/tmp_asl_reg #make local temp directory and do not delete at end
+fi
+mkdir $tempdir
+
+#deal with init matrix option
+if [ ! -z $init ]; then
+    inittext="-init $inmat"
+fi
+
+# deal with weighting applied to input image
+if [ ! -z $inweight ]; then
+    weightinstr="-inweight $inweight"
+fi
+
+# deal with option to try and handle z blurring resulting in a streching of image
+# increase DOF to 9 for asl->struct/lowstruct step
+if [ -z $unblur ]; then
+    DOF=6;
+else
+    echo "Using 9DOF in asl->struct to account for z-blurring"
+    DOF=9;
+fi
+
+# optional flirt schedule for main transformation of asl to structural
+if [ -z $flirtsch ]; then
+    flirtsch=$FSLDIR/etc/flirtsch/simple3D.sch
+else
+    echo "Using supplied FLIRT schedule"
+fi
+
+echo "Running FLIRT"
+if [ -z $lowstrucflag ]; then
+    #Step1: 3DOF translation only transformation
+    flirt -in $infile -ref $struc -schedule $FSLDIR/etc/flirtsch/xyztrans.sch -omat $tempdir/low2high1.mat -out $tempdir/low2hig1 $inittext $weigthinstr
+    #step2: 6DOF transformation with small search region
+    flirt -in $infile -ref $struc -dof $DOF -omat $tempdir/low2high.mat -init $tempdir/low2high1.mat  -schedule $flirtsch -out $tempdir/low2high $weigthinstr
+else
+    #as we have a structural image in perfusion space use it to improve registration
+    echo "Using structral image in perfusion space ($lowstruc)"
+    #Step1: 3DOF translation only transformation perfusion->lowstruc
+    flirt -in $infile -ref $lowstruc -schedule $FSLDIR/etc/flirtsch/xyztrans.sch -omat $tempdir/low2low1.mat $inittext $weigthinstr
+    #Step2: 6DOF limited transformation in perfusion space
+    flirt -in $infile -ref $lowstruc -dof $DOF -schedule $flirtsch -init $tempdir/low2low1.mat -omat $tempdir/low2low.mat $weigthinstr
+    #step3: 6DOF transformation of lowstruc to struc
+    flirt -in $lowstruc -ref $struc -omat $tempdir/str2str.mat
+    #step4: combine the two transformations
+    convert_xfm -omat $tempdir/low2high.mat -concat $tempdir/str2str.mat $tempdir/low2low.mat 
+fi
+
+# make the output files
+# ASL--> strucutral transformation
+cp $tempdir/low2high.mat $outdir/asl2struct.mat
+# ASL-->standard transformation (if specified)
+if [ ! -z $transflag ]; then
+    echo "Combining transformations"
+    convert_xfm -omat $outdir/asl2std.mat -concat $trans $tempdir/low2high.mat 
+fi
+
+if [ ! -z $lowstrucflag ]; then
+# ASL--> low structral transformtaion (if supllied)
+    cp $tempdir/low2low.mat $outdir/asl2lowstruct.mat
+fi
+
+# remove temporary directory
+if [ -z $debug ]; then
+    echo "Tidying up"
+    rm -r $tempdir
+fi
+
+
+
+echo "ASL_REG - Done."
+
+

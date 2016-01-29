@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>fsl_anat</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">fsl_anat</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="Anatomical_Processing_Script:_fsl_anat__.28BETA_version.29">Anatomical Processing Script: fsl_anat  (BETA version)</h1>
+<span class="anchor" id="line-4"></span><p class="line874">This tool provides a general pipeline for processing anatomical images (e.g. T1-weighted scans). <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line874">Most of the pipeline involves standard use of FSL tools, but the bias-field correction has been substantially improved, especially for strong bias-fields typical of multi-coil arrays and high-field scanners. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line874">The stages in the pipeline (in order) are: <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><ul><li><p class="line862">reorient the images to the standard (MNI) orientation  [<tt class="backtick">fslreorient2std</tt>] <span class="anchor" id="line-11"></span></li><li><p class="line862">automatically crop the image  [<tt class="backtick">robustfov</tt>] <span class="anchor" id="line-12"></span></li><li><p class="line862">bias-field correction (RF/B1-inhomogeneity-correction)  [<tt class="backtick">FAST</tt>] <span class="anchor" id="line-13"></span></li><li><p class="line862">registration to standard space (linear and non-linear)  [<tt class="backtick">FLIRT</tt> and <tt class="backtick">FNIRT</tt>] <span class="anchor" id="line-14"></span></li><li><p class="line862">brain-extraction  [<tt class="backtick">FNIRT</tt>-based or <tt class="backtick">BET</tt>] <span class="anchor" id="line-15"></span></li><li><p class="line862">tissue-type segmentation  [<tt class="backtick">FAST</tt>] <span class="anchor" id="line-16"></span></li><li><p class="line862">subcortical structure segmentation [<tt class="backtick">FIRST</tt>] <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span></li></ul><p class="line874">The overall run-time is heavily dependent on the resolution of the image but anything between 30 and 90 minutes would be typical. <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line867">
+<h1 id="Usage">Usage</h1>
+<span class="anchor" id="line-21"></span><p class="line874">Various stages in the pipeline can be turned off.  Currently not all combinations have been tested and so users are advised to only turn off the first few or last couple of stages currently. <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line867"><span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><pre><span class="anchor" id="line-1"></span>Usage: fsl_anat [options] -i &lt;structural image&gt;
+<span class="anchor" id="line-2"></span>       fsl_anat [options] -d &lt;existing anat directory&gt;
+<span class="anchor" id="line-3"></span>
+<span class="anchor" id="line-4"></span>Arguments (You may specify one or more of):
+<span class="anchor" id="line-5"></span>  -i &lt;strucural image&gt;         filename of input image (for one image only)
+<span class="anchor" id="line-6"></span>  -d &lt;anat dir&gt;                directory name for existing .anat directory where this script will be run in place
+<span class="anchor" id="line-7"></span>  -o &lt;output directory&gt;        basename of directory for output (default is input image basename followed by .anat)
+<span class="anchor" id="line-8"></span>  --clobber                    if .anat directory exist (as specified by -o or default from -i) then delete it and make a new one
+<span class="anchor" id="line-9"></span>  --weakbias                   used for images with little and/or smooth bias fields
+<span class="anchor" id="line-10"></span>  --noreorient                 turn off step that does reorientation 2 standard (fslreorient2std)
+<span class="anchor" id="line-11"></span>  --nocrop                     turn off step that does automated cropping (robustfov)
+<span class="anchor" id="line-12"></span>  --nobias                     turn off steps that do bias field correction (via FAST)
+<span class="anchor" id="line-13"></span>  --noreg                      turn off steps that do registration to standard (FLIRT and FNIRT)
+<span class="anchor" id="line-14"></span>  --nononlinreg                turn off step that does non-linear registration (FNIRT)
+<span class="anchor" id="line-15"></span>  --noseg                      turn off step that does tissue-type segmentation (FAST)
+<span class="anchor" id="line-16"></span>  --nosubcortseg               turn off step that does sub-cortical segmentation (FIRST)
+<span class="anchor" id="line-17"></span>  -s &lt;value&gt;                   specify the value for bias field smoothing (the -l option in FAST)
+<span class="anchor" id="line-18"></span>  -t &lt;type&gt;                    specify the type of image (choose one of T1 T2 PD - default is T1)
+<span class="anchor" id="line-19"></span>  --nosearch                   specify that linear registration uses the -nosearch option (FLIRT)
+<span class="anchor" id="line-20"></span>  --betfparam                  specify f parameter for BET (only used if not running non-linear reg and also wanting brain extraction done)
+<span class="anchor" id="line-21"></span>  --nocleanup                  do not remove intermediate files</pre><span class="anchor" id="line-46"></span><p class="line874">By default: <span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><ul><li><p class="line862">the bias-field correction assumes that the field is "strong", typical of that arising from a multi-coil array or a high-field scanner.  For images acquired using birdcage coils or on 1.5T scanners, the <tt class="backtick">--weakbias</tt> option will be faster and may produce equally good results. <span class="anchor" id="line-49"></span></li><li>the brain extraction is based on transforming a standard-space mask to the input image using the FNIRT (non-linear) registration, and does not use the BET tool for this (and consequently the --betfparam setting does not change the brain extraction in this FNIRT-based mode of operation) <span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span></li></ul><p class="line862">Using the <tt class="backtick">-d</tt> option the script can be run again (with a subset of stages) to update an existing result. <span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span><p class="line867">
+<h1 id="Outputs">Outputs</h1>
+<span class="anchor" id="line-54"></span><p class="line874">This section describes the main output files - it is not a complete list, but highlights the most important outputs. <span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><p class="line867">
+<h2 id="Directory">Directory</h2>
+<span class="anchor" id="line-57"></span><p class="line862">The output directory will end with <tt class="backtick">.anat</tt> and by default will have the same basename as the input image (and be in the same directory).  If the <tt class="backtick">-o</tt> option is used the directory name will use the specified name, followed by <tt class="backtick">.anat</tt> <span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span><p class="line867">
+<h2 id="Original_image">Original image</h2>
+<span class="anchor" id="line-60"></span><p class="line862">The specified input image is copied into the output directory and named <tt class="backtick">T1</tt>, <tt class="backtick">T2</tt> or <tt class="backtick">PD</tt>, depending on the setting of the <tt class="backtick">-t</tt> option (default is T1). <span class="anchor" id="line-61"></span><span class="anchor" id="line-62"></span><p class="line867">
+<h2 id="Reorientation_and_Cropping">Reorientation and Cropping</h2>
+<span class="anchor" id="line-63"></span><p class="line862">If run, the original image (we shall call it <tt class="backtick">T1</tt> from here on in as an example), will be replaced by the reoriented and/or cropped version.  The original versions are saved as files: <tt class="backtick">T1_orig</tt> and <tt class="backtick">T1_fullfov</tt>. <span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><p class="line862">In addition, transformation files are provided to allow images to be moved between spaces: i.e. <tt class="backtick">T1_orig2std.mat</tt> and <tt class="backtick">T1_nonroi2roi.mat</tt> and their inverses and combinations. <span class="anchor" id="line-66"></span><span class="anchor" id="line-67"></span><p class="line867">
+<h2 id="Bias-correction">Bias-correction</h2>
+<span class="anchor" id="line-68"></span><p class="line862">The bias-corrected version of the image is called <tt class="backtick">T1_biascorr</tt>. <span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span><p class="line867">
+<h2 id="Registration_and_Brain-Extraction">Registration and Brain-Extraction</h2>
+<span class="anchor" id="line-71"></span><p class="line874">The registration (to standard space) produces the following images that are in MNI space with a 2mm resolution: <span class="anchor" id="line-72"></span><span class="anchor" id="line-73"></span><ul><li><p class="line891"><tt class="backtick">T1_to_MNI_lin</tt>  (linear registration output) <span class="anchor" id="line-74"></span></li><li><p class="line891"><tt class="backtick">T1_to_MNI_nonlin</tt>  (non-linear registration output) <span class="anchor" id="line-75"></span></li><li><p class="line891"><tt class="backtick">T1_to_MNI_nonlin_field</tt>  (non-linear warp field) <span class="anchor" id="line-76"></span></li><li><p class="line891"><tt class="backtick">T1_to_MNI_nonlin_jac</tt>  (Jacobian of the non-linear warp field) <span class="anchor" id="line-77"></span></li><li><p class="line891"><tt class="backtick">T1_vols.txt</tt> - a file containing a scaling factor and brain volumes, based on skull-contrained registration, suitable for head-size normalisation (as the scaling is based on the skull size, not the brain size) <span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span></li></ul><p class="line874">The brain-extraction produces: <span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span><ul><li><p class="line891"><tt class="backtick">T1_biascorr_brain</tt> <span class="anchor" id="line-82"></span></li><li><p class="line891"><tt class="backtick">T1_biascorr_brain_mask</tt> <span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span></li></ul><p class="line867">
+<h2 id="Segmentation">Segmentation</h2>
+<span class="anchor" id="line-85"></span><p class="line874">Tissue-type segmentation (done with FAST) produces: <span class="anchor" id="line-86"></span><span class="anchor" id="line-87"></span><ul><li><p class="line891"><tt class="backtick">T1_biascorr</tt> - refined again in this stage <span class="anchor" id="line-88"></span></li><li><p class="line891"><tt class="backtick">T1_fast_pve_0,&nbsp;T1_fast_pve_1,&nbsp;T1_fast_pve_2</tt> - partial volume segmentations (CSF, GM, WM respectively) <span class="anchor" id="line-89"></span></li><li><p class="line891"><tt class="backtick">T1_fast_pveseg</tt> - a summary image showing the tissue with the greatest partial volume fraction per voxel <span class="anchor" id="line-90"></span><span class="anchor" id="line-91"></span></li></ul><p class="line874">Subcortical segmentation (done with FIRST) produces: <span class="anchor" id="line-92"></span><span class="anchor" id="line-93"></span><ul><li><p class="line891"><tt class="backtick">T1_subcort_seg</tt> - summary image of all subcortical segmentations <span class="anchor" id="line-94"></span></li><li><p class="line862">all other outputs in the <tt class="backtick">first_results</tt> subdirectory <span class="anchor" id="line-95"></span></li><li><p class="line862">'T1_first_all_fast_firstseg<tt class="backtick">&nbsp;-&nbsp;same&nbsp;as&nbsp;</tt>T1_subcort_seg` <span class="anchor" id="line-96"></span></li><li>a host of other images relating to individual segmentations <span class="anchor" id="line-97"></span></li><li><p class="line891"><tt class="backtick">T1_biascorr_to_std_sub.mat</tt> (in the main anat directory) - a transformation matrix of the subcortical optimised MNI registration <span class="anchor" id="line-98"></span></li></ul><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

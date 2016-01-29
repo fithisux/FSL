@@ -1,0 +1,156 @@
+<!DOCTYPE HTMLPUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN""http://www.w3.org/TR/REC-html40/losse.dtd">
+<HTML><HEAD>
+  <TITLE>FSL Programmer's Manual - FSLFileEntry(3Tkl)</TITLE>
+</HEAD>
+ <BODY BACKGROUND="../images/fsl-bg" BGCOLOR="white">
+  <TABLE BORDER=0 WIDTH="100%"><TR>
+  <TD ALIGN=LEFT>  <a href="http://www.fmrib.ox.ac.uk/fsl"><IMG BORDER=0 SRC="../images/fsl-logo"></a>
+   <TD ALIGN=CENTER><H1>FSL Programmer's Manual - FSLFileEntry(3Tkl)</H1>
+  <TD ALIGN=RIGHT> <a href="http://www.fmrib.ox.ac.uk/"><IMG BORDER=0 SRC="../images/fmrib_crest_86.gif"></a>
+   </TR></TABLE>
+  <!-- No Table of Contents -->
+
+<A NAME="section1"></A><HR><H2>NAME</H2>
+ 
+FSLFileEntry - A tix mega-widget generating a file entry box and browser.
+
+ <!-- J-Back -->
+
+
+<A NAME="section2"></A><HR><H2>SYNOPSIS</H2>
+ 
+<B>FSLFileEntry</B> <I>pathName ?options?</I>
+
+ <!-- J-Back -->
+
+
+<A NAME="section3"></A><HR><H2>WIDGET-SPECIFIC OPTIONS</H2>
+ 
+
+<P>
+Command-Line Name: <B>-command</B><BR>
+Database Name: <B>command</B><BR>
+Database Class: <B>Command</B><BR>
+<UL>
+Specifies the command that is run when a selection is made from the dialog box.  Note that the command string specified will be appended with the file/directory selected.
+</UL>
+<br>
+
+
+<P>
+Command-Line Name: <B>-dirasfile</B><BR>
+Database Name: <B>dirasfile</B><BR>
+Database Class: <B>Dirasfile</B><BR>
+<UL>
+This option displays directories that contain the specified file as a selectable file.
+</UL>
+<br>
+
+
+<P>
+Command-Line Name: <B>-directory</B><BR>
+Database Name: <B>directory</B><BR>
+Database Class: <B>Directory</B><BR>
+<UL>
+Specifies the starting directory for the file select dialog box.  Note that after creation the dialog box directory can be changed only by <PRE>[$pathname subwidget fsbox] subwidget fsbox config -directory $dirname</PRE>
+</UL>
+<br>
+
+
+<P>
+Command-Line Name: <B>-filterhist</B><BR>
+Database Name: <B>filterhist</B><BR>
+Database Class: <B>Filterhist</B><BR>
+<UL>
+Specifies the global variable in which the filter history should be stored.  This enables multiple FSLFileEntry widgets to essentially share the same history.
+</UL>
+<br>
+
+
+<P>
+Command-Line Name: <B>-label</B><BR>
+Database Name: <B>label</B><BR>
+Database Class: <B>Label</B><BR>
+<UL>
+Specifies the text to be used as a label for the FileEntry box.
+</UL>
+<br>
+
+
+<P>
+Command-Line Name: <B>-labelwidth</B><BR>
+Database Name: <B>labelwidth</B><BR>
+Database Class: <B>Labelwidth</B><BR>
+<UL>
+Specifies the width of the label.
+</UL>
+<br>
+
+
+<P>
+Command-Line Name: <B>-pattern</B><BR>
+Database Name: <B>pattern</B><BR>
+Database Class: <B>Pattern</B><BR>
+<UL>
+Specifies the matching pattern of the file names that should be listed in the Files listbox. For example "*.txt" matches all the filenames that end with ".txt". If this option is set to the empty string, the default pattern "*" will be used. 
+</UL>
+<br>
+
+
+<P>
+Command-Line Name: <B>-showdotfiles</B><BR>
+Database Name: <B>showdotfiles</B><BR>
+Database Class: <B>Showdotfiles</B><BR>
+<UL>
+A boolean value indicating whether files with "." as their first character should be shown.  The default is set to false.
+</UL>
+<br>
+
+
+<P>
+Command-Line Name: <B>-title</B><BR>
+Database Name: <B>title</B><BR>
+Database Class: <B>Title</B><BR>
+<UL>
+Specifies the title to be used on the file select dialog box.
+</UL>
+<br>
+
+
+<P>
+Command-Line Name: <B>-variable</B><BR>
+Database Name: <B>variable</B><BR>
+Database Class: <B>Variable</B><BR>
+<UL>
+Specifies the global variable in which the value of the FileEntry should be stored. The value of the FileEntry will be automatically updated when this variable is changed.
+</UL>
+<br>
+
+
+<P>
+Command-Line Name: <B>-width</B><BR>
+Database Name: <B>width</B><BR>
+Database Class: <B>Width</B><BR>
+<UL>
+Specifies the width of the entry box.
+</UL>
+<br>
+
+
+
+ <!-- J-Back -->
+
+
+<A NAME="section4"></A><HR><H2>DESCRIPTION</H2>
+ 
+
+The <B>FSLFileEntry</B> widget creates a file entry box, together with a browse button for file selection.  This has some of the functionality of tixFileEntry, but not all.  It's main feature is its use of the FSLFileDirDlg and FSLFileDirBox widgets which enable better control of the filters and the history.
+
+
+ <!-- J-Back -->
+
+   <HR>
+  <!-- No Footnotes -->
+  <H4>Stuart Clare  <BR>FMRIB Centre
+  <BR><BR>Copyright &copy; 2000, University of Oxford</H4><BR>
+</BODY></HTML>

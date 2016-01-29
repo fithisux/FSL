@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Randomise/Theory</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">Randomise/Theory</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./Randomise.html">Introduction</a></li><li><a href="./Randomise(2f)UserGuide.html">User Guide</a></li><li>Theory<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#BACKGROUND_THEORY">BACKGROUND THEORY</a><ol><li>
+<a href="#Permutation_tests_for_the_General_Linear_Model">Permutation tests for the General Linear Model</a></li><li>
+<a href="#Monte_Carlo_Permutation_Tests">Monte Carlo Permutation Tests</a></li><li>
+<a href="#Counting_Permutations">Counting Permutations</a></li></ol></li></ol></div></div></li><li><a href="./Randomise(2f)Faq.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span><hr /><p class="line874"> <span class="anchor" id="line-3"></span>
+<h1 id="BACKGROUND_THEORY">BACKGROUND THEORY</h1>
+<span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line862">A standard nonparametric test is exact, in that the false positive rate is exactly equal to the specified α level. Using <strong>randomise</strong> with a GLM that corresponds to one of the following simple statistical models will result in exact inference: <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line874">One sample t-test on difference measures <span class="anchor" id="line-8"></span>Two sample t-test <span class="anchor" id="line-9"></span>One-way ANOVA <span class="anchor" id="line-10"></span>Simple correlation <span class="anchor" id="line-11"></span>Use of almost any other GLM will result in approximately exact inference. In particular, when the model includes both the effect tested (e.g., difference in FA between two groups) and nuisance variables (e.g., age), exact tests are not generally available. Permutation tests rely on an assumption of exchangeability; with the models above, the null hypothesis implies complete exchangeability of the observations. When there are nuisance effects, however, the null hypothesis no longer assures the exchangeability of the data (e.g. even when the null hypothesis of no FA difference is true, age effects imply that you can't permute the data without altering the structure of the data). <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line867">
+<h2 id="Permutation_tests_for_the_General_Linear_Model">Permutation tests for the General Linear Model</h2>
+<span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line862">For an arbitrary GLM <strong>randomise</strong> uses the method of Freeman &amp; Lane (1983). Based on the contrast (or set of contrasts defining an F test), the design matrix is automatically partitioned into tested effects and nuisance (confound) effects. The data are first fit to the nuisance effects alone and nuisance-only residuals are formed. These residuals are permuted, and then the estimated nuisance signal is added back on, creating an (approximate) realization of data under the null hypothesis. This realization is fit to the full model and the desired test statistic is computed as usual. This process is repeated to build a distribution of test statistics equivalent under the null hypothesis specified by the contrast(s). For the simple models above, this method is equivalent to the standard exact tests; otherwise, it accounts for nuisance variation present under the null. Note, that <strong>randomise v2.0</strong> and earlier used a method due to Kennedy (1995). While both the Freedman-Lane and Kennedy methods are accurate for large n, for small n the Kennedy method can tend to false inflate significances. For a review of these issues and even more possible methods, see Anderson &amp; Robinson (2001) <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line874">This approximate permutation test is asymptotically exact, meaning that the results become more accurate with an ever-growing sample size (for a fixed number of regressors). For large sample sizes, with 50-100 or more degrees of freedom, the P-values should be highly accurate. When the sample size is low and there are many nuisance regressors, accuracy could be a problem. (The accuracy is easily assessed by generating random noise data and fitting it to your design; the uncorrected P-values should be uniformly spread between zero and one; the test will be invalid if there is an excess of small P-values and conservative if there is a deficit of small P-values.) <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line867">
+<h2 id="Monte_Carlo_Permutation_Tests">Monte Carlo Permutation Tests</h2>
+<span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line874">A proper "exact" test arises from evaluating every possible permutation. Often this is not feasible, e.g., a simple correlation with 12 scans has nearly a half a billion possible permutations. Instead, a random sample of possible permutations can be used, creating a Monte Carlo permutation test. On average the Monte Carlo test is exact and will give similar results to carrying out all possible permutations. <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line874">If the number of possible permutations is large, one can show that a true, exhaustive P-value of p will produce Monte Carlo P-values between p ± 2√(p(1-p)/n) about 95% of the time, where n is the number of Monte Carlo permutations. The table below shows confidence limits for p=0.05 for various n. At least 5,000 permutations are required to reduce the uncertainty appreciably, though 10,000 permutations are required to reduce the margin-of-error to below 10% of the nominal alpha. <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><div><table><tbody><tr>  <td><p class="line862"> n </td>
+  <td><p class="line862"> Confidence limits<br>
+for p=0.05</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-26"></span><p class="line862">100   </td>
+  <td><p class="line862">0.0500 ± 0.0436</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-27"></span><p class="line862">500   </td>
+  <td><p class="line862">0.0500 ± 0.0195</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-28"></span><p class="line862">1,000 </td>
+  <td><p class="line862">0.0500 ± 0.0138</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-29"></span><p class="line862">5,000 </td>
+  <td><p class="line862">0.0500 ± 0.0062</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-30"></span><p class="line862">10,000</td>
+  <td><p class="line862">      0.0500 ± 0.0044</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-31"></span><p class="line862">50,000</td>
+  <td><p class="line862">      0.0500 ± 0.0019</td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line862">In <strong>randomise</strong> the number of permutations to use is specified with the -n option. If this number is greater than or equal to the number of possible permutations, an exhaustive test is run. If it is less than the number of possible permutations a Monte Carlo permutation test is performed. The default is 5000, though if time permits, 10000 is recommended. <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><p class="line867">
+<h2 id="Counting_Permutations">Counting Permutations</h2>
+<span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line874">Exchangeabilty under the null hypothesis justifies the permutation of the data. For n scans, there are n! (n factorial, n×(n-1)×(n-2)×...×2) possible ways of shuffling the data. For some designs, though, many of these shuffles are redundant. For example, in a two-sample t-test, permuting two scans within a group will not change the value of the test statistic. The number of possible permutations for different designs are given below. <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><div><table><tbody><tr>  <td><p class="line862"> <strong>Model</strong>  </td>
+  <td><p class="line891"><strong>Sample Size(s)</strong> </td>
+  <td><p class="line862"> <strong>Number of Permutations</strong></td>
+</tr>
+<tr>  <td><span class="anchor" id="line-40"></span><p class="line862"> One sample t-test on difference measures </td>
+  <td><p class="line862">  n </td>
+  <td><p class="line862">    2<sup>n</sup></td>
+</tr>
+<tr>  <td><span class="anchor" id="line-41"></span><p class="line862">Two sample t-test     </td>
+  <td><p class="line862">n<sub>1</sub>, n<sub>2</sub>        </td>
+  <td><p class="line862">(n<sub>1</sub>+n<sub>2</sub>)!   /   ( n<sub>1</sub>! × n<sub>2</sub>! )</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-42"></span><p class="line862">One-way ANOVA </td>
+  <td><p class="line862">n<sub>1</sub>,...,n<sub>k</sub></td>
+  <td><p class="line862">   (n<sub>1</sub>+n<sub>2</sub>+ ... + n<sub>k</sub>)!   /   ( n<sub>1</sub>! × n<sub>2</sub>! × ... × n<sub>k</sub>! )</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-43"></span><p class="line862">Simple correlation    </td>
+  <td><p class="line862">n</td>
+  <td><p class="line862">   n!</td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><p class="line862">Note that the one-sample t-test is an exception. Data are not permuted, but rather their signs are randomly flipped. For all designs except a one-sample t-test, <strong>randomise</strong> uses a generic algorithm which counts the number of unique possible permutations for each contrast. If X is the design matrix and c is the contrast of interest, then Xc is sub-design matrix of the effect of interest. The number of unique rows in Xc is counted and a one-way ANOVA calculation is used. <span class="anchor" id="line-46"></span><hr /><p class="line874"> <span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><p class="line867"><a href="./CategoryRandomise.html">CategoryRandomise</a> <span class="anchor" id="line-49"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

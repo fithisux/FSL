@@ -1,0 +1,211 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>VTKToolbarBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>VTKToolbarBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>285</width>
+            <height>38</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup3</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter</set>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>1</number>
+                </property>
+                <property name="spacing">
+                    <number>1</number>
+                </property>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_optionsButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image0</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Modify 3D rendering options</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_printButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image1</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Save snapshot of scene</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_addMeshButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image2</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Add a 3D mesh object</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Mesh objects (e.g. output from "first") can be superimposed in the 3D space. Valid inputs are VTK are mesh and/or vectors in a VTK polydata structure.</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_meshOptionsButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image3</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Set mesh options</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string></string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>m_threshold</cstring>
+            </property>
+            <property name="maxValue">
+                <number>99999</number>
+            </property>
+            <property name="lineStep">
+                <number>10</number>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>m_clipping</cstring>
+            </property>
+            <property name="text">
+                <string>Clipping</string>
+            </property>
+        </widget>
+    </hbox>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="727">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000029e49444154789c9d944d4b1b6110c77ff36cd664eb4b2c1eb297e62296a09fc05e4ca10a7aa958413c49fc18fd161e3c78f154b054ea41c14309d9c44b73d50a7a6aaa60d3a252f2ea864df6e9212f26a4b5d4b93cbb30f39b67e63fcf0860003610e6715603f240152000d8e3e3e3ef262727e38fa15d5f5f5f66b3d9b7c047c00d00e1a9a9a9f8c6c606954a054490b6b740d71f22bddfbed61cecef47b3d96c1c70801f0100ad35d5ea1d8ee390ce64a8b92ea3a3a3cccebe6262e23922d281354f41041abe4fb95206780258ed925ba649a7d3acacac10894470520efbfb072c2c2c605916edcb09022244a3518c80d14ed4b97a072822b8ae8b6ddb9c9c9c90fb9623954a717c7c8c61187dbddbdede4629a3a70d7dc0b1b1311cc7e1fbd515854281b5b5351289042323237d3d2c168a7875efef40a514737373a43319dcbb3b6cdb26168b512c15a937ea9d52a50b2c2208aa1fd86e7a2c16e359348af67d4404c33008854228511dc5bb4501905e5e6fc922c2f0d01002e85650bfc2ad5304d1ba67acfa80009ee7a1a15988087b7b7b1c1d1de1791ec16090c5c5d7ccccbcc4b24228433d2c4aa95c22f92949a95cea38269349b6b6b6304d93c3c3437676def33597633db14ec8b21e06068c0003c101825eb0e3a094a25aad727e7ecec5c5054a29060226a669a2badad12f8a12c2e130ababab28752f82528acdcd4d6e6f6e10a5989f9f67797919cbb2a8371a0f8c4d2bd8f33c3a2f5884a5a5379c9e7ec1adb998a6891db16909dd23580f506b4dc3f7d15a83d6a05a115a333c3cc8f48be9ae916926d2be06cd1f81b57c3e7ff9617737daa8d79b23d3cede1e0901d172bf7dba1867676765e016d02d57068145204e736bf4a6fcb7ddd25c5d9f819fadda08024f69aea0ff056a9adbfa1750eb0e6e3fa2c700017c80dfa694d9d0d79373c80000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="2161">89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000083849444154789cad97596c9cd515c77ff75b673c3399d519dbf1c45bec989204680409a852a80a6a2baaaaf48dd0d22d482c55a5b642aa445faa3ed0aa740955105225baa88028943e01824a55450921892125c624696cd989d7c4ebd833f3edf7f6616cd736314d5aae74a459a4f3ffddff39f77cf7134a29ae75dd7bdf37bf74c71d9f7ea8b7a7a74bd78da4691a71a554e5fd810f5e3a7eb2ef7b470effc2bfda5ce25a00eefae2dddb41fc4a08ee0628954af474ef200c43a2481245219ee70f343735ddf2e003f7d73e7680cfdcf9b96711e21e000120443d0962f987fa67cbb65ee8ede90e9a9b4a4b6f9f3871f885e7ff70e6ff06b8ed53076ca5e4581846054d13e8868126340062719b4c3a431845b8ae8beb38148b5bb1cd0ca74e1d57e5c5d96f5cbc30f2fb6b02181e1ebe7e6aead2d7fcc0bff599679e8bf5bdf3ce2e20d6546c62a1bc40b55a4520d00d9d62b188a609e6e6e6999999412949369b5bf1092108403c72fcd89b87370578f1c53f173299cc77fdc0bfcd75dd1defbd77bae9645f9f31333d43734b0b5d9d9decece92693cdf2d84f7e4a10f8188689eb38f8be4f1485ace4cae5f3d8760cdff3914a228460674fcfe49f9e7fae6523800170cbbe5bbf55595a7cbcadbd3d333a3a86655b64d2694cd3e2f6db0f90cfe7b0ed184a49464646585c2c631a06b96c8e542a89920a29255249500a5d370085320dcae5322d2dcddcba7f5fe64a4e1bbdbdd76d2934169ec8e6b20d83e7cf63d93633d3d38c5eb8886ee8f4f474e3b91e5114e1792e83e707711d8774b18869e828144a298430088208cff5f1fd1aa669108f3730bf304fb55ac5715d712500cdf5dc1b2726261bfa4ff753ad559132a2b1b14010fab8aecbf8f8189d9d9d6c49a5582c97191c1ac2f73cf2f93c8669629916a9649642be95f496ad98661c19e9d4aa01172f8c22102c9617705d5701da871c181f1b3311024d083a3ada696d6de5ed63c7104210040167cf9c6168cf20919494cb65468687b16336f1988d6dc72916b70306172f0ed3d1d1c5ae5d3702e038352a9532e3e3a39c39dbcfd2e222800d386b0174a5b09454df8ec56228a5f07c8fb6b67652c914b55a9530ac37d7fcdc1c4110f0d65b6fd1ded6465353134dcddbc9c41493333374ed68239148621806a669a1691a5124310c9d52a983bebe13da0d37ecfe59a9545a37250dc330c70052a914e9749a8ef60ef6ecd9437f7f3f972e5d260c035cd743295858580434b66f6fc38ad9384e85f189cb2453096a4e05d77551ca64a0bf1fcf73709c2a4a09b2d90cb95ca37ee8d003a70706deeb5807e0fb6eb5a121352f25591028259052615936f178030b0b0bb8ae8f94e0ba0e8661d2d6d6ce85d173ccf860c5a0e64414f2792c3341ffe901dadb3bd9bdbb97e9e9cbcccc4c33357589c9c949745d6f2f95da5f1b1d1df9ecba636818e658188659c33051aa7ea42ccba6a1a181b9b9793cafee805275a772f90ca73f98259dce52ab2d8188509149b9ea70f0e0bde472695e7ef975868707999f9be6f2f41497a7a79191c4b6ed3bf2f9e2c3b3b3978eb0d29586618d2a25006d194061db36f1781c00d7f5f13c1fa5046128a9d56a14724d64b359b2b90289863ca363a3ecdeb39399d9595e79e5afc8c8414907cb16945a9b692c1488373420a5d284d07e5c28346d5be7004018ca7525b0ed384268785e407dac0a1289146118d2d252422089d936c343536c6f2f313636c2e0f90be87e95a5994b3424123851846e59f47477313e5177617c62226b9ada83c00f57019482289280582d8165d9e8ba89efd70184d0c8e57204be645b6b0bb55a85f9798517cd934cf6f0daebafd0b9bd93d9f18b64b664c866b32840db9226954c90cb6f05607ea18cebbad7af7560b43ec6b56500b02c0bcbb2304d9b208880104dd3b06d9ba3474f70e8d04104825ad5a7755b8977df398961ea549796e8fdc4f5747475114fa53877f603b46482288a08238d85f932e9740629673fb90aa0ebd618a8559b9552d8760cd3b4b02c9b28922845c5f783770dc33c5528e4def71cbf656b63f1478661a084cfe0b96192a93ccdad2d68a68917788c9f1b2399cf737976165dd309230dcff389a288442265eeddbb7705c0181142a8951b8652609a36a6696359f6c97279ee07d3d363e7c33000d063b1987ef4e8dfb4df3efdbb2ff4f636ddecba3552a92d14f24562f1186e18323431411049a28ba374ede86676660ec7f5f03c1fc3b0c864e2c3c78fbf513f054343ff1cd275e3ebba6e0642e8cb4d582f413299f8cbe4e4f0401806212001e9ba6e140441f495afde7b8f65c6ce777575d3d9d98de749ca8b3596962a2c55aa542a4b2c552abc3f30c0f4ec228ee3333535c3b66d2d343636fe4b0851bfd228a5d4b973279f0175432a95faa510fa9ba669fe2308829ff7f5bdf19b1561ea759240b4120f3dfcc05d32d48feddbb79f5acdc7a98538aea45af3a939115164e0fb06b5aa47b1a9483c9ee0ce3b3f53dbbf7fdf93b0e642b20ca301fa72acfdae6d08c17f9e6c02508f3df6f8fdafbefaf7fbc3306a4ea713280428895c1e6cb5aa4310441c3cf8656ab5ea91471f7de43b4a29b9ee4a2684d037886e26be3656d781039f6ff77c75d8f7fc9b4dd340d334a4940461044a914e27e5debdbb5eaa5416ee7beaa9275da594da082036d9bdb80a0005b07bf78da94c66dbf7a514073ccfbf0ed06231db4da71bceb6b46c7de2d9679ffe63b55a8d9452725d09d6406cdcf147ed7e23c06adc74d34dd6ce9dbb4b9a666dcb66e3a78e1cf9f5f472dfc815f12b026c0221f82ff65f0982f58d2b378ac3f220fa5016a5647d2eac2612ac9d54570fb0565c6d14dfd481d53feb3df151bbff500f6c02a0d4264257f566b4066433f1b56b1dc066c2d704700598cd0014cbaa579def7f793dff38d7bf0106a72f697283d8170000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="637">89504e470d0a1a0a0000000d4948445200000013000000130806000000725036cc0000024449444154789c8dd34d88d56514c7f1cf190784320a9d6aa208228a282a845ab411a2a64dbb68538b0a4c29e8457413b878ee7fd5ca8430478ac1a88565cbec8516d510bdd0cba608521b92a4487a73913881dd5f8b7b67ba73c7ca036773cefff99edf737ecfbff44ce17a5c3a925398308809dc82af308f57d272ca59a2f41cc20f780d27f0137e4d4bbfba5a837d984bcb27d5d526dc87d378312d5f8ec366f12d4ea565df7263009ac5feb47cbce2505753780837e15dbc9a96d31390965d58535d6d1b01ed1d4e5f0695aaeaea4a65a3f2274ee241bcb1ac2c2d8f0e219b31ad5c253e5416c575b80c853e8e2b87956ff4adc32378322d2727c776b85f795f6c50bec031cca7e5c755cbeeea5edc86cd69390393c8b03981e7c44e5c226e4dcbec594c535d3d853fd2b263b43e3902da830369f960585bacae76637b5a9606aec533783d2d6faf1a3274b38f8369991f537007eec113066f6f97977d64c116cc24f9655cd90c9ec7daea6a6678eda5ece3b0815b3f639b0577e306dc88f7466113f81ce7631d2ec47a5c8c695c6e60ff066c495ba9643c26f100e60cded477abf63078a01bd3b2f85f20a824aaab0bf0021e1b9f5e77d61ec79d70c4d1616913b6e2697c3df2e967924842cfb49e037ace5baa25e122bf5bb9c77fcb972a03d797ae740d76e2e1b49ca9aeaef69bad9ef5ce8882bbb07da8eefb91fa5f2bfe80b41cadaef662371ec7fdd69b4b72647960d5154325c792ac727345a4e553bc555d75b836ed1fd0ffc52ad810f8261670e85c41838323cb3e97c4cd3888dbc77b7f031f282602abd9dc990000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="892">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000034349444154789c75945f685b7514c73fe777d36c59c90d1a9c2baebeb46ed0aa0fd68d4e28ad1858eb8b82cf467c14dda853d03dc8ed65ac0e84f96f5a99b0e1fa50855128b852b02bfae493d4386db3b18aac65a60eda1a9b264deecdf121374dd23f07cec3fd9ddfeff3fb9e73cff909431c029e060e028f067e00d0c0f7034f00778009604a1d2db3870943dc0016806f810cb0ac8ee600c49538f0193008ac012f01fdc09fc05575f4efdd8023c01f40511dbdbc1570e561e073e06d75f49f8643aeb403af0371601cf8411d550003a08e5e02545c391d1c782880bd530f9361691157fa105e00f60525b904241a14aaa36f04a024d086700c6502e120ca63c15e45b80fa411d294f90b18067e5247af5781a16d259800a651d610eea2dc50479776d4a952dbaf808beae82ff5b150201b71c506be005e069e45795e1dbdb90bec28e00267d4d1fb3be20cf125f01e3002bc5f5524aef4f31f037ccc65ca954b19a09b430cf03d1ff280421dc7071655754318e26b20029c554717eb6feb48747c73ea9553c962a9846c5722b595ccf2f2e6f0f9f3e7808b21e045e03be03571a51c94a00c94bb625dedbdbd7d5cb97a85dbe9345d5dcf70f2643f22d2e0e9dbe97d40077020047c026481eb805069250398e65cf393a0cfc56c9b6432c9d8d818f7ee2d120e87837ac1abc924c698ea272175f42371e502f0943afa637d5a894462dd18c3caca0a37a7a789c5620c0e0e62dbf656cad97fb35520506b9bb3c088b8b2a28efe560f35c670ecf871963319e2f1381bf90d7cdf6f48d9480d589d14054e03ef8a2b8f57839ee5ed37c670f4c8117a7a7ae8ecec64e1ee029393934c4d4db1baba8ab12c2ccb6a0406d022f01670219863d69bd7db45844c26c3afa914a9548af1f1714aa512f3f3f3cccccce07b5ec31faf69ad40b3c019e0537125e287fd478c65884422d8d128d1681411a1502890cd66010887c3983a85db470f753423ae9c03462dcf5a3322b4b4b470f8702b2290cfe7999d9da5b5b595eeee6e9a9a9a1a14ee0006d03be2ca07a107a1376fddfafd447173138c2008b61da5b7af1741f03c8fb9b9399616977c20bf273080ceb75d6bfbf9dae8e809af54da6a3ca99b19a92c90cbe50ac01ce08b56dec55d4d442ca01968da7353cd8a40ee7f10263c3bd110d7750000000049454e44ae426082</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>m_threshold</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>VTKToolbarBase</receiver>
+        <slot>thresholdValueChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>m_clipping</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>VTKToolbarBase</receiver>
+        <slot>clippingStateChanged(int)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot access="private">thresholdValueChanged(int)</slot>
+    <slot access="private">clippingStateChanged(int)</slot>
+</slots>
+<layoutdefaults spacing="2" margin="2"/>
+</UI>

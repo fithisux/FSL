@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FEAT</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FEAT</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Introduction">Introduction</a></li></ol></div></div></li><li><a href="./FEAT(2f)UserGuide.html">User Guide</a></li><li><a href="./FEAT(2f)FAQ.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="Introduction">Introduction</h1>
+<span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line874">For other information on FEAT and updated journal references, see the FEAT web page. If you use FEAT in your research, please quote the journal references listed there. <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line874">FEAT is a software tool for high quality model-based FMRI data analysis, with an easy-to-use graphical user interface (GUI). FEAT is part of FSL (FMRIB's Software Library). FEAT automates as many of the analysis decisions as possible, and allows easy (though still robust, efficient and valid) analysis of simple experiments whilst giving enough flexibility to also allow sophisticated analysis of the most complex experiments. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line874">Analysis for a simple experiment can be set up in less than 1 minute, whilst a highly complex experiment need take no longer than 5 minutes to set up. The FEAT programs then typically take 5-20 minutes to run (per first-level session), producing a web page analysis report, including colour activation images and time-course plots of data vs model. <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line874">The data modelling which FEAT uses is based on general linear modelling (GLM), otherwise known as multiple regression. It allows you to describe the experimental design; then a model is created that should fit the data, telling you where the brain has activated in response to the stimuli. In FEAT, the GLM method used on first-level (time-series) data is known as FILM (FMRIB's Improved Linear Model). FILM uses a robust and accurate nonparametric estimation of time series autocorrelation to prewhiten each voxel's time series; this gives improved estimation efficiency compared with methods that do not pre-whiten. <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line874">FEAT saves many images to file - various filtered data, statistical output and colour rendered output images - into a separate FEAT output directory for each session. If you want to re-run the statistical stage of analysis, you can do so without re-running any of the pre-processing, by telling FEAT to look in a FEAT directory for the processed functional data it needs to do this.  <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line874">FEAT can also carry out the registration of the low resolution functional images to a high resolution scan, and registration of the high resolution scan to a standard (e.g. MNI152) image. Registration is carried out using FLIRT. <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line874">For higher-level analysis (e.g. analysis across sessions or across subjects) FEAT uses FLAME (FMRIB's Local Analysis of Mixed Effects). FLAME uses very sophisticated methods for modelling and estimating the random-effects component of the measured inter-session mixed-effects variance, using MCMC sampling to get an accurate estimation of the true random-effects variance and degrees of freedom at each voxel. <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line874">There is a brief overview of GLM analysis in Appendix A and an overview of how the design matrix is setup in FEAT in Appendix B. <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-22"></span><a href="./CategoryFunctional.html">CategoryFunctional</a> <a href="./CategoryFEAT.html">CategoryFEAT</a> <span class="anchor" id="line-23"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

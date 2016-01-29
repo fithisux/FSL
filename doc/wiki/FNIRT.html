@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FNIRT</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FNIRT</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Research_Overview">Research Overview</a></li><li>
+<a href="#References">References</a></li></ol></div></div></li><li><a href="./FNIRT(2f)UserGuide.html">User Guide</a></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-4"></span><p class="line862">It is frequently desirable to register different brains to each other, or to register a set of brains to a common space/template. This is for example the case when one wants to pool fMRI results across several subjects at a second level or when wanting to compare fractional anisotropy (<a href="./TBSS.html">TBSS</a>) or tissue composition (<a href="./FSLVBM.html">FSLVBM</a>) between groups. Registration algorithms can be divided into linear and non-linear depending on the type of deformations they permit. <a href="./FLIRT.html">FLIRT</a> is an example of a software that performs linear registration, meaning that it will translate, rotate, zoom and shear one image to match it with another. Sometimes the differences between subjects are such that the linear transform is not sufficient to achieve good registration. The local deformations permitted by a non-linear method may then do a better job. <span class="anchor" id="line-5"></span><div><table><tbody><tr>  <td><p class="line862"> <img alt="flirted_subj1.jpg" class="attachment" height="150" src="attachments/FNIRT/flirted_subj1.jpg" title="flirted_subj1.jpg" /> </td>
+  <td><p class="line862"> <img alt="flirted_subj2.jpg" class="attachment" height="150" src="attachments/FNIRT/flirted_subj2.jpg" title="flirted_subj2.jpg" /> </td>
+  <td><p class="line862"> <img alt="template.jpg" class="attachment" height="150" src="attachments/FNIRT/template.jpg" title="template.jpg" /> </td>
+  <td><p class="line862"> <img alt="fnirted_subj1.jpg" class="attachment" height="150" src="attachments/FNIRT/fnirted_subj1.jpg" title="fnirted_subj1.jpg" /> </td>
+  <td><p class="line862"> <img alt="fnirted_subj2.jpg" class="attachment" height="150" src="attachments/FNIRT/fnirted_subj2.jpg" title="fnirted_subj2.jpg" /> </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-6"></span><p class="line862">flirted subject #1 </td>
+  <td><p class="line862">flirted subject #2 </td>
+  <td><p class="line862">MNI152 T1 </td>
+  <td><p class="line862">fnirted subject #1 </td>
+  <td><p class="line862">fnirted subject #2 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line874">The example above demonstrates how a linear transform is unable to account for the local changes around ventricles and sulci caused by atrophy. While the non-linear model has done a reasonable job of compensating for this. <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-14"></span>
+<h1 id="References">References</h1>
+<span class="anchor" id="line-15"></span><p class="line862">There is no current journal paper specifically for FNIRT. We recommend that people cite the following technical report as well as the <a href="./FSL.html">main FSL overview paper</a>: <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line862">Andersson JLR, Jenkinson M, Smith S (2010) Non-linear registration, aka spatial normalisation. <a class="http" href="http://www.fmrib.ox.ac.uk/analysis/techrep/">FMRIB technical report TR07JA2</a> <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-20"></span><a href="./CategoryStructural.html">CategoryStructural</a> <a href="./CategoryFNIRT.html">CategoryFNIRT</a> <span class="anchor" id="line-21"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

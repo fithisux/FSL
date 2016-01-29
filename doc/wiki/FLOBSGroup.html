@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FLOBSGroup</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FLOBSGroup</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867"> <span class="anchor" id="line-5"></span>
+<h1 id="Alternative_Group_Level_Statistics_with_Basis_Functions">Alternative Group Level Statistics with Basis Functions</h1>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line862">Summary statistics of a basis function fit can be calculated and passed up for higher-level analysis but only using non-parametric inference, such as <tt class="backtick">randomise</tt>, due to the fact that the null distribution of these statistics is often highly non-Gaussian.  For example, the signed RMS statistic (representing a form of "energy" of the linear combination, and as used in Calhoun et al, NeuroImage 2004) is:  <span class="anchor" id="line-8"></span><br>
+<tt class="backtick">&nbsp;</tt> <tt class="backtick">&nbsp;</tt>    sign(PE<sub>1</sub>)*sqrt(A<sub>1</sub>*PE<sub>1</sub><sup>2</sup> + A<sub>2</sub>*PE<sub>2</sub><sup>2</sup> + ...)  <span class="anchor" id="line-9"></span><br>
+where PE<sub>1</sub>, PE<sub>2</sub>, etc are the parameter estimates associated EV<sub>1</sub>, EV<sub>2</sub>, etc., (all part of a basis function set for a single condition) and A<sub>1</sub>, A<sub>2</sub>, etc are weighting functions, normally equal to the RMS of the respective EVs.  The null distribution for this statistic is shown below, next to that of PE<sub>1</sub> (where the latter is truly Gaussian).  This highlights severity of the non-Gaussianity in such statistics. <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><div><table><tbody><tr>  <td style="width: 99%; text-align: center"><p class="line862"> <img alt="NullDist2.png" class="attachment" src="attachments/FLOBSGroup/NullDist2.png" title="NullDist2.png" width="400" /></td>
+  <td style="width: 99%; text-align: center"><p class="line862"> <img alt="NullDist1.png" class="attachment" src="attachments/FLOBSGroup/NullDist1.png" title="NullDist1.png" width="400" /></td>
+</tr>
+<tr>  <td style="width: 99%; text-align: center"><span class="anchor" id="line-12"></span><p class="line862"> RMS statistic                          </td>
+  <td style="width: 99%; text-align: center"><p class="line862">                 PE<sub>1</sub>                </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line874">One exception to the use of non-parametric inference for such statistics is where there is a large number of subjects (or sessions) so that the Central Limit Theorem can be invoked.  For highly non-Gaussian distributions this can require a significant number of subjects. <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line862">Once a scalar statistic has been calculated from each first level result, the collection of such images can be merged with <tt class="backtick">fslmerge</tt> and then passed into <tt class="backtick">randomise</tt> for non-parametric testing.  Note that in order to avoid problems with non-differential contrasts (e.g. single group averages) the statistic should be made to be symmetric under the null hypothesis, such as was done with the sign(PE<sub>1</sub>) term above. <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line862">As there is no single statistic of universal interest there are no standard tools for calculating these at present.  Users are recommended to use Matlab or similar tools to calculate their statistics of interest (which usually require the combination of information in the PE images and in the EV files, where the latter can be obtained from the <tt class="backtick">design.mat</tt> within FEAT). <span class="anchor" id="line-20"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

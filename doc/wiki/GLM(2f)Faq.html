@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>GLM/Faq</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">GLM/Faq</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="When_do_I_demean_.28mean_center.29_an_EV.3F">When do I demean (mean center) an EV?</h1>
+<span class="anchor" id="line-4"></span><p class="line862">If your EV is a covariate (of interest or not interest) then it is almost always advisable to demean this.  Sometimes the results of particular contrasts do not depend on whether you demean or not (so not demeaning may not be "wrong" but it does not hurt).  In other cases it is important to demean or the interpretability of the results is lost.  If you have more than one group in your design then it is generally the case that you should demean across <em>all</em> groups and <em>not</em> within each group, however exceptions to this do exist and you should discuss this with someone with expertise in statistics if you are unsure. <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line862">For more on exactly what happens when you center and when it is or is not important, see Jeanette Mumford's guide on <a class="http" href="http://mumford.fmripower.org/mean_centering/">Mean centering continuous covariates for a group fMRI analysis</a>. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line867">
+<h1 id="What_happens_if_I_want_to_estimate_a_differential_.5B1_-1.5D_contrast_between_two_conditions_that_have_very_different_numbers_of_events_than_each_other_-_is_this_valid.3F">What happens if I want to estimate a differential [1 -1] contrast between two conditions that have very different numbers of events than each other - is this valid?</h1>
+<span class="anchor" id="line-9"></span><p class="line874">This is valid, because the estimated BOLD effect size ("PE") for each condition is not biased by the number of events, it just has different uncertainty for the two conditions (because of the different numbers of events in each). Hence the COPE (contrast between the two BOLD effect sizes) will also be unbiased. The uncertainty on the COPE (which affects the size of the related Z-stat) will be affected by the different numbers of events. In general the Z-stat will be maximised when the numbers are the same, but in all cases it will still be valid. <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line867">
+<h1 id="What_does_it_mean_if_I_see_very_extended_areas_of_significance.3F">What does it mean if I see very extended areas of significance?</h1>
+<span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line874">If you have a signal that is very extended (even if quite weak), cluster-based thresholding (including TFCE) may show very large numbers of voxels as being "significant".  In the extreme case of a global effect (that correlates with your model), your whole image may show up as being significant. This is statistically valid, but it is important not to misinterpret this result. As with all cluster-based thresholding, you are only showing that the cluster is significant, not that any given voxel within this cluster is significant in its own right. <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line874">If you want to show which voxels have relatively stronger statistical effect within a significant cluster, you can always (e.g.) mask the original voxelwise t-statistic image with the significant cluster mask, to show relative effects - just be careful not to claim that any individual voxels within this are significant in their own right.  Alternatively, in the case of TFCE thresholding, you may be able to show greater spatial specificity simply by changing the statistical threshold applied (e.g., to the corrected-p-value image, which might require you to run a greater number of permutations in randomise). <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-18"></span><a href="./CategoryFaq.html">CategoryFaq</a> <span class="anchor" id="line-19"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

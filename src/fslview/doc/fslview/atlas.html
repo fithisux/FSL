@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+    <title>Anatomical Tools</title>
+  </head>
+  <body>
+    <h3>Anatomical atlas tools</h3>
+
+    <p>These tools provide feedback via various <a
+      href="../data/atlas-descriptions.html">atlases</a> included in the
+      FSL/FSLView distributions. Labels from selected atlases can be
+      displayed, summary images overlaid, structures located and
+      single structure probabilty maps shown.</p>
+
+      <p>Most of the atlases are <i>probabilistic</i>, which means
+      that each structure in the atlas is represented as a standard
+      space image with values from 0:100, according to the
+      cross-population probability of a given voxel being in that
+      structure. You can view individual structures' probability
+      images via the <b>Structures...</b> button. In addition, each
+      probabilistic atlas has been reduced to a single summary image
+      for ease of display, where each voxel is colour-coded according
+      to the most-probable structure; these images can be turned on
+      via the <b>Atlases...</b> button.</p>
+
+    <table cellspacing="20">
+      <tr>
+	<td>
+	  <p>The <a href="./atlas-tool.html">"Atlas
+	  tool"</a><font color="red">(1)</font>. If it's not visible
+	  then select "Tools"->"Toolbars"->"Atlas tools" from the main
+	  menu or right click in the toolbar region and select "Atlas
+	  tools" from the pop-up menu.</p>
+
+	  <p>The <a href="./atlas-select.html">"Atlas selection
+	  dialog"</a><font color="red">(Not shown)</font>: allows you
+	  to select which atlases to report labels from and which, if
+	  any, summary views to diplay.</p>
+
+	  <p>The <a href="./atlas-inspect.html">"Atlas inspector
+	  dialog"</a><font color="red">(2)</font>: browse an atlas by
+	  anatomical region, including preview of underlying
+	  probability map and jump to region.</p>
+	   
+	</td>
+	<td><img src="atlas-screenshot.png" width="400"></td>
+      </tr>
+    </table>
+
+    <p>See here for <a href="../data/atlas-reference.html">reference</a>
+    details, incl. file formats and XML specifications.</p>
+
+  </body>
+</html>

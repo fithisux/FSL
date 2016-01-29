@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML><HEAD><meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link REL="stylesheet" TYPE="text/css" href="../fsl.css">
+<TITLE>FSL</TITLE></HEAD><BODY>
+
+<IFRAME width="100%" scrolling="no" frameborder="0" src="top.html" type="text/html">Broken</IFRAME>
+
+<H2>DOWNLOADING AND INSTALLING</H2>
+ 
+<p><br><H3>Downloading</H3>
+
+<P> FSL is available precompiled for the Linux and Mac OS X operating
+systems. Windows is supported via a Linux Virtual Machine. The sources are also
+available if you want to compile it yourself.
+
+<P> <B><A HREF="http://www.fmrib.ox.ac.uk/fsldownloads/"
+target="_top">Download FSL</A></B>
+
+<br><br><h3 id='install'>Installation instructions</h3> 
+<ul>
+<li><a href="macosx.html">Mac OS X</a></li>
+<li><a href="linux.html">Linux</a></li>
+<li><a href="windows.html">Windows</a></li>
+<li><a href="compiling.html">You are compiling the source distribution
+instead of taking a binary distribution</a></li>
+</ul>
+
+<br><br><H3>Running</H3>
+
+<P>Make sure the following is present somewhere in your shell setup file (.bashrc,
+.profile, .cshrc etc., depending on what shell you use), changing
+"/usr/local/fsl" to wherever you have installed FSL:
+
+<p><b>bash / sh / ksh</b><code><br>
+FSLDIR=/usr/local/fsl<br>
+. ${FSLDIR}/etc/fslconf/fsl.sh<br>
+PATH=${FSLDIR}/bin:${PATH}<br>
+export FSLDIR PATH</code>
+
+<p><b>tcsh / csh</b><code><br>
+setenv FSLDIR /usr/local/fsl<br>
+source ${FSLDIR}/etc/fslconf/fsl.csh<br>
+setenv PATH ${FSLDIR}/bin:${PATH}</code>
+
+<P>To run the FSL tools from the command line, you can find the
+tools in $FSLDIR/bin. In general command-line programs are lower case
+(e.g. '<b>bet</b>'). In general the GUI version is capitalised
+(e.g. '<b>Bet</b>'), except on Mac, where '_gui' is appended
+because those file systems can't tell the difference between upper and
+lower case (e.g. '<b>Bet_gui</b>').
+
+<p>To bring up a simple GUI which is just a menu of the main
+individual FSL GUI tools, just type <b>fsl</b>.
+
+
+<br><br><a name="custom"></a><br><br><H3>Customising (for different output datatypes, etc.) </H3>
+
+<p>There are several environment variables which FSL uses to determine
+certain user preferences, such as the output file format (NIFTI_GZ, NIFTI_PAIR, etc). 
+The defaults for these are set when you source the
+setup file as shown above (i.e., ${FSLDIR}/etc/fslconf/fsl.sh or
+${FSLDIR}/etc/fslconf/fsl.csh). If you wish to change these defaults
+then you need to:<pre>
+cd
+mkdir .fslconf
+cd .fslconf</pre>
+
+and in this directory create a file called fsl.sh or fsl.csh,
+depending on the shell that you use, setting any or all of the
+variables that appear in the central ${FSLDIR}/etc/fslconf/fsl.sh or
+${FSLDIR}/etc/fslconf/fsl.csh files. 
+<p>
+<b>
+DO NOT copy the central files into <kbd>~/.fslconf/</kbd> as it
+will cause a loop that will stop your login from working.
+</b>
+<p>
+It is recommended that the files <kbd>~/.fslconf/fsl.sh</kbd> or
+<kbd>~/.fslconf/fsl.csh</kbd> only include a few variable definitions
+and nothing more.  Note that whoever installs FSL can also edit the
+central files in <kbd>$FSLDIR/etc/fslconf</kbd> to change the
+preferences for all users.
+
+
+<br><br><a name="sge"></a><br><br><H3>Setting up FSL to use a
+  SunGridEngine (or similar) computing cluster</H3>
+
+Several of the more compute-intensive tools can now take advantage of
+cluster computing, via SunGridEngine (SGE):
+
+<UL>
+
+<LI>FEAT will run multiple first-level analyses in parallel if they are setup
+  all together in one GUI setup. At second level, if full FLAME
+  (stages 1+2) is selected then all the slices are processed in
+  parallel.
+
+<LI>MELODIC will run multiple single-session analyses (or
+  single-session preprocessing if a multi-session/subject analysis is
+  being done) in parallel if they are setup all together in one GUI
+  setup.
+
+<LI>TBSS will run all registrations in parallel.
+
+<LI>BEDPOST (FDT) low-level diffusion processing will run all slices
+  in parallel. 
+
+<LI>FSL-VBM will run all registrations in parallel, both at the
+  template-creation stage and at the final registrations stage.
+
+<LI>POSSUM will process all slices in parallel.
+
+</UL>
+
+All the above tools interact with a compute cluster via a single
+central script <b>fsl_sub</b>; if no cluster is available then this
+script silently runs all the requested jobs in series.
+
+To customise FSL for your local compute cluster and clustering
+software, simply edit ${FSLDIR}/bin/fsl_sub - hopefully the comments
+in this file are sufficient to make this fairly painless, particularly
+for labs using SGE. For other clustering software than SGE, note that
+fsl_sub makes use of an SGE feature allowing the submission of a text
+file containing a list of commands (one per line) to be run in
+parallel.
+
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+</BODY></HTML>

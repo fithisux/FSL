@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>DualRegression/Faq</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">DualRegression/Faq</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./DualRegression.html">Introduction</a></li><li><a href="./DualRegression(2f)UserGuide.html">User Guide</a></li><li>FAQ<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#What_does_it_mean_if_I_find_a_dual-regression_result_outside_a_given_RSN.3F">What does it mean if I find a dual-regression result outside a given RSN?</a></li></ol></div></div></li></ol></div> <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line867">
+<h1 id="What_does_it_mean_if_I_find_a_dual-regression_result_outside_a_given_RSN.3F">What does it mean if I find a dual-regression result outside a given RSN?</h1>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line874">For example, if you have two groups of subjects (patients and controls), did a group-ICA on the basis of all subjects from both groups, and then run dual-regression.  You then did a two-group t-test using the spatial maps output by dual-regression, and found a significant difference for one of the RSNs.   However, what does it mean if the voxels showing a significant difference are not "within" the (group-average) ICA map for that RSN?   This is not necessarily indicative of a problem at all (as long as it's in grey matter!).  It just means that the "connectivity" of this area with the main regions of this RSN is different in the two groups, despite on average (across both groups) not being strongly connected. For example, this area might have a weak positive correlation with the main areas of this RSN in the control group, and a weak negative correlation in the patient group. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-10"></span><a href="./CategoryFaq.html">CategoryFaq</a> <span class="anchor" id="line-11"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

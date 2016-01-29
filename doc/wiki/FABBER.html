@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FABBER</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FABBER</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Research_Overview">Research Overview</a></li><li>
+<a href="#Simultaneous_Inference_of_BOLD_and_CBF_from_Dual-echo_ASL_Data">Simultaneous Inference of BOLD and CBF from Dual-echo ASL Data</a></li><li>
+<a href="#Referencing">Referencing</a></li></ol></div></div></li><li><a href="./FABBER(2f)UserGuide.html">User Guide</a></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-4"></span><p class="line874">Bayesian nonlinear model fitting provides a more flexible alternative to traditional linear analysis of perfusion data. In multi-echo or multi-inversion-time data, this approach uses all time points to estimate all the parameters of interest simultaneously. This can be more accurate because it uses a detailed nonlinear model of the pulse sequence, rather than assuming that different parts of the signal are linearly related to each quantity of interest. <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line874">To make this analysis technique fast enough for routine use, we have adapted a fast approximate method known as Variational Bayes (VB) to work with non-linear generative models. Experimentally we have found that these calculations provide nearly identical results to sampling method and require only a fraction of the computation time (around a minute per slice). <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line867"><tt class="backtick">fabber</tt> is a command-line tool for approximate  Bayesian inference using generative signal models. The design is modular  and new nonlinear forward models can be incorporated into the source  code easily.                   Dual-echo ASL models are documented here, fabber can also be used for multi inversion time resting ASL data, but this can most easily be achieved through the BASIL tool. <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line867">
+<h1 id="Simultaneous_Inference_of_BOLD_and_CBF_from_Dual-echo_ASL_Data">Simultaneous Inference of BOLD and CBF from Dual-echo ASL Data</h1>
+<span class="anchor" id="line-11"></span><p class="line874">Dual-echo Arterial Spin Labelling is a pulse sequence used to acquire BOLD and Cerebral Blood Flow (CBF) information simultaneously. The standard analysis methods involve performing separate analyses on the data from each echo time to obtain separate BOLD and CBF estimates. A more flexible approach is to use a nonlinear forward model to determine all the physical parameters of interest simultaneously, using data from both echo times. This models blood flow and inversion recovery explicitly and is built into a Bayesian framework to provide estimates of uncertainty. <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line867">
+<h1 id="Referencing">Referencing</h1>
+<span class="anchor" id="line-14"></span><p class="line862">If you use <tt class="backtick">fabber</tt> in your research, please make sure that you reference at least the first of the articles listed below, and ideally the complete list. <span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><div class="references"><span class="anchor" id="line-1-1"></span><p class="line874">Chappell, M.A., Groves, A.R., Woolrich, M.W., "Variational Bayesian inference for a non-linear forward model", IEEE Trans. Sig. Proc., 2009, 57(1), 223–236. <span class="anchor" id="line-2-1"></span><span class="anchor" id="line-3-1"></span><p class="line874">Woolrich, M., Chiarelli, P., Gallichan, D., Perthen, J., Liu, T. "Bayesian Inference of Haemodynamic Changes in Functional ASL Data", Magnetic Resonance in Medicine, 56:891-906, 2006. <span class="anchor" id="line-4-1"></span><span class="anchor" id="line-5-1"></span><p class="line862">Groves, A. R., Chappell, M. A., &amp; Woolrich, M. W. (2009). Combined spatial and non-spatial prior for inference on MRI time-series. <a class="nonexistent" href="./NeuroImage.html">NeuroImage</a>, 45(3), 2009. doi:10.1016/j.neuroimage.2008.12.027. </div><span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-24"></span><a href="./CategoryFunctional.html">CategoryFunctional</a> <a href="./CategoryFABBER.html">CategoryFABBER</a> <span class="anchor" id="line-25"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

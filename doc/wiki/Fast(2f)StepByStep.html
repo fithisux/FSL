@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Fast/StepByStep</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">Fast/StepByStep</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FAST.html">Introduction</a></li><li><a href="./FAST(2f)FAQ.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span>
+<h1 id="Tissue-type_segmentation_and_Bias-field_.28RF-inhomogeneity.29_correction">Tissue-type segmentation and Bias-field (RF-inhomogeneity) correction</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><ul><li>T1-weighted image recommended but not compulsory (image just needs good contrast and SNR) <span class="anchor" id="line-5"></span></li><li><p class="line891"><a href="./InitialProcessing.html">Initial processing</a> (e.g. reorientation, cropping) <span class="anchor" id="line-6"></span></li><li>Brain extraction (and if tissue volumes or cortex is of interest then be very precise here; high accuracy is not so necessary for bias field correction) <span class="anchor" id="line-7"></span></li><li>Run FAST (either via the GUI or the command line) <span class="anchor" id="line-8"></span><ul><li>turn on the option for bias field and restored image (bias-field corrected image) <span class="anchor" id="line-9"></span></li></ul></li><li>Check output: <span class="anchor" id="line-10"></span><ul><li><p class="line862">check the segmentation results by loading either the individual <tt class="backtick">pve</tt> images or the <tt class="backtick">pveseg</tt> image into FSLView, on top of the original image <span class="anchor" id="line-11"></span></li><li>look at the restored image and see if it has removed the bias field <span class="anchor" id="line-12"></span></li></ul></li><li>Troubleshooting:  <span class="anchor" id="line-13"></span><ul><li>try other options (e.g. bias field smoothing, MRF parameter, number of iterations) <span class="anchor" id="line-14"></span></li></ul></li><li>Further analysis: <span class="anchor" id="line-15"></span><ul><li>Volume of tissues can be obtained by summing the PVE output <span class="anchor" id="line-16"></span></li><li><p class="line862">Volumetric analysis done in other stats package (e.g. SPSS, Matlab, etc) <em>but</em> for local change analyses look at VBM, vertex analysis, cortical thickness analysis (<a href="./FreeSurfer.html">FreeSurfer</a>), or SIENA/SIENAX <span class="anchor" id="line-17"></span></li></ul></li><li>Alternative: <span class="anchor" id="line-18"></span><ul><li><p class="line891"><tt class="backtick">fsl_anat</tt> for bias field correction <span class="anchor" id="line-19"></span></li></ul></ul><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

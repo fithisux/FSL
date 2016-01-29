@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>lesion_filling</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">lesion_filling</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867"> <span class="anchor" id="line-5"></span>
+<h1 id="Lesion_Filling">Lesion Filling</h1>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line874">Improve volume measurements by reducing intensity contrast within known lesion areas.  It is intended for use with "small" lesions, such as those typical in Multiple Sclerosis. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line867">
+<h2 id="Overview">Overview</h2>
+<span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line874">This tool takes a user-defined lesion mask (usually created manually) together with a structural image (e.g. T1-weighted image, but it could also be T2-weighted, PD, etc.) and "fills" the lesion area in the structural image with intensities that are similar to those in the non-lesion neighbourhood.  It has been shown (see references) that using such a method as part of a pre-processing pipeline can improve the registration and segmentation of pathological brains (particular those with Multiple Sclerosis) and the resultant volumetric measures of brain tissue. <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line874">If you are using this for larger lesions, such as stroke lesions, then be careful not to make the masks touch areas of non-brain tissue, as it uses the intensities immediately surrounding the mask to determine what intensities to fill the lesion with.  When non-brain tissue touches the mask, the intensities of this tissue will be used in the filling process, which normally leads to results that do not look like brain tissue. <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line867">
+<h2 id="Referencing">Referencing</h2>
+<span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line862">If you use <tt class="backtick">lesion_filling</tt> in your research, please make sure that you reference the article below. <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><div class="references"><span class="anchor" id="line-1-1"></span><ul><li>M. Battaglini, M. Jenkinson, and N. De Stefano.  Evaluating and reducing the impact of white matter lesions on brain volume measurements.  Human Brain Mapping, 33(9):2062–2071, 2012. </li></ul></div><span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line867">
+<h2 id="Usage_and_options">Usage and options</h2>
+<span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line874">The usage of the script is particularly simple and there are no configurable options. <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><p class="line867"><span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><pre><span class="anchor" id="line-1"></span>Part of FSL (build 500)
+<span class="anchor" id="line-2"></span>lesion_filling 
+<span class="anchor" id="line-3"></span>Copyright(c) 2012, University of Oxford (Mark Jenkinson)
+<span class="anchor" id="line-4"></span>
+<span class="anchor" id="line-5"></span>Usage: 
+<span class="anchor" id="line-6"></span>lesion_filling [options] -i &lt;intensity image&gt; -l &lt;lesion mask image&gt; -o &lt;output/filled image&gt;
+<span class="anchor" id="line-7"></span>
+<span class="anchor" id="line-8"></span>Compulsory arguments (You MUST set one or more of):
+<span class="anchor" id="line-9"></span>        -i,--in input image filename (e.g. T1w image)
+<span class="anchor" id="line-10"></span>        -o,--out        output filename (lesion filled image)
+<span class="anchor" id="line-11"></span>        -l,--lesionmask filename of lesion mask image
+<span class="anchor" id="line-12"></span>
+<span class="anchor" id="line-13"></span>Optional arguments (You may optionally specify one or more of):
+<span class="anchor" id="line-14"></span>        -v,--verbose    switch on diagnostic messages
+<span class="anchor" id="line-15"></span>        -h,--help       display this message</pre><span class="anchor" id="line-43"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

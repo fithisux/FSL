@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>PNM/UserGuide</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">PNM/UserGuide</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="Running_PNM">Running PNM</h1>
+<span class="anchor" id="line-4"></span><p class="line867"><img align="right" alt="pnm_gui.png" class="attachment" src="attachments/PNM(2f)UserGuide/pnm_gui.png" title="pnm_gui.png" /> <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867">
+<h2 id="GUI">GUI</h2>
+<span class="anchor" id="line-7"></span><p class="line862">The recommended (and easiest) way to run PNM is via the <tt class="backtick">Pnm</tt> GUI. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line862">This GUI allows you to specify the following <strong>inputs</strong>: <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><ul><li>text file containing the sampled physiological recordings  (each line containing numbers corresponding to one point in time) <span class="anchor" id="line-12"></span></li><li>FMRI timeseries data (a 4D image in NIFTI format) <span class="anchor" id="line-13"></span></li><li>information about the text file (which columns are cardiac/respiratory/triggers) <span class="anchor" id="line-14"></span></li><li>information about the physiological recordings (e.g., sampling rate) <span class="anchor" id="line-15"></span></li><li>information about the FMRI scans (e.g., slice ordering) <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span></li></ul><p class="line862">It also allows the user to specify the desired <strong>outputs</strong>: <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><ul><li>order of cardiac EVs (this is the number of pairs of sinusoidal frequencies to use - e.g. a value of 2 would indicate that the base frequency and the first harmonic, twice the base frequency, should be used - which would generate 4 regressors) <span class="anchor" id="line-20"></span></li><li>order of respiratory EVs <span class="anchor" id="line-21"></span></li><li>order of interaction EVs (see below) <span class="anchor" id="line-22"></span></li><li><p class="line862">optional RVT, HeartRate and CSF regressors <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span></li></ul><p class="line867">
+<h3 id="Triggers">Triggers</h3>
+<span class="anchor" id="line-25"></span><p class="line874">Scanner triggers must be supplied, as experience has shown that relative timings between the MR scans and physiological recordings is not sufficiently accurate/reliable without this. The scanner triggers need to be once per volume (a version that can also accept once per slice and automatically work out which it is, should be available in the next release).  The format for the trigger input is just the same as the other traces, and no special values need to be used as the software will automatically detect strong rising edges as the trigger points. <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line874">Cardiac input information can either be provided as a full trace or as "Pulse Ox Triggers" (as detected from any external software). Scanner triggers and cardiac triggers are not interchangeable as they contain different information. <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line867">
+<h3 id="Interaction_EVs">Interaction EVs</h3>
+<span class="anchor" id="line-30"></span><p class="line874">The interaction EVs combine cardiac and respiratory frequencies.  For instance, if the cardiac frequency is fc and the respiratory frequency is fr then the interaction terms have frequencies nc*fc +/- nr*fr where the permitted values of nc and nr are determined by the order of interactions entered in the GUI.  For example, cardiac order 3 and respiratory order 2 would generate frequencies: 1*fc +/- 1*fr ; 2*fc +/- 1*fr ; 3*fc +/- 1*fr ; 1*fc +/- 2*fr ;2*fc +/- 2*fr ; 3*fc +/- 2*fr. For each frequency a pair of regressors (sin and cos) are generated.  So the number of interaction EVs (regressors) can grow quite large. <span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><p class="line874">Note that in practice the frequencies here are changing throughout the scan (as heart rate and breathing rate vary) so they should be thought of more like instantaneous frequencies. <span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><p class="line867">
+<h2 id="PNM_stage_1">PNM stage 1</h2>
+<span class="anchor" id="line-35"></span><p class="line862">Set up the GUI and click <tt class="backtick">Go</tt> when ready. <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line867">
+<h2 id="Manual_check.2BAC8-edit">Manual check/edit</h2>
+<span class="anchor" id="line-38"></span><p class="line874">Unfortunately, physiological recordings, and the detection of the peaks in them, tends not to be perfect.  Therefore we have a simple and quick method for manually checking the recordings and peak detections, and noting down errors to be corrected by the following stage.  This is all done within a browser that shows the waveforms and the appropriate peaks. <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><p class="line862">The output directory will be created and when stage 1 has finished running there will be a file ending with <tt class="backtick">_pnm1.html</tt>. <span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><ul><li>Open this file in the firefox web browser <span class="anchor" id="line-43"></span><ul><li>Note that it uses a javascript plugin that other browsers may not support, and must be run from the same machine that the analysis was run on, e.g. the server, and will not work if the files are moved <span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span></li></ul></li></ul><p class="line862">If you do not have the firefox browser (or cannot install it) then you can either skip this step (hoping for the best) or use some other software to view the outputs (e.g. matlab/octave) and note down the times (in seconds) of erroneous/extra peaks or missing peaks.  You can then rerun <tt class="backtick">popp</tt> (see the log file to get the previous options) and add the options <tt class="backtick">--respadd,--respdel,--cardadd,--carddel</tt> for respiratory/cardiac additions/deletions. <span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><p class="line862">Note that <strong><em>respiratory peaks are only shown (and only detected) in the case where the RVT output has been requested</em>.</strong>  If that is not the case, the respiratory trace is converted to a phase using the RETROICOR methodology, without requiring peak detection.  Therefore, there is no need to manually check and correct the respiratory peaks unless RVT is requested.  Currently the respiratory checkbox is still available on the webpage even when RVT is not selected - this will be changed in future. <span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><p class="line867">
+<h2 id="PNM_stage_2">PNM stage 2</h2>
+<span class="anchor" id="line-50"></span><p class="line874">If you have done the manual check/edit in the browser then follow the instructions given in the browser window (which are tailored to your particular directory and data). <span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><p class="line862">If you have not done a manual check/edit then go to the output directory and run the script <tt class="backtick">pnm_stage2</tt>. <span class="anchor" id="line-53"></span><span class="anchor" id="line-54"></span><p class="line867">
+<h1 id="Outputs_of_PNM">Outputs of PNM</h1>
+<span class="anchor" id="line-55"></span><p class="line862">The main output of PNM is a file containing the desired regressor information.  Since the timing of the MR acquisition varies with slice in the FMRI data, you do not get a simple text file output.  Instead you get a set of outputs in the NIFTI format that are <em>voxelwise regressors</em>.  There is also a text file with a name ending in <tt class="backtick">_evlist.txt</tt> can contains the appropriately ordered list of all of these voxelwise regressors. <span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span><p class="line867">
+<h1 id="Using_PNM_in_FEAT">Using PNM in FEAT</h1>
+<span class="anchor" id="line-58"></span><p class="line862">To use the output of PNM with FEAT all you need to do is to find the file with the name ending in <tt class="backtick">_evlist.txt</tt> and enter this (via the file browser) in the <strong>Voxelwise Confound List</strong> in the FEAT GUI (on the Stats tab).  This will use these regressors as confounds, giving them automatic zero entries in all contrasts.  With the GLM this ensures that wherever there is any shared variance between these and the EVs of interest (specified in the main design matrix) that the shared variance will be assigned to the physiological noise model.  This is the conservative, and more correct, option and avoids inflating false positive rates, maintaining interpretability of any significant output results as being due to the changes of interest and not due to physiological noise. <span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><p class="line867">
+<h2 id="Note_on_randomise">Note on randomise</h2>
+<span class="anchor" id="line-61"></span><p class="line862">Since <tt class="backtick">randomise</tt> currently cannot account for time-series autocorrelations (it invalids the exchangeability) it is not possible to use PNM with <tt class="backtick">randomise</tt>. <span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-64"></span><hr /><p class="line874"> <span class="anchor" id="line-65"></span>
+<h1 id="Other_tools_.28advanced.29">Other tools (advanced)</h1>
+<span class="anchor" id="line-66"></span><p class="line862">The basic command-line tools used by PNM are: <tt class="backtick">popp</tt> and <tt class="backtick">pnm_evs</tt>. <span class="anchor" id="line-67"></span><span class="anchor" id="line-68"></span><p class="line874">The usage for these are: <span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span><p class="line867"><span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span><span class="anchor" id="line-73"></span><span class="anchor" id="line-74"></span><span class="anchor" id="line-75"></span><span class="anchor" id="line-76"></span><span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span><span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span><span class="anchor" id="line-82"></span><span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span><span class="anchor" id="line-85"></span><span class="anchor" id="line-86"></span><span class="anchor" id="line-87"></span><span class="anchor" id="line-88"></span><span class="anchor" id="line-89"></span><span class="anchor" id="line-90"></span><span class="anchor" id="line-91"></span><span class="anchor" id="line-92"></span><span class="anchor" id="line-93"></span><span class="anchor" id="line-94"></span><span class="anchor" id="line-95"></span><span class="anchor" id="line-96"></span><span class="anchor" id="line-97"></span><span class="anchor" id="line-98"></span><span class="anchor" id="line-99"></span><span class="anchor" id="line-100"></span><span class="anchor" id="line-101"></span><span class="anchor" id="line-102"></span><span class="anchor" id="line-103"></span><span class="anchor" id="line-104"></span><span class="anchor" id="line-105"></span><span class="anchor" id="line-106"></span><span class="anchor" id="line-107"></span><span class="anchor" id="line-108"></span><span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span><span class="anchor" id="line-111"></span><span class="anchor" id="line-112"></span><span class="anchor" id="line-113"></span><span class="anchor" id="line-114"></span><pre><span class="anchor" id="line-1"></span>Part of FSL (build 500)
+<span class="anchor" id="line-2"></span>popp
+<span class="anchor" id="line-3"></span>Copyright(c) 2011, University of Oxford (Mark Jenkinson)
+<span class="anchor" id="line-4"></span>
+<span class="anchor" id="line-5"></span>Usage:
+<span class="anchor" id="line-6"></span>popp [options] -i &lt;input data file&gt; -o &lt;output data file&gt;
+<span class="anchor" id="line-7"></span>
+<span class="anchor" id="line-8"></span>Compulsory arguments (You MUST set one or more of):
+<span class="anchor" id="line-9"></span>        -i,--in input physiological data filename (text format)
+<span class="anchor" id="line-10"></span>        -o,--out        output basename for physiological data and timing/triggers (no extensions)
+<span class="anchor" id="line-11"></span>
+<span class="anchor" id="line-12"></span>Optional arguments (You may optionally specify one or more of):
+<span class="anchor" id="line-13"></span>        -s,--samplingrate       sampling rate in Hz (default is 100Hz)
+<span class="anchor" id="line-14"></span>        --tr    TR value in seconds
+<span class="anchor" id="line-15"></span>        --resp  specify column number of respiratory input
+<span class="anchor" id="line-16"></span>        --cardiac       specify column number of cardiac input
+<span class="anchor" id="line-17"></span>        --trigger       specify column number of trigger input
+<span class="anchor" id="line-18"></span>        --rvt   generate RVT data
+<span class="anchor" id="line-19"></span>        --heartrate     generate heartrate data
+<span class="anchor" id="line-20"></span>        --pulseox_trigger       specify that cardiac data is a trigger
+<span class="anchor" id="line-21"></span>        --smoothcard    specify smoothing amount for cardiac (in seconds)
+<span class="anchor" id="line-22"></span>        --smoothresp    specify smoothing amount for respiratory (in seconds)
+<span class="anchor" id="line-23"></span>        --highfreqcutoff        high frequency cut off for respiratory filter in Hz (default is 5Hz)
+<span class="anchor" id="line-24"></span>        --lowfreqcutoff low frequency cut off for respiratory filter in Hz (default is 0.1Hz)
+<span class="anchor" id="line-25"></span>        --initthreshc   initial threshold percentile for cardiac (default 90)
+<span class="anchor" id="line-26"></span>        --nthreshc      neighbourhood exclusion threshold percentile for cardiac (default 60)
+<span class="anchor" id="line-27"></span>        --initthreshr   initial threshold percentile for respiratory (default 80)
+<span class="anchor" id="line-28"></span>        --nthreshr      neighbourhood exclusion threshold percentile for respiratory (default 80)
+<span class="anchor" id="line-29"></span>        --invertresp    invert respiratory trace
+<span class="anchor" id="line-30"></span>        --invertcardiac invert cardiac trace
+<span class="anchor" id="line-31"></span>        --noclean1      turn off cleanup phase 1
+<span class="anchor" id="line-32"></span>        --noclean2      turn off cleanup phase 2
+<span class="anchor" id="line-33"></span>        --loadcardphase input cardiac phase for reprocessing (text format)
+<span class="anchor" id="line-34"></span>        --loadrespphase input respiratory phase for reprocessing (text format)
+<span class="anchor" id="line-35"></span>        --vol   input volumetric image (EPI) filename
+<span class="anchor" id="line-36"></span>        --startingsample        set sample number of the starting time (t=0)
+<span class="anchor" id="line-37"></span>        --respadd       comma separated list of times (in sec) to add to respiratory peak list (uses nearest local max)
+<span class="anchor" id="line-38"></span>        --respdel       comma separated list of times (in sec) to delete from respiratory peak list (uses nearest existing peak)
+<span class="anchor" id="line-39"></span>        --cardadd       comma separated list of times (in sec) to add to cardiac peak list (uses nearest local max)
+<span class="anchor" id="line-40"></span>        --carddel       comma separated list of times (in sec) to delete from cardiac peak list (uses nearest existing peak)
+<span class="anchor" id="line-41"></span>        -v,--verbose    switch on diagnostic messages
+<span class="anchor" id="line-42"></span>        --debug output debugging information
+<span class="anchor" id="line-43"></span>        -h,--help       display this message</pre><span class="anchor" id="line-115"></span><p class="line874">and <span class="anchor" id="line-116"></span><span class="anchor" id="line-117"></span><p class="line867"><span class="anchor" id="line-118"></span><span class="anchor" id="line-119"></span><span class="anchor" id="line-120"></span><span class="anchor" id="line-121"></span><span class="anchor" id="line-122"></span><span class="anchor" id="line-123"></span><span class="anchor" id="line-124"></span><span class="anchor" id="line-125"></span><span class="anchor" id="line-126"></span><span class="anchor" id="line-127"></span><span class="anchor" id="line-128"></span><span class="anchor" id="line-129"></span><span class="anchor" id="line-130"></span><span class="anchor" id="line-131"></span><span class="anchor" id="line-132"></span><span class="anchor" id="line-133"></span><span class="anchor" id="line-134"></span><span class="anchor" id="line-135"></span><span class="anchor" id="line-136"></span><span class="anchor" id="line-137"></span><span class="anchor" id="line-138"></span><span class="anchor" id="line-139"></span><span class="anchor" id="line-140"></span><span class="anchor" id="line-141"></span><span class="anchor" id="line-142"></span><span class="anchor" id="line-143"></span><span class="anchor" id="line-144"></span><span class="anchor" id="line-145"></span><span class="anchor" id="line-146"></span><span class="anchor" id="line-147"></span><span class="anchor" id="line-148"></span><pre><span class="anchor" id="line-1-1"></span>Part of FSL (build 500)
+<span class="anchor" id="line-2-1"></span>pnm_evs
+<span class="anchor" id="line-3-1"></span>Copyright(c) 2011, University of Oxford (Mark Jenkinson)
+<span class="anchor" id="line-4-1"></span>
+<span class="anchor" id="line-5-1"></span>Usage:
+<span class="anchor" id="line-6-1"></span>pnm_evs [options] --tr=3.0 -i fmri_data.nii.gz -o pnmevs -r resp.txt -c card.txt
+<span class="anchor" id="line-7-1"></span>
+<span class="anchor" id="line-8-1"></span>Compulsory arguments (You MUST set one or more of):
+<span class="anchor" id="line-9-1"></span>        -i,--in input image filename (of 4D functional/EPI data)
+<span class="anchor" id="line-10-1"></span>        -o,--out        output filename (for confound/EV matrix)
+<span class="anchor" id="line-11-1"></span>        --tr    TR of fMRI volumes (in seconds)
+<span class="anchor" id="line-12-1"></span>
+<span class="anchor" id="line-13-1"></span>Optional arguments (You may optionally specify one or more of):
+<span class="anchor" id="line-14-1"></span>        -c,--cardiac    input filename for cardiac values (1 or 2 columns: time [phase])
+<span class="anchor" id="line-15-1"></span>        -r,--respiratory        input filename for respiratory phase values (1 or 2 columns: time [phase])
+<span class="anchor" id="line-16-1"></span>        --oc    order of basic cardiac regressors (number of Fourier pairs) - default=2
+<span class="anchor" id="line-17-1"></span>        --or    order of basic respiratory regressors (number of Fourier pairs) - default=1
+<span class="anchor" id="line-18-1"></span>        --multc order of multiplicative cardiac terms (also need to set --multr) - default=0
+<span class="anchor" id="line-19-1"></span>        --multr order of multiplicative respiratory terms (also need to set --multc) - default=0
+<span class="anchor" id="line-20-1"></span>        --csfmask       filename of csf mask image (and generate csf regressor)
+<span class="anchor" id="line-21-1"></span>        --rvt   input filename of RVT data (2 columns: time value)
+<span class="anchor" id="line-22-1"></span>        --heartrate     input filename for heartrate data (2 columns: time value)
+<span class="anchor" id="line-23-1"></span>        --rvtsmooth     Optional smoothing of RVT regressor (in seconds - default 0)
+<span class="anchor" id="line-24-1"></span>        --heartratesmooth       Optional smoothing of heart rate regressor (in seconds - e.g. 10)
+<span class="anchor" id="line-25-1"></span>        --slicedir      specify slice direction (x/y/z) - default is z
+<span class="anchor" id="line-26-1"></span>        --sliceorder    specify slice ordering (up/down/interleaved_up/interleaved_down)
+<span class="anchor" id="line-27-1"></span>        --slicetiming   specify slice timing via an external file
+<span class="anchor" id="line-28-1"></span>        --debug turn on debugging output
+<span class="anchor" id="line-29-1"></span>        -v,--verbose    switch on diagnostic messages
+<span class="anchor" id="line-30-1"></span>        -h,--help       display this message</pre><span class="anchor" id="line-149"></span><p class="line874">The slicetiming file needs to be a text matrix that specifies the timing (in seconds) of every slice relative to the start of the volume acquisition (t=0). The matrix must have dimensions: (number of slices) by (number of volumes).   The values represent the timings for one particular slice, across all volumes (e.g. timing of slice 2 in volume 1, slice 2 in volume 2, slice 2 in volume 3, etc.) which allows for a variable slice timing per volume. <span class="anchor" id="line-150"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ `uname` = "Darwin" ] ; then
+    DYLD_LIBRARY_PATH=${FSLDIR}/bin/fslview.app/Contents/Frameworks
+    export DYLD_LIBRARY_PATH
+    ${FSLDIR}/bin/fslview.app/Contents/MacOS/fslview $@
+fi
+if [ `uname` = "Linux" ] ; then
+    LD_LIBRARY_PATH=${FSLDIR}/lib:${LD_LIBRARY_PATH}
+    export LD_LIBRARY_PATH
+    ${FSLDIR}/bin/fslview_bin $@
+fi

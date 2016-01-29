@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<atlas version="1.0">
+  <header>
+    <name>Mars Parietal connectivity-based parcellation</name>
+    <shortname>Parietal CBP</shortname>
+    <type>Probabilistic</type>
+    <images>
+      <imagefile>/MarsParietalParcellation/Parietal_thr25_2mm</imagefile>
+      <summaryimagefile>/MarsParietalParcellation/Parietal_thr75_summaryimage_2mm</summaryimagefile>
+    </images>
+    <images>
+      <imagefile>/MarsParietalParcellation/Parietal_thr25_1mm</imagefile>
+      <summaryimagefile>/MarsParietalParcellation/Parietal_thr75_summaryimage_1mm</summaryimagefile>
+    </images>
+  </header>
+  <data>
+<label index="0" x="30" y="42" z="62">SPLA</label>
+<label index="1" x="39" y="38" z="67">SPLB</label>
+<label index="2" x="31" y="35" z="63">SPLC</label>
+<label index="3" x="35" y="31" z="62">SPLD</label>
+<label index="4" x="34" y="24" z="57">SPLE</label>
+<label index="5" x="20" y="50" z="51">IPLA</label>
+<label index="6" x="18" y="47" z="58">IPLB</label>
+<label index="7" x="20" y="41" z="57">IPLC</label>
+<label index="8" x="22" y="35" z="58">IPLD</label>
+<label index="9" x="26" y="29" z="55">IPLE</label>
+  </data>
+</atlas>

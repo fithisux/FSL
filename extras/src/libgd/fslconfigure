@@ -1,0 +1,16 @@
+#!/bin/sh
+HOSTTYPE=`uname`
+cppflags="-I${FSLEXTINC}"
+ldflags="-L${FSLEXTLIB}"
+
+configure_opts="--prefix=${FSLDEVDIR} --enable-static --disable-shared --without-libiconv-prefix --with-png=${FSLDEVDIR} --without-freetype --without-jpeg --without-xpm --without-fontconfig --without-x"
+
+configure_script=${FSLDIR}/config/${FSLMACHTYPE}/configure.sh
+if [ -f ${configure_script} ]; then
+    . ${configure_script}
+fi
+
+PATH=${FSLDEVDIR}/bin:${PATH} 
+echo "CFLAGS=\"${cflags}\" LDFLAGS=\"${ldflags}\" CPPFLAGS=\"${cppflags}\" ./configure ${configure_opts}"
+CFLAGS="${cflags}" LDFLAGS="${ldflags}" CPPFLAGS="${cppflags}" ./configure ${configure_opts}
+

@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FUGUE</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FUGUE</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Research_Overview">Research Overview</a></li><li>
+<a href="#Fieldmap_Acquisition">Fieldmap Acquisition</a></li></ol></div></div></li><li><a href="./FUGUE(2f)Guide.html">Guide</a></li><li><a href="./FUGUE(2f)FAQ.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span>
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line862">FUGUE is, most generally, a set of tools for EPI distortion correction.  It also refers to a specific command line tool <tt class="backtick">fugue</tt>. <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><ul><li><p class="line862">Functional images acquired using standard <strong>EPI sequences are distorted due to magnetic field inhomogeneities</strong> <span class="anchor" id="line-7"></span></li><li>Inhomogeneities are caused by magnetic susceptibility differences in neighbouring tissues within the head <span class="anchor" id="line-8"></span><ul><li>particularly for air/bone or air/tissue interfaces in the sinuses <span class="anchor" id="line-9"></span></li></ul></li><li><p class="line862">Inhomogeneities result in <strong>geometrical distortion and signal loss</strong>, particularly in the inferior frontal and temporal regions <span class="anchor" id="line-10"></span></li><li><p class="line862">Field inhomogeneities can be measured with a <strong>fieldmap image</strong> <span class="anchor" id="line-11"></span><ul><li>measured field values can be used to calculate the geometric distortion and signal loss <span class="anchor" id="line-12"></span></li><li><p class="line862">this information can be used to <em>compensate</em> for (not completely remove) these artefacts <span class="anchor" id="line-13"></span></li></ul></li><li>Artefacts are compensated by <span class="anchor" id="line-14"></span><ol type="i"><li>geometrically unwarping the EPI images, and  <span class="anchor" id="line-15"></span></li><li>applying cost-function masking in registrations to ignore areas of signal loss <span class="anchor" id="line-16"></span></li></ol></li><li><p class="line862">Areas where signal loss has occurred <em>cannot be restored</em> with any form of post-processing, as the signal has been lost - only different acquisition techniques (which are available) can restore signal in these areas. <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span></li></ul><p class="line874">Distortions may be corrected for <span class="anchor" id="line-19"></span><ol type="1"><li>improving registration with non-distorted images (e.g. structurals), or <span class="anchor" id="line-20"></span></li><li>dealing with motion-dependent changes. <span class="anchor" id="line-21"></span></li></ol><p class="line874">FUGUE is designed to deal only with the first case - improving registration. The issue of motion-dependent signal changes (due to motion-dependent changes in field inhomogeneity and distortion directions) is not dealt with in the current version. <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line867">
+<h1 id="Fieldmap_Acquisition">Fieldmap Acquisition</h1>
+<span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><p class="line862">Unfortunately, there is no standard sequence for fieldmap acquisitions and different scanners return different images. Normally these images require processing before they represent images with field values in the desired units (of radians/second) in each voxel. For SIEMENS scanners we provide a tool: <a href="./FUGUE(2f)Guide.html#SIEMENS_data">fsl_prepare_fieldmap</a> to assist with this.  Currently this does not support other scanners, but we welcome collaboration from people with other scanners to expand this functionality. <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line874">The most common fieldmap sequence acquires two images with different echo times. The change in MR phase from one image to the other is proportional to both the field inhomogeneity in that voxel and the echo time difference. The field value is therefore given by the difference in phase between these two images divided by the echo time difference. This is true for Spin Echo, Gradient Echo or EPI sequences. However, EPI-based fieldmaps suffer from the same distortions (more or less) as the functional images, while Spin Echo or Gradient Echo based fieldmap images do not. Within FSL you cannot use EPI-based fieldmaps with the standard processing, and their use in general is very problematic. We strongly recommend that Spin Echo or Gradient Echo fieldmap sequences are used to acquire the images. <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line874">MR phase is the most important quantity in a fieldmap sequence, whereas in normal imaging this phase is not of interest and is normally not saved when reconstructing the images. As a consequence, raw fieldmap scans are somewhat different from most scans, and may contain images of complex values, or separate phase and magnitude images. Furthermore, some scanners/sites may do the full reconstruction of acquired scans to yield a real-valued map of field inhomogeneities (in units of Hz, radians per second, Tesla or ppm). Alternatively no reconstruction may be done, and the raw phase and magnitude (or complex) images may be saved instead, although with modern coil arrays it can be difficult to get correct phase measurements. It is important for each different scanner/site/sequence to know what form your data is in. If they have been converted to NIFTI or ANALYZE format, then you can use the FSL tools (particularly fslinfo and FSLView) to determine the types of images present. To obtain fieldmaps that can be used within FSL using the FSL tools (in particular, PRELUDE and FUGUE), please refer to the page on preparing fieldmaps for FEAT. <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-33"></span><a href="./CategoryStructural.html">CategoryStructural</a> <a href="./CategoryFUGUE.html">CategoryFUGUE</a> <span class="anchor" id="line-34"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

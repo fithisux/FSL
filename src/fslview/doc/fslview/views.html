@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+    <title>Image Views</title>
+  </head>
+  <body>
+    <h3>The image views</h3>
+    
+
+
+    <p>Images can be displayed using several kinds of 2 &amp; 3-D views, selectable via
+    the <i>Tools</i> menu:</p>
+
+    <ul>
+      <li><a name="view">Orthographic</a> - the default view showing one slice each of:
+	axial; coronal and sagittal planes.
+      <li>Lightbox - showing all axial slices simultaneously.
+      <li>Single - shows only a single slice - the orientation can be
+	switched between axial, coronal and sagittal.
+    </ul>
+
+    <p>Here we can see a typical view, "Ortho view", with the default set of toolbars enabled:</p>
+
+    <table>
+      <tr>
+	<td>
+
+	  <ul>
+	    <li>
+	      The <a href="mode.html">"Mode" toolbar</a> <font color="red">(1)</font>
+	      determining how the cursor behaves.
+	    </li>
+	    <li>
+	      The <a href="viewtool.html">"View" toolbar</a><font color="red">(2)</font> can be used to
+	      animate/re-orient certain views.
+	    </li>
+	    <li>
+	      The <a href="bricon.html">"BriCon" control</a><font color="red">(3)</font> for adjusting the way
+	      voxel intensities get mapped to colours on screen.
+	    </li>
+	    <li>
+	      The "Slice" views<font color="red">(4)</font> which render the images as
+	      single slices and provide cursor input via the mouse.
+	    </li>
+	    <li>
+	      The <a href="cursor.html">"Cursor" tool</a><font color="red">(5)</font> which
+	      provides control and feedback via the cursor position.
+	    </li>
+	    <li>
+	      The <a href="imagelist.html">"Layer"
+		tool</a><font color="red">(6)</font> used to control the
+	      order and individual properties of each layer to be
+	      draw.
+	    </li>
+	  </ul>
+
+	</td>
+	<td>
+	  <img width="500" src="view-ortho.png">
+	</td>
+      </tr>
+    </table>
+
+    <p>You can open as many views as you like (although the
+      viewer might get a little slow if you open too many). This
+      includes opening more than one instance of any given type
+      - for example, you might want to start with
+      the <i>Ortho</i> view, then open another <i>Ortho</i>
+      view, in which you have different images from
+      the <a name="imagelist" href="imagelist.html">Layer
+	List</a> turned on, so that you can move the cursor around
+      in the volume and compare different images
+      (<a href="twoorthos.png">see example</a>). If you close
+      down all views then all loaded images will be discarded
+      and you will have to re-open a file to start viewing
+      again.</p>
+
+    <p>If you end up with too many open sub-windows to keep
+      track of, <i>Window -> Tile</i> will auto-arrange them so
+      that they are all visible simultaneously, and <i>Window ->
+	Cascade</i> will place all sub-windows in a diagonal
+      overlapping line, for you to select and adjust those of
+      interest.</p>
+
+    <p> Moving the mouse over a slice while holding down the left
+      mouse button will cause the cursor to move around the image.
+      The cursor position and value can be viewed on
+      the <a href="cursor.html">Cursor Toolbar</a>.  It is also
+      possible to move the cursor to any position by altering the
+      values in the <a href="cursor.html">Cursor Toolbar</a>.  FSLView
+      has "linked cursor" behaviour: as the cursor is moved around in
+      one view it also moves in all other views. Visit the "View
+      Options" dialog to turn on/off the linked cursor as needed.</p>
+    
+  </body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>HistogramToolbarBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>HistogramToolbarBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>99</width>
+            <height>34</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup3</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter</set>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>1</number>
+                </property>
+                <property name="spacing">
+                    <number>1</number>
+                </property>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_zoomButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="toggleButton">
+                        <bool>true</bool>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image0</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Zoom&lt;br&gt;&lt;hr&gt;Drag with the left mouse button to select the region to be zoomed up. Pressing the zoom button again will reset the view.</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_printButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image1</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Print&lt;br&gt;&lt;hr&gt;Prints the current view of the histogram.</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_optionsButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image2</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Options&lt;br&gt;&lt;hr&gt;Change the way the histogram is plotted, including: turn on/off log scale, manually select intensity ranges, etc.</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </hbox>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="869">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000032c49444154789cb594cb6f5b451487bfb9beb6efb513db71923a0ffab0d2a4d01023530454955844a214650da20bb6ddf60f63c58a1dcd82a86a2ba5552bd128d03831759cf811dbb17ddf77a68bd8254438a50b8e74348b99f3e9777ea37304ef0e71e60450831cf978d45dd44c8c65a2f1f8a4922aab948a0b4deb28256bae631ff9ae6303f274917e0e301137139f4ccdccdf999e99ff42d3b482943283886cf77bc70f6bfbe5f56ebbb911f85e150886459111b068dc4c14727397ef176e7cf9e3ea376bd7bfbeb33676f3ab55fdd2d5e59c164b7cead8d68aeb58cdc0f7f6a40c9da105a314a6b2d3b3b7968b9fdfbafdeddaf8cd1b2bcc4c4fe2858a3f2b47e8c6b8a645624b52cadb7baef3bce77b5dc00194360298494d4c7e7cedfaca4471e54391bf3487619a782104a1c2304cf24bcbdad4cc7c21a2479780e4c0734601934aaa8be9d4b8399dcda094a0d1b1281fb4795defe00521e94c1a3da27fa094bc38006ae7b52ca4949aedb8a2d5b50889f257bd43f9b04db7ef10d735a488200412a5a240ec5d402b08fcfd4ae5c07ef6fb4e323b35cd51d7a5eff8c4748da419e3f0e000cff7cb52a906100e0bffed9735604c29950f952a849a91740325a454c4a33a49338ad5efb1f968237cf9ecd19356bdba1e86c12ed007e45985ba10624a08f1d171ab9edb7efed80fc3b067f53e8b5dc8cd45e3a62980606f67db79faf041f97569eb89e7dae5012c845393924aa5621313138b86617cef38ce6ab3d9bc605956c71c4b5772f39793869998510853216add56e355bd5a7ee139d663601b6802de5b0f755d8f2612896bf97cfedec2c2c277b55a2db7b9b959711ce797fe71ebb79de396058c0109c0066ac021d0008e01ff6d8b806618c695d9d9d97b8b8b8b3f044130552a95dc76bbfd4a4af9147801d43999047dd05508b8830c38b52874d334d3b95cee7eb158bc2ba5cc6e6c6c78bbbbbb5b9ee7fd0a6c0d5474395902438b86dbe61f8b01409752c66cdb5eaa542ad9fdfd7daf542abdf47dff67601d2803bdb32ace8b08207ddff7abd5ead546a351775df727e001f007703430fb3fc10084104200592144412935ae94aa0015a0f5be30f8db138d93f13138f1c5e63ddafc5fe30d00f281375a9b25a50000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="993">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000003a849444154789cad94cf4b635714c73fef474c4c3421b1d391c4d1cc984452c748ba28e82a8b82d04dc1b5cb829b2203ddcdae9b599442d7d345a17f4017b3105c484db5346ded501d6867128dce9349471b4df499bc675ede7daf0b5f066d67a0851e389b7beefd9c2f9cefb9f03f87f4a642a150f84851947785105f178bc55f00e74ad9fd4fc06c361b5e5c5cfc26168bbdafeb7aa35c2e1bebebeb8eaeeb3f8c8d8d7d562c169f00e2756f95d71d4e4c4c7c2549d287f1789cc1c1c1fe4c2613cee7f3916432795755d5c542a1502b954a4f3de835b5d71466b35935168b7d9acbe5eecfcdcdd16eb769369b743a1da2d128e1701821049d4ee77c6faf5aae56f7d67777771f944aa5d39ee26bc07c3effc5f4f4f4bda5a525d2e93417171798a6c9caca0adbdbdbc8b2ccf0f030b3b339fcfe734e4f033c7ab4c2c3875f268123a023f760d3d3d31f6732997bf3f3f32493490cc34092242ccba256abd1e974884422c46231ba5d8dc3c3ef10a24eb7db05980586004505585858f8646868e8c1e4e424d168945aad46381c46d775d6d6d6383838201e8f93cea4b979fb2683fd2ff007f23c7b7a4abd7e0c90077e038e5540063e9f999921954ae1ba2ebaaed36834d8dcdca45aad924824482693dc4adea212ae1017011463809d9d5d0cc30018007c80a402aa6ddb98e60596d5c5e7f3110804701c87f1f1711289048ee3108fc75164851b9d1bb4ea1d2a8f9f51abd5b06d1b4f94d403ca008ee3a0aa3ebadd2e42087c3e1f2323234892445f5f1f00ad568be04990ad1fb7d0340dd77571ddeb1e575ff94792b06d8bbe3e3f8aa2208443bbdd4608413018c0ef0f60db365b5b9730cbb2b02c0bd334e1728b5cc0550184105896856d3bd8b681e338c8b2442412c1755d8e8efe2410b0d8dfaf5e83699a6697cbe527800e5c008e0cb8baae2f57ab550e0f5fe238828181108aa2d26eb7393f3f47511442a120aaeac3755d2ccbe2f8f8984aa5526eb55a8f81df81134028806c18e6af9aa6bda7eb6791939313e7ecec4c551499fefe20b22c639a2692e452afd7393838607f7fdfd9d9d9a9341a8d9f806f819f81978090bca10481bb9e9feea452a90fd2e9742097cbdd894663a4d32942a1109aa6b1bcbcccc6c6c64eb3d9dc007ac03f0013707bab27032120ea393e02244747470baaaabe353535753b93c9bc631806abababcfcbe5f2da1565cf81ae37946bbb2c7ba9027d40d86b90f01ac481b7bd895681ef81173d65afdcc29b43e6f27bf379190106bd5a1338beaaecdf00ff7e47f19ae0a9fcc75f08f0171e0dab56a313d28d0000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="996">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000003ab49444154789c8d94df4f5b6518c73fa72d2d650c06ed0a832810527435fc282ca43313c564098b1786ba6c1726bbf0da192e8cfb0f8cf1765e8d0bf502c38d1726cc28dbc28fa10b1d633ab463c2e8117029b450da53da734edbf37ad1d3a532587c6ecec9f3beefe73ccff3fdbec7caff8c91919133030303a793c964bb6118ae4c26b375d83e4be9e5dbc1c1f73e733aaf0276332f95d6464747dff5fbfd3fc8b27c3b9fcfdfb2582c5f012ec07628f0ef9b37dfeceeefbfd15455f5c555b87b11de011c8025180cfaac56ebd79aa6354d4f4f23cb328aa2dc065a0167f9874b40e9cef5eb378cdadaa6c0e060d51b6e777f9b24fd740e86806ab7dbedb2d96caf86c361d2e9f49aaaaa63aaaa62b3d95acb3b2c8515b0e49e3edd4daeaf7fd01608f08ac783d8d9b1e615e56d035622aa2a79bdde0fbd5e2f9148c46ab7db85cbe56a2e140a15aaaace021a20ca81920adadaeeee5936369abc030338749da948e4b813de5a492426334234f5f4f4b4d4d7d73b0cc3688e46a32de9743aacebfa2290020ae54052908dc1c3bf52a973e9b939f75a348afffc79d69454b5239fbfece9ec6c696c6c647c7c9c5028a4c4e3f1655dd7ef005b40ec05206000f90cac6f43dfaec371c2e6b0531be8c779aa91d68ed76868686062620245519e1886710f90811560f730a03067b1a340743b970b64e2b1632b5b31ba03fd783c27916599fbf71712994ce60130072c001b807a7086a530802cb02560316e08b1974e376e6fc79dce4a87a4eb1aababab896c367b0b9831ab4b9be7380c58826ae6c66776bbbd2a180cfac27f862d42083abb3ac5fefefe834462ef2eb053de6a290efa48982dfc032c343737d70702015b6f5f1fbffdfe88cdcdcd9a4b972e7ee4f19c7403956641ff31f60b57c784ea40627878389bcbe5b05aad582c166667e74826539e6bd73e0d2512492211f9e3b1b1efbe3147651c56e1f3a8abab3bad288a6f696989582c06600821d69796fe4857d8ec0c5d18227036f0a5dfefbf025497584701255dd7bb344d7bdd300c244922994c16809010e2c79999d982a6aaf4fa7bab7c3edfe74ea7f37d7304d241519e0373b99c5c535373a6a3a3a37d7e7e9e582c16cae7f3f78410bf2c2f3fd9989a9aee8a46a3b69f27271753a9d42cf00c50a5a38080b3b2b2f2938a8a8a0bbaae37689af610f81e7804b8812b400ff02b451bcd0189a3805054f014d00db4037b400858a7f8cf6c03bc145df1d8cceb2f034ae65cea80e314958f03fbe6fa31a086a217531495162f0396a0568ae209f370e96658caf286f9e45f4f8fa0277b9fc6850000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="1" margin="1"/>
+</UI>

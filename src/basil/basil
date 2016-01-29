@@ -1,0 +1,604 @@
+#!/bin/sh
+
+# BASIL: Bayesian Arterial SpIn Labeling parameter estimation
+#
+# Michael Chappell, FMRIB Image Analysis Group
+#
+# Copyright (c) 2007-2011 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+
+Usage() {
+    echo "Bayesian Inference for Arterial Spin Labelling MRI"
+    echo "Version (build `cat $FSLDIR/etc/fslversion | sed 's/\.//g'`)"
+    echo ""
+    echo "Usage (optional parameters in {}):"
+    echo " -i         : specify input/data file"
+    echo " {-o}       : specify output directory"
+    echo " -m         : specify brain mask file"
+    echo " -@         : specify parameter options file"
+    echo " {--model}  : model used for analysis {default: buxton}"
+    echo " Extended options:"
+    echo " --nlls     : Do least squares analysis as first step"
+    echo " --infertau : Add step to infer on bolus length"
+    echo " --infert1  : Add step to include uncertainty in T1 values"
+    echo " --inferart : Add step to infer on arterial compartment"
+#    echo " --inferwm  : Add step to infer a white matter CBF component"
+    echo " --spatial  : Add step that implements adaptive spatial smoothing on CBF"
+    echo " --fast     : Do analysis in single step (appropriate for use with --spatial)"
+    echo ""
+    echo " Special options:"
+    echo " --t1im   : voxelwise T1 (tissue) estimates"
+    echo "  Partial volume correction / CBF estimation"
+    echo "           (enforces --spatial)"
+    echo " --pgm    : Gray matter PV map"
+    echo " --pwm    : White matter PV map"
+    echo ""
+}
+
+call_fabber() {
+    #echo $allinstruct $vbinstruct $extras
+    $fabber --data=$infile --mask=$mask --output=$outdir/step$step --model=$model --max-iterations=$nbiter $allinstruct $vbinstruct $extras -@ $options $1
+    if [ $step -gt 1 ]; then
+	if [ ! -z $devel ]; then #save a copy of the init MVN in the step
+	    ${FSLDIR}/bin/imcp $outdir/temp $outdir/step$step/initMVN 
+	fi
+    fi
+    ${FSLDIR}/bin/imcp $outdir/step$step/finalMVN $outdir/temp
+
+}
+
+# deal with options
+
+if [ -z $1 ]; then
+    Usage
+    exit 1
+fi
+
+until [ -z $1 ]; do
+    case $1 in
+	-o) outflag=1 outdir=$2
+	    shift;;
+	-i) inflag=1 infile=$2 #input/data file
+	    shift;;
+	-m) mask=$2
+	    shift;;
+	-@) options=$2 #options file (text)
+	    shift;;
+	--model) model=$2
+	    shift;;
+	--nlls) nllsonly=1;;
+	--inferart) inferart=1;;
+	--infert1) infert1=1;;
+	--infertau) infertau=1;;
+	--inferwm) inferwm=1;;
+	--spatial) spatial=1;;
+	--fast) fast=1;;
+	--pgm) pvcorr=1 pgm=$2
+	    shift;;
+	--pwm) pvcorr=1 pwm=$2
+	    shift;;
+	--t1im) t1im=$2
+	    shift;;
+	--devel) devel=1;; #implement development version
+	--spriors) custspriors=$2 #custom spriors (need to know what you are doing to use this option)
+	shift;;
+	*)  Usage
+	    echo "Error! Unrecognised option on command line: $1"
+	    echo ""
+	    exit 1;;
+    esac
+    shift
+done
+
+
+# version of software to use
+mvntool=mvntool
+fabber=fabber
+#mvntool=${FSLDIR}/bin/mvntool
+#fabber=${FSLDIR}/bin/fabber
+
+if [ ! -z $devel ]; then
+    # in development mode use local version of fabber
+    mvntool=~/cproject/fabber/mvntool
+    fabber=~/cproject/fabber/fabber
+    #model=devel
+    #any_other_spriors=NN
+fi
+
+# set the output directory here if not specified
+if [ -z $outflag ]; then
+    echo "Ouput being placed in basil subdirectory of input directory"
+    outdir=$indir/basil;
+fi
+
+# Start by looking for the output directory (and create if need be)
+count=0
+while [ -d $outdir ]; do
+    outdir=$outdir"+"
+    count=`expr $count + 1`
+
+    if [ $count -gt 20 ]; then
+	echo "Error: $outdir too many existing output directories (i.e. shall not add another +)"
+	exit
+    fi
+done
+echo "Creating output directory: $outdir"
+mkdir $outdir;
+
+# start the log
+echo "$*" > $outdir/logfile
+
+
+allinstruct="--data-order=singlefile"
+vbinstruct="--method=vb --convergence=trialmode --noise=white --allow-bad-voxels"
+spvbinstruct="--method=spatialvb --noise=white --allow-bad-voxels"
+nbiter=20
+
+# set spatial prior types
+stype=M
+ATstype=N
+BLstype=N
+T1stype=N
+IVstype=A
+IVATstype=N #is also applied to the WM AT 
+t_spriors=""
+iv_spriors=""
+wm_spriors=""
+btau_spriors=""
+T1_spriors=""
+
+#copy options file into output dir
+cp $options $outdir/params.txt
+options=$outdir/params.txt #this is now the options file to which we will refer
+
+# deal with model specification
+modelsearch=`grep "model=" $options` #look for model in options file (the placement of the model in the options file is to be DEPRECEATED)
+modelsearch=`echo $modelsearch | sed 's/'".*\(--model=[a-z]*\).*"'/\1/'` #if there are multple options on one line
+#echo $modelsearch
+if [ ! -z $modelsearch ]; then
+    
+    sed 's/'"$modelsearch"'//' < $options > $outdir/tempparams.txt #remove model specification from options file
+    mv $outdir/tempparams.txt $outdir/params.txt
+    
+    if [ -z $model ]; then
+	model=`echo $modelsearch | sed s/--model=//`
+    else
+	echo "Warning 'model' specified on command line and in options file"
+	echo " basil will deafult to the command line specification"
+    fi
+else
+    if [ -z $model ]; then
+	# deafult case(s) if no model is specified
+	if [ ! -z $pvcorr ]; then
+	  # PV correction model
+	    model=aslpvc
+	else
+	    # default model
+	    model=buxton
+	fi
+    fi
+fi
+echo "Model for analysis is: $model"
+
+# get tau value from $options (if set)
+tausearch=`grep tau $options`
+tausearch=`echo $tausearch | sed 's:.*--tau=\([0-9]*.[0-9]*\).*:\1:'`
+if [ ! -z $tausearch ]; then
+    tauset=$tausearch
+else
+    tauset=10 #effectively infinite
+fi
+
+echo "Using bolus length: $tauset"
+
+# deal with white matter correction options
+if [ ! -z $pvcorr ]; then
+    # we are doing PV corretion - force certain options
+    inferwm=1
+    spatial=1
+    skipstepswmT1=1 #we are going to skip a few steps
+
+    nbiter=200 #need more iterations for PV correction
+
+    if [ -z $pgm ]; then
+	echo "Grey matter PV map not supplied, use --pgm"
+	exit
+    fi
+
+    if [ -z $pwm ]; then
+	echo "White matter PV map not supplied, use --pwm"
+	exit
+    fi
+fi
+
+
+nparam=2
+paramtext="CBF and ^t"
+t_spriors=$t_spriors"${stype}${ATstype}"
+
+### --- NLLS MODULE ---
+if [ ! -z $nllsonly ]; then
+    step=1
+# STEP: NLLS
+    echo "STEP $step: NLLS ($nparam param: $paramtext)"
+    $fabber --data=$infile --mask=$mask --output=$outdir/step$step  --model=$model $allinstruct --method=nlls -@ $options
+    echo "STEP $step: NLLS ($nparam param: $paramtext)" > $outdir/step$step/info.txt
+
+
+    stepfrom=$step
+    nllsinstr=" --continue-from-mvn=$outdir/step${stepfrom}/finalMVN.nii.gz --continue-fwd-only"
+    stepfromtext="- init with STEP $stepfrom"
+    step=`expr $step + 1`
+
+else
+    nllsinstr=""
+    step=1
+    stepfromtext=""
+fi
+
+### --- BASIC VB MODULE ---
+# STEP: VB 
+text="STEP $step: VB ($nparam param: $paramtext)"
+if [ -z $fast ]; then
+    echo $text$stepfromtext
+    call_fabber $nllsinstr
+    #$fabber --data=$infile --mask=$mask --output=$outdir/step$step $allinstruct $vbinstruct -@ $options $nllsinstr
+    echo $text$stepfromtext  > $outdir/step$step/info.txt
+
+    stepfrom=$step
+    step=`expr $step + 1`
+fi
+
+### --- ARTERIAL MODULE ---
+# deal with inference of arterial compartment
+if [ ! -z $inferart ]; then
+    # we are inferring an arterial compartment
+    nparam=4
+    allinstruct=$allinstruct" --inferart"
+    paramtext="CBF, ^t, bCBF, b^t"
+    iv_spriors=$iv_spriors"${IVstype}${IVATstype}"
+    text="STEP $step: VB ($nparam param: $paramtext)"
+
+    if [ -z $fast ]; then
+	$mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=3 --new --val=10 --var=1
+	$mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=4 --new --val=0.5 --var=0.1
+	
+	
+         # STEP: VB 
+	text=$text" - init with STEP $stepfrom"
+	echo $text
+	call_fabber --continue-from-mvn=$outdir/temp
+	#$fabber --data=$infile --mask=$mask --output=$outdir/step$step $allinstruct $vbinstruct -@ $options
+	echo $text  > $outdir/step$step/info.txt
+	
+	stepfrom=$step
+	step=`expr $step + 1`
+    fi
+fi
+
+
+#addinstruct=""
+
+### --- BOLUS LENGTH MODULE ---
+if [ ! -z $infertau ]; then
+# STEP: VB add variable bolus length
+    insposn=3 #sets position for tissue tau to be inserted by mvntool
+    nparam=`expr $nparam + 1`
+    paramtext=$paramtext", tau"
+    t_spriors=$t_spriors"${BLstype}"
+    allinstruct=$allinstruct" --infertau"
+
+    if [ ! -z $inferart ]; then
+	paramtext=$paramtext", btau"
+	btau_spriors=$btau_spriors"${BLstype}"
+	nparam=`expr $nparam + 1`
+    fi
+    text="STEP $step: VB ($nparam param: $paramtext)"
+
+    if [ -z $fast ]; then
+	text=$text" - init with STEP $stepfrom"
+	echo $text
+   
+	$mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=$insposn --new --val=$tauset --var=0.1
+	
+	if [ ! -z $inferart ]; then
+        # add bolus length parameter for arterial compartment
+	    insposn=6 #sets position for arterial tau to be inserted by mvntool
+	    $mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=$insposn --new --val=$tauset --var=0.1
+	fi
+
+	call_fabber --continue-from-mvn=$outdir/temp
+	#$fabber --data=$infile --mask=$mask --output=$outdir/step$step $allinstruct $vbinstruct $addinstruct --continue-from-mvn=$outdir/temp -@ $options
+	echo $text > $outdir/step$step/info.txt
+
+	stepfrom=$step
+	step=`expr $step + 1`
+    fi
+fi
+
+nwmparam=0 #number of WM parameters
+### --- WHITE MATTER MODULE ---
+if [ ! -z $inferwm ]; then
+    insposn=`expr $nparam + 1`
+    nparam=`expr $nparam + 2`
+    nwmparam=2
+    paramtext=$paramtext", fwm, ^twm"
+    wm_spriors=$wm_spriors"${stype}${IVATstype}"
+    allinstruct=$allinstruct" --inferwm"
+   
+    if [ ! -z $infertau ]; then
+	nparam=`expr $nparam + 1`
+	nwmparam=`expr $nwmparam + 1`
+	paramtext=$paramtext", wmtau"
+	wm_spriors=$wm_spriors"${BLstype}"
+    fi
+    text="STEP $step: VB ($nparam param: $paramtext)"
+
+    if [ -z $fast ]; then
+	text=$text" - init with STEP $stepfrom"
+	echo $text
+
+	$mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=$insposn --new --val=1 --var=1
+	$mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=`expr $insposn + 1` --new --val=1 --var=0.1
+
+	if [ ! -z $infertau ]; then
+	   $mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=`expr $insposn + 2` --new --val=$tauset --var=0.1
+	fi
+
+	if [ -z $skipstepswmT1 ]; then
+	    call_fabber --continue-from-mvn=$outdir/temp
+	    echo $text > $outdir/step$step/info.txt
+
+	    stepfrom=$step
+	    step=`expr $step + 1`
+	fi
+    fi
+fi
+
+### --- T1 MODULE ---
+if [ ! -z $infert1 ]; then
+# STEP: VB add variable T1
+    insposn=`expr $nparam + 1` # sets postion for T1 parameters to be inserted by mvntool
+     ### (NB btau is put at very end - so we have to adjust if it is in there)
+    if [ ! -z infertau -a ! -z inferart ]; then
+	insposn=`expr $insposn - 1`
+    fi
+
+    nparam=`expr $nparam + 2`
+    paramtext=$paramtext", T1, T1b"
+    if [ ! -z $t1im ]; then
+	T1tstype=I
+    else
+	T1tstype=N
+    fi
+    t1_spriors=$t1_spriors"${T1tstype}${T1stype}"
+    
+    allinstruct=$allinstruct" --infert1"
+
+    if [ ! -z $inferwm ]; then
+	# need to correct insertion position for the WM parameters that have been added to the very end
+	insposn=`expr $insposn - 2`
+	if [ ! -z $infertau ]; then
+	    insposn=`expr $insposn - 1`
+	fi
+
+	#deal with WM T1
+	nparam=`expr $nparam + 1`
+	nwmparam=`expr $nwmparam + 1`
+	paramtext=$paramtext", T1wm"
+	wm_spriors=$wm_spriors"${T1stype}" #T1 WM is part of the WM block
+    fi
+	text="STEP $step: VB ($nparam param: $paramtext)"
+
+	T1tparam=$isnposn #need this later for the T1t image prior
+
+    if [ -z $fast ]; then
+	text=$text" - init with STEP $stepfrom"
+	echo $text
+	
+	$mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=$insposn --new --val=1.3 --var=0.01 
+	$mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=`expr $insposn + 1` --new --val=1.6 --var=0.01
+	# (NB we dont worry about the T1t image here, we will overwrite this parameter later
+
+	if [ ! -z $inferwm ]; then
+	    $mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=$nparam --new --val=1 --var=0.01
+	fi
+    
+	if [ -z $skipstepswmT1 ]; then
+	    call_fabber --continue-from-mvn=$outdir/temp
+	#$fabber --data=$infile --mask=$mask --output=$outdir/step$step $allinstruct $vbinstruct $addinstruct --continue-from-mvn=$outdir/temp -@ $options
+	    echo $text > $outdir/step$step/info.txt
+
+	    stepfrom=$step
+	    step=`expr $step + 1`
+	fi
+    fi
+fi
+
+### --- SPATIAL MODULE ---
+if [ ! -z $spatial ]; then
+    text="STEP $step: Spatial VB ($nparam param: $paramtext)"
+    vbinstruct=$spvbinstruct
+    #deal with spatial priors specification
+    #make ftiss and fwm spatial (note that we have to turn wm ARD off)
+#    stype="M"
+#    ATstype="M" #stpye for arrival times (GM and WM)
+
+    nbaseparam=`expr $nparam - $nwmparam` # number of base parameters - excluding those from the WM component
+                                          # need this to set the spatial priors string
+    
+    #if [ $nbaseparam -gt 3 ]; then
+#	spriors="${stype}${ATstype}N+"
+    #elif [ $nbaseparam -gt 2 ]; then
+#	spriors="${stype}${ATstype}N"
+   # else
+#	spriors="${stype}${ATstype}"
+    #fi
+
+# collate spriors here
+spriors=${t_spriors}${iv_spriors}${t1_spriors}${btau_spriors}${wm_spriors}
+    # NB PVE spriors are handled below
+
+    if [ ! -z $inferwm ]; then
+	extras="--wmardoff"
+	#spriors=$spriors"${stype}${ATstype}"
+	gmparam=`echo ${#spriors}` #gmparam is position of GM image prior in string
+	gmparam=`expr $gmparam + 1`
+
+	#if [ ! -z $infertau ]; then
+	    #spriors=$spriors"N"
+	    #gmparam=`expr $gmparam + 1`
+	#fi
+	#if [ ! -z $infert1 ]; then
+	    #spriors=$spriors"N"
+	    #gmparam=`expr $gmparam + 1`
+	#fi
+	
+	if [ ! -z $pvcorr ]; then
+	    spriors=$spriors"II"
+	    extras=$extras" --usepve"
+	fi
+    fi
+    spriors=$spriors${any_other_spriors}
+
+# replace with custom spriors if these have been defined
+if [ ! -z $custspriors ]; then
+    spriors=$custspriors
+fi
+
+    extras=$extras" --param-spatial-priors=$spriors" # --spatial-dims=2" # 
+
+    if [ ! -z $pvcorr ]; then
+	wmparam=`expr $gmparam + 1`
+	extras=$extras" --image-prior${gmparam}=$pgm --image-prior${wmparam}=$pwm"
+    fi
+
+    if [ ! -z $t1im ]; then
+    # use image prior for T1t
+	extras=$extras" --image-prior${T1tparam}=$t1im"
+	#make sure that the inital values for T1t come from the T1 image when we are not in fast model (i.e. we overwrite any estiamte we have made of T1t from the data)
+    	if [ -z $fast ]; then
+	    $mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=$T1tparam --valim=$t1im --var=0.01
+	fi
+    fi
+
+    echo "Spatial prior specification: $spriors"
+
+    if [ -z $fast ]; then
+        # STEP: Spatial VB as final stage
+	text=$text" - init with STEP $stepfrom"
+	echo $text
+
+	if [ ! -z $pvcorr ]; then
+	    # add fixed PV values to the MVN otherwise fabber will fail
+	    insposn=`expr $nparam + 1`
+	    $mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=$insposn --new --valim=$pgm --var=1e-12 
+	    $mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=`expr $insposn + 1` --new --valim=$pwm --var=1e-12
+
+            # modify the inital GM amd WM values using a simple PV correction
+	    wmcbfratio=0.4
+	    # modified pvgm map
+	    fslmaths $pgm -sub 0.2 -thr 0 -add 0.2 $outdir/temp_pgm
+	    # first part of correction psuedo WM CBF term
+	    fslmaths $outdir/step${stepfrom}/mean_ftiss -mul $wmcbfratio -mul $pwm $outdir/wmcbfterm
+	    # the rest
+	    fslmaths $outdir/step${stepfrom}/mean_ftiss -sub $outdir/wmcbfterm -div $outdir/temp_pgm $outdir/gmcbf_init
+	    fslmaths $outdir/gmcbf_init -mul $wmcbfratio $outdir/wmcbf_init
+	    # load these into the MVN, GM cbf is always param 1
+	    #$mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=1 --write --valim=$outdir/gmcbf_init
+	    $mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=1 --write --valim=$outdir/gmcbf_init --var=0.1
+	    $fabber --output=$outdir/nextstep --model=$model $allinstruct $vbinstruct $extras -@ $options --params
+	    $mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=fwm --param-list=$outdir/nextstep/paramnames.txt --write --valim=$outdir/wmcbf_init --var=0.1
+	    #wmposn=`expr $nparam - 1` #-1 for WM BAT (NB PV maps have not been counted)
+	    #if [ ! -z $infertau ]; then wmposn=`expr $wmposn - 1`; fi
+	    #if [ ! -z $infert1 ]; then wmposn=`expr $wmposn - 1`; fi
+	    #$mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=$wmposn --write --val=20
+	    #$mvntool --input=$outdir/temp --output=$outdir/temp --mask=$mask --param=$wmposn --write --valim=$outdir/wmcbf_init
+	else
+	    # need to copy finalMVN into the right place
+	    imcp $outdir/step${stepfrom}/finalMVN $outdir/temp
+
+	fi
+        
+	call_fabber --continue-from-mvn=$outdir/temp
+	#$fabber --data=$infile --mask=$mask --output=$outdir/step$step $allinstruct $spvbinstruct $addinstruct --continue-from-mvn=$outdir/step${stepfrom}/finalMVN --spatial-dims=2 --param-spatial-priors=$spriors -@ $options
+	echo $text > $outdir/step$step/info.txt
+    fi
+fi 
+
+### --- FAST OPTION ---
+if [ ! -z $fast ]; then
+#in fast mode do the one call to fabber here
+    echo "Fast mode: "$text
+    call_fabber
+    echo "Fast mode: "$text > $outdir/step$step/info.txt
+fi
+
+if [ -z $devel ]; then
+${FSLDIR}/bin/imrm $outdir/temp
+fi
+
+echo "End."

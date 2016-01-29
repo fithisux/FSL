@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+    <title>Image Info</title>
+  </head>
+  <body>
+    <h3>Image Info</h3>
+
+    <p>
+      To view information about a layer, select the layer in
+      the <a href="imagelist.html">Layer List</a> and press
+      the <i>"Layer Info"</i> button <img alt="picture"
+      src="info.png">. <font color="red">Note that, once this dialog is showing, you can
+      select other layers via the Layer List and the information
+      dialog will update accordingly.</font>
+    </p>
+
+    <table cellpadding="10">
+      <tr>
+	<td>
+	  <h4>Basic information</h4>
+	  <ul>	    
+	    <li>Name:<font color="red">(1)</font> The name of the
+	      layer; can be edited, e.g. to disambiguate two layers with
+	      the same name.</li>
+	    <li>Filename: Original filename of layer.</li>
+	    <li>Voxels: 3D image matrix size. Number of voxels in X, Y
+	      &amp; Z.</li>
+	    <li>Dimensions: Dimensions (real-world physical size) of a
+	      single voxel.</li>
+	    <li>Volumes: Length of the image in the 4th dimension,
+	    e.g. number of time points.</li>
+	    <li>Data type: The data type that each voxel intensity is
+	      stored in (floating point, integer etc.)</li>
+	    <li>Image type:<font color="red">(2)</font> Type of image,
+	      e.g. z-statistic, not many images have this flag set
+	      yet.</li>
+	  </ul>
+
+	  <h4>Lookup table options</h4>
+ 	  <p>This section controls the greyscale or colour-scale
+	    lookup table used<font color="red">(3)</font>. The file
+	    selector<font color="red">(4)</font> button can be used to
+	    load a LUT from disk.</p>
+	  <p>If the second LUT option is activated, by turning on the
+	    checkbox<font color="red">(5)</font>, then this LUT is
+	    applied over negative ranges, and the first LUT is used
+	    for the positive values. In this case the bricon controls
+	    are set wrt the first LUT and should therefore be positive
+	    values (an equivalent inverted range is then used for the
+	    second LUT).</p>
+
+	  <h4>DTI display options</h4>
+	  <p>The selects <a href="dti.html">DTI image display
+	      mode</a>:RGB or Lines<font color="red">(6)</font>, for
+	    the current layer. Additionally a modulation layer can
+	    be selected <font color="red">(7)</font>.
+	</td>
+	<td> 
+	  <img src="imageinfodialog.png" width="300">
+	</td>
+      </tr>
+    </table>
+
+
+    <!-- <p>FSLView is able deal with LUTs of more than one type. If a LUT file -->
+    <!-- has a .lut extension the loaded lut colours will be allocated to -->
+    <!-- values between the minimum and maximum voxel intensity. If a LUT file -->
+    <!-- has a .rgb extension the loaded lut colours will be allocated to -->
+    <!-- absolute voxel values. Using .rgb types of LUTs allows anatomical -->
+    <!-- features to be displayed in predefined colours. -->
+    
+    <!--           <p> -->
+    <!--             Examples of LUT files for users to download and edit:- -->
+    
+    <!--           <p> -->
+    <!--             The three numbers in the .lut file refer to red, green and blue intensities  -->
+    <!--             where 0.0 is the minimum intensity and 1.0 is the maximum intensity. -->
+    
+    <!--           <p> -->
+    <!--             <a href="lut_linear.lut">lut_linear.lut</a> -->
+    
+    <!--           <p> -->
+    <!--             The first number in the .rgb file is the intensity the colour is paired with. -->
+    <!--             Then there is a string for describing the feature, eg Hippocampus. -->
+    <!--             There then follow three numbers expressing the RGB colour intensities where -->
+    <!--             0 is the minimum and 255 is the maximum. The fourth number is not used in -->
+    <!--             Fslview, it can just be set to zero. -->
+    
+    <!--           <p> -->
+    <!--             <a href="lut_absolute.rgb">lut_absolute.rgb</a> -->
+    
+  </body>
+</html>

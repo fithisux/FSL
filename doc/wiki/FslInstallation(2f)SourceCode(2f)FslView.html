@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FslInstallation/SourceCode/FslView</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FslInstallation/SourceCode/FslView</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Preparing_a_build_environment">Preparing a build environment</a></li><li>
+<a href="#Dependencies">Dependencies</a><ol><li>
+<a href="#Platform_Notes">Platform Notes</a></li></ol></li><li>
+<a href="#Configuring_and_building_the_dependent_packages">Configuring and building the dependent packages</a><ol><li>
+<a href="#CMake">CMake</a><ol><li>
+<a href="#A_word_about_CMake">A word about CMake</a></li><li>
+<a href="#Platform_Notes-1">Platform Notes</a></li></ol></li><li>
+<a href="#BOOST">BOOST</a></li><li>
+<a href="#Qt">Qt</a><ol><li>
+<a href="#Platform_notes">Platform notes</a></li></ol></li><li>
+<a href="#Qwt">Qwt</a></li><li>
+<a href="#VTK">VTK</a></li></ol></li><li>
+<a href="#FSLView">FSLView</a><ol><li>
+<a href="#Getting_the_sources">Getting the sources</a><ol><li>
+<a href="#FSL_distribution">FSL distribution</a></li><li>
+<a href="#Via_CVS">Via CVS</a></li></ol></li><li>
+<a href="#Setting_up_your_environment_variables">Setting up your environment variables</a></li><li>
+<a href="#Configuring_a_CMake_build_tree">Configuring a CMake build tree</a></li><li>
+<a href="#Running_make">Running make</a></li><li>
+<a href="#Troubleshooting">Troubleshooting</a></li></ol></li></ol></div> <span class="anchor" id="line-2"></span>
+<h1 id="Preparing_a_build_environment">Preparing a build environment</h1>
+<span class="anchor" id="line-3"></span><p class="line874">These notes detail how to create a development environment suitable for compiling the FSLView project. You may be able to download and install binary installations of some of these packages, however details of how to compile them from sources are available here in case you don't have access to the pre-built versions. <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line874">Wherever possible these instructions performing an out-of-source build, i.e., a build in a separate directory from the source directory. This is desirable because it allows you to re-build with various different switches from the same source tree, e.g., maintaining separate debug and optimised builds. At FMRIB we build all releases of FSLView, each supported architecture with both debug and release flags, from a single shared source directory. When this works it is very useful and FSLView is intended to be built this way. <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line874">These instructions will install these packages into their own directory within /usr/local allowing the use/testing of different versions. You don't need to do this but it'll make following the instructions easier if you do. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line867">
+<h1 id="Dependencies">Dependencies</h1>
+<span class="anchor" id="line-10"></span><p class="line874">The following packages are required to build FSLView: <span class="anchor" id="line-11"></span><div><table class="centred"><tbody><tr>  <td><p class="line862">Package name</td>
+  <td><p class="line862">Minimum Version</td>
+  <td><p class="line862">Notes</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-12"></span><p class="line862">BOOST</td>
+  <td><p class="line862">1.33.1</td>
+  <td><p class="line862">Probably any version above 1.29 (first one I tried) will do.</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-13"></span><p class="line862">Qt</td>
+  <td><p class="line862">3.1.x-3.3.x</td>
+  <td><p class="line862">On my systems the <tt class="backtick">uic</tt> compiler messes up the icons for qt &lt; 3.3</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-14"></span><p class="line862">Qwt</td>
+  <td><p class="line862">4.2.0</td>
+  <td><p class="line862">Do not try Qwt 5.x</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-15"></span><p class="line862">CMake</td>
+  <td><p class="line862">2.2-patch 3</td>
+  <td></td>
+</tr>
+<tr>  <td><span class="anchor" id="line-16"></span><p class="line862">VTK</td>
+  <td><p class="line862">5.0</td>
+  <td></td>
+</tr>
+<tr>  <td><span class="anchor" id="line-17"></span><p class="line862">FSL</td>
+  <td><p class="line862">3.3.x</td>
+  <td></td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line867">
+<h2 id="Platform_Notes">Platform Notes</h2>
+<span class="anchor" id="line-20"></span><p class="line867"><strong>MacOSX</strong> Leopard/Snow Leopard (version 10.5/10.6) are not supported by Trolltech for Qt 3.x variants - Qt 3.x was end-of-lifed in July 2007. We are quite likely to be porting to Qt 4.x soon but until that time you will need to obtain Tiger (10.4) binaries on Leopard/Snow Leopard machines. <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line867">
+<h1 id="Configuring_and_building_the_dependent_packages">Configuring and building the dependent packages</h1>
+<span class="anchor" id="line-23"></span><p class="line867">
+<h2 id="CMake">CMake</h2>
+<span class="anchor" id="line-24"></span><p class="line867">
+<h3 id="A_word_about_CMake">A word about CMake</h3>
+<span class="anchor" id="line-25"></span><p class="line874">This package performs a wide range of build configuration tasks which are difficult to achieve with other systems (including the popular automake and autoconf tools). <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line862">Download from <a class="http" href="http://www.cmake.org/HTML/Download.html">CMake download page</a> and unpack into your source directory. <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line874">Configure and build as follows: <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><span class="anchor" id="line-1-1"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-4505f1a720ad4c0edb849de59092e501fcabf8de" lang="en"><span class="line"><span class="anchor" id="line-1-2"></span><span class="ResWord">cd </span>CMake</span>
+<span class="line"><span class="anchor" id="line-2-1"></span>mkdir build</span>
+<span class="line"><span class="anchor" id="line-3-1"></span><span class="ResWord">cd </span>build</span>
+<span class="line"><span class="anchor" id="line-4-1"></span>../configure</span>
+<span class="line"><span class="anchor" id="line-5-1"></span>make</span>
+<span class="line"><span class="anchor" id="line-6-1"></span>make install</span>
+</pre></div></div><span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line867">
+<h3 id="Platform_Notes-1">Platform Notes</h3>
+<span class="anchor" id="line-40"></span><p class="line867"><strong>MacOSX</strong> Libraries created using the switch: <tt class="backtick">-install_name&nbsp;@executable_path/../Frameworks/</tt> can be copied into the <tt class="backtick">FSLView.app/Contents/Frameworks</tt> subdirectory creating a relocatable bundle. To get CMake to build libraries this way modify the <tt class="backtick">/usr/local/share/CMake/Modules/Platform/Darwin.cmake</tt> file with this <a class="http" href="http://www.fmrib.ox.ac.uk/fsl/fslviewbuild/cmakepatch.txt">patch</a>: <span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><span class="anchor" id="line-1-3"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-ffe1b1042adac15df059103f038a4919c6b82a4a" lang="en"><span class="line"><span class="anchor" id="line-1-4"></span><span class="ResWord">cd</span> /usr/local/shared/CMake/Modules/Platform</span>
+<span class="line"><span class="anchor" id="line-2-2"></span>patch -i cmakepatch.txt</span>
+</pre></div></div><span class="anchor" id="line-45"></span><p class="line862">Configure cmake projects without rpath support, i.e. <tt class="backtick">CMAKE_USE_RELATIVE_PATHS=OFF</tt>. <span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><p class="line867">
+<h2 id="BOOST">BOOST</h2>
+<span class="anchor" id="line-48"></span><p class="line862">Download from <a class="http" href="http://www.boost.org/">boost.org</a> and unpack into <tt class="backtick">/usr/local/boost</tt> <span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><p class="line874">We're only using some of the template classes from boost so we don't need anything but header files, therefore, you don't need to compile boost. <span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><p class="line867">
+<h2 id="Qt">Qt</h2>
+<span class="anchor" id="line-53"></span><p class="line867"><span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span><div class="important"><span class="anchor" id="line-1-5"></span><p class="line867"><strong>Important</strong> <span class="anchor" id="line-2-3"></span><span class="anchor" id="line-3-2"></span><p class="line862">You may well have qt already installed on your machine. Most Linux distributions ship with Qt to support the popular KDE windowing system. If it's already on your system then I recommend you try using that version before installing from scratch. If you decide to do this then you will need to change <tt class="backtick">QTDIR</tt> in all the subsequent builds accordingly. </div><span class="anchor" id="line-58"></span><p class="line867"><span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><span class="anchor" id="line-61"></span><span class="anchor" id="line-62"></span><div class="warning"><span class="anchor" id="line-1-6"></span><p class="line867"><strong>Warning</strong> <span class="anchor" id="line-2-4"></span><span class="anchor" id="line-3-3"></span><p class="line862">Qt can take a very long time to compile. You can speed things up a little by editing the <tt class="backtick">Makefile</tt> file in the distribution top-level source directory and removing the sub-tutorial and sub-example references from the <tt class="backtick">all:</tt> target. </div><span class="anchor" id="line-63"></span><p class="line867"><span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><span class="anchor" id="line-66"></span><span class="anchor" id="line-67"></span><span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span><span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span><span class="anchor" id="line-73"></span><span class="anchor" id="line-74"></span><span class="anchor" id="line-75"></span><span class="anchor" id="line-76"></span><span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span><div class="important"><span class="anchor" id="line-1-7"></span><p class="line867"><strong>Important</strong> <span class="anchor" id="line-2-5"></span><span class="anchor" id="line-3-4"></span><p class="line862">When building Qt you must ensure that other installations of Qt aren't pathed in. In particular it can ruin the installation if an old <tt class="backtick">qt/lib</tt> directory is used by the qt tools during the build. <span class="anchor" id="line-4-2"></span><span class="anchor" id="line-5-2"></span><p class="line862">Download from <a class="ftp" href="ftp://ftp.trolltech.com/qt/">Trolltech Qt Site</a> and unpack into your source directory. <span class="anchor" id="line-6-2"></span><span class="anchor" id="line-7-1"></span><p class="line874">Configure and build as follows: <span class="anchor" id="line-8-1"></span><span class="anchor" id="line-9-1"></span><span class="anchor" id="line-10-1"></span><span class="anchor" id="line-11-1"></span><span class="anchor" id="line-12-1"></span><span class="anchor" id="line-13-1"></span><span class="anchor" id="line-14-1"></span><span class="anchor" id="line-15-1"></span></pre></div><span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span><p class="line867">
+<h3 id="Platform_notes">Platform notes</h3>
+<span class="anchor" id="line-82"></span><p class="line867"><strong>MacOSX</strong> Currently a bug in the build means that it will fail due to a missing <tt class="backtick">Info.plist</tt> file. Restart the build at this point to complete the rest of the compilation. <span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span><p class="line867"><strong>MacOSX</strong> As with CMake you need to modify the link stages if you want to make relocatable .app bundles. (Un)comment the relevant lines in <tt class="backtick">mkspec/macx-g++/qmake.conf</tt> and/or <tt class="backtick">mkspec/darwin-g++/qmake.conf</tt> configuration before building. <span class="anchor" id="line-85"></span><span class="anchor" id="line-86"></span><p class="line867"><strong>MacOSX X11 (untested)</strong> Set <tt class="backtick">MAKESPECS</tt> to <tt class="backtick">darwin-g++</tt> to enable building with X11 support. <span class="anchor" id="line-87"></span><span class="anchor" id="line-88"></span><p class="line867">
+<h2 id="Qwt">Qwt</h2>
+<span class="anchor" id="line-89"></span><p class="line862">Download from <a class="http" href="http://sourceforge.net/projects/qwt">Qwt Sourceforge</a> and unpack into your source directory. <span class="anchor" id="line-90"></span><span class="anchor" id="line-91"></span><p class="line862">Bizarrely Qwt doesn't have an <tt class="backtick">install</tt> target for its main components (only for the plugin!) so add one to <tt class="backtick">/home/sources/qwt-4.2.0/qwt.pro</tt> as follows: <span class="anchor" id="line-92"></span><span class="anchor" id="line-93"></span><span class="anchor" id="line-94"></span><span class="anchor" id="line-95"></span><span class="anchor" id="line-96"></span><span class="anchor" id="line-97"></span><span class="anchor" id="line-98"></span><span class="anchor" id="line-99"></span><span class="anchor" id="line-1-8"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-7de643b77a46c1d63acca5381a532281b36fae26" lang="en"><span class="line"><span class="anchor" id="line-1-9"></span>cat &gt;&gt; qwt.pro</span>
+<span class="line"><span class="anchor" id="line-2-6"></span><span class="ID">INSTALLBASE</span>    = /usr/local/qwt</span>
+<span class="line"><span class="anchor" id="line-3-5"></span>target.path    = <span class="ID">$$</span>INSTALLBASE/lib</span>
+<span class="line"><span class="anchor" id="line-4-3"></span>headers.path   = <span class="ID">$$</span>INSTALLBASE/include</span>
+<span class="line"><span class="anchor" id="line-5-3"></span>headers.files  = <span class="ID">$$</span>HEADERS</span>
+<span class="line"><span class="anchor" id="line-6-3"></span><span class="ID">INSTALLS</span>       = target headers</span>
+</pre></div></div><span class="anchor" id="line-100"></span><p class="line874">Configure and build as follows: <span class="anchor" id="line-101"></span><span class="anchor" id="line-102"></span><span class="anchor" id="line-103"></span><span class="anchor" id="line-104"></span><span class="anchor" id="line-105"></span><span class="anchor" id="line-106"></span><span class="anchor" id="line-107"></span><span class="anchor" id="line-108"></span><span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span><span class="anchor" id="line-111"></span><span class="anchor" id="line-112"></span><span class="anchor" id="line-113"></span><span class="anchor" id="line-1-10"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-ed2ae80a65dc5a7f78464d653968327e6dd0e6ff" lang="en"><span class="line"><span class="anchor" id="line-1-11"></span><span class="ResWord">export </span><span class="ID">QTDIR</span>=/usr/local/qt</span>
+<span class="line"><span class="anchor" id="line-2-7"></span><span class="ResWord">export </span><span class="ID">LD_LIBRARY_PATH</span>=<span class="ID">$QTDIR</span>/lib:<span class="ID">$LD_LIBRARY_PATH</span></span>
+<span class="line"><span class="anchor" id="line-3-6"></span><span class="ResWord">export </span><span class="ID">DYLD_LIBRARY_PATH</span>=<span class="ID">$QTDIR</span>/lib:<span class="ID">$DYLD_LIBRARY_PATH</span></span>
+<span class="line"><span class="anchor" id="line-4-4"></span><span class="ResWord">cd</span> /home/builds; mkdir qwt; <span class="ResWord">cd </span>qwt</span>
+<span class="line"><span class="anchor" id="line-5-4"></span>qmake /home/sources/qwt-4.2.0/qwt.pro</span>
+<span class="line"><span class="anchor" id="line-6-4"></span>make</span>
+<span class="line"><span class="anchor" id="line-7-2"></span>make install</span>
+<span class="line"><span class="anchor" id="line-8-2"></span>mkdir designer; <span class="ResWord">cd </span>designer</span>
+<span class="line"><span class="anchor" id="line-9-2"></span>qmake /home/sources/qwt-4.2.0/designer/qwtplugin.pro</span>
+<span class="line"><span class="anchor" id="line-10-2"></span>make</span>
+<span class="line"><span class="anchor" id="line-11-2"></span>make install</span>
+</pre></div></div><span class="anchor" id="line-114"></span><span class="anchor" id="line-115"></span><p class="line867">
+<h2 id="VTK">VTK</h2>
+<span class="anchor" id="line-116"></span><p class="line862">Download from <a class="http" href="http://www.vtk.org/get-software.php">VTK download page</a> and unpack into your source directory. <span class="anchor" id="line-117"></span><span class="anchor" id="line-118"></span><p class="line874">Configure and build as follows: <span class="anchor" id="line-119"></span><span class="anchor" id="line-120"></span><span class="anchor" id="line-121"></span><span class="anchor" id="line-122"></span><span class="anchor" id="line-123"></span><span class="anchor" id="line-124"></span><span class="anchor" id="line-125"></span><span class="anchor" id="line-126"></span><span class="anchor" id="line-127"></span><span class="anchor" id="line-128"></span><span class="anchor" id="line-129"></span><span class="anchor" id="line-130"></span><span class="anchor" id="line-131"></span><span class="anchor" id="line-1-12"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-7d9bea2691f03319ff76e653376f70630cc50101" lang="en"><span class="line"><span class="anchor" id="line-1-13"></span><span class="ResWord">export </span><span class="ID">QTDIR</span>=/usr/local/qt</span>
+<span class="line"><span class="anchor" id="line-2-8"></span><span class="ResWord">export </span><span class="ID">LD_LIBRARY_PATH</span>=<span class="ID">$QTDIR</span>/lib:<span class="ID">$LD_LIBRARY_PATH</span></span>
+<span class="line"><span class="anchor" id="line-3-7"></span><span class="ResWord">export </span><span class="ID">DYLD_LIBRARY_PATH</span>=<span class="ID">$QTDIR</span>/lib:<span class="ID">$DYLD_LIBRARY_PATH</span></span>
+<span class="line"><span class="anchor" id="line-4-5"></span><span class="ResWord">cd</span> /home/builds; mkdir vtk; <span class="ResWord">cd </span>vtk</span>
+<span class="line"><span class="anchor" id="line-5-5"></span><span class="ResWord">export </span><span class="ID">QTDIR</span>=/usr/local/qt</span>
+<span class="line"><span class="anchor" id="line-6-5"></span>cmake /home/sources/VTK <span class="SPChar">\</span></span>
+<span class="line"><span class="anchor" id="line-7-3"></span><span class="SPChar"></span>  -DCMAKE_INSTALL_PREFIX=/usr/local/vtk -DCMAKE_BUILD_TYPE=Release <span class="SPChar">\</span></span>
+<span class="line"><span class="anchor" id="line-8-3"></span><span class="SPChar"></span>  -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON <span class="SPChar">\</span></span>
+<span class="line"><span class="anchor" id="line-9-3"></span><span class="SPChar"></span>  -DVTK_USE_GUISUPPORT=ON -DVTK_USE_QVTK=ON</span>
+<span class="line"><span class="anchor" id="line-10-3"></span>make</span>
+<span class="line"><span class="anchor" id="line-11-3"></span>make install</span>
+</pre></div></div><span class="anchor" id="line-132"></span><span class="anchor" id="line-133"></span><p class="line867">
+<h1 id="FSLView">FSLView</h1>
+<span class="anchor" id="line-134"></span><p class="line867">
+<h2 id="Getting_the_sources">Getting the sources</h2>
+<span class="anchor" id="line-135"></span><p class="line867">
+<h3 id="FSL_distribution">FSL distribution</h3>
+<span class="anchor" id="line-136"></span><p class="line862">The sources are bundled with every FSL distribution and in particular the <tt class="backtick">fsl-X.Y.Z-sources.tar.gz</tt> or <tt class="backtick">Uncompiled&nbsp;sources&nbsp;only</tt> download. Look in <tt class="backtick">$FSLDIR/src/fslview</tt> for them. <span class="anchor" id="line-137"></span>
+<h3 id="Via_CVS">Via CVS</h3>
+<span class="anchor" id="line-138"></span><p class="line874">FMRIB account holders only may get the sources via our CVS repository. Set up your environment as follows: <span class="anchor" id="line-139"></span><span class="anchor" id="line-140"></span><span class="anchor" id="line-141"></span><span class="anchor" id="line-142"></span><span class="anchor" id="line-1-14"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-4fabb6886aac408c8ff2ae1c04d91015117a0c26" lang="en"><span class="line"><span class="anchor" id="line-1-15"></span><span class="ResWord">export </span><span class="ID">CVSROOT</span>=:ext:mace.fmrib.ox.ac.uk:/usr/local/share/sources</span>
+<span class="line"><span class="anchor" id="line-2-9"></span><span class="ResWord">export </span><span class="ID">CVS_RSH</span>=ssh</span>
+</pre></div></div><span class="anchor" id="line-143"></span><p class="line874">Now check out the fslview project: <span class="anchor" id="line-144"></span><span class="anchor" id="line-145"></span><span class="anchor" id="line-146"></span><span class="anchor" id="line-1-16"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-ccf07c9344d5f1e8948f96de44725ffd788fdf82" lang="en"><span class="line"><span class="anchor" id="line-1-17"></span>cvs co fslview</span>
+</pre></div></div><span class="anchor" id="line-147"></span><p class="line874">Supporting FSL modules should come from your existing FSL installation. <span class="anchor" id="line-148"></span><span class="anchor" id="line-149"></span><p class="line867">
+<h2 id="Setting_up_your_environment_variables">Setting up your environment variables</h2>
+<span class="anchor" id="line-150"></span><p class="line862">You need to set <tt class="backtick">QTDIR</tt>, <tt class="backtick">PATH</tt> and <tt class="backtick">LD_LIBRARY_PATH</tt> (<tt class="backtick">DYLD_LIBRARY_PATH</tt> on Mac OS X) so all the Qt and Qwt tools and libraries can be found. In the following everything has been installed into the <tt class="backtick">/usr/local</tt> directory tree. <span class="anchor" id="line-151"></span><span class="anchor" id="line-152"></span><span class="anchor" id="line-153"></span><span class="anchor" id="line-154"></span><span class="anchor" id="line-155"></span><span class="anchor" id="line-156"></span><span class="anchor" id="line-157"></span><span class="anchor" id="line-1-18"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-241a81285ebbdcdbf21d89e4b2caa5bf5df34a59" lang="en"><span class="line"><span class="anchor" id="line-1-19"></span><span class="ResWord">export </span><span class="ID">QTDIR</span>=/usr/local/qt</span>
+<span class="line"><span class="anchor" id="line-2-10"></span><span class="ResWord">export </span><span class="ID">PATH</span>=<span class="ID">$QTDIR</span>/bin:<span class="ID">$PATH</span></span>
+<span class="line"><span class="anchor" id="line-3-8"></span><span class="ResWord">export </span><span class="ID">QWTDIR</span>=/usr/local/qwt</span>
+<span class="line"><span class="anchor" id="line-4-6"></span><span class="ResWord">export </span><span class="ID">LD_LIBRARY_PATH</span>=<span class="ID">$QTDIR</span>/lib:<span class="ID">$QWTDIR</span>/lib:<span class="ID">$LD_LIBRARY_PATH</span></span>
+<span class="line"><span class="anchor" id="line-5-6"></span><span class="ResWord">export </span><span class="ID">DYLD_LIBRARY_PATH</span>=<span class="ID">$QTDIR</span>/lib:<span class="ID">$QWTDIR</span>/lib:<span class="ID">$DYLD_LIBRARY_PATH</span></span>
+</pre></div></div><span class="anchor" id="line-158"></span><p class="line862">If you're building using a pre-installed FSL distribution then you also need to set <tt class="backtick">FSLDIR</tt> as per the <a href="./FslInstallation(2f)ShellSetup.html">FSL instructions</a>. <span class="anchor" id="line-159"></span><span class="anchor" id="line-160"></span><p class="line867">
+<h2 id="Configuring_a_CMake_build_tree">Configuring a CMake build tree</h2>
+<span class="anchor" id="line-161"></span><p class="line874">It is recommended that you always configure the build trees away from the source directories. This has several advantages including being able to build for multiple platforms or configurations (i.e. Release/Debug) from the same sources. CMake makes this particularly easy: <span class="anchor" id="line-162"></span><span class="anchor" id="line-163"></span><span class="anchor" id="line-164"></span><span class="anchor" id="line-165"></span><span class="anchor" id="line-166"></span><span class="anchor" id="line-167"></span><span class="anchor" id="line-168"></span><span class="anchor" id="line-1-20"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-fffabf3809e59d0281e60dd025d0f835586a48a0" lang="en"><span class="line"><span class="anchor" id="line-1-21"></span><span class="ResWord">cd</span> /home/builds; mkdir fslview-release; <span class="ResWord">cd </span>fslview-release</span>
+<span class="line"><span class="anchor" id="line-2-11"></span>cmake <span class="ID">$FSLDIR</span>/src/fslview <span class="SPChar">\</span></span>
+<span class="line"><span class="anchor" id="line-3-9"></span><span class="SPChar"></span>  -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local <span class="SPChar">\</span></span>
+<span class="line"><span class="anchor" id="line-4-7"></span><span class="SPChar"></span>  -DVTK_DIR=/usr/local/vtk/lib/vtk-5.0 -DBOOST_DIR=/usr/local/boost <span class="SPChar">\</span></span>
+<span class="line"><span class="anchor" id="line-5-7"></span><span class="SPChar"></span>  -DQWT_DIR=/usr/local/qwt</span>
+</pre></div></div><span class="anchor" id="line-169"></span><span class="anchor" id="line-170"></span><p class="line867">
+<h2 id="Running_make">Running make</h2>
+<span class="anchor" id="line-171"></span><p class="line874">Now you're ready to build the binary: <span class="anchor" id="line-172"></span><span class="anchor" id="line-173"></span><span class="anchor" id="line-174"></span><span class="anchor" id="line-175"></span><span class="anchor" id="line-1-22"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-3c26a3eb8ec55f22890686aa9d7149c848c629e0" lang="en"><span class="line"><span class="anchor" id="line-1-23"></span>make</span>
+<span class="line"><span class="anchor" id="line-2-12"></span>make install</span>
+</pre></div></div><span class="anchor" id="line-176"></span><span class="anchor" id="line-177"></span><p class="line867">
+<h2 id="Troubleshooting">Troubleshooting</h2>
+<span class="anchor" id="line-178"></span><p class="line862">For troubleshooting see the <a href="./FslView(2f)Faq.html">FslView FAQ</a>. <span class="anchor" id="line-179"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

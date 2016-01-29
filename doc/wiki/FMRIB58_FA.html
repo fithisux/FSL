@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FMRIB58_FA</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FMRIB58_FA</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867">
+<h1 id="FMRIB58_FA_standard_space_image">FMRIB58_FA standard space image</h1>
+<span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line874">The FMRIB58_FA is a high-resolution average of 58 well-aligned good quality FA images from healthy male and female subjects aged between 20-50. The original DTI resolution was approximately 2x2x2mm. <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line874">The FMRIB58_FA_1mm image is in the same space as the MNI152 standard space image, at 1x1x1mm resolution. It was created by iteratively registering the raw FA images. First all raw images were affine-aligned to the MNI152 using FLIRT. The mean of these aligned images was then taken and all raw FA images were then aligned to this mean, using the IRTK nonlinear registration software. The mean was recreated and the nonlinear registration repeated. Again, the mean was taken, and the nonlinear registration repeated a final time, this time with slightly higher amount of warping allowed. The final mean FA image is scaled by a factor of 10000 from the original theoretical range of 0:1. <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line874">The FMRIB58_FA-skeleton_1mm image is derived from the FMRIB58_FA_1mm by standard TBSS skeletonisation, followed by thresholding at 2000 (i.e., FA=0.2). <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line874">Below: FSLView snapshots. Left: the FMRIB58_FA_1mm mean FA image underneath the derived mean FA skeleton FMRIB58_FA-skeleton_1mm. Right: the same skeleton overlaid onto the MNI152 standard space image sampled at 1mm resolution.  <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line867"><img align="bottom" alt="fmrib58" class="attachment" src="attachments/FMRIB58_FA/FMRIB58snapshot.png" title="fmrib58" /> <span class="anchor" id="line-12"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

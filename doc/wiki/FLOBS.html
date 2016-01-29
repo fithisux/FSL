@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FLOBS</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FLOBS</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"> <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line867">
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-6"></span><p class="line867"><img align="right" alt="basis functions" class="attachment" src="attachments/FLOBS/hrfbasisfns.png" title="basis functions" /> FLOBS ( FMRIB's Linear Optimal Basis Sets ) is a toolkit based around the idea of generating optimal basis sets for use in HRF convolution in FMRI linear modelling such as in FEAT. It allows the specification of sensible ranges for various HRF-controlling parameters (delays and heights for the different parts of the HRF "curve"), generates lots of example HRFs where each timing/height parameter is randomly sampled from the range specified, and then uses PCA to generate an optimal basis set that maximally "spans the space" of the generated samples. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line862">It is easy to tell FEAT to use a FLOBS-generated basis set; either use the <strong>Make_flobs</strong> GUI or use the default FLOBS basis set supplied with FSL. Just select the <strong>optimal/custom</strong> HRF convolution option in the FEAT model setup. <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line862">It is also possible to use <strong>filmbabe</strong> instead of the normal FEAT timeseries analysis (which uses the FILM program). The difference is that filmbabe re-projects the optimal basis set onto the original complete set of samples so that it can learn priors on the expected means and covariances of the individual basis functions. This is so that these priors can then be used when fitting the model to the data, which means that the basis set is restricted from creating implausible HRF shapes. This means that the noise is less "randomly fit" by the model, giving better separation between the null part of the final statistics map and the activation part, i.e. better activation modelling power. Beware: note that the filmbabe program itself is a relatively untested (beta release) program! <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line862">For more detail on FLOBS see <em>M.W. Woolrich, T.E.J. Behrens, and S.M. Smith. Constrained linear basis sets for HRF modelling using Variational Bayes. NeuroImage, 21:4(1748-1761) 2004</em> and a related technical report <a class="http" href="http://www.fmrib.ox.ac.uk/analysis/techrep/#TR04MW2">TR04MW2</a>. <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-15"></span>
+<h2 id="Make_flobs">Make_flobs</h2>
+<span class="anchor" id="line-16"></span><p class="line867"><img align="right" alt="GUI" class="attachment" src="attachments/FLOBS/gui_small.png" title="GUI" /> You can create your own optimal basis set using the <strong>Make_flobs</strong> GUI; either type <strong>Make_flobs</strong> from the command line, or find it under the <strong>Utils</strong> button in the FEAT GUI. The GUI is fairly self-explanatory; using the figure that appears, showing the HRF and its different controlling parameters (time widths set in seconds and the height parameter relative to the main peak height, which is set at 1), set the range you wish for each parameter. Press <strong>Preview</strong> and the basis set will be generated (with a reduced number of samples for speed), popping up a web browser window with the results, typically in a minute or less. The eigenvalues plot shows the eigenvalues for the most important basis functions which explain 99.5% of the variance. This might help you to refine your choice of the number of basis functions to use. <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line862">Now select an output directory name for the basis function information to get saved into (e.g. /Users/karl/my_basis_set.flobs) and press <strong>Go</strong>. Now the full number of samples will be generated and all necessary data (primarily the basis functions and their means and covariances when re-projected back onto the samples) will get saved for use in FEAT or in filmbabe. <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line862">If you are using the basis set inside FEAT, just select the <strong>optimal/custom</strong> HRF convolution option in the FEAT model setup GUI (for <strong>ALL</strong> relevant EVs!) and use the adjacent file browser button to change the default FLOBS directory to the one you have just created (again, you must do this for <strong>ALL</strong> relevant EVs). <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-23"></span>
+<h2 id="Group_Level_Analysis_with_Basis_Functions">Group Level Analysis with Basis Functions</h2>
+<span class="anchor" id="line-24"></span><p class="line867"><span class="anchor" id="GroupLevel"></span> <span class="anchor" id="line-25"></span>There are two main options open to you: <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line874">(1) The typically taken approach is to only pass up to the group level the canonical HRF regression parameter estimates. This makes for a simple group analysis (with some variable sensitivity), and the benefits of including the basis function at the first level are still felt in terms of accounting for HRF variability, without which: - there would be increased error in the first level GLM fit - the explanatory power of certain first level original EVs may be overstated <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line874">(2) Calculate a size summary statistic from the single session analyses (e.g., the amplitude at the peak of the HRF response - note that this is more interpretable than quantities like the zfstats, or the root mean square of the HRF basis function regression parameter estimates), and pass that up to the group level.  However, the population distribution of such summary statistics will be non-Gaussian, and so non-parametric randomisation will be needed at the group level. Note that currently the amplitude at the peak of the HRF response is not provided by FEAT... so you would need to calculate that yourself. This should be included in a future release. <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><p class="line874">There is a bit of extra detail needed to make option 2) work. This is because for main effects such size summary statistics will not be symmetrically distributed around zero under the null. This does not happen with differential (e.g. 1 -1) contrasts, as long as the contrasts are computed on the size summary statistics. For main effects, a way to overcome the problem would be to find the direction of the response for an original EV (e.g. by looking at the sign of the regression parameter for the main canonical HRF basis function regressor), and then to apply this sign to the size summary statistic. <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line862">For more details see the page on <a href="./FLOBSGroup.html">alternative statistics for basis functions</a>. <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line867">
+<h2 id="filmbabe">filmbabe</h2>
+<span class="anchor" id="line-38"></span><p class="line874">If you want to try the filmbabe program (don't forget it's a beta release which hasn't been heavily tested yet!) then you should do the following: <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><ul><li>Read the paper or techrep linked to above. <span class="anchor" id="line-41"></span></li><li><p class="line862">Create your optimal basis set using <strong>Make_flobs</strong>. <span class="anchor" id="line-42"></span></li><li>Run FEAT as normal, using this new basis set. <span class="anchor" id="line-43"></span></li><li><p class="line862">Use <strong>filmbabescript</strong> as an easy way to run filmbabe, carry out inference (thresholding) and generate a web-page report. The usage is: <span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span></li></ul><p class="line867"><tt class="backtick">filmbabescript&nbsp;&lt;feat_directory&gt;&nbsp;&lt;flobs_directory&gt;</tt> <span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><p class="line862">Note that the stats output from filmbabe does <strong>not</strong> follow a simple understood null-distribution (in the null case) so the standard methods for thresholding (like those currently used in FEAT) are not valid. Therefore filmbabescript makes use of the <a href="./Mm.html">mm</a> spatial mixture modelling program, which explicitly models both the null and the activation parts of the final stats image, allowing valid inference. <span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-50"></span><a href="./CategoryFunctional.html">CategoryFunctional</a> <a href="./CategoryFlobs.html">CategoryFlobs</a> <span class="anchor" id="line-51"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

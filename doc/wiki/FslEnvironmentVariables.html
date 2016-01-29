@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FslEnvironmentVariables</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FslEnvironmentVariables</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867">
+<h1 id="Configuring_FSL_with_environment_variables">Configuring FSL with environment variables</h1>
+<span class="anchor" id="line-2"></span><p class="line874">Below is a list of all of the recognised FSL settings which you can change in your fsl.sh (or fsl.csh) file, along with their meaning. <span class="anchor" id="line-3"></span><div><table><tbody><tr>  <td><p class="line891"><strong>Variable name</strong></td>
+  <td><p class="line891"><strong>Default</strong></td>
+  <td><p class="line891"><strong>Possible values</strong></td>
+  <td><p class="line891"><strong>Purpose</strong></td>
+</tr>
+<tr>  <td><span class="anchor" id="line-4"></span><p class="line862">FSLDIR</td>
+  <td><p class="line862">N/A</td>
+  <td><p class="line862">-</td>
+  <td><p class="line862">Points to the folder you installed FSL into, for example <tt class="backtick">/usr/local/fsl</tt></td>
+</tr>
+<tr>  <td rowspan="6"><span class="anchor" id="line-5"></span><p class="line862">FSLOUTPUTTYPE</td>
+  <td rowspan="6"><p class="line862">NIFTI_GZ</td>
+  <td><p class="line862">NIFTY_GZ</td>
+  <td><p class="line862">Output results as a single gzip compressed NIFTI format file</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-6"></span><p class="line862">NIFTI</td>
+  <td><p class="line862">Output as a single NIFTI format file</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-7"></span><p class="line862">NIFTI_PAIR_GZ</td>
+  <td><p class="line862">Output as gzip compressed NIFTI header/image pair</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-8"></span><p class="line862">NIFTY_PAIR</td>
+  <td><p class="line862">Output as NIFTI header/image pair</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-9"></span><p class="line862">ANALYZE_GZ</td>
+  <td><p class="line862">Output as gzip compressed ANALYZE header/image pair</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-10"></span><p class="line862">ANALYZE</td>
+  <td><p class="line862">Output as ANALYZE header/image pair</td>
+</tr>
+<tr>  <td rowspan="2"><span class="anchor" id="line-11"></span><p class="line862">FSLMULTIFILEQUIT</td>
+  <td rowspan="2"><p class="line862">TRUE</td>
+  <td><p class="line862">TRUE</td>
+  <td><p class="line862">If a tool encounters multiple files sharing a basename (eg epi.hdr and epi.nii) it will quit with an error</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-12"></span><p class="line862">FALSE</td>
+  <td><p class="line862">Try to continue if you find multiple files (undefined results!)</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-13"></span><p class="line862">FSLTCLSH</td>
+  <td><p class="line891"><tt class="backtick">$FSLDIR/bin/fsltclsh</tt></td>
+  <td><p class="line862">-</td>
+  <td><p class="line862">Path to the location of the TCL interpreter you wish to use, defaults to the FSL provided copy</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-14"></span><p class="line862">FSLWISH</td>
+  <td><p class="line891"><tt class="backtick">$FSLDIR/bin/fslwish</tt></td>
+  <td><p class="line862">-</td>
+  <td><p class="line862">Path to the location of the TCL/TK interpreter you wish to use, defaults to the FSL provided copy</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-15"></span><p class="line862">FSLCONFDIR</td>
+  <td><p class="line891"><tt class="backtick">$FSLDIR/config</tt></td>
+  <td><p class="line862">-</td>
+  <td><p class="line862">Path to the location of the configuration files used to compile FSL - only necessary for compiling the source code</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-16"></span><p class="line862">FSLMACHTYPE</td>
+  <td><p class="line891"><tt>`$FSLDIR/etc/fslconf/fslmachtype.sh`</tt></td>
+  <td><p class="line862">-</td>
+  <td><p class="line862">Defines the machine/OS we are running on - the <tt class="backtick">fslmachtype.sh</tt> script outputs a value suitable for your computer - only necessary for compiling the source code</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-17"></span><p class="line862">FSLDEVDIR</td>
+  <td><p class="line862">N/A</td>
+  <td><p class="line862">-</td>
+  <td><p class="line862">Defines the location you are building FSL into when compiling the source code. This has to be set if you want to build a single project without running the full compilation script</td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-18"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

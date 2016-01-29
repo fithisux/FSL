@@ -1,0 +1,101 @@
+<html>
+<head>
+<link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+<title>Support</title>
+</head>
+<body>
+<h3>Support, Bug-reporting, etc.</h3>
+
+For up-to-date information regarding FSL see the <a href="http://www.fmrib.ox.ac.uk/fsl">central version</a> of the FSL
+home page. Commonly-asked questions are answered in the <a href="http://www.fmrib.ox.ac.uk/fslfaq">FSL FAQ</a>. For further
+support relating to FSL or related theory, join the <a href="http://www.jiscmail.ac.uk/lists/fsl.html">FSL email list</a>.
+
+<p>To report specific FSLView bugs then please either email the FSL
+email list, or email <a href="mailto:fslview-bugs@fmrib.ox.ac.uk">fslview-bugs@fmrib.ox.ac.uk</a>,
+summarising the nature of the bug in the email subject header. Please also state the version of FSLView that is exhibiting the bug.
+
+<h3>Build and Installation FAQ</h3>
+
+<ul>
+  <li><h4>Compilation problems</h4>
+    <ol>
+      <li><a href="#1">Error while building moc_briconwidget.cxx</a></li>
+    </ol>
+  </li>
+  <li><h4>Run-time issues</h4>
+    <ol>
+      <li><a href="#2">GLIBCXX_3.4.4 problems on, e.g., CentOS</a></li>
+      <li><a href="#3">Missing libGL version info</a></li>
+    </ol>
+  </li>
+</ul>
+
+<h3>Compilation problems</h3>
+
+<h4><a name="1" id="1">Error while building moc_briconwidget.cxx</a></h4>
+
+<p>This is probably due to a badly installed Qwt plugin. The
+instructions on how to install the plugin can be found in the
+supplementary
+document: <a href="../fslviewbuild/prereqs.html">Preparing a build
+environment</a>.</p>
+
+<p>Following my instructions, the plugin should've installed into the
+plugins/designer directory in your Qt installation directory. If you
+choose to install it elsewhere then Qt
+tools: <em>designer</em>; <em>moc</em>; <em>uic</em>, etc., won't be
+able to find it. To tell Qt tools where to find the plugin use
+the <em>designer</em> tool's preferences which has a place where you
+can add custom directories to the "Plugin Paths."</p>
+
+<p>A quick test of the plugin is to run Qt's <em>designer</em>
+application. If the plugin is okay you'll see a Qwt pane in the tools
+on the left-hand side which will be filled with the Qwt widgets.</p>
+
+<h3>Run-time issues</h3>
+
+<h4><a name="2" id="2">GLIBCXX_3.4.4 problems on, e.g., CentOS</a></h4>
+
+<p>
+So far I've only had reports of this issue for CentOS users trying to
+use our RedHat build. It is entirely conceivable that the problem may
+occur for other build and run-time mixtures.
+</p>
+
+<p>The current RedHat binaries can be used on the CentOS-4 platform as
+long as you have the correct compatability libraries installed. If, at
+run-time, you get an error message: </p>
+
+<p>
+<kbd>
+.../usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.4' not found (required by...
+</kbd>
+</p>
+
+<p>
+then try installing the compat libstdc++: <kbd>yum install
+compat-libstdc++-33</kbd>.
+</p>
+
+<p>
+So far I've only had reports of this issue for CentOS users trying to
+use our RedHat build. It is entirely conceivable that the problem may
+occur for other build and run-time mixtures.
+</p>
+
+<h4><a name="3" id="3">Missing libGL version info</a></h4>
+
+<p>The warning looks like:</p>
+
+<p>
+<kbd>.../fslview: /usr/X11R6/lib/libGL.so.1: no version information
+available (required by .../libvtkRendering.so.5.0)</kbd>
+</p>
+
+<p>I've seen this kind of error on a couple of platforms but so far
+haven't correlated it to any actual problem running fslview. Please
+ignore it for now.</p>
+
+
+</body>
+</html>

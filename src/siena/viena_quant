@@ -1,0 +1,312 @@
+#!/bin/sh
+
+#   viena_quant
+#
+#   Part of VIENA - Ventricle Siena, based on siena.
+#   VU medical center Amsterdam, The Netherlands
+#   2010-04-16
+#
+#   This code is released to the public domain.
+#
+#   The VIENA modification of SIENA was implemented at the Department of Radiology of the VU University Medical Center, Amsterdam, The Netherlands
+#   Authors: Hugo Vrenken, Ingrid Sluimer, Veronica Popescu, Ronald van Schijndel and Adriaan Versteeg. 
+#   Questions or comments can be sent to: H.Vrenken@vumc.nl
+# 
+#   Neither the VU University Medical Center, the University of Oxford, nor any of
+#   their employees imply any warranty of usefulness of this software
+#   for any purpose, and do not assume any liability for damages,
+#   incidental or otherwise, caused by any use of this document or software.
+#
+#
+#
+#   This viena version is based on siena version 2.6 from FSL 4.1.3
+#   This viena_quant script quantifies ventricular siena,
+#   from the edgepoints-volume written (indirectly) by vienasiena and
+#   and input ventricular mask.
+#
+#   Input:
+#       - siena FROM scan
+#       - siena TO scan
+#       - ventricular mask
+#   Output:
+#       - report.viena
+#
+#   This version of the script was adapted from the July 2007 script 
+#   Ventricular_quantification.script by Hugo Vrenken.
+
+function usage()
+{
+    echo "Usage: viena_quant <input1> <input2> <ventriclemask>"
+    exit 1
+}
+
+#----------------------------------------------------------------------------
+# Options, arguments, variables and hardcoded parameters
+#----------------------------------------------------------------------------
+
+[ "$2" = "" ] && usage
+[ `${FSLDIR}/bin/imtest $1` = 0 ] && usage
+[ `${FSLDIR}/bin/imtest $2` = 0 ] && usage
+[ `${FSLDIR}/bin/imtest $3` = 0 ] && usage
+
+base=$1
+follow=$2
+ventriclemask=$3
+
+LOG="report.viena"
+HTML="reportviena.html"
+
+# We assume calibration has been done with standard 1.002.
+# You can check this in the "change analysis" part of the vienasiena script (lines 271+272).
+# If not 1.002, change here accordingly.
+m=1.002
+
+
+# Do not set threshold for coregistered masks, use nearest neighbour interpolation instead
+
+thresh=50
+
+# The standard brain
+TEMPLATEBRAIN="${FSLDIR}/data/standard/avg152T1_brain"
+
+# First outputs
+
+echo "Results of ventricular post-hoc sub-analysis" > "$LOG"
+echo ""                                             >> "$LOG"
+echo "Baseline scan:  $base"                        >> "$LOG"
+echo "Follow-up scan: $follow"                      >> "$LOG"
+echo "Ventricle mask: $ventriclemask"               >> "$LOG"
+echo ""                                             >> "$LOG"
+
+#----------------------------------------------------------------------------
+# Files assumed to have been created (and not deleted again) before
+#----------------------------------------------------------------------------
+
+# be sure to prevent their removal by changing viena_cal
+
+scbasehalf="${base}_halfwayto_sc${base}_brain"
+scbaseedge="${base}_to_sc${base}_edgepoints"
+scbaseflow="${base}_to_sc${base}_flow"
+
+scfollowhalf="${follow}_halfwayto_sc${follow}_brain"
+scfollowedge="${follow}_to_sc${follow}_edgepoints"
+scfollowflow="${follow}_to_sc${follow}_flow"
+
+base2followhalf="${base}_halfwayto_${follow}_brain"
+base2followedge="${base}_to_${follow}_edgepoints"
+base2followflow="${base}_to_${follow}_flow"
+
+follow2basehalf="${follow}_halfwayto_${base}_brain"
+follow2baseedge="${follow}_to_${base}_edgepoints"
+follow2baseflow="${follow}_to_${base}_flow"
+
+for VOL in $scbasehalf $scbaseedge $scbaseflow \
+    $scfollowhalf $scfollowedge $scfollowflow \
+    $base2followhalf $base2followedge $base2followflow \
+    $follow2basehalf $follow2baseedge $follow2baseflow
+do
+    if [ `${FSLDIR}/bin/imtest $VOL` = 0 ] ; then
+        echo "Error, file does not exist: $VOL" >> $LOG
+        exit 1
+    fi
+done
+
+#----------------------------------------------------------------------------
+# First determine correction factor.
+#----------------------------------------------------------------------------
+
+# Correction factor calculations for baseline input image.
+
+${FSLDIR}/bin/flirt -in ${TEMPLATEBRAIN} -ref ${scbasehalf} -omat avg_to_halfwaysc${base}.mat
+${FSLDIR}/bin/flirt -in ${ventriclemask} -ref ${scbasehalf} -applyxfm -init avg_to_halfwaysc${base}.mat -out ${scbasehalf}_ventricle_region
+${FSLDIR}/bin/fslmaths ${scbasehalf}_ventricle_region -thr ${thresh} -bin ${scbasehalf}_ventricle_region_bin
+${FSLDIR}/bin/fslmaths ${scbaseedge} -mas ${scbasehalf}_ventricle_region_bin ${scbaseedge}_ventricles
+${FSLDIR}/bin/fslmaths ${scbaseflow} -mas ${scbasehalf}_ventricle_region_bin ${scbaseflow}_ventricles
+edgepointsbase=`${FSLDIR}/bin/fslstats ${scbaseedge}_ventricles -V | cut -d' ' -f1`
+infobaseflow=`${FSLDIR}/bin/fslstats ${scbaseflow}_ventricles -V -M`
+nonzeroflowbase=`echo ${infobaseflow} | cut -d' ' -f1`
+tempmeanflowbase=`echo ${infobaseflow} | cut -d' ' -f3`
+meanflowbase=`echo "10 k ${tempmeanflowbase} ${nonzeroflowbase} * ${edgepointsbase} / p" | sed 's/-/_/g' | dc -`
+
+# Determine only one of three pixdims because we have isotropic pixels.
+pixdimbase=`${FSLDIR}/bin/fslval ${scbasehalf} pixdim1`
+
+# Calculate PVVC
+temppvvcbase=`echo "10 k 30 ${pixdimbase} * ${meanflowbase} * p" | sed 's/-/_/g' | dc -`
+
+# We assume standard FSL settings have been used, i.e. 0.2% change for calibration, change above if not true.
+vm=`echo "10 k ${m} 6 ^ 1.0 - 100.0 * p" | dc -`
+calibbase=`echo "10 k ${vm} ${temppvvcbase} / p" | sed 's/-/_/g' | dc -`
+
+echo "edgepointsbase ${edgepointsbase}"     >> "$LOG"
+echo "infobaseflow ${infobaseflow}"         >> "$LOG"
+echo "nonzeroflowbase ${nonzeroflowbase}"   >> "$LOG"
+echo "tempmeanflowbase ${tempmeanflowbase}" >> "$LOG"
+echo "meanflowbase ${meanflowbase}"         >> "$LOG"
+echo "pixdimbase ${pixdimbase}"             >> "$LOG"
+echo "temppvvcbase ${temppvvcbase}"         >> "$LOG"
+echo "calibbase ${calibbase}"               >> "$LOG"
+echo ""                                     >> "$LOG"
+
+# Correction factor calculations for follow-up input image.
+
+${FSLDIR}/bin/flirt -in ${TEMPLATEBRAIN} -ref ${scfollowhalf} -omat avg_to_halfwaysc${follow}.mat
+${FSLDIR}/bin/flirt -in ${ventriclemask} -ref ${scfollowhalf} -applyxfm -init avg_to_halfwaysc${follow}.mat -out ${scfollowhalf}_ventricle_region
+${FSLDIR}/bin/fslmaths ${scfollowhalf}_ventricle_region -thr ${thresh} -bin ${scfollowhalf}_ventricle_region_bin
+${FSLDIR}/bin/fslmaths ${scfollowedge} -mas ${scfollowhalf}_ventricle_region_bin ${scfollowedge}_ventricles
+${FSLDIR}/bin/fslmaths ${scfollowflow} -mas ${scfollowhalf}_ventricle_region_bin ${scfollowflow}_ventricles
+edgepointsfollow=`${FSLDIR}/bin/fslstats ${scfollowedge}_ventricles -V|cut -f 1 -d " "`
+infofollowflow=`${FSLDIR}/bin/fslstats ${scfollowflow}_ventricles -V -M`
+nonzeroflowfollow=`echo ${infofollowflow} | cut -d' ' -f1`
+tempmeanflowfollow=`echo ${infofollowflow} | cut -d' ' -f3`
+meanflowfollow=`echo "10 k ${tempmeanflowfollow} ${nonzeroflowfollow} * ${edgepointsfollow} / p" | sed 's/-/_/g' | dc -`
+
+# Determine only one of three pixdims because we have isotropic pixels.
+pixdimfollow=`${FSLDIR}/bin/fslval ${scfollowhalf} pixdim1`
+
+# Calculate PVVC
+temppvvcfollow=`echo "10 k 30 ${pixdimfollow} * ${meanflowfollow} * p" | sed 's/-/_/g' | dc -`
+
+# We assume standard FSL settings have been used, i.e. 0.2% change for calibration, change above if not true.
+vm=`echo "10 k ${m} 6 ^ 1.0 - 100.0 * p" | dc -`
+calibfollow=`echo "10 k ${vm} ${temppvvcfollow} / p" | sed 's/-/_/g' | dc -`
+
+echo "edgepointsfollow ${edgepointsfollow}"     >> "$LOG"
+echo "infofollowflow ${infofollowflow}"         >> "$LOG"
+echo "nonzeroflowfollow ${nonzeroflowfollow}"   >> "$LOG"
+echo "tempmeanflowfollow ${tempmeanflowfollow}" >> "$LOG"
+echo "meanflowfollow ${meanflowfollow}"         >> "$LOG"
+echo "pixdimfollow ${pixdimfollow}"             >> "$LOG"
+echo "temppvvcfollow ${temppvvcfollow}"         >> "$LOG"
+echo "calibfollow ${calibfollow}"               >> "$LOG"
+echo ""                                         >> "$LOG"
+
+#----------------------------------------------------------------------------
+# Now apply this to the real thing
+#----------------------------------------------------------------------------
+
+# Register mask to baseline halfway
+${FSLDIR}/bin/flirt -in ${TEMPLATEBRAIN} -ref ${base2followhalf} -omat avg_to_halfway_${base}_${follow}.mat
+${FSLDIR}/bin/flirt -in ${ventriclemask} -ref ${base2followhalf} -applyxfm -init avg_to_halfway_${base}_${follow}.mat -out ${base}_halfwayto_${follow}_ventricle_region
+
+# Register mask to follow-up halfway
+${FSLDIR}/bin/flirt -in ${TEMPLATEBRAIN} -ref ${follow2basehalf} -omat avg_to_halfway_${follow}_${base}.mat
+${FSLDIR}/bin/flirt -in ${ventriclemask} -ref ${follow2basehalf} -applyxfm -init avg_to_halfway_${follow}_${base}.mat -out ${follow}_halfwayto_${base}_ventricle_region
+
+# Threshold and binarise registered masks
+${FSLDIR}/bin/fslmaths ${base}_halfwayto_${follow}_ventricle_region -thr ${thresh} -bin ${base}_halfwayto_${follow}_ventricle_region_bin
+${FSLDIR}/bin/fslmaths ${follow}_halfwayto_${base}_ventricle_region -thr ${thresh} -bin ${follow}_halfwayto_${base}_ventricle_region_bin
+
+${FSLDIR}/bin/fslmaths ${base2followedge} -mas ${base}_halfwayto_${follow}_ventricle_region_bin ${base}_to_${follow}_edgepoints_ventricles
+${FSLDIR}/bin/fslmaths ${base2followflow} -mas ${base}_halfwayto_${follow}_ventricle_region_bin ${base}_to_${follow}_flow_ventricles
+
+${FSLDIR}/bin/fslmaths ${follow2baseedge} -mas ${follow}_halfwayto_${base}_ventricle_region_bin ${follow}_to_${base}_edgepoints_ventricles
+${FSLDIR}/bin/fslmaths ${follow2baseflow} -mas ${follow}_halfwayto_${base}_ventricle_region_bin ${follow}_to_${base}_flow_ventricles
+
+edgepointsbase=`${FSLDIR}/bin/fslstats ${base}_to_${follow}_edgepoints_ventricles -V|cut -f 1 -d " "`
+infobaseflow=`${FSLDIR}/bin/fslstats ${base}_to_${follow}_flow_ventricles -V -M`
+nonzeroflowbase=`echo ${infobaseflow}|cut -f 1 -d " "`
+tempmeanflowbase=`echo ${infobaseflow}|cut -f 3 -d " "`
+meanflowbase=`echo "10 k ${tempmeanflowbase} ${nonzeroflowbase} * ${edgepointsbase} / p" | sed 's/-/_/g' | dc -`
+pixdimbase=`${FSLDIR}/bin/fslval ${base}_halfwayto_${follow} pixdim1`
+
+edgepointsfollow=`${FSLDIR}/bin/fslstats ${follow}_to_${base}_edgepoints_ventricles -V|cut -f 1 -d " "`
+infofollowflow=`${FSLDIR}/bin/fslstats ${follow}_to_${base}_flow_ventricles -V -M`
+nonzeroflowfollow=`echo ${infofollowflow} | cut -f 1 -d " "`
+tempmeanflowfollow=`echo ${infofollowflow} | cut -f 3 -d " "`
+meanflowfollow=`echo "10 k ${tempmeanflowfollow} ${nonzeroflowfollow} * ${edgepointsfollow} / p" | sed 's/-/_/g' | dc -`
+pixdimfollow=`${FSLDIR}/bin/fslval ${follow}_halfwayto_${base} pixdim1`
+
+# Calculate PVVC base -> follow
+pvvcbasetofollow=`echo "10 k 30 ${calibbase} * ${pixdimbase} * ${meanflowbase} * _1.0 * p" | sed 's/-/_/g' | dc -`
+
+# Calculate PVVC follow -> base
+pvvcfollowtobase=`echo "10 k 30 ${calibfollow} * ${pixdimfollow} * ${meanflowfollow} * _1.0 * p" | sed 's/-/_/g' | dc -`
+denom=`echo "10 k ${pvvcfollowtobase} 100 / 1.0 + p" | sed 's/-/_/g' | dc -`
+tmpbackwards=`echo "10 k ${pvvcfollowtobase} ${denom} / _1.0 * p" |sed 's/-/_/g' | dc -`
+
+meanpvvc=`echo "10 k ${pvvcbasetofollow} ${tmpbackwards} + 2 / p" | sed 's/-/_/g' | dc -`
+
+echo ""                 >> "$LOG"
+echo ""                 >> "$LOG"
+echo "Real analysis:"   >> "$LOG"
+echo ""                 >> "$LOG"
+
+echo "edgepointsbase ${edgepointsbase}"     >> "$LOG"
+echo "infobaseflow ${infobaseflow}"         >> "$LOG"
+echo "nonzeroflowbase ${nonzeroflowbase}"   >> "$LOG"
+echo "tempmeanflowbase ${tempmeanflowbase}" >> "$LOG"
+echo "meanflowbase ${meanflowbase}"         >> "$LOG"
+echo "pixdimbase ${pixdimbase}"             >> "$LOG"
+
+echo "edgepointsfollow ${edgepointsfollow}"     >> "$LOG"
+echo "infofollowflow ${infofollowflow}"         >> "$LOG"
+echo "nonzeroflowfollow ${nonzeroflowfollow}"   >> "$LOG"
+echo "tempmeanflowfollow ${tempmeanflowfollow}" >> "$LOG"
+echo "meanflowfollow ${meanflowfollow}"         >> "$LOG"
+echo "pixdimfollow ${pixdimfollow}"             >> "$LOG"
+
+echo "pvvcbasetofollow ${pvvcbasetofollow}" >> "$LOG"
+echo "pvvcfollowtobase ${pvvcfollowtobase}" >> "$LOG"
+echo "tmpbackwards ${tmpbackwards}"         >> "$LOG"
+
+echo "meanpvvc ${meanpvvc}" >> "$LOG"
+
+# added to resemble siena report more closely
+echo >> "$LOG"
+echo "finalPVVC ${meanpvvc} %" >> "$LOG"
+
+echo ""
+echo "meanpvvc ${meanpvvc}" 
+echo ""
+
+#----------------------------------------------------------------------------
+# HTML report
+#----------------------------------------------------------------------------
+
+# Create images for the HTML report
+${FSLDIR}/bin/viena_createpng
+cp ${FSLDIR}/etc/luts/ramp.gif .ramp.gif
+cp ${FSLDIR}/etc/luts/ramp2.gif .ramp2.gif
+
+# Write the HTML report
+cat > "$HTML" << EOF
+<HTML>
+<HEAD><TITLE>FSL/VUmc-viena</TITLE></HEAD>
+<BODY><hr>
+
+<H1>VIENA Report</H1>
+<p><b>Results for the post-hoc ventricular quantification of siena.</b></p><hr>
+
+<h2>Ventricular masking</h2>
+<p>The ventricle mask in halfway space, overlaid on input A:<br>${Ao}</p>
+<IMG BORDER=0 SRC="${base}_halfwayto_${follow}_ventricle_region_bin.png">
+<p>The ventricle mask in halfway space, overlaid on input B:<br>${Bo}</p>
+<IMG BORDER=0 SRC="${follow}_halfwayto_${base}_ventricle_region_bin.png">
+<hr>
+
+<h2>Final brain edge movement image within ventricular mask</h2>
+<p>atrophy <IMG SRC=".ramp2.gif"> 0 <IMG SRC=".ramp.gif"> growth</p>
+<IMG BORDER=0 SRC="${base}_halfwayto_${follow}_render_ventricles.png">
+<p><b>Estimated PVVC: $meanpvvc</b></p>
+<hr>
+
+</BODY>
+</HTML>
+EOF
+
+#----------------------------------------------------------------------------
+
+# Some output to stdout (resembling siena part) and exit
+
+echo
+echo 'Finished Ventricular part of VIENA.'
+echo 'The viena report can be viewed by pointing your web browser at:'
+echo file:`pwd`/"$HTML"
+echo 'Estimated percentage ventricular volume change (PVVC) = '
+echo "$meanpvvc"
+echo
+
+exit 0
+
+#----------------------------------------------------------------------------

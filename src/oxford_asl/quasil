@@ -1,0 +1,465 @@
+#!/bin/sh
+
+# QuASIL: QUASAR Bayesian Arterial SpIn Labeling parameter estimation
+#
+# Michael Chappell, IBME & FMRIB Image Analysis Group
+#
+# Copyright (c) 2011-2012 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage() {
+    echo "QUASAR Bayesian Inference for Arterial Spin Labelling MRI"
+#    echo "Version: 0.95 (beta)"
+    echo ""
+    echo "Usage (optional parameters in {}):"
+    echo " -i         : specify data file"
+    echo " {-o}       : specify output directory"
+    echo " {-m}       : specify brain mask file"
+    echo ""
+    echo " Extended options:"
+    echo " --t1b      : Set the value for T1 of arterial blood {default: 1.6 s}"
+    echo " --disp     : include bolus dispersion in the model (gamma kernel)"
+    echo " --infertau : estimate bolus duration from data"
+    echo " --mfree    : Do model-free (SVD deconvolution) analysis"
+    echo ""
+    echo " Sequence parameters:"
+    echo " --slicedt  : Set the increase in TI with slice {default: 0.035 s}"
+    echo " --fa       : Flip angle for LL readout {default: 35 degrees}"
+    echo " --lfa      : Lower flip angle for final phase of data {default: 11.7 degrees}"
+    echo " --tis      : comma separated list of TI values"
+    echo "            {default: 0.04,0.34,0.64,0.94,1.24,1.54,1.84,2.14,2.44,2.74,3.04,3.34,3.64}"
+    echo ""
+}
+
+Version() {
+echo "$Id: quasil,v 1.11.4.1 2015/09/18 16:00:14 mwebster Exp $"
+exit 0
+}
+
+# deal with options
+
+if [ -z $1 ]; then
+    Usage
+    exit 1
+fi
+
+until [ -z $1 ]; do
+    case $1 in
+	-o) outflag=1 outdir=$2
+	    shift;;
+	-i) inflag=1 infile=$2 #input/data file
+	    shift;;
+	-m) mask=$2
+	    shift;;
+	--t1b) t1b=$2
+	    shift;;
+	--t1) t1=$2
+	    shift;;
+	--slicedt) slicedt=$2
+	    shift;;
+	--fa) fa=$2
+	    shift;;
+       --lfa) lfa=$2
+	    shift;;
+	--disp) disp=1
+	    ;;
+	--mfree) mfree=1
+	    ;;
+	--tis) tis=$2
+	    shift;;
+	--iform) iform=$2 # to choose the input form of the data
+	    shift;;
+	--tau) tau=$2
+	    shift;;
+	--infertau) infertau=1
+	    ;;
+	--ccmds) calibcmds=$2
+	    shift;;
+	--debug) debug=1 #debugging option
+	    ;;
+	--version) Version
+	    ;;
+	*)  Usage
+	    echo "Error! Unrecognised option on command line: $1"
+	    echo ""
+	    exit 1;;
+    esac
+    shift
+done
+
+#### --- Procedural ---
+asl_file=asl_file
+fabber=fabber
+asl_mfree=asl_mfree ###~/cproject/asl_mfree/asl_mfree
+
+#### --- Housekeeping ---
+# set the output directory here if not specified
+if [ -z $outflag ]; then
+    echo "Ouput being placed in basil subdirectory of input directory"
+    outdir=$indir/quasil;
+fi
+
+# Start by looking for the output directory (and create if need be)
+count=0
+while [ -d $outdir ]; do
+    outdir=$outdir"+"
+    count=`expr $count + 1`
+
+    if [ $count -gt 20 ]; then
+	echo "Error: $outdir too many existing output directories (i.e. shall not add another +)"
+	exit
+    fi
+done
+echo "Creating output directory: $outdir"
+mkdir $outdir;
+
+# save the starting directory
+stdir=`pwd`
+
+# make a temp directory to work in
+tmpbase=`$FSLDIR/bin/tmpnam`
+tempdir=${tmpbase}_quasil
+mkdir $tempdir
+
+# deal with the TIs
+if [ -z $tis ]; then
+# default QUASAR list of TIs
+tis="0.04,0.34,0.64,0.94,1.24,1.54,1.84,2.14,2.44,2.74,3.04,3.34,3.64"
+fi
+
+count=0
+tislist=""
+thetis=`echo $tis | sed 's:,: :g'`
+for ti in $thetis; do
+    count=`expr ${count} + 1`
+    tislist=`echo $tislist --ti${count}=$ti`
+done
+# echo "TIs list: $tislist" >> $log
+ntis=$count;
+
+if [ -z $iform ]; then
+    iform="q"
+fi
+
+# parameters
+#bolus duration - default 0.64 s
+if [ -z $tau ]; then
+tau=0.64;
+fi
+
+#T1b
+if [ -z $t1b ]; then
+t1b=1.6;
+fi
+
+#T1 - this si the prior value, since T1 will be estimated from the data
+if [ -z $t1 ]; then
+t1=1.3;
+fi
+
+# sequence parameters
+# slicedt
+if [ -z $slicedt ]; then
+    slicedt=0.035;
+fi
+# Flip angles
+if [ -z $fa ]; then
+    fa=35;
+fi
+if [ -z $lfa ]; then
+    lfa=11.7;
+fi
+
+#### --- Pre-processing ---
+echo "Pre-processing"
+imcp $infile $tempdir/data
+cd $tempdir
+if [ $iform = "q" ]; then
+# input is one big file 13x84 volumes containing raw data (TC pairs) grouped as phases(7) - repeats(6) - tis(13)
+# (NB nesting order is from left to right - so that phases are together for one repeat at one TI in this case)
+# need to get it into right form for fabber: tis(13) - phases(7), mean over repeats, both subtracted and raw data
+    
+    # first break out all the TIs
+    $asl_file --data=data --ntis=$ntis --ibf=tis --iaf=tc --split=ti
+    # now we have 13 tis each with 84 volumes
+    
+    # Within each TI: separate the phases 
+    for ((i=0; i<$ntis; i++)); do
+	mkdir ti$i
+	tifile=`ls ti$i.nii.gz ti0$i.nii.gz ti00$i.nii.gz 2>/dev/null`
+	echo $tifile
+	$asl_file --data=$tifile --ntis=7 --ibf=rpt --iaf=tc --split=ti$i/phs
+        # NB using asl_file to split the phases (pseudo TIs)
+        # leaves TC pairs together
+    done
+
+    #now assemble the multiTI files
+    phslist=""
+    for ((j=0; j<7; j++)); do
+	#within each phase
+	filelist=""
+	for ((i=0; i<$ntis; i++)); do
+            #within each TI
+	    filelist=$filelist" ti$i/phs00$j"
+        done
+	fslmerge -t aslraw_ph$j $filelist
+        #take mean within TI
+	$asl_file --data=aslraw_ph$j --ntis=$ntis --ibf=tis --iaf=tc --mean=aslraw_ph$j
+	phslist=$phslist" aslraw_ph$j"
+     done
+    fslmerge -t aslraw $phslist
+# data is now in 'f' form
+elif [ $iform = "f" ]; then
+# data is (already) in 'f' form: one file with 13x7 volumes raw data (TC pairs) grouped as tis(13) - phases(7)
+    immv data aslraw
+fi
+
+# TC difference
+$asl_file --data=aslraw --ntis=$ntis --ibf=tis --iaf=tc --diff --out=asldata
+# discard the final (low flip angle) phase from the differenced data
+# we do not (currently) use this for the main analysis
+nkeep=`expr $ntis \* 6`
+fslroi asldata asldata 0 $nkeep
+# extract control images
+$asl_file --data=aslraw --ntis=$ntis --ibf=tis --iaf=tc --spairs --out=aslraw
+immv aslraw_even aslcontrol
+
+if [ -z $mask ]; then
+# auto generate mask
+    fslmaths aslcontrol -Tmean aslmean
+    bet aslmean mask -m
+else
+    cd "$stdir"
+    imcp $mask $tempdir/mask
+    cd $tempdir
+fi
+
+# copy mask to output for future reference
+cd "$stdir" 
+imcp $tempdir/mask $outdir/mask
+cd $tempdir
+
+#### --- Calibration ---
+if [ -z "$calibcmds" ]; then
+#voxelwise M0 calibration
+    echo "#QUASAR analysis calibration options" > calib_options.txt
+    echo "--mask=mask" >> calib_options.txt
+    echo "--method=spatialvb --noise=white --param-spatial-priors=MN+" >> calib_options.txt
+    echo "--model=satrecov" >> calib_options.txt
+    echo "--repeats=1" >> calib_options.txt
+    echo "--phases=6" >> calib_options.txt #NB 6 (normal) phases plus 1 LFA phase
+    echo $tislist >> calib_options.txt
+    echo "--t1=$t1 --FA=$fa --LFA=$lfa" >> calib_options.txt
+    echo "--slicedt=$slicedt" >> calib_options.txt
+    $fabber --data=aslcontrol --data-order=singlefile --output=calib -@ calib_options.txt
+    # deal with outputs
+    immv calib/mean_T1t calib/T1t
+    immv calib/mean_g calib/g
+    immv calib/mean_M0t calib/M0t
+
+    #fslmaths instruction for calibration (for execution whilst back in starting dir)
+    cinstr=" -div $tempdir/calib/M0t -mul 0.9 " # partition coefficient 0.9
+
+    #save calibration results to output directory for reference
+    imcp calib/M0t $outdir/M0t
+    imcp calib/T1t $outdir/T1t
+
+else
+    # we have some commands to pass to asl_calib
+    cd $stdir #NB run this in the original starting directory 
+    asl_calib -c $tempdir/aslcontrol $calibcmds --mode satrecov -o $tempdir/calib --bmask $tempdir/mask --tis $tis --fa $fa --lfa $lfa --nphases
+
+    #fslmaths instruction for calibration (for execution whilst back in starting dir)
+    cinstr=" -div `cat $tempdir/calib/M0a.txt` " 
+
+    #return to working in temporary directory
+    cd $tempdir
+
+    #save calibration results to output directory for reference
+    cp calib/M0a.txt $outdir/M0a.txt
+    imcp calib/mean_T1t $outdir/T1t
+fi
+
+
+### --- Analysis ---
+if [ -z $mfree ]; then
+# --- [Model Based] ---
+echo "Begin model-based analysis"
+
+    echo "#QUASAR analysis options" > options.txt
+    echo "--mask=mask" >> options.txt
+    echo "--method=spatialvb" >> options.txt
+    echo "--noise=white" >> options.txt
+    echo "--model=quasar" >> options.txt
+    echo "--inferart" >> options.txt
+    echo "--repeats=1" >> options.txt
+    echo $tislist >> options.txt
+    echo "--t1=$t1 --t1b=$t1b --tau=$tau --fa=$fa " >> options.txt
+    echo "--slicedt=$slicedt" >> options.txt
+    echo "--infert1 ">>options.txt
+    echo "--artdir" >> options.txt
+# use calibration information within inference
+    
+    echo "--usecalib ">>options.txt
+   
+    
+
+    if [ ! -z $infertau ]; then
+	#infer bolus duration
+	echo "--infertau --tauboff" >> options.txt #Note we have only a single tau for both arterial and tissue signal (both also share the same dispersion properties)
+	echo "--image-prior6=calib_latest/T1t " >> options.txt
+	echo "--image-prior12=calib_latest/g" >> options.txt
+	echo "--param-spatial-priors=MNNANINNNNNI" >> options.txt
+    else
+	# spatial prior list without bolus duration
+	echo "--image-prior5=calib_latest/T1t " >> options.txt
+	echo "--image-prior11=calib_latest/g" >> options.txt
+	echo "--param-spatial-priors=MNANINNNNNI" >> options.txt
+    fi
+
+
+    kern="none"
+    if [ ! -z $disp ]; then
+    # include dispersion in the model
+	kern="gamma"
+    fi
+
+    $fabber --data=asldata --data-order=singlefile --disp=$kern --output=full -@ options.txt
+
+   #copy results to output directory
+    cd "$stdir"
+    fslmaths $tempdir/full/mean_ftiss $cinstr -mul 6000 $outdir/perfusion
+    fslmaths $tempdir/full/mean_ftiss $outdir/perfusion_raw 
+    imcp $tempdir/full/mean_delttiss $outdir/arrival
+    fslmaths $tempdir/full/mean_fblood $cinstr $outdir/aCBV
+    if [ ! -z $infertau ]; then
+	imcp $tempdir/full/mean_tautiss $outdir/bolus_duration
+    fi
+else
+# --- [Model Free] ---
+echo "Begin model-free analysis"
+
+# need to separate tissue and arterial signals
+# first split up the differenced data into the separate phases (treating as TIs)
+$asl_file --data=asldata --ntis=6 --ibf=tis --iaf=diff --split=asldata_ph
+fslmaths asldata_ph002 -add asldata_ph005 -mul 0.5 asl_nocrush
+fslmaths asldata_ph000 -add asldata_ph001 -add asldata_ph003 -add asldata_ph004 -mul 0.25 asl_tissue
+fslmaths asl_nocrush -sub asl_tissue asl_blood
+
+# fit GVF for the AIF
+    echo "#QUASAR analysis AIF options" > aifoptions.txt
+    echo "--data-order=singlefile" >> aifoptions.txt
+    echo "--mask=mask" >> aifoptions.txt
+    echo "--method=spatialvb" >> aifoptions.txt
+    echo "--noise=white" >> aifoptions.txt
+    echo "--model=quasar" >> aifoptions.txt
+    echo $tislist >> aifoptions.txt
+    echo "--t1=$t1 --t1b=$t1b --tau=$tau --fa=$fa " >> aifoptions.txt
+    echo "--slicedt=$slicedt" >> aifoptions.txt
+    echo "--repeats=1" >> aifoptions.txt
+    echo "--infert1 ">> aifoptions.txt
+    echo "--inferart --tissoff" >> aifoptions.txt
+    echo "--onephase" >> aifoptions.txt
+    echo "--artdir" >> aifoptions.txt
+# use calibration information within inference
+    echo " --usecalib ">> aifoptions.txt
+    echo "--image-prior9=calib/g" >> aifoptions.txt
+    echo "--param-spatial-priors=MNNNNNNNI" >> aifoptions.txt
+    echo "--save-model-fit" >> aifoptions.txt
+    
+    $fabber --data=asl_blood --disp=gvf --output=aif -@ aifoptions.txt
+
+    # need aBV image (in absolute units) - to determine what voxels contain viable aif
+    fslmaths aif_latest/mean_fblood $cinstr aBV
+    
+    # need aif shapes (scale aifs by the aBV)
+    fslmaths aif_latest/modelfit -div aif_latest/mean_fblood aifs
+
+    #smooth data (a little) before model-free analysis
+    fslmaths asl_tissue -s 2.1 asl_tissue
+
+    # do deconvolution
+
+    $asl_mfree --data=asl_tissue --mask=mask --out=modfree --aif=aifs --dt=0.3 --metric=aBV --mthresh=0.012 --tcorrect --t1=1.6 --fa=$fa
+
+    #copy results to output directory
+    cd "$stdir"
+    fslmaths $tempdir/modfree_magntiude $cinstr -mul 6000 -div $tau $outdir/perfusion 
+    # note that in the calibration we have to account for the scaling of the AIF by the bolus duration
+    # this is still required (even though we have tau in the model-fitting for the AIF) becuase we normalise the AIF above before deconvolution
+    imcp $tempdir/aBV $outdir/aCBV
+fi
+
+
+# clearup
+cd "$stdir" # make sure we are back where we started
+if [ -z $debug ]; then
+    echo "Tidying up"
+    rm -r $tempdir
+else
+mv $tempdir .
+fi
+
+echo "QUASIL done"

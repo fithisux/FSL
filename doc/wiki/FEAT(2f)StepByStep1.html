@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FEAT/StepByStep1</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FEAT/StepByStep1</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FEAT.html">Introduction</a></li><li><a href="./FEAT(2f)UserGuide.html">User Guide</a></li><li><a href="./FEAT(2f)FAQ.html">FAQ</a></li></ol></div> <span class="anchor" id="line-4"></span>
+<h1 id="Step_by_Step_Guide">Step by Step Guide</h1>
+<span class="anchor" id="line-5"></span><p class="line867">
+<h2 id="First-Level_FMRI">First-Level FMRI</h2>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><ul><li><p class="line891"><a href="./InitialProcessing.html">Initial Processing</a> <span class="anchor" id="line-8"></span></li><li><p class="line862">Run <a href="./BET(2f)StepByStep.html">brain extraction</a> on the structural image <span class="anchor" id="line-9"></span><ul><li><p class="line862">make sure you name it with the same basename but ending with <tt class="backtick">_brain</tt> (e.g. if the structural image is <tt class="backtick">img005.nii.gz</tt>, then name the brain extracted version <tt class="backtick">img005_brain.nii.gz</tt>) <span class="anchor" id="line-10"></span></li></ul></li><li>Processing of fieldmaps <span class="anchor" id="line-11"></span><ul><li>tight brain extraction of magnitude image (to avoid noisy voxels at the edge of the brain) <span class="anchor" id="line-12"></span></li><li><p class="line891"><tt class="backtick">fsl_prepare_fieldmap</tt> (or alternative, if not Siemens data) <span class="anchor" id="line-13"></span></li><li>find out values for echo spacing and phase encode direction <span class="anchor" id="line-14"></span></li></ul></li><li><p class="line862">Open <a href="./FEAT(2f)UserGuide.html">FEAT</a> GUI  (e.g. <tt class="backtick">Feat_gui&nbsp;&amp;</tt> on a Mac, or <tt class="backtick">Feat&nbsp;&amp;</tt> on other linux/unix) <span class="anchor" id="line-15"></span></li><li><p class="line862">Set the top left pull-down option to <tt class="backtick">First-level&nbsp;analysis</tt> and the top right pull-down option to <tt class="backtick">Full&nbsp;analysis</tt> (these are the defaults) <span class="anchor" id="line-16"></span></li><li><p class="line862">We will now work our way across the other tabs: <em>Misc, Data, Pre-stats, Stats, Post-stats, Registration</em> <span class="anchor" id="line-17"></span><ol type="1"><li><p class="line891"><em>Misc tab</em>: this can be left as it is for now (we will revisit this later) <span class="anchor" id="line-18"></span></li><li><p class="line891"><em>Data tab</em>: load 4D data; change output directory name (optional); check that TR and number of volumes are correct; we will come back to set the filter later on <span class="anchor" id="line-19"></span></li><li><p class="line891"><em>Pre-stats</em>: the settings used here can vary from study to study but the following provides a basic default (see <a class="nonexistent" href="./www(2e)fmrib(2e)ox(2e)ac(2e)uk(2f)fslcourse.html">feat1 lecture</a> for more info). Motion correction - on (mcflirt); B0 unwarping - recommended if a fieldmap was acquired (<a href="./FUGUE(2f)Guide.html">see separate instructions</a>); Slice timing correction - off (temporal derivatives recommended instead); Spatial filtering - on (small amount recommended); Intensity normalisation - off (between-session normalisation is done automatically, but this within time-series form is not recommended); Melodic - off (turn on for additional exploratory analysis); <span class="anchor" id="line-20"></span></li><li><p class="line891"><em>Stats tab</em>: Select <tt class="backtick">Use&nbsp;FILM&nbsp;prewhitening</tt>; click on <tt class="backtick">Full&nbsp;model&nbsp;setup</tt> <span class="anchor" id="line-21"></span><ul><li>Within the General Linear Model window do the following: <span class="anchor" id="line-22"></span><ul><li><p class="line862">On the <tt class="backtick">EVs</tt> tab: <span class="anchor" id="line-23"></span><ul><li><p class="line862">Set the <tt class="backtick">Number&nbsp;of&nbsp;Original&nbsp;EVs</tt> appropriately <span class="anchor" id="line-24"></span><ul><li>For each individual EV tab (marked with the number 1, 2, …) <span class="anchor" id="line-25"></span><ul><li><p class="line862">Set the <tt class="backtick">EV&nbsp;name</tt> (something short but meaningful) <span class="anchor" id="line-26"></span></li><li><p class="line862">Set the <tt class="backtick">Basic&nbsp;shape</tt> (the Custom 3 column format is the most commonly used)  <span class="anchor" id="line-27"></span></li><li><p class="line862">If using the <tt class="backtick">Custom&nbsp;3&nbsp;column&nbsp;format</tt>, prepare a plain text file (avoiding editors such as MS Word) containing one line for each stimulus associated with the condition to be modelled by this EV. Each line must contain three numbers: the onset time (in seconds); the duration (in seconds); the relative magnitude of each stimulus (usually set to 1) <span class="anchor" id="line-28"></span></li><li><p class="line862">To use the standard HRF the <tt class="backtick">Convolution</tt> settings can be left as they are <span class="anchor" id="line-29"></span></li></ul></li><li><p class="line862">Leave the <tt class="backtick">Orthogonalise</tt> button unchecked (there are <em>very</em> limited circumstances when this can be validly used) <span class="anchor" id="line-30"></span></li><li><p class="line862">Leave the <tt class="backtick">Add&nbsp;temporal&nbsp;derivative</tt> box checked (this is recommended for modelling slice timing and HRF timing delays) <span class="anchor" id="line-31"></span></li><li><p class="line862">Leave the <tt class="backtick">Apply&nbsp;temporal&nbsp;filtering</tt> box checked <span class="anchor" id="line-32"></span></li></ul></li></ul><ul><li>Repeat the above for each EV <span class="anchor" id="line-33"></span></li><li><p class="line862">Select the <tt class="backtick">Contrasts&nbsp;&amp;&nbsp;F-tests</tt> tab: <span class="anchor" id="line-34"></span><ul><li><p class="line891"><tt class="backtick">Setup&nbsp;Contrasts&nbsp;&amp;&nbsp;F-tests</tt> can normally be left at <tt class="backtick">Original&nbsp;EVs</tt> (unless you use individual basis functions in your statistical question) <span class="anchor" id="line-35"></span></li><li>Specify a name (title) and values for the individual contrasts <span class="anchor" id="line-36"></span></li></ul></li><li>At any point in the above process, press the View design button to see if what you've entered looks correct (and dismiss the image by clicking on it when you are done) <span class="anchor" id="line-37"></span></li><li><p class="line862">When you are finished, press <em>Done</em> (and dismiss the image after you've checked it) <span class="anchor" id="line-38"></span></li><li>If there are any problems then you can re-edit the EVs and Contrasts by pressing the Full model setup button again <span class="anchor" id="line-39"></span></li></ul></li></ul></li></ul></li><li><p class="line891"><em>Post-stats tab</em>: the defaults can be left as they are <span class="anchor" id="line-40"></span></li><li><p class="line891"><em>Registration</em>: <span class="anchor" id="line-41"></span><ul><li><p class="line862">Check the <tt class="backtick">Main&nbsp;structural&nbsp;image</tt> button and select the brain extracted structural image (defaults of <tt class="backtick">Normal&nbsp;search</tt> and <tt class="backtick">BBR</tt> are recommended) <span class="anchor" id="line-42"></span></li><li>Nonlinear registration to standard space is recommended (select the Nonlinear button) <span class="anchor" id="line-43"></span></li></ul></li><li><p class="line891"><em>Misc tab</em>: return to this tab and press the <tt class="backtick">Estimate&nbsp;High&nbsp;Pass&nbsp;Filter</tt> then check that it has changed the <tt class="backtick">High&nbsp;pass&nbsp;filter&nbsp;cutoff</tt> on the <em>Data tab</em> (note that this can be overly conservative sometimes, but should always provide a safe estimate) <span class="anchor" id="line-44"></span></li></ol></li><li><p class="line862">When everything is set up correctly press <tt class="backtick">GO</tt> (be patient - it should start a browser within a minute, but if not you can find the output feat directory and open the <tt class="backtick">report.html</tt> file in a browser) <span class="anchor" id="line-45"></span></li><li><p class="line862">Note that you can use the <em>Save</em> button at any time to save your design, but it will be automatically saved for you in the feat directory when you press <em>Go</em> <span class="anchor" id="line-46"></span></li><li>View the results: <span class="anchor" id="line-47"></span><ol type="1"><li>Look at the webpage output in the browser window <span class="anchor" id="line-48"></span></li><li>View the result images that are in the feat directory (in FSLView) <span class="anchor" id="line-49"></span><ul><li>thresholded images are in the top-level feat directory <span class="anchor" id="line-50"></span></li><li><p class="line862">unthresholded images are in the <tt class="backtick">stats</tt> subdirectory <span class="anchor" id="line-51"></span></li><li><p class="line862">registration results are in the <tt class="backtick">reg</tt> subdirectory <span class="anchor" id="line-52"></span></li></ul></ol></ul><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

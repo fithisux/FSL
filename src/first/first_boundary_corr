@@ -1,0 +1,252 @@
+#!/bin/sh
+
+#   first_boundary_corr - run all forms of boundary correction for FIRST outputs
+#
+#   Brian Patenaude and Mark Jenkinson, FMRIB Image Analysis Group
+#
+#   Copyright (C) 2006-2009 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage() {
+    echo ""
+    echo "Usage:   `basename $0` -s <segmented_image> -i <intensity_image> -o <output_image> -b <boundary_correction_method> [options]"
+    echo ""
+    echo "boundary_correction_method can be: fast, thresh, none"
+    echo "-t <threshold> : threshold value for 'thresh' method"
+    echo "-v             : verbose output"
+    echo ""
+    echo "e.g.:  `basename $0` -s image_first_L_Hipp -i orig_t1 -o image_first_L_Hipp_corr -b fast"
+    exit 1
+}
+
+
+#########################################################################################################
+
+# FAST Boundary Correction
+
+fastbcorr() {
+    if [ $# -lt 3 ] ; then
+	echo "Usage: fastbcorr() <initial FIRST label image> <t1 image> <output> [verbose]" 
+	exit 1;
+    fi
+
+    #echo "Running FAST Boundary Correction"
+    #input image
+    imlb=$1
+    imt1=$2
+    imout=$3
+    offset=2
+    verbose=no;
+    if [ X$4 != X ] ; then verbose=$4; fi
+
+    $FSLDIR/bin/fslmaths ${imlb} -uthr 100 ${imout}_grot
+    lb=`fslstats ${imout}_grot -R  | awk '{ print $2 }'`
+    ${FSLDIR}/bin/imrm ${imout}_grot
+    
+    xvox=`$FSLDIR/bin/fslval ${imlb} pixdim1`
+    yvox=`$FSLDIR/bin/fslval ${imlb} pixdim2`
+    zvox=`$FSLDIR/bin/fslval ${imlb} pixdim3`
+    
+    bounds=`$FSLDIR/bin/fslstats $imlb -w`
+    if [ $verbose = yes ] ; then echo "Initial bounds: $bounds" ; fi;
+    
+    xmin=`echo $bounds | awk '{ print $1 }'`
+    xsize=`echo $bounds | awk '{ print $2 }'`
+    ymin=`echo $bounds | awk '{ print $3 }'`
+    ysize=`echo $bounds | awk '{ print $4 }'`
+    zmin=`echo $bounds | awk '{ print $5 }'`
+    zsize=`echo $bounds | awk '{ print $6 }'`
+    
+    if [ $verbose = yes ] ; then echo "Initial ROI: $xmin $xsize $ymin $ysize $zmin $zsize" ; fi;
+    
+    xmin=`echo "${xmin} - $offset" | bc`
+    xsize=`echo "$xsize + 2*$offset" | bc`
+    ymin=`echo "$ymin - $offset" | bc`
+    ysize=`echo "$ysize + 2*$offset" | bc`
+    zmin=`echo "$zmin - $offset" | bc`
+    zsize=`echo "$zsize + 2*$offset" | bc`
+    if [ $verbose = yes ] ; then echo "fslroi call with : $xmin $xsize $ymin $ysize $zmin $zsize"; fi;
+    
+    $FSLDIR/bin/fslroi $imt1 ${imout}_t1_roi $xmin $xsize $ymin $ysize $zmin $zsize
+    $FSLDIR/bin/fslroi $imlb ${imout}_lb_roi $xmin $xsize $ymin $ysize $zmin $zsize
+    
+    if [ $verbose = yes ] ; then echo "run FAST" ; fi;
+    $FSLDIR/bin/fast ${imout}_t1_roi 
+    if [ $verbose = yes ] ; then echo "done FAST" ; fi;
+    
+    $FSLDIR/bin/fslmaths ${imout}_lb_roi -bin -mul ${imout}_t1_roi_seg ${imout}_lb_roi_seg
+    greylb=`$FSLDIR/bin/fslstats ${imout}_lb_roi_seg -M`
+    
+    if [ $verbose = yes ] ; then echo "Pre-round $greylb" ; fi;
+    greylb=`echo $greylb + 0.5 | bc -l | sed 's/\.[0-9]*//'`;   # round the value (sed truncates from decimal place)
+    if [ $verbose = yes ] ; then echo "Post-round $greylb" ; fi;
+    
+    $FSLDIR/bin/fslmaths ${imout}_t1_roi_seg -thr $greylb -uthr $greylb -bin ${imout}_t1_roi_grey
+    $FSLDIR/bin/fslmaths ${imout}_lb_roi -thr 100 -mas ${imout}_t1_roi_grey -bin -mul $lb ${imout}_lb_bound
+    $FSLDIR/bin/fslmaths ${imout}_lb_roi -uthr 100 -add  ${imout}_lb_bound ${imout}_roi
+    
+    # having processed the rois, now put them back into the larger images
+    transx=`echo $xmin \* $xvox | bc -l`;
+    transy=`echo $ymin \* $yvox | bc -l`;
+    transz=`echo $zmin \* $zvox | bc -l`;
+    # deal with annoying flip of x coordinates for FLIRT conventions in neuro
+    if [ `$FSLDIR/bin/fslorient $imlb ` = NEUROLOGICAL ] ; then
+	dim1=`$FSLDIR/bin/fslval $imlb dim1`
+	transx=`echo " ( $dim1 - 1 - ( $xmin + $xsize - 1 ) ) * $xvox" | bc -l`;
+    fi
+    echo "1 0 0 $transx" > ${imout}_trans_roi.mat
+    echo "0 1 0 $transy" >> ${imout}_trans_roi.mat
+    echo "0 0 1 $transz" >> ${imout}_trans_roi.mat
+    echo "0 0 0 1" >> ${imout}_trans_roi.mat
+    flirt -in ${imout}_roi -ref ${imlb} -out ${imout} -interp nearestneighbour -applyxfm -init ${imout}_trans_roi.mat
+    
+    
+    $FSLDIR/bin/imrm ${imout}_lb_bound ${imout}_t1_roi_grey ${imout}_lb_roi_seg ${imout}_roi ${imout}_t1_roi ${imout}_lb_roi ${imout}_t1_roi_seg ${imout}_lb_bound ${imout}_t1_roi_pve* ${imout}_t1_roi_mixeltype
+    rm ${imout}_trans_roi.mat
+
+}
+
+#########################################################################################################
+
+GETOPT_COMPATIBLE=
+POSIXLY_CORRECT=
+export GETOPT_COMPATIBLE POSIXLY_CORRECT
+args=`getopt s:i:o:b:t:v $*`
+if [ $? != 0 ] || [ $# -eq 0 ] ; then 
+    Usage
+fi
+verbose=no;
+set -- $args
+for i
+  do
+  case "$i"
+      in
+      -s)
+	  segim="$2";
+	  shift 2;;
+      -i)
+	  intim="$2";
+	  shift 2;;
+      -o)
+	  outim="$2";
+	  shift 2;;
+      -b)
+	  corrmeth="$2";
+	  shift 2;;
+      -t)
+	  thresh="$2";
+	  shift 2;;
+      -v)
+	  verbose=yes;
+	  shift;;
+  esac
+done
+
+
+# test compulsory arguments
+
+if [ `${FSLDIR}/bin/imtest $segim` = 0 ] ; then
+    echo "Error: cannot find image $segim"
+    exit 1
+fi
+segim=`${FSLDIR}/bin/remove_ext $segim`
+
+if [ `${FSLDIR}/bin/imtest $intim` = 0 ] ; then
+    echo "Error: cannot find image $intim"
+    exit 1
+fi
+intim=`${FSLDIR}/bin/remove_ext $intim`
+
+if [ $corrmeth = FAST ] ; then corrmeth=fast; fi
+if [ $corrmeth != fast ] && [ $corrmeth != thresh ] && [ $corrmeth != none ] ; then
+    echo "Unrecognized correction method: $corrmeth"
+    exit 2
+fi
+
+if [ X$outim = X ] ; then
+    echo "Must specify an output image"
+    exit 3
+fi
+
+# do work
+
+if [ $corrmeth = thresh  ] ; then 
+    if [ X$thresh = X ] ; then
+	echo "Must specify a valid threshold with the -t option"
+	exit 4
+    fi
+    ${FSLDIR}/bin/first_utils --singleBoundaryCorr -i ${segim} -r ${intim} -p ${thresh} -o ${outim}
+fi
+
+if [ $corrmeth = fast ] ; then
+    fastbcorr ${segim} ${intim} ${outim} ${verbose}
+fi
+
+if [ $corrmeth = none ] ; then
+    # a bit hacky, but makes sure that boundary intensities are dealt with correctly
+    ${FSLDIR}/bin/first_utils --singleBoundaryCorr -i ${segim} -r ${intim} -p 100000 -o ${outim}
+fi
+
+

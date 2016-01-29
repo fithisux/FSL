@@ -1,0 +1,21 @@
+<HTML><link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+<HEAD><TITLE>Troubleshooting</TITLE></HEAD><BODY><hr>
+<TABLE BORDER=0><TR>
+<TD ALIGN=LEFT><a href="../index.html"><IMG ALIGN=LEFT BORDER=0 SRC="fsl-logo.png"></a>
+<TD ALIGN=MIDDLE><H3> &nbsp; Troubleshooting &nbsp; </H3>
+</TR></TABLE><hr>
+
+<h3>Compilation fails while building moc_briconwidget.cxx</h3>
+
+<p>This is probably due to a badly installed Qwt plugin. The instructions on how to install the plugin can be found in the supplementary document: <a href="prereqs.html">Preparing a build environment</a>.</p>
+
+<p>Following my instructions, the plugin should've installed into the plugins/designer directory in your Qt installation directory. If you choose to install it elsewhere then Qt tools: <em>designer</em>; <em>moc</em>; <em>uic</em>, etc., won't be able to find it. To tell Qt tools where to find the plugin use the <em>designer</em> tool's preferences has a place where you can add custom directories to the "Plugin Paths."</p>
+
+<p>A quick test of the plugin is to run Qt's <em>designer</em> application. If the plugin is okay you'll see a Qwt pane in the tools on the left-hand side which will be filled with the Qwt widgets.</p>
+
+<h3>Run-time problems on CentOS</h3>
+
+<p>The current redhat binaries can be used on CentOS-4 platforms as long as you have the correct compatability libraries installed. If, at run-time, you get an error message: <kbd>.../usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.4' not found (required by...</kbd>, then try <kbd>yum install compat-libstdc++-33</kbd>.</p>
+
+</body>
+

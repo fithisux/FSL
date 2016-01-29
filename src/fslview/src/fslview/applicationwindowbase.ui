@@ -1,0 +1,639 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ApplicationWindowBase</class>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>ApplicationWindowBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>FslView</string>
+    </property>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>MenuBar</cstring>
+    </property>
+    <item text="&amp;File" name="fileMenu">
+        <action name="fileOpenAction"/>
+        <action name="fileOpen152Action"/>
+        <action name="fileSaveAsAction"/>
+        <separator/>
+        <action name="fileAddAction"/>
+        <action name="fileAdd152Action"/>
+        <action name="fileRemoveAction"/>
+        <action name="fileCreateMaskAction"/>
+        <separator/>
+        <action name="fileCloseAction"/>
+        <action name="fileQuitAction"/>
+        <separator/>
+        <action name="filePreferencesAction"/>
+    </item>
+    <item text="&amp;Tools" name="Tools">
+        <action name="viewOrthographicAction"/>
+        <action name="viewLightboxAction"/>
+        <action name="viewSingleAction"/>
+        <action name="view3DViewerAction"/>
+        <separator/>
+        <action name="viewImageHistogramAction"/>
+        <action name="viewTimeseriesAction"/>
+        <action name="viewClusterBrowserAction"/>
+        <separator/>
+    </item>
+    <item text="&amp;Window" name="Window">
+        <action name="windowCascadeAction"/>
+        <action name="windowTileAction"/>
+        <separator/>
+    </item>
+    <item text="&amp;Help" name="helpMenu">
+        <action name="helpContentsAction"/>
+        <separator/>
+        <action name="helpAboutAction"/>
+        <action name="helpAboutQtAction"/>
+        <action name="helpOnlineHelpAction"/>
+        <action name="help3DRenderingAction"/>
+    </item>
+</menubar>
+<toolbars>
+</toolbars>
+<actions>
+    <action>
+        <property name="name">
+            <cstring>fileOpenAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image0</iconset>
+        </property>
+        <property name="text">
+            <string>&amp;Open...</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Open...</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Shift+O</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileSaveAsAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>image1</iconset>
+        </property>
+        <property name="text">
+            <string>&amp;Save As...</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Save As...</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+S</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpContentsAction</cstring>
+        </property>
+        <property name="text">
+            <string>Contents</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Contents...</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+        <property name="visible">
+            <bool>false</bool>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpAboutAction</cstring>
+        </property>
+        <property name="text">
+            <string>About</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;About</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileRemoveAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Remove</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Remove</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+R</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileAddAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Add</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Add...</string>
+        </property>
+        <property name="toolTip">
+            <string>&amp;Add</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+A</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileQuitAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Quit</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Quit</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Q</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileCloseAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Close</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Close</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+W</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewOrthographicAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Orthographic</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Orthographic</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+O</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewLightboxAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Lightbox</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Lightbox</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+L</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewSingleAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Single</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Single</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+1</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>view3DViewerAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;3D Viewer</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;3D Viewer</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+3</string>
+        </property>
+        <property name="visible">
+            <bool>true</bool>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewImageHistogramAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>Image &amp;Histogram</string>
+        </property>
+        <property name="menuText">
+            <string>Image &amp;Histogram</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Shift+H</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewTimeseriesAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Timeseries</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Timeseries</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+T</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileCreateMaskAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Create Mask</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Create Mask</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+C</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>windowCascadeAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Cascade</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Cascade</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>windowTileAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Tile</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Tile</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewClusterBrowserAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>Cluster &amp;Browser</string>
+        </property>
+        <property name="menuText">
+            <string>Cluster &amp;Browser</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+B</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpAboutQtAction</cstring>
+        </property>
+        <property name="text">
+            <string>About Qt</string>
+        </property>
+        <property name="menuText">
+            <string>About Qt</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileOpen152Action</cstring>
+        </property>
+        <property name="text">
+            <string>Open standard...</string>
+        </property>
+        <property name="menuText">
+            <string>Open standard...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileAdd152Action</cstring>
+        </property>
+        <property name="text">
+            <string>Add standard...</string>
+        </property>
+        <property name="menuText">
+            <string>Add standard...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpOnlineHelpAction</cstring>
+        </property>
+        <property name="text">
+            <string>Read the on-line manual</string>
+        </property>
+        <property name="menuText">
+            <string>Manual</string>
+        </property>
+        <property name="accel">
+            <string>Shift+F1</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewToolboxAction</cstring>
+        </property>
+        <property name="text">
+            <string>Toolbox</string>
+        </property>
+        <property name="menuText">
+            <string>Toolbox</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewToolboxnew_itemAction</cstring>
+        </property>
+        <property name="text">
+            <string>new item</string>
+        </property>
+        <property name="menuText">
+            <string>new item</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewToolboxCursorAction</cstring>
+        </property>
+        <property name="text">
+            <string>Cursor</string>
+        </property>
+        <property name="menuText">
+            <string>Cursor</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>filePreferencesAction</cstring>
+        </property>
+        <property name="text">
+            <string>Preferences...</string>
+        </property>
+        <property name="menuText">
+            <string>Preferences...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>help3DRenderingAction</cstring>
+        </property>
+        <property name="text">
+            <string>3D Rendering</string>
+        </property>
+        <property name="menuText">
+            <string>3D Rendering</string>
+        </property>
+        <property name="accel">
+            <string>Shift+F2</string>
+        </property>
+    </action>
+</actions>
+<images>
+    <image name="image0">
+        <data format="PNG" length="231">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000ae49444154789cb594510ec3200c436db45371b6691fd3cee66bb18f5135a219235af04f442b5e2c03a124ec50d942dd09be4537d45a9b5d4be2f85f1243e06393d748126d53661d9e854a624ac6633c40cff8576e51280010406b0d00dab104b9c69d19e887774201f64ebc7c8f342fc678b0ce553cc76b752e37e368d69edc8c2df4f58c01ef8f4f7533fe176a1e482ef4e2380b6ac0b9d0d36a57161430833e130aacdef62f9acd8ab4793cea0d051970cd5b32cc0a0000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="230">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000ad49444154789cd595310e842010453f8686c482f3d0ccc58c85f16234731e0b922d770b3386150d62d084d7100cbe7cc6411433e309340038e7be35a5ccacb44ce6691d8711f0de178988687b878800005da590093abfe418132c3efdb2cd25a9904d6c82850936791e4b81b59452ce4be2bb644bb14f7695c712b7274e6a3c4f69ebe488bbe1547cb6b09477db6d18cb45fb5dde3ed2f18feae89bb4d76eed8995dc79b5ae2766567fe2dafc0045362bc8b49ae4470000000049454e44ae426082</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>fileOpenAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>fileOpen()</slot>
+    </connection>
+    <connection>
+        <sender>fileSaveAsAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>fileSaveAs()</slot>
+    </connection>
+    <connection>
+        <sender>helpContentsAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>helpContents()</slot>
+    </connection>
+    <connection>
+        <sender>fileQuitAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>close()</slot>
+    </connection>
+    <connection>
+        <sender>fileCloseAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>fileCloseWindow()</slot>
+    </connection>
+    <connection>
+        <sender>fileCreateMaskAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>fileCreateMask()</slot>
+    </connection>
+    <connection>
+        <sender>fileAddAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>fileAdd()</slot>
+    </connection>
+    <connection>
+        <sender>fileRemoveAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>fileRemove()</slot>
+    </connection>
+    <connection>
+        <sender>helpAboutAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>helpAbout()</slot>
+    </connection>
+    <connection>
+        <sender>viewOrthographicAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>viewOrthographic()</slot>
+    </connection>
+    <connection>
+        <sender>viewLightboxAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>viewLightbox()</slot>
+    </connection>
+    <connection>
+        <sender>view3DViewerAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>view3d()</slot>
+    </connection>
+    <connection>
+        <sender>viewSingleAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>viewSingle()</slot>
+    </connection>
+    <connection>
+        <sender>viewTimeseriesAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>viewTimeseries()</slot>
+    </connection>
+    <connection>
+        <sender>viewImageHistogramAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>viewImageHistogram()</slot>
+    </connection>
+    <connection>
+        <sender>viewClusterBrowserAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>viewClusterBrowser()</slot>
+    </connection>
+    <connection>
+        <sender>helpAboutQtAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>helpAboutQt()</slot>
+    </connection>
+    <connection>
+        <sender>fileOpen152Action</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>fileOpen152()</slot>
+    </connection>
+    <connection>
+        <sender>fileAdd152Action</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>fileAdd152()</slot>
+    </connection>
+    <connection>
+        <sender>helpOnlineHelpAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>helpOnlineHelp()</slot>
+    </connection>
+    <connection>
+        <sender>filePreferencesAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>filePreferences()</slot>
+    </connection>
+    <connection>
+        <sender>help3DRenderingAction</sender>
+        <signal>activated()</signal>
+        <receiver>ApplicationWindowBase</receiver>
+        <slot>help3DRendering()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot access="private">fileNew()</slot>
+    <slot access="private">fileOpen()</slot>
+    <slot access="private">fileSaveAs()</slot>
+    <slot access="private">filePrint()</slot>
+    <slot access="private">fileExit()</slot>
+    <slot access="private">helpIndex()</slot>
+    <slot access="private">helpContents()</slot>
+    <slot access="private">helpAbout()</slot>
+    <slot access="private">fileRemove()</slot>
+    <slot access="private">fileCloseWindow()</slot>
+    <slot access="private">fileCreateMask()</slot>
+    <slot access="private">helpOnlineHelp()</slot>
+    <slot access="private">viewOrthographic()</slot>
+    <slot access="private">viewSingle()</slot>
+    <slot access="private">view3d()</slot>
+    <slot access="private">viewLightbox()</slot>
+    <slot access="private">viewTimeseries()</slot>
+    <slot access="private">viewImageHistogram()</slot>
+    <slot access="private">viewClusterBrowser()</slot>
+    <slot access="private">helpAboutQt()</slot>
+    <slot access="private">fileOpen152()</slot>
+    <slot access="private">fileAdd152(void)</slot>
+    <slot access="private">fileAdd()</slot>
+    <slot access="private">filePreferences()</slot>
+    <slot access="private">help3DRendering()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

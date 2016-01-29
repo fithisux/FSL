@@ -1,0 +1,12 @@
+
+flirt -in MNI-prob-2mm -ref MNI-prob-2mm -out MNI-prob-1mm -applyisoxfm 1
+
+foreach f ( 1 2 )
+  /usr/local/fsl/data/atlases/bin/threshold MNI-prob-${f}mm
+  /usr/local/fsl/data/atlases/bin/addlut MNI-maxprob-thr0-${f}mm Random-Rainbow
+  /usr/local/fsl/data/atlases/bin/addlut MNI-maxprob-thr25-${f}mm Random-Rainbow
+  /usr/local/fsl/data/atlases/bin/addlut MNI-maxprob-thr50-${f}mm Random-Rainbow
+end
+
+/usr/local/fsl/data/atlases/bin/locate-centres MNI-prob-2mm ../MNI.xml
+

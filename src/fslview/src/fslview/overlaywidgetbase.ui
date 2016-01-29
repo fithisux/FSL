@@ -1,0 +1,572 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>OverlayWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>OverlayWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>373</width>
+            <height>103</height>
+        </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>32767</width>
+            <height>32767</height>
+        </size>
+    </property>
+    <property name="font">
+        <font>
+            <pointsize>11</pointsize>
+        </font>
+    </property>
+    <property name="caption">
+        <string>Overlay List</string>
+    </property>
+    <property name="focusPolicy">
+        <enum>StrongFocus</enum>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>1</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout13</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout12</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer4_3</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>MinimumExpanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_addButton</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>22</width>
+                                    <height>22</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="accel">
+                                <string>Ctrl+A</string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>image0</iconset>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Add overlay image</string>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_removeButton</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>22</width>
+                                    <height>22</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="accel">
+                                <string>Ctrl+R</string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>image1</iconset>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Remove overlay image</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QListView">
+                    <column>
+                        <property name="text">
+                            <string>V</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>L</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Filename</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>T</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>M</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                <item>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="text">
+                        <string>avg152_T2.nifti</string>
+                    </property>
+                    <property name="text">
+                        <string>1</string>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>image2</pixmap>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>image3</pixmap>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap></pixmap>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap></pixmap>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>image4</pixmap>
+                    </property>
+                </item>
+                    <property name="name">
+                        <cstring>m_overlayListView</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>60</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>32767</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <pointsize>10</pointsize>
+                        </font>
+                    </property>
+                    <property name="allColumnsShowFocus">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Selected image:&lt;br&gt;&lt;hr&gt;/usr/people/twonk/avg152_T2&lt;br&gt;X x Y x Z (X x Y x Z mm)&lt;br&gt;N volumes&lt;br&gt;N bits per pixel</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout11</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_upButton</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>22</width>
+                                    <height>22</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>image5</iconset>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Layer Up</string>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_downButton</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>22</width>
+                                    <height>22</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>image6</iconset>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Layer down</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer4</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout34</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout33</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_detailsButton</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>22</width>
+                                    <height>22</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>image7</iconset>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Image Info</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>m_eyeIcon</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image8</pixmap>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>m_visibleButton</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>1</hsizetype>
+                                    <vsizetype>1</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Visible Layer&lt;hr&gt;When checked the layer is visible. Uncheck to view the images without this layer.</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>m_lockIcon</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image9</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>m_lockedButton</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>1</hsizetype>
+                                    <vsizetype>1</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Lock Layer&lt;hr&gt;When checked the layer is locked, i.e., you can't update the layer using the pen/masking tools.</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout9</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QSlider">
+                            <property name="name">
+                                <cstring>m_modTransSlider</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>1</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="lineStep">
+                                <number>1</number>
+                            </property>
+                            <property name="pageStep">
+                                <number>100</number>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Intensity Modulation&lt;hr&gt;Adjust the intensity according to the specified modulation layer.</string>
+                            </property>
+                        </widget>
+                        <widget class="QSlider">
+                            <property name="name">
+                                <cstring>m_transSlider</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>1</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="lineStep">
+                                <number>1</number>
+                            </property>
+                            <property name="pageStep">
+                                <number>100</number>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Transparency Value&lt;hr&gt;1 is opaque, 0 is tranparent.</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer4_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>100</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="166">89504e470d0a1a0a0000000d494844520000000e0000000e08060000001f482dd10000006d49444154789cd5d1bd0980500c46d1efcac3ce525be7701d71239770065b17b075124190d858264fb0104c93e2e40712cc4c6fa28800588039f294195ae53cdcf814df3726a096343ad64a3a81c9b19ebb6073b0bcf3e15843f4476095b49b59e7f98faefafe1d191b249d115ebeca12f17cb6d0750000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="98">89504e470d0a1a0a0000000d494844520000000e0000000e08060000001f482dd10000002949444154789c63fcffff3f033980892c5d23442323030383140303c33112f5d9926fe3683cd240230056ed073199bcdd5e0000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="272">89504e470d0a1a0a0000000d49484452000000100000000d0806000000a0bbee24000000d749444154789ca552310e83300c3c5015d3a1b0d06c61e3134cf0803e14f18876ca47d8024b61286149a744a440d58adb62e7ecb3cf81941247101e620338ed258aa230440c00a0f50c2965b0f52ff81ca1aa4af3ade3fdfef00a790aaaaa34d3a4317423121e63a9e0a906c4d70ba288ccb250b824abb6c7d08dc872012286a6bea1a96f2062c87281a11ba1dade53142ec97bd07ac634bddc5bb5bd1bf56717a2e8bc19774bb415ad122e52d79d8879d2b948d73bb0014b546dbf2273917a64e0c3059b48786c889873818b74f7165677f02f0e9ff21b4a6f6925c4f6e2610000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="168">89504e470d0a1a0a0000000d49484452000000100000000d0806000000a0bbee240000006f49444154789ca592510ac0200c43edd84da47807ef4fee30c4b36c5f0571a973347f6a135f440190223abd835aeb3dae01089b3b56660062c639d00d18cdf3ed2c8412305caf027d030f773ba0f7468773d6d71ead60522d49b5fc2730b5762dcd9f043ba204acab27897ee57085071d7225f649613c8d0000000049454e44ae426082</data>
+    </image>
+    <image name="image4">
+        <data format="PNG" length="149">89504e470d0a1a0a0000000d49484452000000100000000d0806000000a0bbee240000005c49444154789cc5d24b0e80200c84e119e3a5dafb673856dd1a79d8ca42362cc8ff854029093bebd8aa019cab43778f880049dcf7d61a5f6f9089a740361e0295b803aa710748e2332609338b14f005193e6205997e6316e1efa37c018c776dbfb78d31680000000049454e44ae426082</data>
+    </image>
+    <image name="image5">
+        <data format="PNG" length="132">89504e470d0a1a0a0000000d49484452000000100000000d0806000000a0bbee240000004b49444154789c633c76ec180325808922ddc418606567f59f6c03609af11982d300744db80cc16a002ec5d8c4310c20e4677479467cd188acf8d8a1638cd8d4d03e1a696e00de30a08b0b00d8861a4793219f960000000049454e44ae426082</data>
+    </image>
+    <image name="image6">
+        <data format="PNG" length="141">89504e470d0a1a0a0000000d49484452000000100000000d0806000000a0bbee240000005449444154789c633c76ec180325808922dd0c0c0c2cf824adecacfec3d8c70e1d63a4890b06de0046f45840f6372e801c1e182ec01558b8e4b17a019721d8c4718601ba62b2a211a6099fb7300291544071340200d7bf2188eda5e0560000000049454e44ae426082</data>
+    </image>
+    <image name="image7">
+        <data format="PNG" length="277">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000000dc49444154789c633c76ec1803350113554da385812cf8241d1c16fe47173b70209e119f1e466c6188cd20620dc6f03236c3aaabbc187e7e9fc6f0f3fb340651511ebc96a218884b111f1f07c3a953f719366dbec8f0faf517bceaf186210c9457ac234619aa0b71b94e448407eedd9a6a2f0c79747d04938da1812c9c7dfefc63e25d88d34043398481171e516ea001d485af5e7d6678f6ec23e506c25c488ceb500cc49650f9f838181415842106e2083f747d785d686820c7c0c808517f81541762b3cdd0107f0c63f315d5f3325603f1194c56694309a07a010b00e2635e379963eada0000000049454e44ae426082</data>
+    </image>
+    <image name="image8">
+        <data format="PNG" length="286">89504e470d0a1a0a0000000d49484452000000100000000d0806000000a0bbee24000000e549444154789ca592316a03311045df2c6b18150ef61629b6cc3154f8103e68aae00318aca3b831c421014b60c3b8c8aebcf2da81b0d308e6eb8ffe1f7d092130a5aa496ca07e0678ef2da3170821c8a37b726fc1afbcfdf562d896830a057ee5cdce0607905761a8c0be0de62033b1e1a0aa207f1af110716f0e6ad86dd67cbcafa106d73af881d3fe5428aa8664123875193c2658ea022e9052cab8ed2d5bcd0a628aa0ddd9d552e198be0050d51bae0f96d84fec95482bd93ff5ad8f823432de41df9046403baf03724c1169a5208f7e210f7991df0c74a834f2340ba31cfcb72647f90ae2806dfb582c88310000000049454e44ae426082</data>
+    </image>
+    <image name="image9">
+        <data format="PNG" length="189">89504e470d0a1a0a0000000d49484452000000100000000d0806000000a0bbee240000008449444154789ca592b10e802010438b7160248c8e7e06ff9f7e869f601cd9745013941ec178cbe5c2b5bc121c49fca9d13a4829ede54cd2a9bda12526e96ee1dbd03428c5efdb95892450b85604f906166eb7c1baac800790f1e8718ad5ae8c000f6c79439ce329bae66e026420f8f020093ec8d52641d57b095456abdcdfafac237ca80338c1383ead5990900000000049454e44ae426082</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>m_addButton</sender>
+        <signal>pressed()</signal>
+        <receiver>OverlayWidgetBase</receiver>
+        <slot>addButtonPressed()</slot>
+    </connection>
+    <connection>
+        <sender>m_removeButton</sender>
+        <signal>pressed()</signal>
+        <receiver>OverlayWidgetBase</receiver>
+        <slot>removeButtonPressed()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot access="private">addButtonPressed()</slot>
+    <slot access="private">removeButtonPressed()</slot>
+</slots>
+<layoutdefaults spacing="1" margin="0"/>
+</UI>

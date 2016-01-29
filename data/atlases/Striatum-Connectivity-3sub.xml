@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<atlas version="1.0">
+  <header>
+          <name>Oxford-Imanova Striatal Connectivity Atlas 3 sub-regions</name>
+           <shortname>OISCA3</shortname>
+           <type>Probabilistic</type>
+           <images>
+              <imagefile>/Striatum/striatum-con-prob-thr50-1mm</imagefile>
+              <summaryimagefile>/Striatum/striatum-con-label-thr50-3sub-1mm</summaryimagefile>
+          </images>
+           <images>
+              <imagefile>/Striatum/striatum-con-prob-thr50-2mm</imagefile>
+              <summaryimagefile>/Striatum/striatum-con-label-thr50-3sub-2mm</summaryimagefile>
+          </images>   
+        </header>
+  <data>
+<label index="0" x="107" y="138" z="64">limbic</label>
+<label index="1" x="114" y="138" z="73">executive</label>
+<label index="2" x="63" y="124" z="79">sensorimotor</label>
+ </data>
+</atlas>

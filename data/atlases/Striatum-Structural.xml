@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<atlas version="1.0">
+  <header>
+          <name>Oxford-Imanova Striatal Structural Atlas</name>
+          <type>Label</type>
+          <images>
+              <imagefile>/Striatum/striatum-structural-1mm</imagefile>
+              <summaryimagefile>/Striatum/striatum-structural-1mm</summaryimagefile>
+          </images>
+          <images>
+              <imagefile>/Striatum/striatum-structural-2mm</imagefile>
+              <summaryimagefile>/Striatum/striatum-structural-2mm</summaryimagefile>
+          </images>
+      </header>
+  <data>
+<label index="0" x="0" y="0" z="0">*.*.*.*.*</label>
+<label index="1" x="81" y="138" z="67">ventral-striatum</label>
+<label index="2" x="66" y="138" z="73">putamen</label>
+<label index="3" x="76" y="138" z="84">caudate</label>
+ </data>
+</atlas>

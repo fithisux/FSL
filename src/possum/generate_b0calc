@@ -1,0 +1,111 @@
+#!/bin/sh
+
+#   POSSUM
+#
+#   Tejas Pendse	12.12.12
+#
+#   Wrapper script for b0calc. To used primarily by the GUI (B0 field -> Make B0 file)
+
+#################################
+#$ -l h_rt=5:0:0
+#$ -l h_vmem=2.5G,tmem=2.5G
+#$ -S /bin/bash
+#$ -cwd
+#$ -N makeb0
+#$ -V
+#################################
+
+
+usage()
+{
+	echo "makeb0.sh  --  Tejas Pendse 14.12.12"
+	echo
+	echo "Compulsory Options:"
+	echo "  -i <input-file>    -   Input Air-tissue segmentation"
+	echo "  -o <output-file>   -   Output B0 file(s) basename"
+	echo
+	echo "Optional Options:"
+	echo "  -f <field-str>     -   Field Strength (in Tesla)"
+	echo "  -m                 -   Motion (generates 9 volumes)"
+	echo
+}
+
+
+## Get input options
+motion="no"
+verbose="yes"
+fieldstr=1
+compset=0
+while [ ! -z "$1" ]
+do
+  case "$1" in
+      -i) input="$2";compset=$((compset+1));shift;;
+      -o) output="$2";compset=$((compset+1));shift;;
+      -f) fieldstr="$2";shift;;
+      -m) motion="yes";shift;;
+      *) break;;
+  esac
+  shift
+done
+
+if [ $compset != "2" ]
+then
+	usage
+	exit
+fi
+
+if [ ! -z $verbose ]
+then 
+	echo "Input: $input;   Output: $output;"
+	echo "FieldStrength: ${fieldstr}T;   Motion: $motion"
+fi
+
+if [ ! -e $input ]; then echo "Error: Can't find '$input'!" >&2; exit; fi
+
+date
+hostname
+
+outwd=$(dirname $output)
+output=$(basename $output)
+output=$(echo $output | sed -e 's/.nii.gz//')
+
+if [ $motion == "yes" ]
+then
+	## b0x
+	if [ ! -z $verbose ];then echo "------B0X------";fi
+	b0calc -i $input -o $outwd/b0x --b0x=1 --b0y=0 --b0=0 --xyz
+	fslsplit $outwd/b0x $outwd/b0x -t
+	
+	## b0y
+	if [ ! -z $verbose ];then echo "------B0Y------";fi
+	b0calc -i $input -o $outwd/b0y --b0x=0 --b0y=1 --b0=0 --xyz
+	fslsplit $outwd/b0y $outwd/b0y -t
+
+	## b0z
+	if [ ! -z $verbose ];then echo "------B0Z------";fi
+	b0calc -i $input -o $outwd/b0z --b0x=0 --b0y=0 --b0=1 --xyz
+	fslsplit $outwd/b0z $outwd/b0z -t
+
+	if [ ! -z $verbose ];then echo "------Merging------";fi
+	fslmerge -t $outwd/$output $outwd/b0z0002 $outwd/b0z0001 $outwd/b0z0000 $outwd/b0y0002 $outwd/b0y0001 $outwd/b0y0000 $outwd/b0x0002 $outwd/b0x0001 $outwd/b0x0000
+
+	## Multiply by the field strength if other than 1T
+	if [ $fieldstr -ne 1 ]
+	then
+		fslmaths $outwd/$output -mul $fieldstr $outwd/$output
+	fi
+
+	## Clean up
+	rm -rv $outwd/b0x.nii.gz $outwd/b0y.nii.gz $outwd/b0z.nii.gz $outwd/b0z0002.nii.gz $outwd/b0z0001.nii.gz $outwd/b0z0000.nii.gz $outwd/b0y0002.nii.gz $outwd/b0y0001.nii.gz $outwd/b0y0000.nii.gz $outwd/b0x0002.nii.gz $outwd/b0x0001.nii.gz $outwd/b0x0000.nii.gz
+else
+	if [ ! -z $verbose ];then echo "------B0CALC SINGLE------";fi
+	b0calc -i $input -o $outwd/$output
+
+	## Multiply by the field strength if other than 1T
+	if [ $fieldstr -ne 1 ]
+	then
+		fslmaths $outwd/$output -mul $fieldstr $outwd/$output
+	fi
+fi
+
+echo "Files generated at $outwd/$output"

@@ -1,0 +1,76 @@
+<link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+<h3>Masking</h3>
+
+<p><img alt="picture" src="masking.png">
+
+<p>FSLView can be used to create image masks and manually edit images.
+
+<p><b>To create a mask</b>, first <a href="opening.html">load in the
+image</a> that you want to base the masking on. Make sure that the
+loaded image is highlighted in the <a href="imagelist.html">Image
+List</a>. Then press <i>File -> Create Mask</i>.  This will create a
+new blank image that will appear in the
+<i>Image List</i>. This overlay has the same dimensions as the
+original image; you will still see the original image because the mask
+image is currently empty and so is transparent.
+
+<p><b>To edit an existing image</b> just <i>unlock</i> it (see below)
+and select the masking/editing mode in the <a href="mode.html">Mode
+Toolbar</a>.
+
+<p>To draw on an image it must be highlighted in the <i>Image List</i>
+and it must be <i>unlocked</i>. If it is
+<i>locked</i> then a small padlock symbol <img valign=middle
+src="padlock.png"> will appear next to the image name on the <i>Image
+List</i>.  Click on the <i >Padlock</i> checkbox at the bottom of the
+<i>Image List</i> to lock or unlock the image for editing. Select
+<i>Masking</i> mode by clicking on the pencil icon on the
+<i>Mode Toolbar</i>. Moving the mouse over the image while holding
+down the left mouse button allows you to draw on the image.
+
+<p>You can change the slice viewed by pressing the <i>Page Up</i> or
+<i>Page Down</i> keys when the mouse cursor is over an image. You can
+also move the cursor incrementally using the <i>Arrow</i> keys.
+
+<p>To save the edited image / mask, make sure the image is highighted
+in the <i>Image List</i> and then press <i >File -> Save As</i>.
+
+<p><table border="1" cellpadding="10">
+
+<tr>
+<td><img src="penbutton.png">
+<td>Pen Button
+<td>Selects <i class="mode">Pen</i> mode for drawing voxels into the image
+</tr>
+
+<tr>
+<td><img src="erasebutton.png">
+<td>Erase Button
+<td>Selects <i class="mode">Erase</i> mode for removing ("zeroing") pixels
+</tr>
+
+<tr>
+<td><img src="filltool.png">
+<td>Fill Button
+<td>Fills closed shapes with <i>Pen Value</i>.
+</tr>
+
+<tr>
+<td><img src="undobutton.png">
+<td>Undo Button
+<td>Undo up to 5 of the most recent drawing actions
+</tr>
+
+<tr>
+<td>
+<td>Pen Value
+<td>Changes the value that is written into the image when drawing
+</tr>
+
+<tr>
+<td>
+<td>Pen Size
+<td>Edits the pen width (voxels X voxels) when drawing
+</tr>
+
+</table>

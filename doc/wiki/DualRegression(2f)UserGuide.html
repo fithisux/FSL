@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>DualRegression/UserGuide</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">DualRegression/UserGuide</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./DualRegression.html">Introduction</a></li><li>User Guide<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Running_Dual_Regression">Running Dual Regression</a></li><li>
+<a href="#Explanation_of_outputs">Explanation of outputs</a></li><li>
+<a href="#Multiple-comparison_correction_across_all_RSNs">Multiple-comparison correction across all RSNs</a><ol><li>
+<a href="#The_need_for_correction.2C_and_correction_via_Bonferroni">The need for correction, and correction via Bonferroni</a></li></ol></li></ol></div></div></li><li><a href="./DualRegression(2f)Faq.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span><hr /><p class="line874"> <span class="anchor" id="line-3"></span>
+<h1 id="Running_Dual_Regression">Running Dual Regression</h1>
+<span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><ul><li><p class="line862">Run MELODIC on your group data in Concat-ICA mode ("Multi-session temporal concatenation"). Find the file containing the ICA spatial maps output by the group-ICA; this will be called something like <tt>melodic_IC.nii.gz</tt> and will be inside a <tt>something.ica</tt> MELODIC output directory. <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span></li><li class="gap"><p class="line862">Use Glm (or any other method) to create your multi-subject design matrix and contrast files (<tt>design.mat</tt> / <tt>design.con</tt>). <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span></li><li class="gap">Run dual_regression. Just type the script name to get the usage - should be mostly self-explanatory: <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><ul><li><p class="line862">The 4D group spatial IC maps file will be something like <tt>somewhere.ica/melodic_IC</tt> <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span></li><li class="gap"><p class="line862">The <tt>des_norm</tt> option determines whether to variance-normalise the timecourses created by stage 1 of the dual regression; it is these that are used as the regressors in stage 2. If you don't normalise them, then you will only test for RSN "shape" in your cross-subject testing. If you do normalise them, you are testing for RSN "shape" and "amplitude". <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span></li><li class="gap"><p class="line862">One easy way to get the list of inputs (all subjects' standard-space 4D timeseries files) at the end of the command is to use the following (instead of listing the files explicitly, by hand), to get the list of files that was fed into your group-ICA: <tt>`cat&nbsp;somewhere.gica/.filelist`</tt> <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span></li></ul></li></ul><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-19"></span>
+<h1 id="Explanation_of_outputs">Explanation of outputs</h1>
+<span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><ul><li><p class="line891"><tt>dr_stage1_subject[#SUB].txt</tt> - the timeseries outputs of stage 1 of the dual-regression. One text file per subject, each containing columns of timeseries - one timeseries per group-ICA component. <strong>These timeseries can be fed into further <a href="./FSLNets.html">network modelling</a>, e.g., taking the N timeseries and generating an NxN correlation matrix.</strong> <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span></li><li class="gap"><p class="line891"><tt>dr_stage2_subject[#SUB].nii.gz</tt> - the spatial maps outputs of stage 2 of the dual-regression. One 4D image file per subject, and within each, one timepoint (3D image) per original group-ICA component. These are the GLM "parameter estimate" (PE) images, i.e., are not normalised by the residual within-subject noise. By default we recommend that it is these that are fed into stage 3 (the final cross-subject modelling). <span class="anchor" id="line-24"></span></li><li><p class="line891"><tt>dr_stage2_subject[#SUB]_Z.nii.gz</tt> - the Z-stat version of the above, which could be fed into the cross-subject modelling, but in general does not seem to work as well as using the PEs.  <span class="anchor" id="line-25"></span></li><li><p class="line891"><tt>dr_stage2_ic[#ICA].nii.gz</tt> - the same as the PE images described above, but reorganised into being one 4D image file per group-ICA component, and, within each, having one timepoint (3D image) per subject. This reorganisation is to allow stage 3, the cross-subject modelling for each group-ICA component - so it is these files that would normally be fed into <tt>randomise</tt>. <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span></li><li class="gap"><p class="line891"><tt>dr_stage3_ic[#ICA]_tstat[#CON].nii.gz</tt> - the output of "stage 3", i.e. files created by running randomise, doing cross-subject statistics separately for each group-ICA component. You'll get one set of statistical output files per group-ICA component, and, within that set of statistical output files, one t-stat (etc.) per contrast in the cross-subject contrast file (<tt>design.con</tt>). The corresponding corrected (1-p) p-value images are called <tt>*corrp*</tt>. <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span></li></ul><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-30"></span>
+<h1 id="Multiple-comparison_correction_across_all_RSNs">Multiple-comparison correction across all RSNs</h1>
+<span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><p class="line867">
+<h2 id="The_need_for_correction.2C_and_correction_via_Bonferroni">The need for correction, and correction via Bonferroni</h2>
+<span class="anchor" id="line-33"></span><p class="line867"><strong>Warning</strong>: The corrected p-values output by the final randomise (<tt>*corrp*</tt>) are fully corrected for multiple comparisons across voxels, but only for each RSN in its own right, and only doing one-tailed testing (for t-contrasts specified in design.con). This means that if you test (with randomise) all components found by the initial group-ICA, and you do not have a prior reason for only considering one of them, you should correct your corrected p-values by a further factor. For example, let's say that your group-ICA found 30 components, and you decided to ignore 18 of them as being artefact. You therefore only considered 12 RSNs as being of potential interest, and looked at the outputs of randomise for these 12, with your model being a two-group test (controls and patients). However, you didn't know whether you were looking for increases or decreases in RSN connectivity, and so you ran the two-group contrast both ways for each RSN. In this case, instead of your corrected p-values needing to be &lt;0.05 for full significance, they really need to be &lt; 0.05 / (12 * 2) = 0.002 ! <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><p class="line867"><span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><div class="comment" style="display:none"><span class="anchor" id="line-1-1"></span><p class="line867">
+<h2 id="Alternative:_correction_via_combining_statistics">Alternative: correction via combining statistics</h2>
+<span class="anchor" id="line-2-1"></span><p class="line862">An alternative to this full Bonferroni correction, that <em>might</em> be more sensitive (while still giving full control of overall family-wise-error, is to do the following "combining" statistic approach. For each voxel, this just keeps the maximum test statistic value across all RSNs, and builds up a null distribution of that. This mini-script needs running in sh (or bash): <span class="anchor" id="line-3-1"></span><span class="anchor" id="line-4-1"></span><p class="line867"><span class="anchor" id="line-5-1"></span><span class="anchor" id="line-6-1"></span><span class="anchor" id="line-7-1"></span><span class="anchor" id="line-8-1"></span><span class="anchor" id="line-9-1"></span><span class="anchor" id="line-10-1"></span><span class="anchor" id="line-11-1"></span><span class="anchor" id="line-12-1"></span><span class="anchor" id="line-13-1"></span></pre></div><span class="anchor" id="line-51"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

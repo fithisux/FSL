@@ -1,0 +1,353 @@
+#!/bin/sh
+
+#   invwarp - wrapper script for invwarp_exe
+#
+#   All the script does (despite the many lines of code) is to
+#    crop the warp and highres down tightly, run invwarp_exe on
+#    the cropped images and then put the result back into the
+#    larger FOV
+#
+#   Mark Jenkinson, FMRIB Image Analysis Group
+#
+#   Copyright (C) 2009 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage () {
+  $FSLDIR/bin/invwarp_exe -h > /tmp/invwarp_help_$PID 2>&1
+  cat /tmp/invwarp_help_$PID | sed 's/-r,--ref.*/-r,--ref	filename for new brain-extracted reference image, i.e., what was originally the brain-extracted input image (used to determine FOV and pixdims for inverse warp)/' |  sed 's/--rel/--oldref	filename of old reference image (default="standard" or MNI152_T1_2mm)@	--rel/' |  sed 's/-v,/--force  	force process to run despite warnings@	-v,/' | tr '@' '\n'
+## @	--nowarning	do not perform check for BET and large ROI size
+  rm -f /tmp/invwarp_help_$PID
+  exit 1;
+}
+
+#
+# As part of testing the new invwarp (with the imaginative
+# name new_invwarp) this script is retained but all its 
+# functionality is bypassed and the parameters are fed
+# straight into the executable. This makes it trivial to
+# revert back to the old version by simply commenting out
+# the call to new_invwarp and the exit below.
+#
+${FSLDIR}/bin/new_invwarp $*
+exit $?
+
+if [ $# -lt 3 ] ; then
+    Usage
+fi
+
+# Process the options
+#   old syntax: invwarp <warpvol=$inwarp> <refvol=$refvol> <out=$outvol> $args
+args="";
+verbose=no;
+warning=yes;
+force=no;
+while [ $# -gt 0 ] ; do
+    aa=$1;
+    bb=`echo $aa | sed 's/=.*//'`;
+    cc=`echo $aa | sed 's/.*=//'`;
+    if [ $aa = "-w" ]  ; then
+	inwarp=$2;
+	shift; shift;
+    elif [ $bb = "--warp" ] ; then
+	inwarp=$cc;
+	shift;
+    elif [ $aa = "-o" ] ; then
+	outvol=$2;
+	shift; shift;
+    elif [ $bb = "--out" ] ; then
+	outvol=$cc;
+	shift;
+    elif [ $aa = "-r" ] ; then
+	refvol=$2;
+	shift; shift;
+    elif [ $bb = "--ref" ] ; then
+	refvol=$cc;
+	shift;
+    elif [ $bb = "--oldref" ] ; then
+	stdvol=$cc;
+	shift;
+    elif [ $bb = "--nowarning" ] ; then
+	warning=no;
+	shift;
+    elif [ $bb = "--force" ] ; then
+	force=yes;
+	shift;
+    elif [ $aa = "-v" ] ; then
+	args="$args -v";
+	verbose=yes;
+	shift;
+    elif [ $bb = "--verbose" ] ; then
+	args="$args --verbose";
+	verbose=yes;
+	shift;
+    else
+	args="$args $aa";
+	shift;
+    fi
+done
+
+# Do a quick sanity check on the options
+if [ $verbose = yes ] ; then
+    echo warp=$inwarp out=$outvol ref=$refvol stdvol=$stdvol args="$args"
+fi
+if [ `$FSLDIR/bin/imtest $refvol` = 0 ] ; then  Usage ; fi
+if [ `$FSLDIR/bin/imtest $inwarp` = 0 ] ; then  Usage ; fi
+if [ X$outvol = X ] ; then Usage ; fi
+
+# Now start doing some work!
+if [ $verbose = yes ] ; then  echo "Extracting ROI" ; fi
+roivals=`$FSLDIR/bin/fslstats $refvol -w`;
+
+xmin=`echo $roivals | awk '{ print $1 }'`;
+ymin=`echo $roivals | awk '{ print $3 }'`;
+zmin=`echo $roivals | awk '{ print $5 }'`;
+xsize=`echo $roivals | awk '{ print $2 }'`;
+ysize=`echo $roivals | awk '{ print $4 }'`;
+zsize=`echo $roivals | awk '{ print $6 }'`;
+
+if [ $warning = yes ] ; then
+ # test if it looks like BET has been run or not (see if ROI is
+ #  actually any smaller and ROI is not more than 20% bigger than MNI brain)
+ # MNI brain size is 140 180 150 -> 170 220 180  (with 20% increase)
+  badroi=no;
+  if [ $xsize -gt 170 ] ; then badroi=yes; fi
+  if [ $ysize -gt 220 ] ; then badroi=yes; fi
+  if [ $zsize -gt 180 ] ; then badroi=yes; fi
+  if [ `$FSLDIR/bin/fslval $refvol dim1` -le `echo "$xsize + 2" | bc` ] ; then
+      if [ `$FSLDIR/bin/fslval $refvol dim2` -le `echo "$ysize + 2" | bc` ] ; then 
+	  if [ `$FSLDIR/bin/fslval $refvol dim3` -le `echo "$zsize + 2" | bc` ] ; then 
+	      badroi=yes; 
+	  fi
+      fi
+  fi
+  if [ $badroi = yes ] ; then
+      echo " "
+      echo "WARNING!! Reference image has large non-zero ROI. Check that BET has run successfully on this."
+      echo " "
+      if [ $force = no ] ; then exit 1; fi
+  fi
+fi
+
+if [ $verbose = yes ] ; then  echo "Enlarging initial ROI: $roivals"; fi
+# take an extra couple of voxels around the ROI if possible
+if [ $xmin -ge 2 ] ; then 
+   xmin=`echo $xmin - 2 | bc`; 
+   xsize=`echo $xsize + 2 | bc`; 
+fi
+if [ $ymin -ge 2 ] ; then 
+   ymin=`echo $ymin - 2 | bc`; 
+   ysize=`echo $ysize + 2 | bc`; 
+fi
+if [ $zmin -ge 2 ] ; then 
+   zmin=`echo $zmin - 2 | bc`; 
+   zsize=`echo $zsize + 2 | bc`; 
+fi
+if [ `$FSLDIR/bin/fslval $refvol dim1` -ge `echo "$xmin + $xsize + 2" | bc` ] ; then
+  xsize=`echo $xsize + 2 | bc`;
+fi
+if [ `$FSLDIR/bin/fslval $refvol dim2` -ge `echo "$ymin + $ysize + 2" | bc` ] ; then
+  ysize=`echo $ysize + 2 | bc`;
+fi
+if [ `$FSLDIR/bin/fslval $refvol dim3` -ge `echo "$zmin + $zsize + 2" | bc` ] ; then
+  zsize=`echo $zsize + 2 | bc`;
+fi
+
+if [ $verbose = yes ] ; then  
+  echo "Enlarged ROI: $xmin $xsize $ymin $ysize $zmin $zsize" ; 
+fi
+# make xminmm version (in mm not voxels)
+xvox=`$FSLDIR/bin/fslval $refvol pixdim1`;
+yvox=`$FSLDIR/bin/fslval $refvol pixdim2`;
+zvox=`$FSLDIR/bin/fslval $refvol pixdim3`;
+xminmm=`echo "$xmin * $xvox" | bc -l`;
+yminmm=`echo "$ymin * $yvox" | bc -l`;
+zminmm=`echo "$zmin * $zvox" | bc -l`;
+xsizemm=`echo "$xsize * $xvox" | bc -l`;
+ysizemm=`echo "$ysize * $yvox" | bc -l`;
+zsizemm=`echo "$zsize * $zvox" | bc -l`;
+
+if [ $verbose = yes ] ; then  echo "Making tmp directory" ; fi
+tmpdir=`$FSLDIR/bin/tmpnam`;
+origdir=$tmpdir;
+tmpdir="${tmpdir}A"
+if [ -d $tmpdir ] ; then
+  echo "Temporary directory $tmpdir already exists!  Exiting.";
+  exit 1;
+else
+  mkdir $tmpdir
+fi
+
+if [ $verbose = yes ] ; then  echo "Generating field"; fi
+# pick a standard (either set via options or use "standard" in pwd 
+#    or MNI152_T1_2mm  - in that order)
+if [ X$stdvol = X ] ; then
+    stdvol=$FSLDIR/data/standard/MNI152_T1_2mm
+    if [ `$FSLDIR/bin/imtest standard` = 1 ] ; then stdvol=standard; fi
+fi
+# Note: on line below need "standard" in pwd!  - What to do about this?!?
+$FSLDIR/bin/fnirtfileutils -i $inwarp -f field -o $tmpdir/hr2std_field -a
+
+if [ $verbose = yes ] ; then  echo "Extracting ROI and offsetting field" ; fi
+$FSLDIR/bin/fslroi $refvol $tmpdir/refvol_roi $xmin $xsize $ymin $ysize $zmin $zsize 0 1
+
+# need to adjust field for different starting position in roi images
+$FSLDIR/bin/fslroi $tmpdir/hr2std_field $tmpdir/fieldx 0 1
+$FSLDIR/bin/fslroi $tmpdir/hr2std_field $tmpdir/fieldy 1 1
+$FSLDIR/bin/fslroi $tmpdir/hr2std_field $tmpdir/fieldz 2 1
+
+# NEUROLOGICAL FIX
+if [ `$FSLDIR/bin/fslorient $refvol ` = NEUROLOGICAL ] ; then
+    dim1=`$FSLDIR/bin/fslval $refvol dim1`;
+    transx=`echo " ( $dim1 - 1 - ( $xmin + $xsize - 1 ) )  * $xvox " | bc -l`;
+else
+    transx=$xminmm;
+fi
+
+$FSLDIR/bin/fslmaths $tmpdir/fieldx -sub $transx $tmpdir/fieldx
+$FSLDIR/bin/fslmaths $tmpdir/fieldy -sub $yminmm $tmpdir/fieldy
+$FSLDIR/bin/fslmaths $tmpdir/fieldz -sub $zminmm $tmpdir/fieldz
+$FSLDIR/bin/fslmerge -t $tmpdir/roi2std_field $tmpdir/fieldx $tmpdir/fieldy $tmpdir/fieldz
+
+if [ $verbose = yes ] ; then  echo "Running real INVWARP"; fi
+$FSLDIR/bin/invwarp_exe -w $tmpdir/roi2std_field -o $tmpdir/standard2highres_warp -r $tmpdir/refvol_roi $args
+
+if [ $verbose = yes ] ; then  echo "Undoing offset" ; fi
+$FSLDIR/bin/fslroi $tmpdir/standard2highres_warp $tmpdir/fieldx 0 1
+$FSLDIR/bin/fslroi $tmpdir/standard2highres_warp $tmpdir/fieldy 1 1
+$FSLDIR/bin/fslroi $tmpdir/standard2highres_warp $tmpdir/fieldz 2 1
+$FSLDIR/bin/fslmaths $tmpdir/fieldx -sub $transx $tmpdir/fieldx
+$FSLDIR/bin/fslmaths $tmpdir/fieldy -sub $yminmm $tmpdir/fieldy
+$FSLDIR/bin/fslmaths $tmpdir/fieldz -sub $zminmm $tmpdir/fieldz
+$FSLDIR/bin/fslmerge -t $tmpdir/standard2highres_full_warp $tmpdir/fieldx $tmpdir/fieldy $tmpdir/fieldz
+
+if [ $verbose = yes ] ; then  echo "Restoring full FOV" ; fi
+# extend ROI by copying the extreme slices
+warp=$tmpdir/standard2highres_full_warp
+refdim1=`$FSLDIR/bin/fslval $refvol dim1`;
+refdim2=`$FSLDIR/bin/fslval $refvol dim2`;
+refdim3=`$FSLDIR/bin/fslval $refvol dim3`;
+dim1=`$FSLDIR/bin/fslval $warp dim1`;
+dim2=`$FSLDIR/bin/fslval $warp dim2`;
+dim3=`$FSLDIR/bin/fslval $warp dim3`;
+# extend in z first
+bottom_slice=$tmpdir/bottom_slice
+top_slice=$tmpdir/top_slice
+$FSLDIR/bin/fslroi $warp $bottom_slice 0 $dim1 0 $dim2 0 1 0 3
+$FSLDIR/bin/fslroi $warp $top_slice 0 $dim1 0 $dim2 `echo $dim3 - 1 | bc` 1 0 3
+com="$FSLDIR/bin/fslmerge -z $warp ";
+sl=0;
+while [ $sl -lt $zmin ] ; do com="$com $bottom_slice "; sl=`echo $sl + 1 | bc`; done
+com="$com $warp ";
+sl=`echo $zmin + $zsize | bc`;
+if [ $verbose = yes ] ; then  echo Starting slice=$sl and finish=$refdim3 ; fi
+if [ $verbose = yes ] ; then  echo zmin=$zmin and zsize=$zsize ; fi
+while [ $sl -lt $refdim3 ] ; do com="$com $top_slice "; sl=`echo $sl + 1 | bc`; done
+#echo $com 
+$com
+dim3=`$FSLDIR/bin/fslval $warp dim3`;
+# extend in y next
+back_slice=$tmpdir/back_slice
+front_slice=$tmpdir/front_slice
+$FSLDIR/bin/fslroi $warp $back_slice 0 $dim1 0 1 0 $dim3 0 3
+$FSLDIR/bin/fslroi $warp $front_slice 0 $dim1 `echo $dim2 - 1 | bc` 1 0 $dim3 0 3
+com="$FSLDIR/bin/fslmerge -y $warp ";
+sl=0;
+while [ $sl -lt $ymin ] ; do com="$com $back_slice "; sl=`echo $sl + 1 | bc`; done
+com="$com $warp ";
+sl=`echo $ymin + $ysize | bc`;
+while [ $sl -lt $refdim2 ] ; do com="$com $front_slice "; sl=`echo $sl + 1 | bc`; done
+#echo $com
+$com
+dim2=`$FSLDIR/bin/fslval $warp dim2`;
+# extend in x next
+left_slice=$tmpdir/left_slice
+right_slice=$tmpdir/right_slice
+$FSLDIR/bin/fslroi $warp $left_slice 0 1 0 $dim2 0 $dim3 0 3
+$FSLDIR/bin/fslroi $warp $right_slice `echo $dim1 - 1 | bc` 1 0 $dim2 0 $dim3 0 3
+lcom=""; rcom=""; com="";
+sl=0;
+while [ $sl -lt $xmin ] ; do lcom="$lcom $left_slice "; sl=`echo $sl + 1 | bc`; done
+sl=`echo $xmin + $xsize | bc`;
+while [ $sl -lt $refdim1 ] ; do rcom="$rcom $right_slice "; sl=`echo $sl + 1 | bc`; done
+if [ `$FSLDIR/bin/fslorient $refvol ` = NEUROLOGICAL ] ; then
+    # neurological case
+    com="$FSLDIR/bin/fslmerge -x $warp $rcom $warp $lcom";
+else
+    # radiological case
+    com="$FSLDIR/bin/fslmerge -x $warp $lcom $warp $rcom";
+fi
+#echo $com
+$com
+dim1=`$FSLDIR/bin/fslval $warp dim1`;
+
+$FSLDIR/bin/imcp $warp $outvol
+
+if [ $verbose = yes ] ; then  echo "Cleanup temporary files"; fi
+rm -f ${tmpdir}/*.nii*
+rm -f ${tmpdir}/*.hdr*
+rm -f ${tmpdir}/*.img*
+rm -f ${tmpdir}/*.mat
+rmdir ${tmpdir}
+if [ X$origdir != X ] ; then rm ${origdir} ; fi

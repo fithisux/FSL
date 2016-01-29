@@ -1,0 +1,364 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>DrawToolbarBase</class>
+<author>Dave Flitney</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>DrawToolbarBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>389</width>
+            <height>72</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>Form2</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout15</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_penButton</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>22</width>
+                            <height>22</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="toggleButton">
+                        <bool>true</bool>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image0</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Pen Tool&lt;hr&gt;Sets the voxel value according to the current pen value.</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_eraseButton</cstring>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>22</width>
+                            <height>22</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="toggleButton">
+                        <bool>true</bool>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image1</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Eraser Tool&lt;hr&gt;Set voxel to the background value.&lt;br&gt;&lt;br&gt;&lt;b&gt;You can change the background value by selecting this mode and changing the pen value. Each mode has it's own pen value.&lt;/b&gt;</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_fillButton</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>22</width>
+                            <height>22</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="toggleButton">
+                        <bool>true</bool>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image2</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Fill Tool&lt;hr&gt;Fill a region with the selected pen value. &lt;br&gt;&lt;br&gt;&lt;b&gt;Draw around a region using the pen tool then select the fill tool and click inside the region of interest to fill it with the current pen value.&lt;/b&gt;</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="Line">
+            <property name="name">
+                <cstring>line1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>VLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="margin">
+                <number>4</number>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout14</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_undoButton</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>22</width>
+                            <height>22</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image3</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Undo Tool&lt;hr&gt;Undo the previous pen action.</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_redoButton</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>22</width>
+                            <height>22</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image4</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Redo Tool&lt;hr&gt;Allows you to redo a pen update which you've cancelled with the undo tool.</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="Line">
+            <property name="name">
+                <cstring>line1_2</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>VLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="margin">
+                <number>4</number>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+        </widget>
+        <widget class="QToolButton">
+            <property name="name">
+                <cstring>m_linkCursorButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>22</width>
+                    <height>22</height>
+                </size>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image5</iconset>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Cursor follows pen&lt;hr&gt;Lock the cursor to the pen position so all views update accordingly.</string>
+            </property>
+        </widget>
+        <widget class="Line">
+            <property name="name">
+                <cstring>line1_2_3</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>VLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="margin">
+                <number>4</number>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+        </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>m_valBox</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>50</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32767</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="maxValue">
+                <number>99</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Pen Value&lt;hr&gt;Select the numeric value which the pen will use when setting voxels.</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>m_colorPixmapLabel</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>15</width>
+                    <height>15</height>
+                </size>
+            </property>
+            <property name="pixmap">
+                <pixmap>image6</pixmap>
+            </property>
+            <property name="scaledContents">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="Line">
+            <property name="name">
+                <cstring>line1_2_2</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>VLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="margin">
+                <number>4</number>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+        </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>m_sizeBox</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>50</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32767</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Pen Size&lt;hr&gt;The pen will paint a NxN square patch. Use this control to change N.</string>
+            </property>
+        </widget>
+    </hbox>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="775">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000002ce49444154388d8d94cb4f13511487bf6967a653dbd2d2da561114252a112a098a0f8c319ab8911526c6e8ce184d34fa1fe8c2b571812edc6888c64412a3f1198d361a5fe01b0d5a5e159487284c915a6a299d695db424884ce5eceee4de2fdff99d7b07e65866b379bfdd669b2cb05a334ec59276c8d225a01830fdb56f8e3c87cf3bffc9d913c7bb3716cef3ee5d5aa45904a1bcf5474402da800920cd4c7a9edab763db567d34f46195107a87188f4a85568b0258011b2002c25c813eafd77b6ce7a6f5f1a127419c760725e5ab887b8bc881e429d8d4877c2500870e1d3ca09845d1b1a2ba06b7a210162cbc0cf7441c92a8c6525a7afa81ff018b3d1ecf9efafa7aeb784425e3f4b0d00c4fef07690f7f0ed925b13596d212800e64fed7b2001cd9b7a7ce25a937cc139107949525e935c9dc6b7931e290a5d72389e417e017a0cdc5b03410086ca9ae58ec36455b49a8714c2576828f54da3aba7aedb2d80c8c02bfc94d389fa1001cdd5db76ef5cac21ee9eb704c585d5d4d645ce4ceadebd1aacad2f763139383c0183039d56e3ec3653535359515653eab4dea24a9e998440bd78203f40f0ef5ab11f9ee6c7646862659960fefaa5bbbbddc3740786098b51b371057b672faccf9d1c04acf8df8efe4500e989c6e6704f4d7d6d6fa8bfc25e89a05415030cb2e4e359c4b03831fdad567800a8ccfb4330256f93dceaae8f75e7afa04dcfecd8cb186c60b57269697baaee5cc7e02a99976b30105205060d12b17f87dc8b6428a039b38d9d048815d097dec8abcc8d9fd935d3e432191d490e6b9712fa9e062d36d5e3637772d5ee8ba088c909decac76603065359ae047dcc4b3fbaf78fc30d8eeb24b979fb77e790b7cc720bbbcc0d1b118576fdee55328d4e2543237c37dc32d403fd9fc34233b4360476737e94c67b3964a357dd3f477baaef791cd2e99cfce10f82b167b0534016f803e2042f645e485c1b4ffd8b4b5075844b62d15830b6c547f0097e80c0453f9cbfc0000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="868">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000032b49444154388dad944b6f5b551485bf7deecbcecbb57b1d9a0724294d2904a8040421060806304002092131e00730a95489097f84bfc11089210c2a21214419a5ad5d8586dae461276e1cfbfa71cf83c1bd71a2a2d049b7b47575a4bdd75e6b9f750f3ce790e754e32e2a96288aca9eb8e5a942a1acc4f38c3538903008c43a8720f84a28449114a3481502ffc96838aad71acde391d6c63f452acdcec86b2fafcd4785e2d795b9b9af2e4d17d795f2226b2dce59e52995155a27ca39097ccf43c4ef749ed4bbeda3ef4d32f861ebe0a0ed038441c07ca5327ba51a7ff6f6c6c6edf76fbeb1fa625c21500a04c43ab03653e61c6803ce31369a875bb5eb3ffd72e7dbc641eb1ef09b0f906aadca73336b2b0b0b5f6cdeb8beba5a29814eb1ce222e5b903887b8ec2064dfc0f7796f69995fc3f0ea204d9780e95cb22bcccdcc6eac2e2c6caec631a20d0e8770d6fc341802ca398234e5b8d777dde1700a087d40ca97caf195f8f2476f5dbb1a1714b853363933260c01970db24a51ec0fb1dd3e8749f2a0331c26003e202b8b0bcbd54ae5cb97aa55613cccf6969b61c270c2346327cac3d796edbd7dda83417da4f531a01510c5a5d2fa3bafde287b38109938ebbf72990c8b9221532709779b4df67bbd1d0747c058bd508d4bc528bcf5e19b1b301a8131a85cb2e460921bf6f48cf2f09dd06cb5f8bdd1a8fddde9d4c800077e210c37d6d756364953444e1bcfe449fe1388cd688b088421ded850db3fe0e1e161ad3b1aed027d20f595a84f3ffff813d4cc2c44119ed160cf01e59732598117e01722f46e9bc7474749bbdf6fa4d6b67240e34f2bf5c1cd28448d35ca0b418599792f084953824e8fbbbbfbdcd9d9a9374f4eee011d6008587f5aa9d7c78f1a54b506632e043a43147a9ec783bdbdb47e7cfcd7519234811e30069c0a60eb7ea3812916b161386942040b9873699dc359cb5ebbcd9fdbdbed7fbaddfad898fd1cd000c82b71fccdb5f9f9ef2e974a8b46eba2d27a621dfbb474e750223649d3c3fbadd6cfb576fbc7d4983f809d7c874e8045e05d600998013cfeff0d744002348147c063e01048c91b7d603acf28077c565840e7c03d60940f9a3051799e67f62c96a76939f762ff0bb72687b94497657e0000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="1161">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000045049444154388d9d94dd6f537518c7bfe7a59c73da357d033b4ad78ebac9c05e6c1ac5121547cab20b1a339625de48e24c40ddcd820b262ef14f98212186cb8532c998b2a991b870414684aca3d18d7a01445687edbab6b4a7ed39a72fe7d50bcadc08a8f1497ec92fbf3cbfcff7799ee4fb507876f8007c0ce0130035000f01e8cfc9dd16d433de0800c701ac039806f03e80df018800b47f0392ff20c400d8673299da49926400989a62ff0b58f3f97c3d0303035fbaddee507f7ffffea6c0f3f2b755b22d4e9e3c692108e2eddedede8f464747fdcbcbcb5cb95c760f0e0ede8bc562193c6edbf84f158e8f8f73a552e9585f5fdf879148c4e37038b067cf1e44229137171717cf8c8d8d850070cd42483c1ec1b631d04f2ee7ce9db3261289e39d9d9d670e1f3e7cc0eff7c36c368320080c0f0f4396e577be9999e18ebf1a8c85e83ad9d0f4d5c57ce5f6cd8d52926fa825000a009d028068346a5d5b5bfb80e3b8cfc3e170a7dfef87d56a05c330585a5a42201040201020dbbc5e6f221e7f69609fd7e7664d070fb877867b9ce6204b80cfd795624dd3556a7a7a9a595d5d1dcee7f35f0c0d0d79bc5e2f5a5a5ac0b22ceedfbf8fb9b939783c1e747777a3adad8d60ed4ef6d6af2bfaa1f6dd46c75be176276beab008856eddc01f0fc5c606d5d3d3732c91487c353232626f6d6d05c3309be7fcf9f33875ea14a6a6a670f4e851f03c0f8bd54ae43582bb7a2b567e99330a6daf1d7272726dd783541aab426d8572b95c774f9f3e4d3b1c0ec26c36836559b02c0b9aa661b3d93031318113274e0000b2d92c144581afbd9d7077056dd15feec532b3d1c42be1fed6b5b535d79dcca39f294992de0b068346575797856559300c039aa6a1eb3a9c4e27c2e130689a862008a0280ab55a0db3b3b3d52b57ae6462b1985e6e2896839d7b5b7ebb7bcfb9922bfd48e772b977cf9e3d3b67b7db5f08854200004551a0691aaad52a0a85022a950a388ec3fafa3a2e5cb820cccfcfff248ae20c80ecee9dbb86d552a16387aed224018a5255b52249523293c9ec77bbddad2e97cba8d7eb84288a28168b104511168b05d96c16172f5e94e6e7e7af0a82f0351efb3b7dc86d3fe8a3f5ae8d6291bdc357bfa70018b22ce764594e562a95bd369bcde37038c87c3ebf09cbe572989c9cac5fbb76ed8772b97c09c003006900e5d777598fbc68d283c56addb45cae7f47376d24a452a91bf1789c00f0992449a18e8e0e582c166c6c6c201a8d1ad7af5f9fe179fedb266c1d800040ab69bacac955c34ec1a089bfbd6c0050789ecfe4f3f9542a950a98cd662b4992c4d4d414b1b0b070a950285c6ec2324d980a007e2bdbbb8f25f697145d8ef1f5ab9bd66b9a5ec8e5720ba228cad96c769c619837d2e9f4e562b138fb14ecc98220fe941af5876663c71d49ad56345ddd0adc8456abd59bc964f253c330da55552d1b8691dadae6d60f92a249050d1995a21d14416acfdad8060045d3b482aeeb290039008f00484fc3001092aa493b18e6c8aad0b891ae36e27f01b35cfc16b66723b70000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="816">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000002f749444154388dd5945d4853611cc67f679bae395dae9cd96c15d9a7d907354d2bfab828a1ee22c38be8a68bbae826a28b0a04a1cbea228a8422a9500a828a42b220228aecc38bb2566aa374a5733b3aa7dbd9768ee79c2eb6e5185676d9032f071ef8ffcec3fb3eef0bffab1cc03ec090e1cd0016fc6dd0f41bff06a0008f8130a0019b535edf9f808629bc7badcd8db58019c80704607b6b73a3f36fe9b2133a9694cdbb71eb5a63ad1e79c7f2c58e1d9aaaf6a3ab9f6a366d7c6a8877772d2b732cd035f5408e511ffcee8ff68423f2402af52f09a9efbccd35abcf351cdf5be72e37812603109722f807029cbdfc921e5fbcfdc4916dedee558e91e050503f77b98396fbbd1f804f402c0d34028eb515aef3470fefacdb5259045a7c327e4e2e85b3ec6ca974f2a6d3eb7afcbc5fddb96d85d7593a47db5a558acf17b07bbca30a10c804e6d8f22d9545e6c006a7e1336aa887586072a9b28475b68b827cb3e9eacdb7b956f5c7d7b212756c66f17cdd566036de7ae031a480721a98180e45df7ef68ab334495c57660f416218259a5c72788044c8c7dca56e42417fc1f3d77de3eb9d01af29f65d752e75131f0b5a3a3d2312104c03012429c1a357dd9add20e86bac16c1b4e394146d6a93c591b0625e511235da0a6d04e3b30dcd77ba7de2a8d2bbaa34a214da93dea367bd4160281308a0024f3abd5a9100551e9ff60268f8d8afe559728545d5e516933831877bed9e8e2f837a479e59c8a92eb708296f280dccee611c3876fbc5c4159265fe009cbed426fb1539c178240120011f9bdae4588637650fd34a0027819a541dfa81a86c76311c8a8ac037601c5065b38bf0584c22799b982a615a22f0101806960179a3ba93a6ebaffa803724efb571547772f15ac71819b5f91d502759035b6989ed4ccb85fa852d77de2b4362a40718985b5cb0b2e542bdb5f56e97ea0f8c8fa4b6615a3ab877778578687f950edc04d601d57b7655d41fda5f750070670f08d946968a813aa01cb8020c0211a004b002effe152830f9ea68240f43f9e3c434254ce3e700fc04fe12478a8440f91b0000000049454e44ae426082</data>
+    </image>
+    <image name="image4">
+        <data format="PNG" length="793">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000002e049444154388ddd945d48936114c77fdbbb0f7db7924da7395b1f549a69d645170521049514d44d5f5088377dd15d195d84115610d545104511455460985674917d5c596af6610bb38c9428dd5c634e72dfbeef36d7c5b67a5b16d665ffbbe770ceef9cf33ce73cf03f682690a538ab81cd80652267f52480b380e50aff1ca01ab8feaf401aaed45b8115800a3002fa862bf555c0dd4c5fcd04f1da1ca3ce3a7d9aa1381a5715aad402eab10f869a6d6b3675763c3d874a28550b02258523d8db2fafdf5273f841ff476735304c2aa352d940e9b675f3caf7ed588aa5c0a2eaea19361f3fdb5a556ccbaaaaddb18c69d67cb24463aa3f1d5dbd318e9c6a6e6aef7cb30f700a19c0f91b57cf5a70ead05a21afc0aafaea937575271eadb659d42b4fd6add1e45b8bd068753fbc1371ac05d9984d39651f3fb96d6e8fbf55d9f214a068eb86255ad13815ef67bbfae6dd7745bd1f8616ee3db95e2f4e994ac0f91a79d4f953058148829e9712e1b0fc05909540dbce8d73f32aca6630dc7d0787c3adb9ffc4bf78c3aad9b68ab21978bbef100d7a188f49df032252821b8f651a1ec72e0dfb1247019f12a82d2e2d11f0f7e1720ca84edf92b42ffae2e2e62d251afc7db89d839cbf27c98d6d312f90d37020dbd0da1d952e3e8c5d026a010932c626d72c321e74d1d41e8bdf7f151f023c695be393a8d4d816bb07ec015edcee889282ed4fc37e010682125159e2428b1c01de01e1b4ed7c8bec068e016f81f1e68eef958d29194aa0cfe78f8465bd0d200e0480cf235f43de942d04f40011e00c705059d94440cfb9abcffca3092b8040727f5f5eb8f67c206513811260047800783361e9c0b4a2c1906cd26935e6da5d95faceae016330243b4361b94cab11e6d7eeaecc7d6e1f9c13084a2da9ea2754e660bbec3d2ebdc52c5acc2683e67dbf2702b4d9dfbacc16b3589e6b124dbdfd1e07f0fa77c0ccd54b6b11c93b7393fc0c0a81ed402fd00478fe16a89496e416a98120c987484c22ee8f524d3239df003c451ce8cb57fcfc0000000049454e44ae426082</data>
+    </image>
+    <image name="image5">
+        <data format="PNG" length="557">89504e470d0a1a0a0000000d4948445200000013000000130806000000725036cc000001f449444154388db5d43b6815511006e06f6f6e344a248806150382a7d2428324d8083120a85d7a11492129c442b0d0cec2c256bbe0a3102d6cb4f3c505455309a216a9c2626121011f01e146d0b8163b1bd74d62e7c0d9b373cecc9cfffcf3ef66799e5bcb524a63788ef198413327a504dacd85b02c464ff8ad882d50a4940a1455d16a6ead725a1689db30126ba3d8897ef4c57e96526a82f8cb320ce25a85a231ae630f06b02ee2e579ae288a158806f126125fe256bcdfc08b789fc53e6cae17ac5f2f436f0dd1651cc299f027318c4be1dfc6ee40d88b2ccff365ce326cc559cce031bee343207c8f79dc45072731844d55316847fb7b6a64cf617f149ac1532ce100b6c7358f6002aff1154faa46ac4674111cf5d53879f68fd8b6788c2b25328a2bb88a7771b525a1a794d2396c09541722ee2d3e6b581bbbe2948741f60e1c0c44c381b00f7722ee28f62abbdae68f680b2ce01e8e071ffdc1d1e140b41ea770221af40d3ff12bf297a5d1c246a5206763f3815222052ed610cde158346428f25a799eafd0d9805290f7d720fa51141ab18aceaa0fbd08c88b4a499c57aa7e02a771330a7d54ea6f412989c5c82b541559fe6b54083728053916d79bc4ab48ec065f8bf881627a7a1ab43a9d8e4ea723168a08e8e24b9c0e9f02d57cac779b8520ab3b3035355521ac8fca9a1cfe3ffb0d11e3c0d1140b493e0000000049454e44ae426082</data>
+    </image>
+    <image name="image6">
+        <data format="PNG" length="103">89504e470d0a1a0a0000000d494844520000001e0000000d0806000000be72de970000002e49444154388d633c76ec18c34000a601b195818181918181e1ff40583c603e1eb578d4e2518ba90618475c910900e50305bba1688d2b0000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="1" margin="1"/>
+</UI>

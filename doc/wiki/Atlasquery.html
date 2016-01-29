@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Atlasquery</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">Atlasquery</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="Atlasquery-1">Atlasquery</h1>
+<span class="anchor" id="line-4"></span><p class="line874">The tool atlasquery is designed to allow command-line interrogation of the atlas images supplied with FSL, in the same way as is possible via FSLView.  It takes as input the name of one of the FSL atlases together with either a coordinate of interest or a mask.  The syntax is: <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867"><span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><pre><span class="anchor" id="line-1"></span>atlasquery [-a "&lt;atlasname&gt;"] [-m &lt;maskimage&gt;] [-c &lt;X&gt;,&lt;Y&gt;,&lt;Z&gt;]
+<span class="anchor" id="line-2"></span>
+<span class="anchor" id="line-3"></span>Compulsory arguments (You MUST set one or more of):
+<span class="anchor" id="line-4"></span>        -a,--atlas      name of atlas to use
+<span class="anchor" id="line-5"></span>
+<span class="anchor" id="line-6"></span>Optional arguments (You may optionally specify one or more of):
+<span class="anchor" id="line-7"></span>        -V,--verbose    switch on diagnostic messages
+<span class="anchor" id="line-8"></span>        -h,--help       display this message
+<span class="anchor" id="line-9"></span>        -m,--mask       a mask image to use during structural lookups
+<span class="anchor" id="line-10"></span>        -c &lt;X&gt;,&lt;Y&gt;,&lt;Z&gt;  specify coordinates of the point of interest (as mm coordinates)
+<span class="anchor" id="line-11"></span>        --dumpatlases   Dump a list of the available atlases</pre><span class="anchor" id="line-19"></span><p class="line874">Note that the name of the atlas being specified must be exactly as specified in the list created by --dumpatlases and requires double quotes to enable the spaces to be included in the name.  See examples below. <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line867">
+<h2 id="Outputs">Outputs</h2>
+<span class="anchor" id="line-22"></span><p class="line862">The output from <tt class="backtick">atlasquery</tt> is text, sometimes with a small amount of formatting in html suitable for a browser.  It gives the (average) probability of a voxel or mask being a member of the different labelled regions within the atlas.  If a mask is used then the probability is averaged over all the voxels in the mask.  All the probability numbers are scaled from 0 to 100, so that they are easily interpreted as percentages (e.g., 49.5 represents a probability of 0.495). <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line874">The probability values will not add up to 100 if the coordinate or mask is outside, or on the edge of, the ROIs featured in the atlas. <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><p class="line874">For a single coordinate, the output will exactly match that shown in the atlas tool of FSLView. <span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><p class="line867">
+<h2 id="Example_Usage_and_Output">Example Usage and Output</h2>
+<span class="anchor" id="line-29"></span><p class="line862">In the following examples the first line is the command (after the shell prompt, <tt class="backtick">$</tt>) and the remaining lines are the output. <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><p class="line874">With a coordinate (in mm convention; i.e. MNI coordinates): <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line867"><span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><pre><span class="anchor" id="line-1-1"></span>$ atlasquery -a "Harvard-Oxford Subcortical Structural Atlas" -c -22,10,0
+<span class="anchor" id="line-2-1"></span>&lt;b&gt;Harvard-Oxford Subcortical Structural Atlas&lt;/b&gt;&lt;br&gt;99% Left Putamen</pre><span class="anchor" id="line-37"></span><p class="line874">With a mask (in MNI space): <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line867"><span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><pre><span class="anchor" id="line-1-2"></span>$ atlasquery -a "Harvard-Oxford Subcortical Structural Atlas" -m mask.nii.gz
+<span class="anchor" id="line-2-2"></span>Right Cerebral White Matter:3.5
+<span class="anchor" id="line-3-1"></span>Right Cerebral Cortex :0.5
+<span class="anchor" id="line-4-1"></span>Right Putamen:49.5
+<span class="anchor" id="line-5-1"></span>Right Pallidum:46</pre><span class="anchor" id="line-46"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:31
+</body>
+</html>

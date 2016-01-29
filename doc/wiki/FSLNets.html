@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FSLNets</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FSLNets</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><img align="right" alt="netsim.png" class="attachment" src="attachments/FSLNets/netsim.png" title="netsim.png" width="250" /> <span class="anchor" id="line-2"></span><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Overview">Overview</a></li><li>
+<a href="#Installing_FSLNets">Installing FSLNets</a></li><li>
+<a href="#Running_FSLNets">Running FSLNets</a></li></ol></div></div></li><li><a href="./FSLNets(2f)FurtherInformation.html">Further Information</a></li></ol></div> <span class="anchor" id="line-3"></span><hr /><p class="line874"> <span class="anchor" id="line-4"></span>
+<h1 id="Overview">Overview</h1>
+<span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line874">FSLNets v0.5 is a set of simple MATLAB scripts for carrying out basic network modelling from (typically FMRI) timeseries data. This beta-version package requires you to have various other software than just FSL, such as MATLAB (or Octave), and for now is not bundled as part of FSL. It has only been tested with MATLAB and Octave running on Linux/Mac. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line874">Version 0.5 has various improvements over the previous versions, including Octave compatibility and "help" for all functions (type "help functionname"). See the README file for a brief list of backwards incompatibilities. <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line862">The main thing you will feed into FSLNets network modelling is N timecourses from S subjects' datasets - i.e., timeseries from N network nodes. For display purposes you will also need the spatial maps associated with the nodes (one map per node). For example, a good way to get these timeseries and spatial maps is to use <a href="./Melodic.html">MELODIC group-ICA</a> with a dimensionality of N, to get the group-level spatial maps, and then use <a href="./DualRegression.html">dual regression</a> to generate S subject-specific versions of the N timecourses. Alternatively, you might have used a set of template images or ROIs from another study, to feed into the dual regression. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line862">Now you are ready to compute a <em>network matrix</em> for each subject, which in general will be an NxN matrix of connection strengths.  The simplest and most common approach is just to use "full" correlation, giving an NxN matrix of correlation coefficients. Or, you might want to estimate the partial correlation matrix, which should do a better job of only estimating the <em>direct</em> network connections than the full correlation does. Once you have estimated a network matrix for each subject, you can then test these matrices across subjects, for example, testing each matrix element for a two-group subject difference, or feeding the whole matrices into multivariate discriminant analysis. <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-15"></span>
+<h1 id="Installing_FSLNets">Installing FSLNets</h1>
+<span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line874">Requirements: <span class="anchor" id="line-18"></span><ul><li><p class="line891"><a class="http" href="http://www.fmrib.ox.ac.uk/fsl">FSL</a> <span class="anchor" id="line-19"></span></li><li>MATLAB or Octave: <span class="anchor" id="line-20"></span><ul><li>For MATLAB, you will need the official MATLAB toolboxes: <span class="anchor" id="line-21"></span><ul><li>Statistics (you must have this one) <span class="anchor" id="line-22"></span></li><li>Bioinformatics (if you want to use MATLAB's SVM) <span class="anchor" id="line-23"></span></li><li>Signal Processing (if you want to see timeseries spectra) <span class="anchor" id="line-24"></span></li></ul></li><li>For Octave, you will need Octave version 3.8.0 or later, as well as toolboxes: <span class="anchor" id="line-25"></span><ul><li>control (v2.6.2 or greater) <span class="anchor" id="line-26"></span></li><li>general (v1.3.4 or greater) <span class="anchor" id="line-27"></span></li><li>signal (v1.3.0 or greater) <span class="anchor" id="line-28"></span></li><li>statistics (v1.2.3 or greater) <span class="anchor" id="line-29"></span></li></ul></li></ul></li><li>LIBSVM (setup for MATLAB or Octave - if you want to use the LIBSVM implementation of SVM for netmat-based classification) <span class="anchor" id="line-30"></span></li><li><p class="line891"><a class="http" href="http://www.cs.ubc.ca/~schmidtm/Software/L1precision.zip">L1precision</a> free third-party MATLAB toolbox (to estimate L1-norm regularised partial correlation matrices) <span class="anchor" id="line-31"></span></li><li><p class="line891"><a class="http" href="http://www.cs.helsinki.fi/u/ahyvarin/code/pwcausal/">Pairwise causal</a> free third-party MATLAB toolbox (if you want to look at causal directionalities) <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span></li></ul><p class="line874">Setup FSLNets: <span class="anchor" id="line-34"></span><ul><li><p class="line862">Unpack <a class="http" href="http://www.fmrib.ox.ac.uk/~steve/ftp/fslnets.tar.gz">FSLNets</a> with <tt>tar&nbsp;xvfz&nbsp;fslnets.tar.gz</tt> (or <tt>tar&nbsp;xvf&nbsp;fslnets.tar</tt> if your browser has already uncompressed the file). <span class="anchor" id="line-35"></span></li><li><p class="line862">See the top of the file <tt>nets_examples.m</tt>, which you can edit to point to the paths of the various additional toolboxes listed above. <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span></li></ul><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-38"></span><img align="right" alt="nethier.png" class="attachment" src="attachments/FSLNets/nethier.png" title="nethier.png" width="400" /> <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><p class="line867">
+<h1 id="Running_FSLNets">Running FSLNets</h1>
+<span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><p class="line862">Take a copy of <tt>nets_examples.m</tt> (for example <tt>cp&nbsp;nets_examples.m&nbsp;my_nets.m</tt> ) and edit this new file with your own settings. To run inside MATLAB, just copy individual lines, one at a time, into MATLAB from your new file, or, once it is ready, just type <tt>my_nets</tt> in MATLAB. <span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><p class="line862">The file <tt>nets_examples.m</tt> is fairly well documented, with each stage of the analysis hopefully fairly clear and easy. <span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-47"></span><a href="./CategoryOther.html">CategoryOther</a> <a class="nonexistent" href="./CategoryFSLNets.html">CategoryFSLNets</a> <span class="anchor" id="line-48"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

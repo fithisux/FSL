@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Check for display being set \
+if [ _$DISPLAY = _ ] ; then echo "DISPLAY is not set. Please set your DISPLAY environment variable!" ; exit 1 ; fi
+# Check for FSLDIR being set \
+if [ -z "$FSLDIR" ]; then echo "You need to set the FSLDIR environment variable to point to the FSL installation directory before you can run anything." ; exit 1; fi
+# Check for FSLDIR being valid \
+if [ ! -f $FSLDIR/etc/fslconf/fsl.sh ]; then echo "You need to set the FSLDIR environment variable to point to the FSL installation directory before you can run anything." ; exit 1; fi
+
+# the next line restarts using wish \
+if [ _$FSLWISH = _ ] ; then echo "You need to source an FSL setup file - either fsl.sh or fsl.csh in \$FSLDIR/etc/fslconf !" ; exit 1 ; else exec $FSLWISH "$0" -- "$@" ; fi
+
+set FSLDIR $env(FSLDIR)
+
+set origname [ string tolower [ file tail [ info script ] ] ]
+
+set UNAME [ exec uname ]
+if { $UNAME == "Darwin" || [ string compare CYGWIN [ string range $UNAME 0 5 ] ] == 0 } {
+    regsub "_gui" $origname "" origname
+}
+
+source ${FSLDIR}/tcl/${origname}.tcl
+
+exit

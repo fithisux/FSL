@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FDT</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FDT</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Research_Overview">Research Overview</a></li><li>
+<a href="#Referencing">Referencing</a></li></ol></div></div></li><li><a href="./FDT(2f)UserGuide.html">User Guide</a></li><li><a href="./FDT(2f)FAQ.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867">
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line874">FDT (FMRIB's Diffusion Toolbox) is a software tool for analysis of diffusion weighted images. <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line862">FDT is part of <a href="./FSL.html">FSL</a> (FMRIB's Software Library) . FDT has an easy-to-use graphical user interface (GUI) and its component programmes can also be run from the command line. FDT includes tools for data preprocessing, local diffusion modelling and tractography. Each stage in FDT is run separately. The main FDT programmes, which are accessible from the GUI are: <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><ul><li>eddycorrect - for correction of eddy current distortions <span class="anchor" id="line-13"></span></li><li>bedpostx - for local modelling of diffusion parameters <span class="anchor" id="line-14"></span></li><li>probtrackx - for tractography and connectivity-based segmentation <span class="anchor" id="line-15"></span></li><li>dtifit - for local fitting of diffusion tensors <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span></li></ul><p class="line862">The FDT GUI also includes a registration option that registers images using <a href="./FLIRT.html">FLIRT</a>. <span class="anchor" id="line-18"></span>Additional FDT utilities, that can be run only from the command line, are: <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><ul><li>proj_thresh - for thresholding some outputs of probtrackx <span class="anchor" id="line-21"></span></li><li>find_the_biggest - for performing hard segmentation on the outputs of connectivity-based thresholding in probtrackx <span class="anchor" id="line-22"></span></li><li>vecreg - for resampling vector data <span class="anchor" id="line-23"></span></li><li>qboot - for estimating fibre orientations and their uncertainty using ODFs and bootstrapping <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span></li></ul><p class="line862">The probabilistic tractography tools within FDT are very flexible and allow the user to generate connectivity distributions from single or multiple voxels, from <a class="http" href="http://surfer.nmr.mgh.harvard.edu/">FreeSurfer</a> or <a class="http" href="http://brainvis.wustl.edu/wiki/index.php/Caret:About">Caret</a> cortical surfaces; or <a href="./FIRST.html">FIRST</a> sub-cortical surfaces; to limit these distributions based on anatomical criteria and to perform segmentation based on the probability of connection to user-defined target regions. <span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line862">To call the FDT GUI, either run <tt class="backtick">Fdt</tt> (<tt class="backtick">Fdt_gui</tt> on Mac or Windows), or run <tt class="backtick">fsl</tt> and press the <strong>FDT</strong> button. <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><p class="line862">For an overview of the local diffusion modelling and tractography used within FDT see the <a class="http" href="http://www.fmrib.ox.ac.uk/analysis/techrep/tr03tb1/tr03tb1/">appendix</a>. <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><p class="line867">
+<h1 id="Referencing">Referencing</h1>
+<span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line874">If you use FDT in your research, please make sure that you reference the relevant articles amongst the following: <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/14587019">[Behrens 2003a]</a> T.E.J. Behrens, M.W. Woolrich, M. Jenkinson, H. Johansen-Berg, R.G. Nunes, S. Clare, P.M. Matthews, J.M. Brady, and S.M. Smith. Characterization and propagation of uncertainty in diffusion-weighted MR imaging. Magn Reson Med, 50(5):1077-1088, 2003. <span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/12808459">[Behrens 2003b]</a> <span class="anchor" id="line-43"></span>T.E.J. Behrens, H. Johansen-Berg, M.W. Woolrich, S.M. Smith, C.A.M. Wheeler-Kingshott, P.A. Boulby, G.J. Barker, E.L. Sillery, K. Sheehan, O. Ciccarelli, A.J. Thompson, J.M. Brady, and P.M. Matthews. Non-invasive mapping of connections between human thalamus and cortex using diffusion imaging. Nature Neuroscience, 6(7):750-757, 2003. <span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/12808459">[Johansen-Berg 2004]</a> <span class="anchor" id="line-46"></span>H. Johansen-Berg, T.E.J. Behrens, M.D. Robson, I. Drobnjak, M.F.S. Rushworth, J.M. Brady, S.M. Smith, D.J. Higham, and P.M. Matthews. Changes in connectivity profiles define functionally distinct regions in human medial frontal cortex. Proc Natl Acad Sci U S A, 101(36):13335-13340, 2004. <span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/17070705">[Behrens 2007]</a> T.E.J. Behrens, H. Johansen-Berg, S. Jbabdi, M.F.S. Rushworth, and M.W. Woolrich. Probabilistic diffusion tractography with multiple fibre orientations. What can we gain?  <span class="anchor" id="line-49"></span>NeuroImage, 23:144-155, 2007. <span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span><p class="line867"><a class="http" href="http://humanconnectome.org/hosted/posters/HCP-HBM%202011%20poster%20609%20-%20Sotiropolous%20et%20al.pdf">[Sotiropoulos 2011]</a> S.N. Sotiropoulos, I. Aganj, S. Jbabdi, G. Sapiro, C. Lenglet, T.E.J. Behrens. Inference on Constant Solid Angle Orientation Distribution Functions from Diffusion-Weighted MRI, p. 609, OHBM, Canada, 2011. <span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/22334356">[Jbabdi 2012]</a> S. Jbabdi, S.N. Sotiropoulos, A. Savio, M. Grana, T.E.J. Behrens. Model-based analysis of multishell diffusion MR data for tractography: How to get over fitting problems. Magn Reson Med, doi: 10.1002/mrm.24204, 2012. <span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span><span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-61"></span><a href="./CategoryDiffusion.html">CategoryDiffusion</a> <a href="./CategoryFDT.html">CategoryFDT</a> <span class="anchor" id="line-62"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

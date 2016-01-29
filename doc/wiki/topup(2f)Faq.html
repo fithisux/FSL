@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>topup/Faq</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">topup/Faq</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./topup.html">Introduction</a></li><li><a href="./topup(2f)TopupUsersGuide.html">Topup Users Guide</a></li><li><a href="./topup(2f)ApplytopupUsersGuide.html">Applytopup Users Guide</a></li><li><a href="./topup(2f)ExampleTopupFollowedByApplytopup.html">Example Topup Followed By Applytopup</a></li><li>FAQ<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#How_do_I_know_what_phase-encode_vectors_to_put_into_my_--datain_text_file.3F">How do I know what phase-encode vectors to put into my --datain text file?</a></li></ol></div></div></li><li><a href="./topup(2f)TopupFurtherInformation.html">Topup Further Information</a></li><li><a href="./topup(2f)ApplytopupFurtherInformation.html">Applytopup Further Information</a></li></ol></div> <span class="anchor" id="line-4"></span>
+<h1 id="How_do_I_know_what_phase-encode_vectors_to_put_into_my_--datain_text_file.3F">How do I know what phase-encode vectors to put into my --datain text file?</h1>
+<span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line874">Below you see four examples of images acquired with different phase encoding. Below the images you see what you would find in the PDF protocol generated on a Siemens scanner for these acquisitions. Unfortunately I don't have enough experience of other scanner manufacturers to know where to find the information from those. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line862">If you are uncertain about how to create your own <a href="./topup(2f)TopupUsersGuide.html#datain">--datain</a> file I suggest you get your scanner protocol, load your images into FSLVIEW and then find which of the images below that looks most like then one you have. When you have done that compare the "Phase enc." entry below that image with that in your protocol. When you are happy that you have found the right column you can use the three first values from the vector below the image. <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line874">Finally look up the "Echo spacing" and "EPI factor" entries in your protocol and calculate the fourth column from the formula <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line867"><img align="centre" alt="topup_faq_eq1.png" class="attachment" src="attachments/topup(2f)Faq/topup_faq_eq1.png" title="topup_faq_eq1.png" width="200" /> <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line862">where S<sub>E</sub> is the echo spacing in ms and F<sub>EPI</sub> is the EPI factor. <span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><div><table><tbody><tr>  <td><p class="line862"> What you see in FSLVIEW </td>
+  <td><p class="line891"><img align="centre" alt="P_2_A.jpg" class="attachment" src="attachments/topup(2f)Faq/P_2_A.jpg" title="P_2_A.jpg" width="150" /></td>
+  <td><p class="line891"><img align="centre" alt="A_2_P.jpg" class="attachment" src="attachments/topup(2f)Faq/A_2_P.jpg" title="A_2_P.jpg" width="150" /></td>
+  <td><p class="line891"><img align="centre" alt="R_2_L.jpg" class="attachment" src="attachments/topup(2f)Faq/R_2_L.jpg" title="R_2_L.jpg" width="150" /></td>
+  <td><p class="line891"><img align="centre" alt="L_2_R.jpg" class="attachment" src="attachments/topup(2f)Faq/L_2_R.jpg" title="L_2_R.jpg" width="150" /></td>
+</tr>
+<tr>  <td><span class="anchor" id="line-17"></span><p class="line862"> In Siemens protocol </td>
+  <td><p class="line862">Phase enc. dir. P &gt;&gt; A<br>
+Echo spacing 0.75 [ms]<br>
+EPI factor 128</td>
+  <td><p class="line862">Phase enc. dir. A &gt;&gt; P<br>
+Echo spacing 0.75 [ms]<br>
+EPI factor 128</td>
+  <td><p class="line862">Phase enc. dir. R &gt;&gt; L<br>
+Echo spacing 0.96 [ms]<br>
+EPI factor 128</td>
+  <td><p class="line862">Phase enc. dir. L &gt;&gt; R<br>
+Echo spacing 0.96 [ms]<br>
+EPI factor 128</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-18"></span><p class="line862"> In <a href="./topup(2f)TopupUsersGuide.html#datain">--datain</a> file </td>
+  <td><p class="line862"> 0 1 0 0.095 </td>
+  <td><p class="line862"> 0 -1 0 0.095 </td>
+  <td><p class="line862"> 1 0 0 0.122 </td>
+  <td><p class="line862"> -1 0 0 0.122 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-19"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

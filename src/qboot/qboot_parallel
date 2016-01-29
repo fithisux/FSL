@@ -1,0 +1,174 @@
+#!/bin/sh
+
+#   Copyright (C) 2010-2012 University of Oxford
+#
+#   Stamatios Sotiropoulos
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+if [ "x$SGE_ROOT" = "x" ] ; then
+    if [ -f /usr/local/share/sge/default/common/settings.sh ] ; then
+	. /usr/local/share/sge/default/common/settings.sh
+    elif [ -f /usr/local/sge/default/common/settings.sh ] ; then
+	. /usr/local/sge/default/common/settings.sh
+    fi
+fi
+
+Usage() {
+    echo ""
+    echo "Usage: qboot_parallel <subject directory> [options]"
+    echo ""
+    echo "expects to find bvals and bvecs in subject directory"
+    echo "expects to find data and nodif_brain_mask in subject directory"
+    echo ""
+    echo " You can pass on qboot options"
+    echo " Default qboot options are utilised otherwise"
+    echo " For example:  qboot_parallel <subject directory> --lmax=6 --lambda=0.006"
+    echo " Type 'qboot --help' for a list of available options "
+    echo ""
+   exit 1
+}
+
+make_absolute(){
+    dir=$1;
+    if [ -d ${dir} ]; then
+	OLDWD=`pwd`
+	cd ${dir}
+	dir_all=`pwd`
+	cd $OLDWD
+    else
+	dir_all=${dir}
+    fi
+    echo ${dir_all}
+}
+
+[ "$1" = "" ] && Usage
+
+subjdir=`make_absolute $1`
+subjdir=`echo $subjdir | sed 's/\/$/$/g'`
+
+echo subjectdir is $subjdir
+
+shift
+opts="$*"
+
+#check that all required files exist
+
+if [ ! -d $subjdir ]; then
+	echo "subject directory $subjdir not found"
+	exit 1
+fi
+
+if [ ! -e ${subjdir}/bvecs ]; then
+	echo "${subjdir}/bvecs not found"
+	exit 1
+fi
+
+if [ ! -e ${subjdir}/bvals ]; then
+	echo "${subjdir}/bvals not found"
+	exit 1
+fi
+
+if [ `${FSLDIR}/bin/imtest ${subjdir}/data` -eq 0 ]; then
+	echo "${subjdir}/data not found"
+	exit 1
+fi
+
+
+if [ `${FSLDIR}/bin/imtest ${subjdir}/nodif_brain_mask` -eq 0 ]; then
+	echo "${subjdir}/nodif_brain_mask not found"
+	exit 1
+fi
+
+
+echo Making qboot directory structure
+
+mkdir -p ${subjdir}.qboot/
+mkdir -p ${subjdir}.qboot/diff_slices
+mkdir -p ${subjdir}.qboot/logs
+mkdir -p ${subjdir}.qboot/logs/pid_${$}
+
+echo Queuing preprocessing stages
+preprocid=`${FSLDIR}/bin/fsl_sub -T 60 -N qboot_preproc -l ${subjdir}.qboot/logs ${FSLDIR}/bin/qboot_preproc.sh ${subjdir}`
+
+
+echo Queuing parallel processing stage
+nslices=`${FSLDIR}/bin/fslval ${subjdir}/data dim3`
+[ -f ${subjdir}.qboot/commands.txt ] && rm ${subjdir}.qboot/commands.txt
+
+ slice=0
+ while [ $slice -lt $nslices ]
+   do
+    slicezp=`$FSLDIR/bin/zeropad $slice 4`
+    if [ `$FSLDIR/bin/imtest ${subjdir}.qboot/diff_slices/data_slice_$slicezp/dyads1` -eq 1 ];then
+	echo "slice $slice has already been processed"
+    else
+	echo "${FSLDIR}/bin/qboot --data=${subjdir}/data_slice_${slicezp} --mask=${subjdir}/nodif_brain_mask_slice_${slicezp} -b ${subjdir}/bvals -r ${subjdir}/bvecs --forcedir --logdir=$subjdir.qboot/diff_slices/data_slice_${slicezp} ${opts}" >> ${subjdir}.qboot/commands.txt
+    fi
+    slice=$(($slice + 1))
+ done
+    
+ qbootid=`${FSLDIR}/bin/fsl_sub -q long.q -j $preprocid -l ${subjdir}.qboot/logs -N qboot -t ${subjdir}.qboot/commands.txt`
+
+ echo Queuing post processing stage
+ mergeid=`${FSLDIR}/bin/fsl_sub -j $qbootid -T 60 -N qboot_postproc -l ${subjdir}.qboot/logs ${FSLDIR}/bin/qboot_postproc.sh $subjdir`

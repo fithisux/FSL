@@ -1,0 +1,155 @@
+#!/bin/bash
+
+#   autoaq - atlasquery automation script
+
+#  This code is released to the public domain, 2011-2014
+#  
+#  Anderson Winkler, Matthew Webster and Mark Jenkinson, FMRIB Centre, University of Oxford
+
+#  Neither the FMRIB Centre, the University of Oxford, nor any of
+#  its employees imply any warranty of usefulness of this software
+#  for any purpose, and do not assume any liability for damages,
+#  incidental or otherwise, caused by its usage.
+
+# Original version by Winkler A.M., Brumbaugh M.S. and Glahn D.C..
+
+
+# Print usage if no argument is given
+if [ -z "$1" ]; then
+cat <<EOU
+Generate a report from the results of FSL's randomise showing the
+structures to which they belong, using the names from a given atlas.
+In other words automatically make an atlas query.
+
+Usage:
+autoaq -i <input image> -a "<atlas name>" -t <threshold> -o <output.txt>
+
+All arguments above are compulsory.
+
+There are two optional arguments:
+-u : This can be used to append to the output file instead of creating
+     a new one at every run. This is useful to use autoaq inside
+     for-loops to create a single large report.
+-p : By default, the coordinates used to name structures are those of the
+     center of mass. The option -p uses instead the coordinates of the
+     peak, i.e., the highest value in the cluster.
+
+atlas names are the long form used by fslview, e.g. "MNI Structural Atlas"
+
+the input image needs to be in standard space
+EOU
+exit
+fi
+
+IN=""
+ATLAS=""
+OUT=""
+UPDATE=0
+PEAK=0
+
+# Check and accept the arguments
+while getopts 'i:a:t:o:up' OPTION
+do
+  case ${OPTION} in
+    i) IN=${OPTARG} ;;
+    a) ATLAS="${OPTARG}" ;;
+    t) THR=${OPTARG} ;;
+    o) OUT=${OPTARG} ;;
+    u) UPDATE=1 ;;
+    p) PEAK=1 ;;
+  esac
+done
+
+# Prepare a random string to save temporary files
+TMPNAME=`$FSLDIR/bin/tmpnam`
+
+# Put a title (useful when using the option -u)
+if [ ${UPDATE} -eq 0 ] ; then
+   NEWOUT=${OUT}
+   echo "=====[ ${IN} | ${ATLAS} ]=====" >  ${OUT}
+elif [ ${UPDATE} -eq 1 ] ; then
+   NEWOUT=${TMPNAME}_report
+   echo "=====[ ${IN} | ${ATLAS} ]=====" > ${NEWOUT}
+fi
+
+# Get cluster stats
+${FSLDIR}/bin/cluster --in=${IN} --thresh=${THR} --mm --oindex=${TMPNAME} | sed 's/Cluster\ Index/ClusterIndex/' >> ${NEWOUT}
+
+# Produce names for the peaks
+if [ $(cat ${NEWOUT} | wc -l) -gt 2 ] ; then
+
+   # Put a separator for clarity
+   echo "------------------------------------------" >> ${NEWOUT}
+   if [ ${PEAK} -eq 0 ] ; then
+      echo "Structures to which each center of mass belongs to:" >> ${NEWOUT}
+   elif [ ${PEAK} -eq 1 ] ; then
+      echo "Structures to which each cluster peak belongs to:" >> ${NEWOUT}
+   fi
+
+   # Number of clusters
+   NC=$(awk 'NR == 3 { print $1 }' ${NEWOUT})
+
+   head -n $(echo ${NC} 2 + p |dc) ${NEWOUT} > ${TMPNAME}.txt
+
+   for (( r=1 ; r<=${NC} ; r++ )) ; do
+      idx=$(awk "NR==${r}+2 {print \$1}" ${TMPNAME}.txt)
+      if [ ${PEAK} -eq 0 ] ; then
+         X=$(awk "NR==${r}+2 {print \$7}" ${TMPNAME}.txt)
+         Y=$(awk "NR==${r}+2 {print \$8}" ${TMPNAME}.txt)
+         Z=$(awk "NR==${r}+2 {print \$9}" ${TMPNAME}.txt)
+      elif [ ${PEAK} -eq 1 ] ; then
+         X=$(awk "NR==${r}+2 {print \$4}" ${TMPNAME}.txt)
+         Y=$(awk "NR==${r}+2 {print \$5}" ${TMPNAME}.txt)
+         Z=$(awk "NR==${r}+2 {print \$6}" ${TMPNAME}.txt)
+      fi
+      echo -n "${idx},${X},${Y},${Z}," >> ${NEWOUT}
+      ${FSLDIR}/bin/atlasquery -a "${ATLAS}" -c ${X},${Y},${Z} | sed 's/<b>//g' | sed 's/<\/b><br>/\,/g' >> ${NEWOUT}
+   done
+
+   # Cleanup
+   rm ${TMPNAME}.txt
+   
+   # Put another separator for clarity
+   echo "------------------------------------------" >> ${NEWOUT}
+   echo "Structures to which each cluster belongs to:" >> ${NEWOUT}
+else
+       echo "No clusters found after thresholding, exiting."
+       exit 0
+fi
+
+# Count again the number of clusters, for sanity check
+NC2=$(${FSLDIR}/bin/fslstats ${TMPNAME} -R | awk '{ print $2 }' | awk -F. '{ print $1 }')
+if [ ${NC} != ${NC2} ] ; then
+   # This line should never be printed...
+   echo "Warning: The number of clusters in the report table isn't the same as in the image."
+fi
+
+# Split the clusters into independent images and query the atlas
+for (( c=${NC} ; c>=1 ; c-=1 )) ; do
+
+   # Suffix string
+   cstr=$(printf %04d ${c})
+
+   # Split!
+   ${FSLDIR}/bin/fslmaths ${TMPNAME} -thr ${c} -uthr ${c} -bin ${TMPNAME}_${cstr}
+
+   # Get the structure names and output to the report file
+   echo "" >> ${NEWOUT}
+   echo "Cluster #${c}" >> ${NEWOUT}
+   ${FSLDIR}/bin/atlasquery -a "${ATLAS}" -m ${TMPNAME}_${cstr} >> ${NEWOUT}
+
+   # Cleanup
+   ${FSLDIR}/bin/imrm ${TMPNAME}_${cstr}
+done
+
+if [ ${UPDATE} -eq 1 ] ; then
+    cat ${NEWOUT} >> ${OUT}
+    rm ${NEWOUT}
+fi
+
+
+# More cleanup
+${FSLDIR}/bin/imrm ${TMPNAME}
+rm ${TMPNAME}
+
+exit 0

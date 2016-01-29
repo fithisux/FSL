@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FSLVBM</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FSLVBM</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Research_Overview:_Why_FSL-VBM.3F">Research Overview: Why FSL-VBM?</a></li><li>
+<a href="#Referencing_FSL-VBM">Referencing FSL-VBM</a></li></ol></div></div></li><li><a href="./FSLVBM(2f)UserGuide.html">User Guide</a></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-4"></span><strong>New version<em></strong>: FSL-VBM v1.1 has switched the nonlinear registration to using <a href="./FNIRT.html">FNIRT</a> (FMRIB's Nonlinear Registration Tool). FNIRT is about 10-15 times faster than IRTK on structural data and possibly a little more 'accurate'. An FSL-VBM v1.1 analysis is not compatible with an older analysis. To see the full list of changes from the previous version see <a href="./FSLVBM.html#New">what's new</a>.</em> <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-7"></span>
+<h1 id="Research_Overview:_Why_FSL-VBM.3F">Research Overview: Why FSL-VBM?</h1>
+<span class="anchor" id="line-8"></span><p class="line874">You might want to investigate voxel-wise differences in the local grey matter volume/topography in one population related to (e.g.) one clinical score, or between several populations. Or you might be carrying out a functional study (fMRI, PET) and want to test whether the effect seen in this study is possibly caused by structural GM differences. This approach is unbiased, in that it requires no a priori information about the location of these possible differences in the grey matter, and is not operator-dependant. It follows the optimised VBM protocol developed by Good et al., 2001. <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line874">To be able to compare all the GM images on a voxelwise basis, they need to be transformed into a standard space, which involves the use of non-linear registration. This approach is somewhat of a trade-off: in order to be able to compare voxel-by-voxel the local GM volume in your images, you want all the structures across your subjects to match (that's why you use a non-linear registration), but not "too much" or you would not be able to see any difference, if all these structures were perfectly aligned across the subjects (that's why you use limited degrees-of-freedom for the non-linear registration). <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line874">Please bear in mind that the interpretation of the results you may obtain with such voxel-wise analysis has inherent limitations, however. It is sometimes not possible to determine if the results you may find are the consequence of an effective reduced thickness or atrophy in the grey matter, or rather an indirect reflection of a different gyrification pattern. Indeed, it might be possible that a misalignment of the gyri/sulci or even different folding patterns may lead to the difference of grey matter distribution that you have found. Moreover, there is theoretically a continuum of results dependent on the degrees of freedom of the non-rigid registration used (here free-form deformation with 20 mm initial control point spacing) and the amount of smoothing. <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line867"><img alt="flowchart" class="attachment" height="268px" src="attachments/FSLVBM/flowchart.jpg" title="flowchart" width="946px" /> <span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line874">For more detailed information: <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><ul><li><p class="line862">On the validation of the FSL-VBM approach and a clinical application:<br>
+see <strong>Douaud et al</strong>., Anatomically related grey and white matter abnormalities in adolescent-onset schizophrenia. Brain 2007.<br>
+<br>
+ <span class="anchor" id="line-19"></span></li><li><p class="line862">On a dedicated longitudinal FSL-VBM protocol and a clinical application:<br>
+see <strong>Douaud et al</strong>., Schizophrenia delays and alters maturation of the brain in adolescence. Brain 2009.<br>
+<br>
+ <span class="anchor" id="line-20"></span></li><li>On the VBM protocol: <span class="anchor" id="line-21"></span><p class="line862">see <strong>Ashburner et al</strong>., Voxel-based morphometry-the methods. Neuroimage 2000.<br>
+see <strong>Good et al</strong>., A voxel-based morphometric study of ageing in 465 normal adult human brains. Neuroimage 2001.<br>
+<br>
+ <span class="anchor" id="line-22"></span></li><li>On the issues of such voxel-wise analyses: <span class="anchor" id="line-23"></span><p class="line862">see <strong>Bookstein</strong>,"Voxel-based morphometry" should not be used with imperfectly registered images. Neuroimage 2001.<br>
+see <strong>Ashburner et al</strong>., Why voxel-based morphometry should be used. Neuroimage 2001.<br>
+see <strong>Crum et al</strong>., Zen and the art of medical image registration: correspondence, homology, and quality. Neuroimage 2003.<br>
+see <strong>Jones et al</strong>., The effect of filter size on VBM analyses of DT-MRI data. Neuroimage 2005. <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span></li></ul><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-26"></span>
+<h1 id="Referencing_FSL-VBM">Referencing FSL-VBM</h1>
+<span class="anchor" id="line-27"></span><p class="line874">If you use this tool in your research, you may want to incude the following methods description, and please reference the papers listed below: <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line862">"Structural data was analysed with FSL-VBM (Douaud et al., 2007, <a class="http" href="http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSLVBM">http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSLVBM</a>), an optimised VBM protocol (Good et al., 2001) carried out with FSL tools (Smith et al., 2004). First, structural images were brain-extracted and grey matter-segmented before being registered to the MNI 152 standard space using non-linear registration (Andersson et al., 2007). The resulting images were averaged and flipped along the x-axis to create a left-right symmetric, study-specific grey matter template. Second, all native grey matter images were non-linearly registered to this study-specific template and "modulated" to correct for local expansion (or contraction) due to the non-linear component of the spatial transformation. The modulated grey matter images were then smoothed with an isotropic Gaussian kernel with a sigma of ?? mm. Finally, voxelwise GLM was applied using permutation-based non-parametric testing, correcting for multiple comparisons across space." <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><p class="line867"><em>Douaud G, Smith S, Jenkinson M, Behrens T, Johansen-Berg H, Vickers J, James S, Voets N, Watkins K, Matthews PM, James A (2007) Anatomically related grey and white matter abnormalities in adolescent-onset schizophrenia. Brain 130:2375-2386.</em> <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line867"><em>Good CD, Johnsrude IS, Ashburner J, Henson RN, Friston KJ, Frackowiak RS (2001) A voxel-based morphometric study of ageing in 465 normal adult human brains. <a class="nonexistent" href="./NeuroImage.html">NeuroImage</a> 14:21-36.</em> <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><p class="line867"><em>Smith SM, Jenkinson M, Woolrich MW,  Beckmann CF, Behrens TE, Johansen-Berg H, Bannister PR, De Luca M,  Drobnjak I, Flitney DE, Niazy RK, Saunders J, Vickers J, Zhang Y, De  Stefano N, Brady JM, Matthews PM (2004) Advances in functional and  structural MR image analysis and implementation as FSL. <a class="nonexistent" href="./NeuroImage.html">NeuroImage</a> 23  Suppl 1:S208-219.</em> <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line867"><em>Andersson, M. Jenkinson and S. Smith (2007) Non-linear registration, aka Spatial normalisation. FMRIB technical report TR07JA2 from www.fmrib.ox.ac.uk/analysis/techrep</em> <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line867"><em> </em> <span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-42"></span><a href="./CategoryStructural.html">CategoryStructural</a> <a href="./CategoryFSLVBM.html">CategoryFSLVBM</a> <span class="anchor" id="line-43"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

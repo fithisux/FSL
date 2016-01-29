@@ -1,0 +1,102 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:583: checking whether to use symlinks for manpages
+configure:595: checking whether to compress the manpages
+configure:621: checking whether to add a package name suffix for the manpages
+configure:652: checking for gcc
+configure:765: checking whether the C compiler (gcc  -L/usr/local/fsl/extras/lib) works
+configure:781: gcc -o conftest  -I/usr/local/fsl/extras/include -L/usr/local/fsl/extras/lib conftest.c  1>&5
+configure:807: checking whether the C compiler (gcc  -L/usr/local/fsl/extras/lib) is a cross-compiler
+configure:812: checking whether we are using GNU C
+configure:840: checking whether gcc accepts -g
+configure:882: checking how to run the C preprocessor
+configure:963: checking dirent.h
+configure:1018: checking for errno.h
+configure:1055: checking for float.h
+configure:1092: checking for values.h
+configure:1129: checking for limits.h
+configure:1169: checking for stdlib.h
+configure:1251: checking for string.h
+configure:1324: checking for sys/wait.h
+configure:1361: checking for dlfcn.h
+configure:1402: checking for unistd.h
+configure:1402: checking for sys/param.h
+configure:1447: checking if the compiler understands -pipe
+configure:1874: checking for building with threads
+configure:1905: checking for sin
+configure:1954: checking for main in -lieee
+configure:1996: checking for main in -linet
+configure:2033: checking for net/errno.h
+configure:2088: checking for connect
+configure:2281: checking for gethostbyname
+configure:2382: checking how to build libraries
+configure:2421: checking for ranlib
+configure:2453: checking if 64bit support is requested
+configure:2467: checking if 64bit Sparc VIS support is requested
+configure:2488: checking system version
+configure:2523: checking for dlopen in -ldl
+configure:2590: checking for ar
+configure:4362: checking for build with symbols
+configure:4423: checking for required early compiler flags
+configure:4584: checking for 64-bit integer type
+configure:4818: checking whether byte ordering is bigendian
+configure:4917: checking for getcwd
+configure:4979: checking for opendir
+configure:4979: checking for strstr
+configure:4979: checking for strtol
+configure:4979: checking for strtoll
+configure:4979: checking for strtoull
+configure:4979: checking for tmpnam
+configure:4979: checking for waitpid
+configure:5034: checking for strerror
+configure:5086: checking for getwd
+configure:5138: checking for wait3
+configure:5190: checking for uname
+configure:5249: checking for realpath
+configure:6260: checking for sys/modem.h
+configure:6297: checking termios vs. termio vs. sgtty
+configure:6532: checking for fd_set in sys/types
+configure:6604: checking whether struct tm is in sys/time.h or time.h
+configure:6642: checking for sys/time.h
+configure:6679: checking whether time.h and sys/time.h may both be included
+configure:6714: checking for tm_zone in struct tm
+configure:6787: checking for gmtime_r
+configure:6787: checking for localtime_r
+configure:6841: checking tm_tzadj in struct tm
+configure:6875: checking tm_gmtoff in struct tm
+configure:6913: checking long timezone variable
+configure:6993: checking for st_blksize in struct stat
+configure:7027: checking for fstatfs
+configure:7084: checking for 8-bit clean memcmp
+configure:7126: checking for memmove
+configure:7187: checking proper strstr implementation
+configure:7232: checking for strtoul
+configure:7282: checking proper strtoul implementation
+configure:7336: checking for strtod
+configure:7386: checking proper strtod implementation
+configure:7443: checking for strtod
+configure:7493: checking for Solaris2.4/Tru64 strtod bugs
+configure:7556: checking for ANSI C header files
+configure:7660: checking for mode_t
+configure:7693: checking for pid_t
+configure:7726: checking for size_t
+configure:7759: checking for uid_t in sys/types.h
+configure:7794: checking for socklen_t
+configure:7839: checking for opendir
+configure:7900: checking union wait
+configure:7945: checking for strncasecmp
+configure:8095: checking for BSDgettimeofday
+configure:8145: checking for gettimeofday
+configure:8200: checking for gettimeofday declaration
+configure:8237: checking whether char is unsigned
+configure:8300: checking signed char declarations
+configure:8341: checking for a putenv() that copies the buffer
+configure:8412: checking for langinfo.h
+configure:8446: checking whether to use nl_langinfo
+configure:8841: checking for fts
+configure:8894: checking for sys/ioctl.h
+configure:8934: checking for sys/filio.h
+configure:8972: checking system version
+configure:9003: checking FIONBIO vs. O_NONBLOCK for nonblocking I/O
+configure:9124: checking whether to enable DTrace support

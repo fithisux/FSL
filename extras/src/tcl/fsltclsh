@@ -1,0 +1,19 @@
+#!/bin/sh
+
+if [ "$FSLDIR" = "" ] ; then
+    echo "FSLDIR has not been set!"
+fi
+
+TCL_LIBRARY=${FSLDIR}/extras/lib/tcl8.4
+TK_LIBRARY=${FSLDIR}/extras/lib/tk8.4
+
+LD_LIBRARY_PATH=${FSLDIR}/extras/lib:${FSLDIR}/lib:${LD_LIBRARY_PATH}
+DYLD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+SHLIB_PATH=${LD_LIBRARY_PATH}
+TCLTKSHELL=`basename $0`
+
+export TCL_LIBRARY TK_LIBRARY LD_LIBRARY_PATH DYLD_LIBRARY_PATH SHLIB_PATH
+
+exec ${FSLDIR}/extras/bin/${TCLTKSHELL}8.4 $*
+
+

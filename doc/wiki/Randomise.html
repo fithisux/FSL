@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Randomise</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">Randomise</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Test_Statistics_in_Randomise">Test Statistics in Randomise</a></li><li>
+<a href="#Accounting_for_Repeated_Measures">Accounting for Repeated Measures</a><ol><li>
+<a href="#Confound_Regressors">Confound Regressors</a></li></ol></li><li>
+<a href="#REFERENCES">REFERENCES</a></li></ol></div></div></li><li><a href="./Randomise(2f)UserGuide.html">User Guide</a></li><li><a href="./Randomise(2f)Theory.html">Theory</a></li><li><a href="./Randomise(2f)Faq.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span><hr /><p class="line874"> <span class="anchor" id="line-3"></span>Permutation methods (also known as randomisation methods) are used for inference (thresholding) on statistic maps when the null distribution is not known. The null distribution is unknown because either the noise in the data does not follow a simple distribution, or because non-statandard statistics are used to summarize the data. <strong>randomise</strong> is a simple permutation program enabling modelling and inference using standard GLM design setup as used for example in FEAT. It can output voxelwise and cluster-based tests, and also offers variance smoothing as an option. For more detail on permutation testing in neuroimaging see Nichols and Holmes (2002). <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line867">
+<h1 id="Test_Statistics_in_Randomise">Test Statistics in Randomise</h1>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line867"><strong>randomise</strong> produces a test statistic image (e.g., <tt class="backtick">ADvsNC_tstat1</tt>, if your chosen output rootname is <tt class="backtick">ADvsNC</tt>) and sets of P-value images (stored as 1-P for more convenient visualization, as bigger is then "better"). The table below shows the filename suffices for each of the different test statistics available. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line862">Voxel-wise uncorrected P-values are generally only useful when a single voxel is selected <em>a priori</em> (i.e., you don't need to worry about multiple comparisons across voxels). The significance of suprathreshold clusters (defined by the cluster-forming threshold) can be assessed either by cluster size or cluster mass. Size is just cluster extent measured in voxels. Mass is the sum of all statistic values within the cluster. Cluster mass has been reported to be more sensitive than cluster size (Bullmore et al, 1999; Hayasaka &amp; Nichols, 2003). <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line867">
+<h1 id="Accounting_for_Repeated_Measures">Accounting for Repeated Measures</h1>
+<span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line874">Permutation tests do not easily accommodate correlated datasets (e.g., temporally smooth timeseries), as null-hypothesis exchangeability is essential. However, the case of "repeated measurements", or more than one measurement per subject in a multisubject analysis, can sometimes be accommodated. <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line867"><strong>randomise</strong> allows the definition of exchangeability blocks, as specified by the group_labels option. If specfied, the program will only permute observations within block, i.e., only observations with the same group label will be exchanged. See the repeated measures example in the Guide below for more detail. <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line867">
+<h2 id="Confound_Regressors">Confound Regressors</h2>
+<span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line862">Unlike with the previous version of <strong>randomise</strong>, you no longer need to treat confound regressors in a special way (e.g. putting them in a separate design matrix). You can now include them in the main design matrix, and <strong>randomise</strong> will work out from your contrasts how to deal with them. For each contrast, an "effective regressor" is formed using the original full design matrix and the contrast, as well as a new set of "effective confound regressors", which are then pre-removed from the data before the permutation testing begins. One side-effect of the new, more powerful, approach is that the full set of permutations is run for each contrast separately, increasing the time that <strong>randomise</strong> takes to run. <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line862">More information on the theory behind <strong>randomise</strong> can be found in the Theory section below. <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><p class="line867">
+<h1 id="REFERENCES">REFERENCES</h1>
+<span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line862">MJ Anderson &amp; J Robinson. Permutation Tests for Linear Models. Aust. N.Z. J. Stat. 43(1):75-88, 2001. <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line874">Bullmore, ET and Suckling, J and Overmeyer, S and Rabe-Hesketh, S and Taylor, E and Brammer, MJ Global, voxel, and cluster tests, by theory and permutation, for a difference between two groups of structural MR images of the brain. IEEE TMI, 18(1):32-42, 1999. <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><p class="line862">D Freedman &amp; D Lane. A nonstocastic interpretation of reported significance levels. J. Bus. Econom. Statist. 1:292-298, 1983. <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line862">S Hayasaka &amp; TE Nichols. Validating cluster size inference: random field and permutation methods. <a class="nonexistent" href="./NeuroImage.html">NeuroImage</a>, 20:2343-2356, 2003 <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><p class="line874">PE Kennedy. Randomization tests in econometrics. J. Bus. Econom. Statist. 13:84-95, 1995. <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line874">TE Nichols and AP Holmes. Nonparametric Permutation Tests for Functional Neuroimaging: A Primer with Examples. Human Brain Mapping, 15:1-25, 2002. <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line874">Copyright © 2004-2007, University of Oxford. Written by T. Behrens, S. Smith, M. Webster and T. Nichols.  <span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-43"></span><a href="./CategoryOther.html">CategoryOther</a> <a href="./CategoryRandomise.html">CategoryRandomise</a> <span class="anchor" id="line-44"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

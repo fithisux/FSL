@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>MELODIC/FAQ</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">MELODIC/FAQ</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./MELODIC.html">Introduction</a></li><li>FAQ<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#What_is_an_Independent_Component_.28IC.29_and_how_do_I_know_what_each_one_means.3F">What is an Independent Component (IC) and how do I know what each one means?</a></li><li>
+<a href="#How_do_I_use_MELODIC_to_filter_out_unwanted_components_from_my_functional_data.3F">How do I use MELODIC to filter out unwanted components from my functional data?</a></li><li>
+<a href="#How_does_MELODIC_calculate_the_number_of_Independent_Components_.28ICs.29.3F">How does MELODIC calculate the number of Independent Components (ICs)?</a></li><li>
+<a href="#How_do_I_transform_the_MELODIC_results_from_a_low-resolution_standard_space_to_a_higher-resolution_one.3F">How do I transform the MELODIC results from a low-resolution standard space to a higher-resolution one?</a></li></ol></div></div></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="What_is_an_Independent_Component_.28IC.29_and_how_do_I_know_what_each_one_means.3F">What is an Independent Component (IC) and how do I know what each one means?</h1>
+<span class="anchor" id="line-4"></span><p class="line862">Independent Component Analysis (ICA) attempts to split the 4D functional data into a set of spatial maps, each with an associated time course. This is a way of breaking up the original data set in a way which does not require the experimental paradigm to be specified and hopefully separates out signals of interest from other signals or artefacts. It is particularly useful when examining data where the timecourse of the response is uncertain. Ideally the result of running ICA will be a set of Independent Components (ICs), some of which are clearly related to activation while some are related to other physiological processes (e.g. respiration, resting-state signals, etc) or to imaging artefacts (e.g. motion, ghosting, slice dropout, noise, etc). An example of several different artefacts can be found in <a class="http" href="http://www.fmrib.ox.ac.uk/~beckmann/homepage/academic/littleshop/index.html">The Little FMRI Shop of Horror</a>. An example of some simple activation-related signals can be found in the <a class="http" href="http://www.fmrib.ox.ac.uk/fslcourse/lectures/melodic/_2005_GLM.fpd/s_1030_visdata.htm">FSL Course Examples</a>. There is no automatic way of determining which ICs are artefacts and which are not (since the process is model-free) and some knowledge of the experiment (and standard artefacts) is usually required to interpret the results. <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line862">Technically, ICA performs a linear decomposition of the original data, such that when all the Independent Components (ICs) are added together (each one being a 4D signal formed by the outer product of the spatial map and timecourse) they equal the original data. This is a similar concept to PCA but enforces independence between the components spatially while PCA enforces orthogonality both spatially and temporally. Note that in ICA for FMRI no relationship between the timecourses is imposed - they can be very similar. In addition, MELODIC uses a <a href="./MELODIC(2f)FAQ.html#How_does_MELODIC_calculate_the_number_of_Independent_Components_.28ICs.29.3F">dimensionality estimation technique</a> which separates out much of the noise before performing the ICA, thus reducing the number of purely noise-driven ICs in the output. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line867">
+<h1 id="How_do_I_use_MELODIC_to_filter_out_unwanted_components_from_my_functional_data.3F">How do I use MELODIC to filter out unwanted components from my functional data?</h1>
+<span class="anchor" id="line-9"></span><p class="line874">To filter out unwanted components from the original data using MELODIC you will need (i) the name of the original data, (ii) the mixing matrix that defines the decomposition and (iii) a list of component numbers to remove. This is described more fully in an FSL Course Example. In brief, the required command is: <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line867"><tt class="backtick">melodic&nbsp;-i&nbsp;inputdata&nbsp;-v&nbsp;-o&nbsp;outputname.ica&nbsp;--mix=inputdata.ica/melodic_mix&nbsp;-f&nbsp;"a,b,c,d,e,f,..."</tt> <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line862">where <tt class="backtick">inputdata</tt> has previously been run through MELODIC, creating the output directory <tt class="backtick">inputdata.ica</tt> and <tt class="backtick">a,b,c</tt> etc. are the component numbers of the unwanted components found in this ouptut. <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line862">Note: You need those doublequotes so that the entire list of numbers is passed to melodic as the argument of the <tt class="backtick">-f</tt> option! <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line867">
+<h1 id="How_does_MELODIC_calculate_the_number_of_Independent_Components_.28ICs.29.3F">How does MELODIC calculate the number of Independent Components (ICs)?</h1>
+<span class="anchor" id="line-18"></span><p class="line862">The number of components is calculated using Bayesian dimensionality estimation techniques, as detailed in the FMRIB technical report <a class="http" href="http://www.fmrib.ox.ac.uk/analysis/techrep/tr02cb1/tr02cb1/">TR02CB1</a>. Refer to this report for full details on this and other aspects of the probabilistic ICA method used in MELODIC. This dimensionality estimation is used by default in both the command line and GUI versions. It can be turned off and the number of components specified manually, although this is not recommended for FMRI data. <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line867">
+<h1 id="How_do_I_transform_the_MELODIC_results_from_a_low-resolution_standard_space_to_a_higher-resolution_one.3F">How do I transform the MELODIC results from a low-resolution standard space to a higher-resolution one?</h1>
+<span class="anchor" id="line-21"></span><p class="line874">Transforming an image between different resolution versions of standard space (e.g. 3mm to 2mm) should be done with flirt: <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">flirt&nbsp;-in&nbsp;image3mm&nbsp;-ref&nbsp;$FSLDIR/data/standard/MNI152_T1_2mm&nbsp;-applyxfm&nbsp;-usesqform&nbsp;-out&nbsp;image2mm</tt> <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span></li></ul><p class="line862">Note that in this case the <tt class="backtick">flirt</tt> command line must be used (not <tt class="backtick">applywarp</tt>) since the <tt class="backtick">-usesqform</tt> flag aligns the images based on standard space coordinates, and not using a prior transformation matrix or warp.  The input image can be at any resolution as long as it is in standard space (as created by MELODIC) and the reference image can be at a higher resolution (e.g. 1mm) if desired. <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-28"></span>CategoryFAQ <a href="./CategoryMELODIC.html">CategoryMELODIC</a> <span class="anchor" id="line-29"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FslInstallation/Faq</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FslInstallation/Faq</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FslInstallation.html">Introduction</a></li><li><a href="./FslInstallation(2f)MacOsX.html">Mac Os X</a></li><li><a href="./FslInstallation(2f)Linux.html">Linux</a></li><li><a href="./FslInstallation(2f)Windows.html">Windows</a></li><li><a href="./FslInstallation(2f)SourceCode.html">Source Code</a></li><li><a href="./FslInstallation(2f)ShellSetup.html">Shell Setup</a></li><li>FAQ<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#I.27m_running_Mac_OS_X_and_when_I_try_to_launch_a_FSL_GUI_I_get_.60command_not_found.60_errors">I'm running Mac OS X and when I try to launch a FSL GUI I get `command not found` errors</a></li><li>
+<a href="#I.27m_running_Mac_OS_X_10.5_and_find_that_the_FSL_GUIs_crash_or_don.27t_seem_to_be_working_properly">I'm running Mac OS X 10.5 and find that the FSL GUIs crash or don't seem to be working properly</a></li><li>
+<a href="#I.27m_running_MATLAB_on_Mac_OS_X_and_can.27t_get_the_FSL_NIFTI_libraries_to_work">I'm running MATLAB on Mac OS X and can't get the FSL NIFTI libraries to work</a></li><li>
+<a href="#I.27m_running_Mac_OS_X_10.5.2BAC8-10.6_and_the_FSL_GUIs_don.27t_work">I'm running Mac OS X 10.5/10.6 and the FSL GUIs don't work</a></li><li>
+<a href="#I.27m_running_Mac_OS_X_10.4_and_the_FSL_GUIs_don.27t_work">I'm running Mac OS X 10.4 and the FSL GUIs don't work</a></li><li>
+<a href="#FSLView_issues">FSLView issues</a></li></ol></div></div></li></ol></div> <span class="anchor" id="line-2"></span>
+<h1 id="I.27m_running_Mac_OS_X_and_when_I_try_to_launch_a_FSL_GUI_I_get_.60command_not_found.60_errors">I'm running Mac OS X and when I try to launch a FSL GUI I get `command not found` errors</h1>
+<span class="anchor" id="line-3"></span><p class="line862">The file system that Mac OS X uses can't distinguish between upper and lower case filenames, so <tt class="backtick">Feat</tt> and <tt class="backtick">feat</tt> are the same. Consequently, the GUIs on the Mac OS X release are called <tt class="backtick">Toolname_gui</tt> for example <tt class="backtick">Feat_gui</tt>. <span class="anchor" id="line-4"></span>
+<h1 id="I.27m_running_Mac_OS_X_10.5_and_find_that_the_FSL_GUIs_crash_or_don.27t_seem_to_be_working_properly">I'm running Mac OS X 10.5 and find that the FSL GUIs crash or don't seem to be working properly</h1>
+<span class="anchor" id="line-5"></span><p class="line862">We no longer support the use of FSL on Mac OS X 10.5 and would strongly recommend you upgrade (if possible) to a later version, OS X 10.8 being the current version. The version of X11 that Apple included with Mac OS X 10.5 has a significant number of bugs which can effect usage - especially with the clipboard handling. We would recommend that all 10.5 users install the open source updated version available from <a class="http" href="http://xquartz.macosforge.org/trac/wiki">http://xquartz.macosforge.org/trac/wiki</a>. <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line874">X11 under 10.6 and 10.7 is much more stable, but you may also find the version available from Mac OS forge to be superior. <span class="anchor" id="line-8"></span>
+<h1 id="I.27m_running_MATLAB_on_Mac_OS_X_and_can.27t_get_the_FSL_NIFTI_libraries_to_work">I'm running MATLAB on Mac OS X and can't get the FSL NIFTI libraries to work</h1>
+<span class="anchor" id="line-9"></span><p class="line874">Look at the FslInstallation/MacOsX page for details on using these libraries with MATLAB. <span class="anchor" id="line-10"></span>
+<h1 id="I.27m_running_Mac_OS_X_10.5.2BAC8-10.6_and_the_FSL_GUIs_don.27t_work">I'm running Mac OS X 10.5/10.6 and the FSL GUIs don't work</h1>
+<span class="anchor" id="line-11"></span><p class="line867"><span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><div class="caution"><span class="anchor" id="line-1-1"></span><p class="line874">We no longer support Mac OS X 10.4 and 10.5, so this has been kept for historical interest </div><span class="anchor" id="line-14"></span><p class="line862">Have you upgraded from Mac OS X 10.4? If so then you may have a .bash_profile (or .tcshrc or .cshrc) that breaks this behaviour. If you installed using the fsl_installer.sh script then download the <a href="./FslInstallation(2f)MacOsX.html#FSL_Install_Script">current version</a> and re-run it <a href="./FslInstallation(2f)MacOsX.html#Configuring_your_account_for_FSL_usage_using_the_install_script">using the `-e` option</a>. <span class="anchor" id="line-15"></span>
+<h1 id="I.27m_running_Mac_OS_X_10.4_and_the_FSL_GUIs_don.27t_work">I'm running Mac OS X 10.4 and the FSL GUIs don't work</h1>
+<span class="anchor" id="line-16"></span><p class="line867"><span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><div class="caution"><span class="anchor" id="line-1-2"></span><p class="line874">We no longer support Mac OS X 10.4 and 10.5, so this has been kept for historical interest </div><span class="anchor" id="line-19"></span><p class="line862">To run the FSL GUIs you need to be running the <tt class="backtick">X11</tt> program which can be found in <tt class="backtick">/Applications/Utilities</tt> - it's icon is a white square with a black X superimposed on it. If you have this program running and you get an error like: <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><pre><span class="anchor" id="line-1"></span>Error: Can't open display:</pre><span class="anchor" id="line-23"></span><p class="line862">then you need to configure the Apple Terminal application to setup X11 correctly. You can do this by running the <a href="./FslInstallation(2f)MacOsX.html#Configuring_your_account_for_FSL_usage_using_the_install_script">FSL installer</a> with the <tt class="backtick">-e</tt> option. <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><p class="line867">
+<h1 id="FSLView_issues">FSLView issues</h1>
+<span class="anchor" id="line-26"></span><p class="line862">Also, see the <a href="./FslView(2f)Faq.html">FslView/Faq</a> for some installation issues you might come across with FSLView. <span class="anchor" id="line-27"></span><hr /><p class="line874"> <span class="anchor" id="line-28"></span><a href="./CategoryFaq.html">CategoryFaq</a> <span class="anchor" id="line-29"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

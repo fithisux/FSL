@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+    <title>Introduction</title>
+  </head>
+  <body>
+    <h3>Introduction</h3>
+
+    <p>The 3D viewer uses a set of stock VTK display elements to allow
+      the user to view, and manipulate, the selected images. There is
+      a main display showing each volume according to their designated
+      display intent (modifiable via the <i>Image Type</i> control of
+      the <a href="imageinfo.html">Layer Information Dialog</a>) as
+      follows:</p>
+      
+    <table cellspacing="20">
+      <tr><th>Unknown</th><td>Not displayed</td></tr>
+      <tr><th>Main image</th><td>Displayed as a surface with
+	  optional cut-aways to reveal the image data and any other
+	  images within.</td></tr>
+      <tr><th>Mask/Label</th><td>The image is displayed as a surface
+	  with the label value at each appropriate vertex which will
+	  appear to be a group of surfaces, one per label, coloured
+	  according to the label value for the given
+	  region.</td></tr>
+      <tr><th>Statistic</th><td>The statistical data is blended into the main image so that it appears on the surface of the cut-away planes. </td></tr>
+      <tr><th>Diffusion tensor</th><td>Not displayed</td></tr>
+    </table>
+
+  </body>
+</html>

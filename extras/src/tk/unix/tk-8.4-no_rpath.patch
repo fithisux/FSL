@@ -1,0 +1,11 @@
+--- tk8.4.7/unix/tcl.m4.no_rpath	2003-12-01 14:50:28.000000000 +0100
++++ tk8.4.7/unix/tcl.m4	2003-12-01 14:50:31.000000000 +0100
+@@ -1125,7 +1125,7 @@
+ 		DL_OBJS="tclLoadDl.o"
+ 		DL_LIBS="-ldl"
+ 		LDFLAGS="$LDFLAGS -Wl,--export-dynamic"
+-		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
++		CC_SEARCH_FLAGS=''
+ 		LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
+ 	    else
+ 		AC_CHECK_HEADER(dld.h, [

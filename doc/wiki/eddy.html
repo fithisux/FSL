@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>eddy</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">eddy</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#eddy_--_a_tool_for_correcting_eddy_currents_and_movements_in_diffusion_data">eddy -- a tool for correcting eddy currents and movements in diffusion data</a></li><li>
+<a href="#Referencing">Referencing</a></li></ol></div></div></li><li><a href="./eddy(2f)UsersGuide.html">Users Guide</a></li><li><a href="./eddy(2f)Faq.html">FAQ</a></li></ol></div> <span class="anchor" id="line-17"></span>
+<h1 id="eddy_--_a_tool_for_correcting_eddy_currents_and_movements_in_diffusion_data">eddy -- a tool for correcting eddy currents and movements in diffusion data</h1>
+<span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line862">This is a new tool to correct for eddy current-induced distortions and subject movements.  It simultaneously models the effects of diffusion eddy currents and movements on the image, allowing it to work with higher b-value data than has been possible with for example <tt class="backtick">eddy_correct</tt> (FSL's earlier tool for eddy current correction). <span class="anchor" id="line-20"></span><div><table><tbody><tr>  <td style="text-align: center;"><p class="line862">Selected slice in 300 volumes of a data set from the HCP project</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-21"></span><p class="line891"><img align="left" alt="before_after_hcp_v4.gif" class="attachment" src="attachments/eddy/before_after_hcp_v4.gif" title="before_after_hcp_v4.gif" width="600" /></td>
+</tr>
+<tr>  <td style="text-align: center;"><span class="anchor" id="line-22"></span><p class="line862">On the left before correction and on the right after correction for susceptibility, eddy<br>
+ currents and subject movement using a combination of <tt class="backtick">topup</tt> and <tt class="backtick">eddy</tt>.</td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line874">The diffusion signal is modelled using a Gaussian Process, which means that it makes very few assumptions about the diffusion signal (unlike parametric models such as for example the diffusion tensor). The only two assumptions are <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><ul><li>the signal from two acquisitions acquired with diffusion weighting along two vectors with a small angle between them is more similar than for two acquisitions with a large angle between them  <span class="anchor" id="line-27"></span></li><li><p class="line862">the signal from two acquisitions along vectors <strong>v</strong> and -<strong>v</strong> is identical.  <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span></li></ul><p class="line874">From these two assumptions it also follows that:  <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><ul><li><p class="line862">if <strong>v1</strong> and <strong>v2</strong> are two vectors with a "small" angle between them so that it can be assumed that the signal from the corresponding acquisitions is "similar" then <strong>v1</strong> and -<strong>v2</strong> are equally similar. <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span></li></ul><p class="line862">Because of the way the diffusion signal is modelled, and because <tt class="backtick">eddy</tt> needs to be able to distinguish between signal variation caused by diffusion and that caused by eddy currents/movements the data needs to be acquired with either <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><ul><li><p class="line862">A set of diffusion encoding directions that span <em>the entire sphere</em> and not just a half-sphere <span class="anchor" id="line-36"></span></li><li>A blip-up-blip-down (phase encode reversed) acquisition <span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span></li></ul><p class="line862">or with both. Note that "sampling on the whole sphere" does <strong>not</strong> imply twice as many directions. From a diffusion perspective sampling along <strong>v</strong> and -<strong>v</strong> is exactly equivalent whereas from the perspective of eddy current distortions they are different. One can therefore have two sampling schemes that both sample the diffusion evenly and equally well (and with the same total acquisition time), but where one is on the half sphere and the other on the whole sphere. To make this concrete look at the two sampling schemes below. In these plots the end of each vector is marked with an x-marker. They sample the diffusion in exactly the same way <strong>but</strong> the one on the left facilitates correcting for eddy currents while the one on the right does <strong>not</strong>. Note also that either of these schemes can easily be created from the other. To for example transform the half sphere scheme to the whole sphere scheme one just need to replace half the vectors by their negations. <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><div><table><tbody><tr>  <td><p class="line891"><img align="left" alt="whole_sphere_final.gif" class="attachment" src="attachments/eddy/whole_sphere_final.gif" title="whole_sphere_final.gif" width="400" /></td>
+  <td><p class="line891"><img align="left" alt="half_sphere.gif" class="attachment" src="attachments/eddy/half_sphere.gif" title="half_sphere.gif" width="400" /></td>
+</tr>
+<tr>  <td><span class="anchor" id="line-41"></span><p class="line862"> Diffusion sampled on the whole sphere </td>
+  <td><p class="line862"> Diffusion sampled on the half sphere </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><p class="line874">In order to check your own diffusion directions you can use the following Matlab commands <span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><p class="line867"><span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><pre><span class="anchor" id="line-1"></span>bvecs = load('bvecs'); % Assuming your filename is bvecs
+<span class="anchor" id="line-2"></span>figure('position',[100 100 500 500]);
+<span class="anchor" id="line-3"></span>plot3(bvecs(1,:),bvecs(2,:),bvecs(3,:),'*r');
+<span class="anchor" id="line-4"></span>axis([-1 1 -1 1 -1 1]);
+<span class="anchor" id="line-5"></span>axis vis3d;
+<span class="anchor" id="line-6"></span>rotate3d</pre><span class="anchor" id="line-53"></span><span class="anchor" id="line-54"></span><p class="line862">The final command (<tt class="backtick">rotate3d</tt>) will allow you to use the pointer to rotate the plot which is essential as from some angles a half sphere looks just like a whole sphere. <span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><p class="line874">For eddy to work well there also needs to be a minimum number of diffusion directions. The reason for this is that the concept of "close" and "distant" vectors becomes a little pointless when there are only a handful of vectors. We don't actually know what the "minimum number" is yet but we know that with the ~60 directions that is the standard protocol at FMRIB it works well. <span class="anchor" id="line-57"></span><span class="anchor" id="line-58"></span><p class="line862">If it sounds like your data might be a good candidate for <tt class="backtick">eddy</tt> I suggest you go on to read the <a href="./eddy(2f)UsersGuide.html">manual</a>. <span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><p class="line867"><hr /><p class="line874">  <span class="anchor" id="line-61"></span>
+<h1 id="Referencing">Referencing</h1>
+<span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><p class="line862">Currently there are no journal publications relating to <tt class="backtick">eddy</tt>. <span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><p class="line867"><span class="anchor" id="line-66"></span><span class="anchor" id="line-67"></span><div class="references"><span class="anchor" id="line-1-1"></span><p class="line874">References appear here </div><span class="anchor" id="line-68"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

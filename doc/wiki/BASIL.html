@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>BASIL</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">BASIL</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><img align="right" alt="BASIL perfusion" class="attachment" src="attachments/BASIL/basil_perfusion.jpg" title="BASIL perfusion" /> <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#BASIL:_Bayesian_Inference_for_Arterial_Spin_Labeling_MRI">BASIL: Bayesian Inference for Arterial Spin Labeling MRI</a></li><li>
+<a href="#The_BASIL_toolset">The BASIL toolset</a></li><li>
+<a href="#Referencing">Referencing</a></li></ol></div></div></li><li><a href="./BASIL(2f)UserGuide.html">User Guide</a></li><li><a href="./BASIL(2f)Tutorial.html">Tutorial</a></li><li><a href="./BASIL(2f)FurtherInformation.html">Further Information</a></li></ol></div> <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line867">
+<h1 id="BASIL:_Bayesian_Inference_for_Arterial_Spin_Labeling_MRI">BASIL: Bayesian Inference for Arterial Spin Labeling MRI</h1>
+<span class="anchor" id="line-8"></span><p class="line874">Arterial Spin Labeling (ASL) MRI is a non-invasive method for the quantification of perfusion. Analysis of ASL data typically requires the inversion of a kinetic model of label inflow along with a separate calculation of the equilibrium magnetization of arterial blood. The BASIL toolbox provides a means to do this based on Bayeisan inference principles. The method was orginally developed for multi delay (inversion time) data where it can be used to greatest effect, but is also sufficiently fleixble to deal with the widely used single delay form of acquisition. <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line862">If you have resting ASL data with only a single inversion time then you can still use the tools in BASIL for perfusion quantification. If you want to perform analysis of a functional experiment with ASL data, i.e. one where you want to use a GLM, then you should consult the perfusion section of <a href="./FEAT(2f)UserGuide.html">FEAT</a>, or if you have dual-echo (combined BOLD and ASL) data then consult <a href="./FABBER.html">FABBER</a>. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line874">For single delay ASL data kinetic model inversion is realtively trivial and solutions to the standard model have been described int he literature. However, it is becoming increasingly common to aquire ASL data at multiple times post-inversion and fit the resultant data to a kinetic curve model. This permits problems in perfusion estimation associated with variable bolus arrival time to be avoided, since this becomes a paramter of the model whose value is determined from the data. Commonly the model fitting will be performed with a least squares technique providing parameter estimates, e.g. perfusion and bolus arrival time. In contrast to this BASIL uses a (fast) Bayesian inference method for the model inversion, this provides a number of advantages: <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><ul><li>Voxel-wise estimation of perfusion and bolus arrival time along with parameter variance (allowing confidence intervals to be calculated). <span class="anchor" id="line-15"></span></li><li>Incorporation of natural varaibility of other model parameters, e.g. values of T1, T1b and labeling/bolus duration. <span class="anchor" id="line-16"></span></li><li>Spatial regularization of the estimated perfusion image. <span class="anchor" id="line-17"></span></li><li>Correction for partial volume effects (where the appropriate segmentation information is available). <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span></li></ul><p class="line874">While the first two apply specfically to the case of mulitple delay data, the latter are also applicable to single delay ASL and are only available using the Bayesian technique employed by BASIL. <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line867">
+<h1 id="The_BASIL_toolset">The BASIL toolset</h1>
+<span class="anchor" id="line-22"></span><p class="line874">BASIL is supplemented by a collection of tools that aid in the creation of quantitative CBF images from ASL data, you should either use one of the higher-level analysis packages or if you want a more specific analysis select the appropriate tool(s) for the data you have. <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line867"><strong>Higher-level packages</strong>, these provide a single means to quantify CBF from ASL data, including kinetic-model inversion, absolute quantification via a calibration image and registration of the data. This will generally be the first place to go for most people who want to do processing of ASL data. <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><ul><li>Asl (Asl_gui) - The graphical user interface that brings the BASIL tools together in one place. [BETA from FSL 5.0.3 onward] <span class="anchor" id="line-27"></span></li><li>Oxford_asl    - A command line interface for most common ASL perfusion analysis. <span class="anchor" id="line-28"></span></li></ul><p class="line874">(Note: there are a couple of changes in oxford_asl in the FSL 5.0.6 release that might affect perfusion quantification compared to previous versions - see the user guide for more information) <span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><p class="line867"><strong>The BASIL toolset</strong>: <span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><ul><li>BASIL (itself) - this is the core tool that performs kinetic-model inversion to the data using a Bayesian algorithm. You should only need to use it directly for more custom analyses than that offered by oxford_asl/Asl_gui. <span class="anchor" id="line-33"></span></li><li>QUASIL - A special version of BASIL optimised for QUASAR ASL data, includes model-based or model-free analyses along with calibration. <span class="anchor" id="line-34"></span></li><li>asl_calib - this tool takes a supplied calibration volume and calculates the magnetization of arterial blood allowing CBF to be quantified in absolute units. The main functionality of asl_calib is built into oxford_asl, Asl_gui and QUASIL, but more options are available when using it directly. <span class="anchor" id="line-35"></span></li><li>asl_reg - this tool is designed to assist in registration of (low resolution) ASL images to structural or standard brain images. The functionality of asl_reg is built into oxford_asl and Asl_gui. <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span></li></ul><p class="line867">
+<h1 id="Referencing">Referencing</h1>
+<span class="anchor" id="line-38"></span><p class="line874">If you employ BASIL in your research please reference the article below, plus any others that specifically relate to the analysis you have performed: <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><p class="line867"><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><div class="references"><span class="anchor" id="line-1-1"></span><p class="line874">Chappell MA, Groves AR, Whitcher B, Woolrich MW. Variational Bayesian inference for a non-linear forward model. IEEE Transactions on Signal Processing 57(1):223-236, 2009. </div><span class="anchor" id="line-43"></span><p class="line874">If you employ spatial priors you should ideally reference this article too. <span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><p class="line867"><span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><div class="references"><span class="anchor" id="line-1-2"></span><p class="line862">A.R. Groves, M.A. Chappell, M.W. Woolrich, Combined Spatial and Non-Spatial Prior for Inference on MRI Time-Series , <a class="nonexistent" href="./NeuroImage.html">NeuroImage</a> 45(3) 795-809, 2009. </div><span class="anchor" id="line-48"></span><p class="line874">If you fit the macrovascular (arterial) contribution you should reference this article too. <span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><p class="line867"><span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><div class="references"><span class="anchor" id="line-1-3"></span><p class="line862">Chappell MA, <a class="nonexistent" href="./MacIntosh.html">MacIntosh</a> BJ, Donahue MJ, Gunther M, Jezzard P, Woolrich MW. Separation of Intravascular Signal in Multi-Inversion Time Arterial Spin Labelling MRI. Magn Reson Med 63(5):1357-1365, 2010. </div><span class="anchor" id="line-53"></span><p class="line874">If you employ the partial volume correction method then you should reference this article too. <span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span><p class="line867"><span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span><div class="references"><span class="anchor" id="line-1-4"></span><p class="line862">Chappell MA, <a class="nonexistent" href="./MacIntosh.html">MacIntosh</a> BJ, Donahue MJ,Jezzard P, Woolrich MW. Partial volume correction of multiple inversion time arterial spin labeling MRI data, Magn Reson Med, 65(4):1173-1183, 2011. </div><span class="anchor" id="line-58"></span><p class="line874">If you perform model-based analysis of QUASAR ASL data then you should reference this article too. <span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><p class="line867"><span class="anchor" id="line-61"></span><span class="anchor" id="line-62"></span><div class="references"><span class="anchor" id="line-1-5"></span><p class="line862">Chappell, M. A., Woolrich, M. W., Petersen, E. T., Golay, X., &amp; Payne, S. J. (2012). Comparing model-based and model-free analysis methods for QUASAR arterial spin labeling perfusion quantification. doi:10.1002/mrm.24372 </div><span class="anchor" id="line-63"></span><p class="line867"><a href="./CategoryPerfusion.html">CategoryPerfusion</a> <a href="./CategoryBASIL.html">CategoryBASIL</a> <span class="anchor" id="line-64"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:31
+</body>
+</html>

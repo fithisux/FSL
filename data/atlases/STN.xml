@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<atlas version="1.0">
+  <header>
+    <name>Subthalamic Nucleus Atlas</name>
+    <type>Probabilistic</type>
+    <images>
+      <imagefile>/STN/STN-prob-0.5mm</imagefile>
+      <summaryimagefile>/STN/STN-maxprob-thr25-0.5mm</summaryimagefile>
+    </images>
+  </header>
+  <data>
+<label index="0" x="199" y="224" z="130">Subthalamic Nucleus  L</label>
+<label index="1" x="158" y="226" z="126">Subthalamic Nucleus  R</label>
+  </data>
+</atlas>
+

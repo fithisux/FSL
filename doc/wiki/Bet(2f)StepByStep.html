@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Bet/StepByStep</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">Bet/StepByStep</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./BET.html">Introduction</a></li><li><a href="./BET(2f)UserGuide.html">User Guide</a></li><li><a href="./BET(2f)FAQ.html">FAQ</a></li></ol></div> <span class="anchor" id="line-4"></span>
+<h1 id="Step-by-Step_Guide">Step-by-Step Guide</h1>
+<span class="anchor" id="line-5"></span><p class="line867">
+<h2 id="Brain_Extraction">Brain Extraction</h2>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><ul><li><p class="line891"><a href="./InitialProcessing.html">Initial processing</a> (dicom conversion, fslreorient2std, robustfov/fslroi)  <span class="anchor" id="line-8"></span></li><li><p class="line862">Run the <a href="./BET(2f)UserGuide.html">BET</a> tool: <span class="anchor" id="line-9"></span><ul><li>from the GUI (simply fill in the input image; default output image is created, but can be changed) <span class="anchor" id="line-10"></span></li><li>from the command line (specify input and output image names) <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span></li></ul></li><li class="gap">Check outputs: <span class="anchor" id="line-13"></span><ul><li>load brain extracted image over original image in FSLView (use colour map with brain extracted image) <span class="anchor" id="line-14"></span></li><li>for registration purposes small errors do not matter ; for segmentations it is important to be very accurate (at least no loss of brain tissue, but extra CSF/dark tissue is fine) <span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span></li></ul></li><li class="gap">Troubleshooting: <span class="anchor" id="line-17"></span><ul><li>try different options (e.g. "fractional intensity threshold" or -f ; "robust brain centre" or -R; see BET page; and many others) <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span></li></ul></li><li class="gap">Alternative methods: <span class="anchor" id="line-20"></span><ul><li><p class="line891"><a href="./fsl_anat.html">fsl_anat</a> <span class="anchor" id="line-21"></span></li><li><p class="line862">non-linear registration with <a href="./FNIRT(2f)UserGuide.html">fnirt</a> (transforming brain mask from standard space back to the native space) <span class="anchor" id="line-22"></span></li></ul></ul><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:31
+</body>
+</html>

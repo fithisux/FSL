@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Tbss/StepByStep</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">Tbss/StepByStep</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./TBSS.html">Introduction</a></li><li><a href="./TBSS(2f)UserGuide.html">User Guide</a></li><li><a href="./TBSS(2f)Faq.html">FAQ</a></li><li><a href="./TBSS(2f)FurtherInformation.html">Further Information</a></li></ol></div> <span class="anchor" id="line-4"></span>
+<h1 id="Step_by_Step_Guide">Step by Step Guide</h1>
+<span class="anchor" id="line-5"></span><p class="line867">
+<h2 id="TBSS_.28voxel-wise_analysis_of_local_diffusion_measures.29">TBSS (voxel-wise analysis of local diffusion measures)</h2>
+<span class="anchor" id="line-6"></span><ul><li><p class="line862">Do a tensor fit with <a href="./FDT(2f)StepByStep.html">DTIFIT</a> <span class="anchor" id="line-7"></span></li><li>Make a directory for the analysis <span class="anchor" id="line-8"></span></li><li>Copy the FA images into this directory <span class="anchor" id="line-9"></span></li><li><p class="line891"><em>Standard</em> <a href="./TBSS(2f)UserGuide.html">TBSS</a> analysis (of FA): <span class="anchor" id="line-10"></span><ul><li><p class="line891"><tt class="backtick">tbss_1_preproc&nbsp;*.nii.gz</tt> <span class="anchor" id="line-11"></span></li><li><p class="line891"><tt class="backtick">tbss_2_reg&nbsp;-T</tt>   (recommended - one registration per image, deriving a study-specific template) <span class="anchor" id="line-12"></span><ul><li>alternative is to use a custom template (-t) <span class="anchor" id="line-13"></span></li><li>use best target from all images (-n) - lots of registrations <span class="anchor" id="line-14"></span></li></ul></li><li><p class="line891"><tt class="backtick">tbss_3_postreg&nbsp;-S</tt>   (-T for FMRIB58) <span class="anchor" id="line-15"></span><ul><li>view/check the skeleton output <span class="anchor" id="line-16"></span></li></ul></li><li><p class="line891"><tt class="backtick">tbss_4_prestats&nbsp;0.2</tt> <span class="anchor" id="line-17"></span></li><li><p class="line891"><tt class="backtick">cd&nbsp;stats</tt> <span class="anchor" id="line-18"></span></li><li>Use the Glm GUI to create appropriate design matrices and contrasts, and save the design <span class="anchor" id="line-19"></span></li><li><p class="line862">Run <a href="./randomise.html">randomise</a> with the design files from the Glm GUI and appropriate multiple-comparison correction (e.g. <tt class="backtick">--T2</tt>) <span class="anchor" id="line-20"></span></li></ul></li><li>View the results <span class="anchor" id="line-21"></span><ul><li>look at the *corrp* images (these are the multiple comparison corrected p-values, stored as 1-p values) <span class="anchor" id="line-22"></span></li><li>tbss_fill for making a thicker skeleton for more easy viewing and creating figures for publications <span class="anchor" id="line-23"></span></li></ul></ul><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

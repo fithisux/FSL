@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FDR</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FDR</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867">
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-2"></span><p class="line867"><tt class="backtick">fdr</tt> is a simple program which takes in a p-value image and uses FDR ( False Discovery Rate ) theory to carry out multiple comparison correction. For detail on FDR theory see <a class="http" href="http://www-personal.umich.edu/~nichols/FDR/">Tom Nichols' FDR page</a>. <span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867"><strong>Outputs:</strong> <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><ul><li>The main output from FDR is the threshold to apply to the p-value image. Everything below this threshold is significant. If nothing is significant then the threshold will be 0.  This threshold is written as text to standard output. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span></li><li class="gap"><p class="line862">A thresholded image (with <tt class="backtick">--othresh</tt>) <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span></li><li class="gap"><p class="line862">A "q-rate" image (with <tt class="backtick">-o</tt>) which is effectively the FDR version of a corrected p-value (such that values less than 0.05 would typically be considered significant). <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span></li></ul><p class="line867"><strong>Options:</strong> <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><ul><li><p class="line891"><tt class="backtick">--positivecorr</tt> uses a normalisation that assumes the samples are positively correlated - this is the default <span class="anchor" id="line-15"></span></li><li><p class="line891"><tt class="backtick">--independent</tt> uses a normalisation that assumes all samples are independent (NB: the normalisation is the same as for <tt class="backtick">--positivecorr</tt>) <span class="anchor" id="line-16"></span></li><li><p class="line891"><tt class="backtick">--conservative</tt> uses the more general normalisation of (1+1/2+1/3+...+1/N), suitable for any dependence between samples [<strong>not recommended</strong>] <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span></li></ul><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-19"></span><hr /><p class="line874"> <span class="anchor" id="line-20"></span><strong>Examples:</strong> <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line874">The p-value image fed into fdr can be produced in a number of ways. <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-25"></span>
+<h2 id="Use_with_FEAT">Use with FEAT</h2>
+<span class="anchor" id="line-26"></span><p class="line874">Change directory into the stats subdirectory. It is then necessary to convert a give cope and varcope image into a p-value image. For example: <span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><p class="line867"><tt>ttologp&nbsp;-logpout&nbsp;logp1&nbsp;varcope1&nbsp;cope1&nbsp;`cat&nbsp;dof`</tt> <span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><ul><li style="list-style-type:none">(this outputs the log(p) image) <span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span></li></ul><p class="line867"><tt class="backtick">fslmaths&nbsp;logp1&nbsp;-exp&nbsp;p1</tt> <span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><ul><li style="list-style-type:none">(this creates the p-value image) <span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span></li></ul><p class="line867"><tt class="backtick">fdr&nbsp;-i&nbsp;p1&nbsp;-m&nbsp;../mask&nbsp;-q&nbsp;0.05</tt> <span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">Probability&nbsp;Threshold&nbsp;is:&nbsp;</tt> <tt class="backtick">0.00339819</tt> (this tells you the FDR threshold - p-values below 0.00339819 are significant) <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span></li></ul><p class="line867"><tt class="backtick">fslmaths&nbsp;p1&nbsp;-mul&nbsp;-1&nbsp;-add&nbsp;1&nbsp;-thr&nbsp;.99660181&nbsp;-mas&nbsp;../mask&nbsp;thresh_1_minus_p1</tt> <span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><ul><li style="list-style-type:none">(this creates a 1-p image for ease of display, thresholds that at 1-thresh and then remasks) <span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span></li></ul><p class="line874">Note that if you are looking at a cope created by FLAME fixed-effects, the correct dof is not in the "dof" text file, but in the tdof_t1 image. <span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-47"></span>
+<h2 id="Use_with_randomise">Use with randomise</h2>
+<span class="anchor" id="line-48"></span><p class="line862">Output from <tt class="backtick">randomise</tt> can be fed directly into <tt class="backtick">fdr</tt>; use the voxel-based thresholding, uncorrected for multiple comparisons, i.e. a <tt class="backtick">*_vox_p_tstat*</tt> image. This images stores values as 1-p rather than p (where p is the p-value from 0 to 1).  That is, 1 is most significant in a 1-p image (and it is arranged this way to make display and thresholding simple). Therefore <tt class="backtick">fdr</tt> needs to know that it is a 1-p image. Thus an example would be: <span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><p class="line867"><tt class="backtick">fdr&nbsp;-i&nbsp;grot_vox_p_tstat1&nbsp;--oneminusp&nbsp;-m&nbsp;mask&nbsp;-q&nbsp;0.05&nbsp;--othresh=thresh_grot_vox_p_tstat1</tt> <span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><p class="line862">where the input image, <tt class="backtick">grot_vox_p_tstat1</tt>, contains 1-p values, as output by <tt class="backtick">randomise</tt>.  Note that the name of this image should be changed to whatever you have called your image. <span class="anchor" id="line-53"></span><span class="anchor" id="line-54"></span><p class="line862">The output from <tt class="backtick">fdr</tt> gives you a p-value threshold (<strong>not</strong> a 1-p value) that can be applied to the p-values, as well as a thresholded image, <tt class="backtick">thresh_grot_vox_p_tstat1</tt>, where all non-significant voxels are given a value of 1-p=0 and significant voxels still contain the original 1-p values. <span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-57"></span><a href="./CategoryOther.html">CategoryOther</a> <a href="./CategoryFdr.html">CategoryFdr</a> <span class="anchor" id="line-58"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

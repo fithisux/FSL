@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+    <title>3D properties dialog</title>
+  </head>
+  <body>
+    <h3>3D properties dialog</h3>
+
+    <p>The dialog has two sections: "Basic" - dealing with lighting
+      and surface colouring; and "Advanced" which allows the user to
+      tune some of the parameters used to determine the shape of the
+      extracted surface mesh. Usually the surface in question is being
+      determined from a segmented brain and is intended to approximate
+      the "pial" surface.</p>
+
+    <p></p>
+
+    <h4>The basic settings</h4>
+
+    <table cellspacing="10">
+      <tr>
+	<td>
+	  <ul>
+	    <li><b>Interpolation</b> Changes how the shading of
+	      vertices is calculated. Possible options are: Flat,
+	      Gouraud and Phong. In most cases Gouraud is the most
+	      appropriate setting.</li>
+
+	    <li><b>Ambient</b> Determines the percieved intensity of
+	      the main light source.</li>
+
+	    <li><b>Diffuse</b> This controls how much of the ambient
+	      light is scattered back to the observer and other
+	      objects in the scene. Larger values add substance in the
+	      form of shadows and detail.</li>
+
+	    <li><b>Opacity</b> Controls how opaque the surface will be
+	      rendered. You can also modify opacity via the slider on
+	      the <a href="imagelist.html">layer list</a>
+	      panel.</li>
+	    
+	    <li><b>Specular</b> The intensity of the light reflected from
+	      the surface of a shiny object.</li>
+
+	    <li><b>Specular power</b> How shiny the object
+	      is. Increasing this value will give the object smaller
+	      highlights as they become less diffuse.</li>
+
+	    <li><b>Surface Colour</b> These controls allow you to
+	      change the colour of the surface representing the main
+	      image.</li>
+	  </ul>
+	</td>
+	<td>  
+	  <img src="3D-dialog-basic.png" width="300">
+	</td>
+      </tr>
+    </table>
+
+    <h4>Advanced settings</h4>
+
+    <p>These settings determine how the pial surface is
+      rendered. Modifying these values allow you to customize the look
+      of the main images surface representation.</p>
+
+    <table cellspacing="10">
+      <tr>
+	<td>  
+	  <img src="3D-dialog-advanced.png" width="300">
+	</td>
+	<td>
+	  <li><b>Gaussian: SD</b> Sets the standard deviation of the
+	    smoothing kernel applied to the main surface.</li>
+
+	  <li><b>Gaussian: radius</b>  Sets the radius of the
+	    smoothing kernel applied to the main surface.</li>
+
+	  <li><b>Marching Cubes: threshold</b> The upper threshold of
+	    the marching cubes algorithm. Higher values generate deeper
+	    sulci.</li>
+
+	  <li><b>SmoothPolyDataFilter: iterations</b> For each vertex
+	    v, the coordinates of v are modified according to an average
+	    of the connected vertices. The number of iterations determines the
+	    smoothness, i.e., the higher the number the smoother the
+	    resultant surface.</li>
+
+	  <li><b>SmoothPolyDataFilter: relaxation factor</b> Controls the
+	    amount of displacement possible during each iteration of the
+	    algorithm.</li>
+
+	  <li><b>PolyDataNormals: feature angle</b> Used to control
+	    the angle at which the algorithm defines an edge as
+	    "sharp". When sharp edges are present, the edges are split
+	    and new points generated to prevent blurry edges (due to
+	    Gouraud shading).</li>
+
+	</td>
+      </tr>
+    </table>
+
+  </body>
+</html>

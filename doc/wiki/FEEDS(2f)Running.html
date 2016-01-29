@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FEEDS/Running</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FEEDS/Running</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FEEDS.html">Introduction</a></li><li><a href="./FEEDS(2f)Downloading.html">Downloading</a></li><li>Running<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Running_the_evaluation_suite">Running the evaluation suite</a></li></ol></div></div></li><li><a href="./FEEDS(2f)TimingResults.html">Timing Results</a></li><li><a href="./FEEDS(2f)UsingData.html">Using Data</a></li></ol></div> <span class="anchor" id="line-5"></span>
+<h1 id="Running_the_evaluation_suite">Running the evaluation suite</h1>
+<span class="anchor" id="line-6"></span><ul><li>You need at least 1GB of swap/RAM on your computer to run FEEDS. <span class="anchor" id="line-7"></span></li><li>Make sure your environment is setup correctly for using FSL - see the Running section on the Downloading and Installing page. <span class="anchor" id="line-8"></span></li><li><p class="line891"><tt class="backtick">cd</tt> into the top level directory feeds. <span class="anchor" id="line-9"></span></li><li>Type: <span class="anchor" id="line-10"></span><ul><li style="list-style-type:none"><span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><pre><span class="anchor" id="line-1"></span>/usr/bin/time ./RUN all</pre><span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><div class="note"><span class="anchor" id="line-1-1"></span><ul><li style="list-style-type:none"><p class="line862">If you are interested in comparing how fast FSL runs on your computer with other computers, the final output - the time marked with a <tt class="backtick">u</tt> - tells you how many CPU seconds or minutes the test took to run.) </li></ul></div><span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span></li></ul></li></ul><p class="line862">The script <tt class="backtick">RUN</tt> uses input data from the data subdirectory, saving all output in the results subdirectory. This output is then compared with the test output data in the data subdirectory. (Note that test input and output data is mixed together in data, as in some cases the output from one tool was used as input to another one.) Each tool's output is compared with the example data output and a percentage error is generated - this may not be exactly zero as different hardware platforms can give slightly different results without this being classified as an "error". Each tool's error is scaled so that a reported error of 1% is considered a failure. <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line862">If you get any failures, you may want to send us the complete text output from <tt class="backtick">RUN</tt>, and also the complete results directory (in the form of a <tt class="backtick">tar.gz</tt> archive. <span class="anchor" id="line-20"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

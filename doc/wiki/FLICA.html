@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FLICA</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FLICA</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line862">FLICA (FMRIB's Linked Independent Component Analysis) is an exploratory analysis tool designed to automatically find structured components that cross multiple modalities of group data (e.g. <a href="./TBSS.html">TBSS</a>, VBM, Freesurfer, etc). <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="Quick_start_guide">Quick start guide</h1>
+<span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line867">
+<h2 id="Setup">Setup</h2>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line874">Prerequisites: working installations of FSL, Freesurfer (if you want to work with surface data), and the various MATLAB functions that come with them. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line862">Download the <a class="attachment" href="attachments/FLICA/flica_2013-01-15.tar.gz" title="latest release">latest release</a> and unpack with <tt>tar&nbsp;xvzf&nbsp;flica_2013-01-15.tar.gz</tt>. <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line862">FMRIB account-holders who are members of the <tt>cvs</tt> group should get the latest version of FLICA by running <tt>cvs&nbsp;co&nbsp;flica</tt> -- this will make it easier to keep up-to-date without losing your modifications. <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line867">
+<h2 id="Prepare_the_data">Prepare the data</h2>
+<span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line862">Typically you should run your standard single-modality hypothesis-driven analyses first, and obtain the final per-subject images from the various modalities.  For VBM this is <tt>GM_mod_merg_s?.nii.gz</tt>, for TBSS this is <tt>all_??_skeletonised.nii.gz</tt>, and for Freesurfer this is <tt>?h.thick.fsaverage.mgh</tt> and <tt>?h.pial.area.fsaverage.mgh</tt>, etc. <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line874">These should be in the same subject order, and any missing data should be replaced with a volume of all zeroes. <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line874">If you have limited memory or a large number of subjects, it may be helpful to downsample the data to a more manageable number of voxels.  For hints on how to do this for VBM and TBSS, see ~adriang/scratch/data/oslo/lars484/make4mm and make2mm, respectively.  The Freesurfer data should be downsampled using their tools to a lower standard space, e.g. fsaverage5. <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line874">Currently, the only supported inputs are *.mgh and *.nii.gz -- but more formats could easily be added to flica_load.m and flica_save.m <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line867">
+<h2 id="Run_the_analysis">Run the analysis</h2>
+<span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><p class="line862">To run FLICA it's best to set up a MATLAB script, along the lines of the template file supplied in <tt>flica_template_script.m</tt>. Here are the important bits: <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line867"><span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><span class="anchor" id="line-1-1"></span><div class="highlight matlab"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+function isnumbered(obj) {
+  return obj.childNodes.length && obj.firstChild.childNodes.length && obj.firstChild.firstChild.className == 'LineNumber';
+}
+function nformat(num,chrs,add) {
+  var nlen = Math.max(0,chrs-(''+num).length), res = '';
+  while (nlen>0) { res += ' '; nlen-- }
+  return res+num+add;
+}
+function addnumber(did, nstart, nstep) {
+  var c = document.getElementById(did), l = c.firstChild, n = 1;
+  if (!isnumbered(c)) {
+    if (typeof nstart == 'undefined') nstart = 1;
+    if (typeof nstep  == 'undefined') nstep = 1;
+    var n = nstart;
+    while (l != null) {
+      if (l.tagName == 'SPAN') {
+        var s = document.createElement('SPAN');
+        var a = document.createElement('A');
+        s.className = 'LineNumber';
+        a.appendChild(document.createTextNode(nformat(n,4,'')));
+        a.href = '#' + did + '_' + n;
+        s.appendChild(a);
+        s.appendChild(document.createTextNode(' '));
+        n += nstep;
+        if (l.childNodes.length) {
+          l.insertBefore(s, l.firstChild);
+        }
+        else {
+          l.appendChild(s);
+        }
+      }
+      l = l.nextSibling;
+    }
+  }
+  return false;
+}
+function remnumber(did) {
+  var c = document.getElementById(did), l = c.firstChild;
+  if (isnumbered(c)) {
+    while (l != null) {
+      if (l.tagName == 'SPAN' && l.firstChild.className == 'LineNumber') l.removeChild(l.firstChild);
+      l = l.nextSibling;
+    }
+  }
+  return false;
+}
+function togglenumber(did, nstart, nstep) {
+  var c = document.getElementById(did);
+  if (isnumbered(c)) {
+    remnumber(did);
+  } else {
+    addnumber(did,nstart,nstep);
+  }
+  return false;
+}
+</script>
+
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-0cac41860d2c78956472400e163f257e116db64e\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-0cac41860d2c78956472400e163f257e116db64e" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-0cac41860d2c78956472400e163f257e116db64e_1">   1</a> </span><span class="LineAnchor" id="CA-0cac41860d2c78956472400e163f257e116db64e_1"></span><span class="anchor" id="line-1-2"></span><span class="ID">addpath</span>([<span class="ID">getenv</span>(<span class="String">'</span><span class="String">FSLDIR'</span>) <span class="String">'</span><span class="String">/etc/matlab/'</span>])</span>
+<span class="line"><span class="LineNumber"><a href="#CA-0cac41860d2c78956472400e163f257e116db64e_2">   2</a> </span><span class="LineAnchor" id="CA-0cac41860d2c78956472400e163f257e116db64e_2"></span><span class="anchor" id="line-2-1"></span><span class="ID">addpath</span> /<span class="ID">usr</span>/<span class="ID">local</span>/<span class="ID">fmrib</span>/<span class="ID">fmt</span>/</span>
+<span class="line"><span class="LineNumber"><a href="#CA-0cac41860d2c78956472400e163f257e116db64e_3">   3</a> </span><span class="LineAnchor" id="CA-0cac41860d2c78956472400e163f257e116db64e_3"></span><span class="anchor" id="line-3-1"></span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-0cac41860d2c78956472400e163f257e116db64e_4">   4</a> </span><span class="LineAnchor" id="CA-0cac41860d2c78956472400e163f257e116db64e_4"></span><span class="anchor" id="line-4-1"></span><span class="ID">outdir</span> = <span class="String">'</span><span class="String">/my/output/directory/'</span>;</span>
+<span class="line"><span class="LineNumber"><a href="#CA-0cac41860d2c78956472400e163f257e116db64e_5">   5</a> </span><span class="LineAnchor" id="CA-0cac41860d2c78956472400e163f257e116db64e_5"></span><span class="anchor" id="line-5-1"></span><span class="ID">mkdir</span>(<span class="ID">outdir</span>)</span>
+</pre></div></div><span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><p class="line862">This just sets up the environment and creates an output directory.  Note that there's no automatic <tt>+</tt> appending -- so it will overwrite files if it already exists! <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line867"><span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><span class="anchor" id="line-1-3"></span><div class="highlight matlab"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-fd57e2e2899b7226616bf890e23f96542970982e\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-fd57e2e2899b7226616bf890e23f96542970982e" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-fd57e2e2899b7226616bf890e23f96542970982e_1">   1</a> </span><span class="LineAnchor" id="CA-fd57e2e2899b7226616bf890e23f96542970982e_1"></span><span class="anchor" id="line-1-4"></span><span class="ID">Yfiles</span> = {<span class="String">'</span><span class="String">/path/to/file1.nii.gz'</span>, <span class="String">'</span><span class="String">/path/to/file2_?h.mgh'</span>};</span>
+<span class="line"><span class="LineNumber"><a href="#CA-fd57e2e2899b7226616bf890e23f96542970982e_2">   2</a> </span><span class="LineAnchor" id="CA-fd57e2e2899b7226616bf890e23f96542970982e_2"></span><span class="anchor" id="line-2-2"></span>[<span class="ID">Y</span> <span class="ID">fileinfo</span>] = <span class="ID">flica_load</span>(<span class="ID">Yfiles</span>);</span>
+</pre></div></div><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><p class="line862">Noting the use of full paths and question marks instead of <tt>l</tt> or <tt>r</tt> in left/right hemisphere MGH files.  Now <tt>Y</tt> contains a cell array of voxels-by-subjects data for each modality, and fileinfo is stuff like the resolution, masks, etc. <span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><p class="line874">Next we set up the options and run the analysis: <span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span><p class="line867"><span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span><span class="anchor" id="line-1-5"></span><div class="highlight matlab"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-9f56968ef7056284b8f4a985dacc1c034cda0c98\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-9f56968ef7056284b8f4a985dacc1c034cda0c98" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-9f56968ef7056284b8f4a985dacc1c034cda0c98_1">   1</a> </span><span class="LineAnchor" id="CA-9f56968ef7056284b8f4a985dacc1c034cda0c98_1"></span><span class="anchor" id="line-1-6"></span><span class="ID">clear</span> <span class="ID">opts</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-9f56968ef7056284b8f4a985dacc1c034cda0c98_2">   2</a> </span><span class="LineAnchor" id="CA-9f56968ef7056284b8f4a985dacc1c034cda0c98_2"></span><span class="anchor" id="line-2-3"></span><span class="ID">opts</span>.<span class="ID">num_components</span> = 20;</span>
+<span class="line"><span class="LineNumber"><a href="#CA-9f56968ef7056284b8f4a985dacc1c034cda0c98_3">   3</a> </span><span class="LineAnchor" id="CA-9f56968ef7056284b8f4a985dacc1c034cda0c98_3"></span><span class="anchor" id="line-3-2"></span><span class="ID">opts</span>.<span class="ID">maxits</span> = 10000;</span>
+<span class="line"><span class="LineNumber"><a href="#CA-9f56968ef7056284b8f4a985dacc1c034cda0c98_4">   4</a> </span><span class="LineAnchor" id="CA-9f56968ef7056284b8f4a985dacc1c034cda0c98_4"></span><span class="anchor" id="line-4-2"></span><span class="Comment">% Run flica_parseoptions to see a list of options and default values</span></span>
+</pre></div></div><span class="anchor" id="line-52"></span><p class="line862">This sets up a few options; anything not supplied will be set to default values.  For more information on the available options, call <tt>flica_parseoptions.m</tt> from the matlab prompt without any input arguments. <span class="anchor" id="line-53"></span><span class="anchor" id="line-54"></span><p class="line867"><span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span><span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span><span class="anchor" id="line-1-7"></span><div class="highlight matlab"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-d263ccc31768ed01de4666be2a6fbc8a985e3778\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-d263ccc31768ed01de4666be2a6fbc8a985e3778" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-d263ccc31768ed01de4666be2a6fbc8a985e3778_1">   1</a> </span><span class="LineAnchor" id="CA-d263ccc31768ed01de4666be2a6fbc8a985e3778_1"></span><span class="anchor" id="line-1-8"></span><span class="ID">Morig</span> = <span class="ID">flica</span>(<span class="ID">Y</span>, <span class="ID">opts</span>);</span>
+<span class="line"><span class="LineNumber"><a href="#CA-d263ccc31768ed01de4666be2a6fbc8a985e3778_2">   2</a> </span><span class="LineAnchor" id="CA-d263ccc31768ed01de4666be2a6fbc8a985e3778_2"></span><span class="anchor" id="line-2-4"></span><span class="ID">M</span> = <span class="ID">flica_reorder</span>(<span class="ID">M</span>);</span>
+<span class="line"><span class="LineNumber"><a href="#CA-d263ccc31768ed01de4666be2a6fbc8a985e3778_3">   3</a> </span><span class="LineAnchor" id="CA-d263ccc31768ed01de4666be2a6fbc8a985e3778_3"></span><span class="anchor" id="line-3-3"></span><span class="Comment">% Or: M = flica_reorder(M, HmatrixFromAnEarlierRunForComparison)</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-d263ccc31768ed01de4666be2a6fbc8a985e3778_4">   4</a> </span><span class="LineAnchor" id="CA-d263ccc31768ed01de4666be2a6fbc8a985e3778_4"></span><span class="anchor" id="line-4-3"></span><span class="ID">flica_save_everything</span>(<span class="ID">outdir</span>, <span class="ID">M</span>, <span class="ID">fileinfo</span>);</span>
+</pre></div></div><span class="anchor" id="line-60"></span><span class="anchor" id="line-61"></span><p class="line862">The <tt>flica</tt> call does all the calculations, producing a set of components in an arbitrary order.  <tt>flica_reorder</tt> then reoganizes (and sign-flips) them in a sensible order: either in order of total energy, or to match the subject-courses of a previous similar run (for easier comparison, e.g. if you add another modality, or re-run with different initialisation).  <tt>flica_save_everything</tt> populates the output directory with spatial maps, timecourses, and various other information.  Now the output is safely saved, and all the rest of these steps could be run in a different MATLAB session. <span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><p class="line874">The post-hoc correlation analysis is performed as follows: <span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><p class="line867"><span class="anchor" id="line-66"></span><span class="anchor" id="line-67"></span><span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span><span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span><span class="anchor" id="line-73"></span><span class="anchor" id="line-74"></span><span class="anchor" id="line-1-9"></span><div class="highlight matlab"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-d28621381112c11af23a3accb3923fdbf324345e\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-d28621381112c11af23a3accb3923fdbf324345e" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-d28621381112c11af23a3accb3923fdbf324345e_1">   1</a> </span><span class="LineAnchor" id="CA-d28621381112c11af23a3accb3923fdbf324345e_1"></span><span class="anchor" id="line-1-10"></span><span class="ID">clear</span> <span class="ID">des</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-d28621381112c11af23a3accb3923fdbf324345e_2">   2</a> </span><span class="LineAnchor" id="CA-d28621381112c11af23a3accb3923fdbf324345e_2"></span><span class="anchor" id="line-2-5"></span><span class="ID">des</span>.<span class="ID">Subject_Index</span> = (1:<span class="ResWord">size</span>(<span class="ID">Y</span>{1},2))';</span>
+<span class="line"><span class="LineNumber"><a href="#CA-d28621381112c11af23a3accb3923fdbf324345e_3">   3</a> </span><span class="LineAnchor" id="CA-d28621381112c11af23a3accb3923fdbf324345e_3"></span><span class="anchor" id="line-3-4"></span><span class="ID">des</span>.<span class="ID">Age</span> = <span class="ID">load</span>(<span class="String">'</span><span class="String">age.txt'</span>);</span>
+<span class="line"><span class="LineNumber"><a href="#CA-d28621381112c11af23a3accb3923fdbf324345e_4">   4</a> </span><span class="LineAnchor" id="CA-d28621381112c11af23a3accb3923fdbf324345e_4"></span><span class="anchor" id="line-4-4"></span><span class="ID">des</span>.<span class="ID">Group</span> = <span class="ID">load</span>(<span class="String">'</span><span class="String">group.txt'</span>);</span>
+<span class="line"><span class="LineNumber"><a href="#CA-d28621381112c11af23a3accb3923fdbf324345e_5">   5</a> </span><span class="LineAnchor" id="CA-d28621381112c11af23a3accb3923fdbf324345e_5"></span><span class="anchor" id="line-5-2"></span><span class="Comment">% etc etc.</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-d28621381112c11af23a3accb3923fdbf324345e_6">   6</a> </span><span class="LineAnchor" id="CA-d28621381112c11af23a3accb3923fdbf324345e_6"></span><span class="anchor" id="line-6-1"></span><span class="Comment">% Each one should be a subjects-by-1 column vector.</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-d28621381112c11af23a3accb3923fdbf324345e_7">   7</a> </span><span class="LineAnchor" id="CA-d28621381112c11af23a3accb3923fdbf324345e_7"></span><span class="anchor" id="line-7-1"></span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-d28621381112c11af23a3accb3923fdbf324345e_8">   8</a> </span><span class="LineAnchor" id="CA-d28621381112c11af23a3accb3923fdbf324345e_8"></span><span class="anchor" id="line-8-1"></span><span class="ID">flica_posthoc_correlations</span>(<span class="ID">outdir</span>, <span class="ID">des</span>);</span>
+</pre></div></div><span class="anchor" id="line-75"></span><span class="anchor" id="line-76"></span><p class="line862">This produces a few more text files and <tt>correlation_*_*.png</tt> correlation plot images.  It also produces the <tt>significantComponents.txt</tt> output file, which lists the most-significantly-correlated components for each EV.  This text file is dropped straight into the final HTML report.  Note that if you re-run <tt>flica_posthoc_correlations</tt> it will overwrite the existing <tt>correlations*.png</tt> files and overwrite <tt>significantComponents.txt</tt> -- so generally it's a good idea to only add, not remove, EVs.  If you remove EVs (or change an EV's name) you should manually delete all of the old <tt>correlations*.png</tt>, or they will continue to appear in the report. <span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span><p class="line874">Optionally, if you have high-res versions of the input data, you can "upsample" the results (actually re-fit the model to the new data): <span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span><p class="line867"><span class="anchor" id="line-82"></span><span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span><span class="anchor" id="line-85"></span><span class="anchor" id="line-86"></span><span class="anchor" id="line-1-11"></span><div class="highlight matlab"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-6c6f6a54c3f7809fc95954e44b15f284a282c01f\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-6c6f6a54c3f7809fc95954e44b15f284a282c01f" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-6c6f6a54c3f7809fc95954e44b15f284a282c01f_1">   1</a> </span><span class="LineAnchor" id="CA-6c6f6a54c3f7809fc95954e44b15f284a282c01f_1"></span><span class="anchor" id="line-1-12"></span><span class="ID">YfilesHR</span> = {<span class="String">'</span><span class="String">/path/to/file1_HIGHRES.nii.gz'</span>, <span class="String">'</span><span class="String">/path/to/file2_HIGHRES_?h.mgh'</span>};</span>
+<span class="line"><span class="LineNumber"><a href="#CA-6c6f6a54c3f7809fc95954e44b15f284a282c01f_2">   2</a> </span><span class="LineAnchor" id="CA-6c6f6a54c3f7809fc95954e44b15f284a282c01f_2"></span><span class="anchor" id="line-2-6"></span><span class="ID">flica_upsample</span>(<span class="ID">outdir</span>, <span class="ID">YfilesHR</span>, <span class="ID">Y</span>);</span>
+<span class="line"><span class="LineNumber"><a href="#CA-6c6f6a54c3f7809fc95954e44b15f284a282c01f_3">   3</a> </span><span class="LineAnchor" id="CA-6c6f6a54c3f7809fc95954e44b15f284a282c01f_3"></span><span class="anchor" id="line-3-5"></span><span class="Comment">%Note that Y is optional, and just used for error checking (to make sure the scaling is the same, etc):</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-6c6f6a54c3f7809fc95954e44b15f284a282c01f_4">   4</a> </span><span class="LineAnchor" id="CA-6c6f6a54c3f7809fc95954e44b15f284a282c01f_4"></span><span class="anchor" id="line-4-5"></span><span class="Comment">%flica_upsample(outdir, YfilesHR); % Would also work (but more error-prone).</span></span>
+</pre></div></div><span class="anchor" id="line-87"></span><span class="anchor" id="line-88"></span><p class="line862">This will produce new output <tt>.nii.gz</tt> and <tt>.mgh</tt> files at the higher spatial resolutions. <span class="anchor" id="line-89"></span><span class="anchor" id="line-90"></span><p class="line874">Finally, the rendering and report-generation is all done by a shell script: <span class="anchor" id="line-91"></span><span class="anchor" id="line-92"></span><span class="anchor" id="line-93"></span><span class="anchor" id="line-94"></span><span class="anchor" id="line-1-13"></span><div class="highlight matlab"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-d5ea132e3a02c47b41a19552e2d0c804b98e0b5c\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-d5ea132e3a02c47b41a19552e2d0c804b98e0b5c" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-d5ea132e3a02c47b41a19552e2d0c804b98e0b5c_1">   1</a> </span><span class="LineAnchor" id="CA-d5ea132e3a02c47b41a19552e2d0c804b98e0b5c_1"></span><span class="anchor" id="line-1-14"></span><span class="ID">srcpath</span> = <span class="ID">regexprep</span>(<span class="ID">mfilename</span>(<span class="String">'</span><span class="String">fullpath'</span>),<span class="ID">mfilename</span>,<span class="String">'</span><span class="String">'</span>); <span class="Comment">% /path/to/this/function/</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-d5ea132e3a02c47b41a19552e2d0c804b98e0b5c_2">   2</a> </span><span class="LineAnchor" id="CA-d5ea132e3a02c47b41a19552e2d0c804b98e0b5c_2"></span><span class="anchor" id="line-2-7"></span><span class="ID">dos</span>([<span class="ID">srcpath</span> <span class="String">'</span><span class="String">/flica_report.sh '</span> <span class="ID">outdir</span> <span class="String">'</span><span class="String"> _HR'</span>])</span>
+</pre></div></div><span class="anchor" id="line-95"></span><span class="anchor" id="line-96"></span><p class="line862">Where the <tt>_HR</tt> argument instructs it to use the high-res outputs rather than low-res outputs to generate the report.  Of course, this step could always be performed separately, from the command line -- this might be advisable if you want to use a different machine for Freesurfer rendering.  I suggest using a Mac, as Freesurfer rendering in Linux uses a screenshot method that breaks if you cover up the window while it's running. <span class="anchor" id="line-97"></span><span class="anchor" id="line-98"></span><p class="line862">For a more advanced example of how to set up your main script, see <tt>flica_lars484_WMGM.m</tt>.  This repeats the analysis of [Groves2012]. <span class="anchor" id="line-99"></span><span class="anchor" id="line-100"></span><p class="line867">
+<h2 id="File_outputs">File outputs</h2>
+<span class="anchor" id="line-101"></span><span class="anchor" id="line-102"></span><p class="line867"><strong>flica_save_everything.m</strong>: The main outputs are the spatial maps, contained in <tt>niftiOut_mi*.nii.gz</tt> and <tt>mriOut_mi*.nii.gz</tt>.  These are pseudo-Z-statistic images, indicating how high a voxel in the spatial map sticks out above the estimated noise floor.  The report is generated with hard-coded tresholding from Z=3 to Z=10.  The corresponding subject-courses are given in <tt>subjectCoursesOut.txt</tt> -- note that there's only of of these, because the subject-courses are shared across modalities.  Other useful information is contained in noiseStdevOut.txt and  <span class="anchor" id="line-103"></span><span class="anchor" id="line-104"></span><p class="line867"><strong>flica_posthoc_correlations.m</strong>: This generates the <tt>correlation_*.png</tt> files. <span class="anchor" id="line-105"></span><span class="anchor" id="line-106"></span><p class="line867"><strong>render_surfaces.sh</strong> generates the <tt>fsaverage*_in_all.png</tt> inflated surface renderings. <span class="anchor" id="line-107"></span><span class="anchor" id="line-108"></span><p class="line867"><strong>surfaces_to_volumes_all.sh</strong> converts the surface <tt>*.mgh</tt> files into <tt>*.nii.gz</tt> volume files.  Note that this currently assumes a linear transformation (<tt>FS_to_stdspace.mat</tt>) between Freesurfer's standard template (<tt>/vols/Data/oslo/fsaverages/fsaverage/mri/orig.mgz</tt>; convert this to NIFTI with <tt>mri_convert&nbsp;-i&nbsp;orig.mgz&nbsp;-o&nbsp;orig.nii.gz</tt>) and the MNI space that everything else is aligned to (<tt>$FSLDIR/data/standard/MNI152_T1_?mm.nii.gz</tt>).  This could explain some of the misalignment between area changes and VBM changes when the two are overlaid.  (Another possible suspect: misalignment introduced because of VBM's custom template?) <span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span><p class="line867"><strong>render_lightboxes_all.sh</strong> creates <tt>lightbox_*.png</tt> files from slices of the <tt>*.nii.gz</tt> files. <span class="anchor" id="line-111"></span><span class="anchor" id="line-112"></span><p class="line867"><strong>flica_html_report.sh</strong> collects all of the relevant <tt>*.png</tt> and <tt>*.txt</tt> files into a set of <tt>*.html</tt> pages that collectively make up the report. <span class="anchor" id="line-113"></span><span class="anchor" id="line-114"></span><p class="line874">TODO: Move the PNG and HTML files into a "report" directory. <span class="anchor" id="line-115"></span><span class="anchor" id="line-116"></span><p class="line867">
+<h2 id="Reading_the_report">Reading the report</h2>
+<span class="anchor" id="line-117"></span><span class="anchor" id="line-118"></span><p class="line862">In your output directory, there should be an <tt>index.html</tt> file.  Look at it! <span class="anchor" id="line-119"></span><span class="anchor" id="line-120"></span><p class="line874">First there are links to each of the components' separate pages.  There are also some all-in-one pages if you prefer -- but note that these can contain 100+ MB of images and might slow down your computer! <span class="anchor" id="line-121"></span><span class="anchor" id="line-122"></span><p class="line874">Below, there are some summary images.  The first shows the distribution of weight across different modalities, and should show that many of the components are shared between modalities. <span class="anchor" id="line-123"></span><span class="anchor" id="line-124"></span><p class="line874">Next the per-subject noise estimates should be reasonably flat, with NO values very close to zero (this would indicate a major problem).  It's okay if some of the data structure shows through (e.g. age), but I'd expect the overall variability to be quite small (less than 2:1 ratio between largest and smallest values).  There's one line per modality. <span class="anchor" id="line-125"></span><span class="anchor" id="line-126"></span><p class="line874">Then the "Components dominated by a single subject" plot shows how much of the energy (subject weight squared) comes from a single subject.  The lines show the a=0.05 corrected (solid) and uncorrected (dashed) thresholds, assuming normally-distributed subject loadings.  Note that the subject loadings aren't normally distributed so this isn't necessarily a problem if it's above threshold.  However, very large values indicate that this component is driven by a outlier subject (or subjects) and should be looked at carefully.  This can be cause by genuinely unusual brains or by analysis problems (e.g. severe registration failure). <span class="anchor" id="line-127"></span><span class="anchor" id="line-128"></span><p class="line874">Below these images, the report lists the most-significantly-correlated components for each EV in the posthoc regression analysis.  The p-values refer to significance of the linear regression and the significance of the quadratic term in a quadratic regression.  Bold and double-starred values are significant corrected across components and EVs. <span class="anchor" id="line-129"></span><span class="anchor" id="line-130"></span><p class="line862">On the individual component pages, each modality's spatial map is shown in a lightbox view.  The text above each image names the modality and gives its "weight" in this component, as a percentage.  The "prior" weight is fixed, so its fraction can be used of a rough estimate of how large the component is overall; a small (0-1%) prior weight means the component is very large, and a big (&gt;10%) prior weight indicates it wasn't that far off being eliminated.  Surface renderings are also shown for <tt>.mgh</tt> inputs (but so far I haven't found a good way to project volumetric results back onto the surface). <span class="anchor" id="line-131"></span><span class="anchor" id="line-132"></span><p class="line862">Below this we have the scatterplots between the component subject-loadings (y axis) and each of the EVs (x axis).  If there's a significant linear relationship the linear fit is plotted on the graph, and the quadratic fit is plotted if the quadratic term of that fit is significant.  The same definitions of significant are used as above, with a corresponding line equating to <tt>**</tt> and a dashed line equating to <tt>*</tt>. <span class="anchor" id="line-133"></span><span class="anchor" id="line-134"></span><p class="line867">
+<h2 id="Debugging">Debugging</h2>
+<span class="anchor" id="line-135"></span><span class="anchor" id="line-136"></span><p class="line874">If FLICA fails during the MATLAB part of the run, unfortunately it won't save the output and you'll lose the calculation results.  Hopefully the MATLAB output/error messages will help you figure out where you've gone wrong.  I think I've moved most of the error checks early in the code so it should crash quickly if you give it invalid inputs. <span class="anchor" id="line-137"></span><span class="anchor" id="line-138"></span><p class="line862">If the <tt>*.nii.gz</tt>, <tt>*.mgh</tt> and <tt>*.txt</tt> outputs have been saved, then it's an error with the report-generating script <tt>flica_report.sh</tt>.  Based on the output files you have you should be able to figure out what stage it is, and hopefully the error messages will make it easy to determine whether this is a configuration error (<a href="./FreeSurfer.html">FreeSurfer</a> not in the path, etc) or a bug in the scripts. <span class="anchor" id="line-139"></span><span class="anchor" id="line-140"></span><p class="line862">Assuming it's produced a report, have a look and see if there's anything interesting!  Don't expect spectacular results on &lt;100 subjects -- but hopefully you should get the basic effects (age, ICV, etc) and some artefacts. <span class="anchor" id="line-141"></span><span class="anchor" id="line-142"></span><p class="line862">Generally if you get lots of very noisy-looking components, something has gone wrong... generally overfitting.  This is diagnosed by looking at the subject noise plots on the index page; these should be reasonably flat, and any values close to zero indicate severe overfitting.  This can be caused by silly mistakes like including the same subject twice.  It can also be caused by having too many components... I generally suggest that #components &lt; #subjects/4.  Instead of solving the root problem, you can also reduce the overfitting by turning off per-subject noise estimation: use the <tt>opts.lambda_dims&nbsp;=&nbsp;'';</tt> option to do this. <span class="anchor" id="line-143"></span><span class="anchor" id="line-144"></span><span class="anchor" id="line-145"></span><p class="line867">
+<h1 id="References">References</h1>
+<span class="anchor" id="line-146"></span><span class="anchor" id="line-147"></span><p class="line874">AR Groves, SM Smith, AM Fjell, CK Tamnes, KB Walhovd, G Douaud, MW Woolrich, LT Westlye. <span class="anchor" id="line-148"></span>Benefits of multi-modal fusion analysis on a large-scale dataset: Life-span patterns of inter-subject variability in cortical morphometry and white matter microstructure. <span class="anchor" id="line-149"></span>Neuroimage, in press. <a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/22750721">PubMed #22750721</a> <a class="http" href="http://users.fmrib.ox.ac.uk/~adriang/home/files/Groves-NeuroImage2012-FinalManuscript.pdf">(preprint)</a> <span class="anchor" id="line-150"></span><span class="anchor" id="line-151"></span><p class="line874">AR Groves, CF Beckmann, SM Smith, MW Woolrich. <span class="anchor" id="line-152"></span>Linked independent component analysis for multimodal data fusion. <span class="anchor" id="line-153"></span>Neuroimage, Feb 2011, 54(3):2198-2217. <a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/20932919">PubMed #20932919</a> <a class="http" href="http://users.fmrib.ox.ac.uk/~adriang/home/files/Groves-NeuroImage2010-LinkedICA-FinalManuscript.pdf">(preprint)</a> <span class="anchor" id="line-154"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

@@ -1,0 +1,38 @@
+<link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+
+<IMG ALIGN=RIGHT hspace=20 vspace=20 SRC="fslview_dti.png">
+
+<h3>Viewing DTI Images</h3>
+      
+<p>Certain DTI image files (e.g., V1, the vector image showing the
+principal diffusion tensor direction) are multi-volume (4D), like FMRI
+image files. To view such images in <i>DTI Mode</i>, select the image
+in the <a href="imagelist.html">Image List</a> and press the <i>Image
+Info</i> button <img valign=middle src="info.png">.  This will open
+the <a href="imageinfo.html">Image Info</a> dialog.
+
+<p>In the <i>DTI Display options</i> section, change the value from
+<i>None</i> to <i>Lines </i> or <i>RGB</i>. When <i>Lines</i> is set
+the DTI vectors are expressed by the direction of many small
+lines.
+
+<p>When <i>RGB</i> is set the DTI vectors are expressed by colours
+where Red, Green and Blue represent the x,y and z diffusion directions
+respectively.  Colours such as purple are mixes of red, green and blue
+and therefore express vectors that have significant nonzero components
+in more than one of the x,y,z directions.
+
+<p>Also, when DTI Display is set to <i>RGB</i> the image intensity can
+be modulated, e.g. with the fractional anisotropy image. To do this,
+load the FA image into FSLView and then select this in the
+<i>Modulation</i> menu on the <a href="imageinfo.html">Image Info</a>
+dialog. The DTI image will now be modulated by the anisotropy
+image. Where anisotropy values are very low the DTI image will appear
+more transparent. Where the anisotropy are very high the DTI image
+will appear more opaque.  When the DTI image is highlighted in the
+<i>Image List</i> the transparency slider will split into 2 parts. The
+left hand slider controls the overall transparency. The right hand
+slider controls the amount of transparency change caused by the
+modulation. If the right hand slider is set to the furthest point on
+the right then the modulation will have no effect at all.
+

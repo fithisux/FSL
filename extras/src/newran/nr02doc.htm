@@ -1,0 +1,1011 @@
+<html>
+
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+<title>Newran - random number generator library</title>
+</head>
+
+<body BGCOLOR="#FFFFFF">
+
+<h1><a NAME="top"></a><font COLOR="#FF0000">Newran02A - a random number generator library</font></h1>
+<i>
+
+<p></i>30 August, 1998</p>
+
+<p>Copyright (C) 1989, 1995, 1998: R B Davies </p>
+
+<p><i>Permission is granted to use or distribute but not to sell</i>. 
+
+<ul>
+  <li><a HREF="#overview">Overview</a></li>
+  <li><a HREF="#starting">Getting started</a></li>
+  <li><a HREF="#description">Descriptions of the classes to be accessed by the user</a></li>
+  <li><a HREF="#supporting">Descriptions of the supporting classes</a></li>
+  <li><a HREF="#generating">Generating numbers from other distributions</a></li>
+  <li><a HREF="#other">Other people's code</a></li>
+  <li><a HREF="#files">Files included in this package</a></li>
+  <li><a HREF="#class">Class structure</a></li>
+  <li><a HREF="#todo">To do</a></li>
+  <li><a href="#history">History</a></li>
+  <li><a HREF="ol_doc.htm">To online documentation page</a></li>
+</ul>
+
+<p>This is a C++ library for generating sequences of random numbers from a wide variety of
+distributions. It is particularly appropriate for the situation where one requires
+sequences of identically distributed random numbers since the set up time for each type of
+distribution is relatively long but it is efficient when generating each new random
+number. The library includes <i>classes</i> for generating random numbers from a number of
+distributions and is easily extended to be able to generate random numbers from almost any
+of the standard distributions. </p>
+
+<p><i>Newran02</i>, fixes some bugs, includes more extensive testing, has been updated to
+be compatible with <i>newmat09</i> and includes some additional distributions. <em>Newran02A</em>
+includes an updated version of the exception library.</p>
+
+<p>Comments and bug reports to <a HREF="mailto:robertd@netlink.co.nz">mailto:robertd@netlink.co.nz</a>.
+</p>
+
+<p>For updates and notes see <a HREF="http://webnz.com/robert/">http://webnz.com/robert/</a>.
+</p>
+
+<p>&nbsp; </p>
+
+<h2><a NAME="overview"></a><font COLOR="#FF0000">Overview</font></h2>
+
+<p>The following are the classes for generating random numbers from particular
+distributions&nbsp; </p>
+
+<table BORDER="0" width="100%">
+  <tr>
+    <td VALIGN="TOP" width="20%"><a HREF="#uniform">Uniform</a></td>
+    <td VALIGN="TOP" width="80%">uniform distribution</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP" width="20%"><a HREF="#constant">Constant</a></td>
+    <td VALIGN="TOP" width="80%">return a constant</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP" width="20%"><a HREF="#exponential">Exponential</a></td>
+    <td VALIGN="TOP" width="80%">negative exponential distribution</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP" width="20%"><a HREF="#cauchy">Cauchy</a></td>
+    <td VALIGN="TOP" width="80%">Cauchy distribution</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP" width="20%"><a HREF="#normal">Normal</a></td>
+    <td VALIGN="TOP" width="80%">normal distribution</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP" width="20%"><a HREF="#chisq">ChiSq</a></td>
+    <td VALIGN="TOP" width="80%">non-central chi-squared distribution</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP" width="20%"><a HREF="#gamma">Gamma</a></td>
+    <td VALIGN="TOP" width="80%">gamma distribution</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP" width="20%"><a HREF="#pareto">Pareto</a></td>
+    <td VALIGN="TOP" width="80%">Pareto distribution</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP" width="20%"><a HREF="#poisson">Poisson</a></td>
+    <td VALIGN="TOP" width="80%">Poisson distribution</td>
+  </tr>
+  <tr>
+    <td width="20%"><a HREF="#binomial">Binomial</a></td>
+    <td width="80%">binomial distribution</td>
+  </tr>
+  <tr>
+    <td width="20%"><a HREF="#negativebinomial">NegativeBinomial</a></td>
+    <td width="80%">negative binomial distribution</td>
+  </tr>
+</table>
+
+<p>The following classes are available to the user for generating numbers from other
+distributions &nbsp; </p>
+
+<table BORDER="0" WIDTH="100%">
+  <tr>
+    <td VALIGN="top" width="20%"><a HREF="#posgenx">PosGenX</a></td>
+    <td VALIGN="top" width="80%">Positive random numbers with a decreasing density</td>
+  </tr>
+  <tr>
+    <td VALIGN="top" width="20%"><a HREF="#symgenx">SymGenX</a></td>
+    <td VALIGN="top" width="80%">Random numbers from a symmetric unimodal density</td>
+  </tr>
+  <tr>
+    <td VALIGN="top" width="20%"><a HREF="#asymgenx">AsymGenX</a></td>
+    <td VALIGN="top" width="80%">Random numbers from an asymmetric unimodal density</td>
+  </tr>
+  <tr>
+    <td VALIGN="top" width="20%"><a HREF="#posgen">PosGen</a></td>
+    <td VALIGN="top" width="80%">Positive random numbers with a decreasing density</td>
+  </tr>
+  <tr>
+    <td VALIGN="top" width="20%"><a HREF="#symgen">SymGen</a></td>
+    <td VALIGN="top" width="80%">Random numbers from a symmetric unimodal density</td>
+  </tr>
+  <tr>
+    <td VALIGN="top" width="20%"><a HREF="#asymgen">AsymGen</a></td>
+    <td VALIGN="top" width="80%">Random numbers from an asymmetric unimodal density</td>
+  </tr>
+  <tr>
+    <td VALIGN="top" width="20%"><a HREF="#discretegen">DiscreteGen</a></td>
+    <td VALIGN="top" width="80%">Random numbers from a discrete distribution</td>
+  </tr>
+  <tr>
+    <td VALIGN="top" width="20%"><a HREF="#sum">SumRandom</a></td>
+    <td VALIGN="top" width="80%">Sum and/or product of random numbers</td>
+  </tr>
+  <tr>
+    <td VALIGN="top" width="20%"><a HREF="#mixed">MixedRandom</a></td>
+    <td VALIGN="top" width="80%">Mixture of random numbers</td>
+  </tr>
+</table>
+
+<p>Each of these classes has the following member functions &nbsp; </p>
+
+<table BORDER="0" WIDTH="75%">
+  <tr>
+    <td VALIGN="TOP"><tt>Real Next()</tt></td>
+    <td VALIGN="TOP">Get a new random number</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP"><tt>char* Name()</tt></td>
+    <td VALIGN="TOP">Name of the distribution</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP"><tt>ExtReal Mean()</tt></td>
+    <td VALIGN="TOP">Mean of the distribution</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP"><tt>ExtReal Variance()</tt></td>
+    <td VALIGN="TOP">Variance of the distribution</td>
+  </tr>
+</table>
+
+<p>These 4 functions are declared <i>virtual</i> so it is easy to write simulation
+programs that can be run with different distributions. </p>
+
+<p><i>Real</i> is typedefed to be either <i>float</i> or <i>double</i>. See <a
+HREF="#customising">customising</a>. Note that <tt>Next()</tt> always returns a <i>Real</i>
+even for discrete distributions. </p>
+
+<p><a HREF="#extreal">ExtReal</a> is a class which is, in effect either a <i>Real</i> or
+one of the following: <i>PlusInfinity</i>, <i>MinusInfinity</i>, <i>Indefinite</i> or <i>Missing</i>.
+I use <i>ExtReal</i> so that I can return infinite or indefinite values for the mean or
+variance of a distribution. </p>
+
+<p>There are two static functions in the class <i>Random</i>. </p>
+
+<pre>&nbsp;&nbsp; void Random::Set(double)</pre>
+
+<p>must be called with an argument between 0 and 1 to set up the base random number
+generator before <tt>Next()</tt> is called in any class. </p>
+
+<pre>&nbsp;&nbsp; double Random::Get()</pre>
+
+<p>returns the current value of the seed. </p>
+
+<p>There are two classes for doing combinations and permutations. <br>
+&nbsp; </p>
+
+<table BORDER="0" WIDTH="100%">
+  <tr>
+    <td width="25%"><a HREF="#permutation">RandomPermutation</a></td>
+    <td width="75%">Draw numbers without replacement</td>
+  </tr>
+  <tr>
+    <td width="25%"><a HREF="#combination">RandomCombination</a></td>
+    <td width="75%">Draw numbers without replacement and sort</td>
+  </tr>
+</table>
+
+<p>Further details of all these classes including the constructors are given <a
+HREF="#description">below</a>. </p>
+
+<p>&nbsp; </p>
+
+<h2><a NAME="starting"></a><font COLOR="#FF0000">Getting started</font></h2>
+
+<h3><a NAME="customising"></a><font COLOR="#FF0000">Customising</font></h3>
+
+<p>The file include.h sets a variety of options including several compiler dependent
+options. You may need to edit include.h to get the options you require. If you are using a
+compiler different from one I have worked with you may have to set up a new section in
+include.h appropriate for your compiler. </p>
+
+<p>Borland, Turbo, Gnu, Microsoft and Watcom are recognised automatically. If none of
+these are recognised a default set of options is used. These are fine for AT&amp;T, HPUX
+and Sun C++. If you using a compiler I don't know about, you may have to write a new set
+of options. </p>
+
+<p>There is an option in include.h for selecting whether you use compiler supported
+exceptions, simulated exceptions, or disable exceptions. Use the option for compiler
+supported exceptions if and only if you have set the option on your compiler to recognise
+exceptions. Disabling exceptions sometimes helps with compilers that are incompatible with
+my exception simulation scheme. <br>
+&nbsp; </p>
+
+<table BORDER="1" WIDTH="100%">
+  <tr>
+    <td ALIGN="CENTER" WIDTH="100%">This version of <i>newran</i> does <i>not</i> do memory
+    clean-up with the <i>simulated</i> exceptions.</td>
+  </tr>
+</table>
+
+<p>If your compiler recognises <i>bool</i> as required by the standard activate the
+statement <tt>#define bool_LIB</tt>. This will deactivate my Boolean class. (I have
+included a command in the make file to do this automatically with Gnu G++).</p>
+
+<p>Activate the appropriate statement to make the element type <i>Real</i> to mean <i>float</i>
+or <i>double</i>. </p>
+
+<p>Activate the <i>namespace</i> option if your want to use namespaces and have a compiler
+that <i>really</i> does support them. </p>
+
+<h3><font COLOR="#FF0000">Compiling</font></h3>
+
+<p>You will need to compile newran.cpp, myexcept.cpp and extreal.cpp and link the
+resulting object files to your programs. Your source files which access <i>newran</i> will
+need to have newran.h as an include file. </p>
+
+<h3><font COLOR="#FF0000">Compilers</font></h3>
+
+<p>I have tested newran02 with the following compilers (all PC ones in 32 bit console
+mode)</p>
+
+<table border="0" width="75%">
+  <tr>
+    <td width="50%" valign="top">Borland 5.01A</td>
+    <td width="50%" valign="top">OK</td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">Borland 3.1</td>
+    <td width="50%" valign="top">See notes on 16 bit under <a href="#testing">testing</a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">Microsoft 5.0</td>
+    <td width="50%" valign="top">OK</td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">Watcom 10A</td>
+    <td width="50%" valign="top">OK</td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">Sun CC 4.2</td>
+    <td width="50%" valign="top">OK</td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">Gnu G++ 2.7.2 (Linux), 2.8.0 (Sun)</td>
+    <td width="50%" valign="top">OK</td>
+  </tr>
+</table>
+
+<p>I have included make files for Watcom 10A, CC and Gnu G++. See <a href="#files">files</a>
+section.</p>
+
+<h3><a name="testing"></a><font COLOR="#FF0000">Testing</font></h3>
+
+<p>The files tryrand.cpp, tryrand1.cpp, tryrand2.cpp, tryrand3.cpp, tryrand4.cpp, hist.cpp
+run the generators in the library and print histograms of the resulting distributions.
+Sample means and variances are also calculated and can be compared with the population
+values. The correct results are in tryrand.txt (although there might be slight differences
+in the format of the output from different compilers). <br>
+&nbsp; </p>
+
+<table BORDER="1" WIDTH="100%">
+  <tr>
+    <td WIDTH="100%">If you are compiling on a PC with a 16 bit compiler you will need to set <i>n_large</i>
+    to be 8000 rather than 1000000 and <i>n</i> to 8000 rather than 200000 in tryrand.cpp.
+    This will change the output from the test program from that given in tryrand.txt although
+    the general appearance should be the same.</td>
+  </tr>
+</table>
+
+<p>The test program tryrand.cpp includes a simple test for memory leaks. This is valid for
+only some compilers. It seems to work for Borland C++ in console mode but not for Gnu G++
+or Microsoft C++, where it almost always (presumably incorrectly) suggests an error. </p>
+
+<p>&nbsp; </p>
+
+<h2><a NAME="description"></a><font COLOR="#FF0000">Descriptions of the classes to be
+accessed by the user:</font></h2>
+
+<h3><a NAME="random"></a><font COLOR="#FF0000">Random:</font></h3>
+
+<p>This is the basic uniform random number generator, used to drive all the others. The
+Lewis-Goodman-Miller algorithm is used with Marsaglia mixing. While not perfect, and now
+superseded, the LGM generator has given me acceptable results in a wide variety of
+simulations. See <i>Numerical Recipes in C</i> by Press, Flannery, Teukolsky, Vetterling
+published by the Cambridge University Press for details. The LGM generator does pass the
+Marsaglia <i><a HREF="http://stat.fsu.edu/~geo/diehard.html">diehard</a></i> tests when
+you include the mixing. (It doesn't pass without the mixing). Nevertheless it should be
+upgraded. Ideally the basic generator should be recoded in assembly language to give the
+maximum speed to all the generators in this package. You can access the numbers directly
+using <tt>Next()</tt> but I suggest you use class <a HREF="#uniform">Uniform</a> for
+uniform random numbers and reserve Random for setting the starting seed and as the base
+class for the random number generators. </p>
+
+<h3><a NAME="uniform"></a><font COLOR="#FF0000">Uniform:</font></h3>
+
+<p>Return a uniform random number from the range (0, 1). The constructor has no
+parameters. For example </p>
+
+<pre>&nbsp;&nbsp; Uniform U;
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; U.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<p>prints a column of 100 numbers drawn from a uniform distribution. </p>
+
+<h3><a NAME="constant"></a><font COLOR="#FF0000">Constant:</font></h3>
+
+<p>This returns a constant. The constructor takes one <i>Real</i> parameter; the value of
+the constant to be returned. So </p>
+
+<pre>&nbsp;&nbsp; Constant C(5.5);
+&nbsp;&nbsp; cout &lt;&lt; C.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<p>prints 5.5. </p>
+
+<h3><a NAME="exponential"></a><font COLOR="#FF0000">Exponential:</font></h3>
+
+<p>This generates random numbers with density <tt>exp(-x)</tt> for <tt>x&gt;=0</tt>. The
+constructor takes no arguments. </p>
+
+<pre>&nbsp;&nbsp; Exponential E;
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; E.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="cauchy"></a><font COLOR="#FF0000">Cauchy:</font></h3>
+
+<p>Generates random numbers from a standard Cauchy distribution. The constructor takes no
+parameters. </p>
+
+<pre>&nbsp;&nbsp; Cauchy C;
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; C.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="normal"></a><font COLOR="#FF0000">Normal:</font></h3>
+
+<p>Generates standard normal random numbers. The constructor has no arguments. This class
+has been augmented to ensure only one copy of the arrays generated by the constructor
+exist at any given time. That is, if the constructor is called twice (before the
+destructor is called) only one copy of the arrays is generated. </p>
+
+<pre>&nbsp;&nbsp; Normal Z;
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; Z.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="chisq"></a><font COLOR="#FF0000">ChiSq:</font></h3>
+
+<p>Non-Central chi-squared distribution. The method uses ChiSq1 to generate the
+non-central part and Gamma2 or Exponential to generate the central part. The constructor
+takes as arguments the number of degrees of freedom <tt>(&gt;=1)</tt> and the
+non-centrality parameter (omit if zero). </p>
+
+<pre>&nbsp;&nbsp; int df = 10; Real noncen = 2.0;
+&nbsp;&nbsp; ChiSq CS(df, noncen);
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; CS.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="gamma"></a><font COLOR="#FF0000">Gamma:</font></h3>
+
+<p>Gamma distribution. The constructor takes the shape parameter as argument. Uses Gamma1,
+Gamma2 or Exponential. </p>
+
+<pre>&nbsp;&nbsp; Real shape = 0.75;
+&nbsp;&nbsp; Gamma G(shape);
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; G.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="pareto"></a><font COLOR="#FF0000">Pareto:</font></h3>
+
+<p>Pareto distribution. The constructor takes the shape parameter as argument. I follow
+the definition of Kotz and Johnson's <i>Continuous univariate distributions 1</i>, chapter
+19, page 234, with <i>k</i> = 1. The generator uses a power transform of a uniform random
+number. </p>
+
+<pre>&nbsp;&nbsp; Real shape = 0.75;
+&nbsp;&nbsp; Pareto P(shape);
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; P.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="poisson"></a><font COLOR="#FF0000">Poisson:</font></h3>
+
+<p>Poisson distribution: uses Poisson1 or Poisson2. Constructor takes the mean as its
+argument. </p>
+
+<pre>&nbsp;&nbsp; Real mean = 5.0;
+&nbsp;&nbsp; Poisson P(mean);
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; (int)P.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="binomial"></a><font COLOR="#FF0000">Binomial:</font></h3>
+
+<p>Binomial distribution: uses Binomial1 or Binomial2. Constructor takes <i>n</i> and <i>p</i>
+as its arguments. </p>
+
+<pre>&nbsp;&nbsp; int n = 50; Real p = 0.25;
+&nbsp;&nbsp; Binomial B(n, p);
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; (int)B.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="negativebinomial"></a><font COLOR="#FF0000">NegativeBinomial:</font></h3>
+
+<p>Negative binomial distribution. Constructor takes <i>N</i> and <i>P</i> as its
+arguments. I use the notation of Kotz and Johnson's <i>Discrete distributions</i>. Some
+people use <i>p</i> = 1/(<i>P</i>+1) in place of the second parameter. </p>
+
+<pre>&nbsp;&nbsp; Real N = 12.5; Real P = 3.0;
+&nbsp;&nbsp; NegativeBinomial NB(N, P);
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; (int)NB.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="posgenx"></a><font COLOR="#FF0000">PosGenX:</font></h3>
+
+<p>This uses an arbitrary density satisfying the previous conditions to generate random
+numbers from that density. Suppose <tt>Real pdf(Real)</tt> is the density. Then use <tt>pdf</tt>
+as the argument of the constructor. For example </p>
+
+<pre>&nbsp;&nbsp; PosGenX P(pdf);
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; P.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<table BORDER="1" WIDTH="100%">
+  <tr>
+    <td WIDTH="100%">Note that the probability density <i>pdf</i> must drop to exactly 0 for
+    the argument large enough. For example, include a statement in the program for <i>pdf</i>
+    that, if the value is less than 1.0E-15, then return 0.</td>
+  </tr>
+</table>
+
+<h3><a NAME="symgenx"></a><font COLOR="#FF0000">SymGenX:</font></h3>
+
+<p>This corresponds to PosGenX for symmetric distributions. <br>
+&nbsp; </p>
+
+<table BORDER="1" WIDTH="100%">
+  <tr>
+    <td WIDTH="100%">Note that the probability density <i>pdf</i> must drop to exactly 0 for
+    the argument large enough. For example, include a statement in the program for <i>pdf</i>
+    that, if the value is less than 1.0E-15, then return 0.</td>
+  </tr>
+</table>
+
+<h3><a NAME="asymgenx"></a><font COLOR="#FF0000">AsymGenX:</font></h3>
+
+<p>Corresponds to PosGenX. The arguments of the constructor are the name of the density
+function and the location of the mode. </p>
+
+<pre>&nbsp;&nbsp; Real pdf(Real);
+&nbsp;&nbsp; Real mode;
+&nbsp;&nbsp; .....
+&nbsp;&nbsp; AsymGenX X(pdf, mode);
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; X.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<table BORDER="1" WIDTH="100%">
+  <tr>
+    <td WIDTH="100%">Note that the probability density <i>pdf</i> must drop to exactly 0 for
+    the argument large (large positive and large negative) enough. For example, include a
+    statement in the program for <i>pdf</i> that, if the value is less than 1.0E-15, then
+    return 0.</td>
+  </tr>
+</table>
+
+<h3><a NAME="posgen"></a><font COLOR="#FF0000">PosGen:</font></h3>
+
+<p>PosGen is not used directly. It is used as a base class for generating a random number
+from an arbitrary probability density <tt>p(x)</tt>. <tt>p(x)</tt> must be non-zero only
+for <tt>x&gt;=0</tt>, be monotonically decreasing for <tt>x&gt;=0</tt>, and be finite. For
+example, <tt>p(x)</tt> could be <tt>exp(-x)</tt> for <tt>x&gt;=0</tt>. </p>
+
+<p>The method is to cover the density in a set of rectangles of equal area as in the
+diagram (indicated by <tt>---</tt>). </p>
+
+<pre>&nbsp;&nbsp; <b>|
+</b>&nbsp;&nbsp; <b>x
+</b>&nbsp;&nbsp; <b>|xx</b>------
+&nbsp;&nbsp; <b>|</b>&nbsp; <b>xx</b>&nbsp;&nbsp;&nbsp; |
+&nbsp;&nbsp; <b>|</b>&nbsp;&nbsp;&nbsp; <b>xxx</b> |
+&nbsp;&nbsp; <b>|</b>.......<b>xxx</b>---------
+&nbsp;&nbsp; <b>|</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <b>xxxx</b>&nbsp;&nbsp;&nbsp;&nbsp; |
+&nbsp;&nbsp; <b>|</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp; <b>xxxx</b> |
+&nbsp;&nbsp; <b>|</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |.........<b>xxxxx</b>------------
+&nbsp;&nbsp; <b>|</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; <b>xxxxx</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+&nbsp;&nbsp; <b>|</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>xxxxxx</b> |
+&nbsp;&nbsp; <b>|</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |..............<b>xxxxxx</b>----------------------
+&nbsp;&nbsp; <b>|</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; <b>xxxxxxx</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+&nbsp;&nbsp; <b>|</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>xxxxxxx</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+&nbsp;&nbsp; <b>|</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>xxxxxxxx</b>|
+&nbsp;&nbsp; <b>+===========================================================================</b></pre>
+
+<p>The numbers are generated by generating a pair of numbers uniformly distributed over
+these rectangles and then accepting the <i>X</i> coordinate as the next random number if
+the pair corresponds to a point below the density function. The acceptance can be done in
+two stages, the first being whether the number is below the dotted line. This means that
+the density function need be checked only very occasionally and on the average only just
+over 3 uniform random numbers are required for each of the random numbers produced by this
+generator. </p>
+
+<p>See PosGenX or Exponential for the method of deriving a class to generate random
+numbers from a given distribution. <br>
+&nbsp; </p>
+
+<table BORDER="1" WIDTH="100%">
+  <tr>
+    <td WIDTH="100%">Note that the probability density <i>p(x)</i> must drop to exactly 0 for
+    the argument, <i>x</i>, large enough. For example, include a statement in the program for <i>p(x)</i>
+    that, if the value is less than 1.0E-15, then return 0.</td>
+  </tr>
+</table>
+
+<h3><a NAME="symgen"></a><font COLOR="#FF0000">SymGen:</font></h3>
+
+<p>SymGen is a modification of PosGen for unimodal distributions symmetric about the
+origin, such as the standard normal. </p>
+
+<h3><a NAME="asymgen"></a><font COLOR="#FF0000">AsymGen:</font></h3>
+
+<p>A general random number generator for unimodal distributions following the method used
+by PosGen. The constructor takes one argument: the location of the mode of the
+distribution. </p>
+
+<h3><a NAME="discretegen"></a><font COLOR="#FF0000">DiscreteGen:</font></h3>
+
+<p>This is for generating random numbers taking just a finite number of values. There are
+two alternative forms of the constructor: </p>
+
+<pre>&nbsp;&nbsp; DiscreteGen D(n,prob);
+&nbsp;&nbsp; DiscreteGen D(n,prob,val);</pre>
+
+<p>where <tt>n</tt> is an integer giving the number of values, <tt>prob</tt> a Real array
+of length <tt>n</tt> giving the probabilities and <tt>val</tt> a Real array of length <tt>n</tt>
+giving the set of values that are generated. If <tt>val</tt> is omitted the values are <tt>0,1,...,n-1</tt>.
+</p>
+
+<p>The method requires two uniform random numbers for each number it produces. This method
+is described by Kronmal and Peterson, <i>American Statistician</i>, 1979, Vol 33, No 4,
+pp214-218. </p>
+
+<h3><a NAME="sum"></a><font COLOR="#FF0000">SumRandom:</font></h3>
+
+<p>This is for building a random number generator as a linear or multiplicative
+combination of existing random number generators. Suppose <tt>RV1</tt>, <tt>RV2</tt>, <tt>RV3</tt>,
+<tt>RV4</tt> are random number generators defined with constructors given above and <tt>r1</tt>,
+<tt>r2</tt>, <tt>r0</tt> are Reals and <tt>i1</tt>, <tt>i3</tt> are integers. </p>
+
+<p>Then the generator <tt>S</tt> defined by something like </p>
+
+<pre>&nbsp;&nbsp; SumRandom S = RV1(i1)*r1 - RV2*r2 + RV3(i3)*RV4 + r0;</pre>
+
+<p>has the obvious meaning. <tt>RV1(i1)</tt> means that the sum of <tt>i1</tt> independent
+values from <tt>RV1</tt> should be used. Note that <tt>RV1*RV1</tt> means the product of
+two independent numbers generated from <tt>RV1</tt>. Remember that <tt>SumRandom</tt> is
+slow if the number of terms or copies is large. I support the four arithmetic operators <tt>+</tt>,
+<tt>-</tt>, <tt>*</tt> and <tt>/</tt> but cannot calculate the means and variances if you
+divide by a random variable. </p>
+
+<p>Use <tt>SumRandom</tt> to quickly set up simple combinations of the existing
+generators. But if the combination is going to be used extensively, then it is probably
+better to write a new class to do this. </p>
+
+<p>Example: <i>normal</i> with mean = 10, standard deviation = 5: </p>
+
+<pre>&nbsp;&nbsp; Normal N;
+&nbsp;&nbsp; SumRandom Z = 10 + 5 * N;
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; Z.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<p>Example: <i>F</i> distribution with <i>m</i> and <i>n</i> degrees of freedom: </p>
+
+<pre>&nbsp;&nbsp; int m, n;
+&nbsp;&nbsp; ... put values in m and n
+&nbsp;&nbsp; ChiSq Num(m); ChiSq Den(n);
+&nbsp;&nbsp; SumRandom F = (double)n/(double)m * Num / Den;
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; F.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="mixed"></a><font COLOR="#FF0000">MixedRandom:</font></h3>
+
+<p>This is for mixtures of distributions. Suppose <tt>rv1</tt>, <tt>rv2</tt>, <tt>rv3</tt>
+are random number generators and <tt>p1</tt>, <tt>p2</tt>, <tt>p3</tt> are Reals summing
+to 1. Then the generator <tt>M</tt> defined by </p>
+
+<pre>&nbsp;&nbsp; MixedRandom M = rv1(p1) + rv2(p2) + rv3(p3);</pre>
+
+<p>produces a random number generator with selects its next random number from <tt>rv1</tt>
+with probability <tt>p1</tt>, <tt>rv2</tt> with probability <tt>p2</tt>, <tt>rv3</tt> with
+probability <tt>p3</tt>. </p>
+
+<p>Alternatively one can use the constructor </p>
+
+<pre>&nbsp;&nbsp; MixedRandom M(n, prob, rv);</pre>
+
+<p>where <tt>n</tt> is the number of distributions in the mixture, <tt>prob</tt> the Real
+array of probabilities, <tt>rv</tt> an array of pointers to random variables. </p>
+
+<p>Normal with outliers: </p>
+
+<pre>&nbsp;&nbsp; Normal N; Cauchy C;
+&nbsp;&nbsp; MixedRandom Z = N(0.9) + C(0.1);
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; Z.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<p>or: </p>
+
+<pre>&nbsp;&nbsp; Normal N;
+&nbsp;&nbsp; MixedRandom Z = N(0.9) + (10*N)(0.1);
+&nbsp;&nbsp; for (int i=0; i&lt;100; i++) cout &lt;&lt; Z.Next() &lt;&lt; &quot;\n&quot;;</pre>
+
+<h3><a NAME="permutation"></a><font COLOR="#FF0000">RandomPermutation:</font></h3>
+
+<p>To draw <tt>M</tt> numbers without replacement from <tt>start, start+1, ..., start+N-1</tt>
+use </p>
+
+<pre>&nbsp;&nbsp; RandomPermutation RP;
+&nbsp;&nbsp; RP.Next(N, M, p, start);</pre>
+
+<p>where <tt>p</tt> is an <tt>int*</tt> pointing to an array of length <tt>M</tt> or
+longer. Results are returned to that array. </p>
+
+<pre>&nbsp;&nbsp; RP.Next(N, p, start);</pre>
+
+<p>assumes <tt>M = N</tt>. The parameter, <tt>start<font FACE="Times New Roman">,</font></tt>
+has a default value of 0. </p>
+
+<p>The method is rather inefficient if <tt>N</tt> is very large and <tt>M</tt> is much
+smaller. </p>
+
+<h3><a NAME="combination"></a><font COLOR="#FF0000">RandomCombination:</font></h3>
+
+<p>To draw <tt>M</tt> numbers without replacement from <tt>start, start+1, ..., start+N-1</tt>
+and then sort use </p>
+
+<pre>&nbsp;&nbsp; RandomCombination RC;
+&nbsp;&nbsp; RC.Next(N, M, p, start);</pre>
+
+<p>where <tt>p</tt> is an <tt>int*</tt> pointing to an array of length <tt>M</tt> or
+longer. Results are returned to that array. </p>
+
+<pre>&nbsp;&nbsp; RC.Next(N, p, start);</pre>
+
+<p>assumes <tt>M = N</tt>. The parameter, <tt>start<font FACE="Times New Roman">,</font></tt>
+has a default value of 0. </p>
+
+<p>The method is rather inefficient if <tt>N</tt> is large. A better approach for large <tt>N</tt>
+would be to generate the sorted combination directly. This would also provide a better way
+of doing permutations with large <tt>N</tt>, small <tt>M</tt>. </p>
+
+<h3><a NAME="extreal"></a><font COLOR="#FF0000">ExtReal</font></h3>
+
+<p>A class consisting of a Real and an enumeration, <tt>EXT_REAL_CODE</tt>, taking the
+following values: 
+
+<ul>
+  <li>Finite</li>
+  <li>PlusInfinity</li>
+  <li>MinusInfinity</li>
+  <li>Indefinite</li>
+  <li>Missing</li>
+</ul>
+
+<p>The arithmetic functions <tt>+</tt>, <tt>-</tt>, <tt>*</tt>, <tt>/</tt> are defined in
+the obvious ways, as is <tt>&lt;&lt;</tt> for printing. The constructor can take either a
+Real or a value of <tt>EXT_REAL_CODE</tt> as an argument. If there is no argument the
+object is given the value <i>Missing</i>. Member function <tt>IsReal()</tt> returns <i>true</i>
+if the enumeration value is <i>Finite</i> and in this case value of the Real can be found
+with <tt>Value()</tt>. The enumeration value can be found with member function <tt>Code()</tt>.
+</p>
+
+<p><i>ExtReal</i> is used at the type for values returned from the <i>Mean</i> and <i>Variance</i>
+member functions since these values may be infinite, indefinite or missing. </p>
+
+<p>&nbsp; </p>
+
+<h2><a NAME="supporting"></a><font COLOR="#FF0000">Descriptions of the supporting classes:</font></h2>
+
+<h3><font COLOR="#FF0000">ChiSq1:</font></h3>
+
+<p>Non-central chi-squared with one degree of freedom. Used as part of ChiSq. </p>
+
+<h3><font COLOR="#FF0000">Gamma1:</font></h3>
+
+<p>This generates random numbers from a gamma distribution with shape parameter <tt>alpha
+&lt; 1</tt>. Because the density is infinite at <i>x</i> = 0 a power transform is
+required. The constructor takes <tt>alpha</tt> as an argument. </p>
+
+<h3><font COLOR="#FF0000">Gamma2:</font></h3>
+
+<p>Gamma distribution for the shape parameter, <tt>alpha</tt>, greater than 1. The
+constructor takes <tt>alpha</tt> as the argument. </p>
+
+<h3><font COLOR="#FF0000">Poisson1:</font></h3>
+
+<p>Poisson distribution; derived from AsymGen. The constructor takes the mean as the
+argument. Used by Poisson for values of the mean greater than 10. </p>
+
+<h3><font COLOR="#FF0000">Poisson2:</font></h3>
+
+<p>Poisson distribution with mean less than or equal to 10. Uses DiscreteGen. Constructor
+takes the mean as its argument. </p>
+
+<h3><font COLOR="#FF0000">Binomial1:</font></h3>
+
+<p>Binomial distribution; derived from AsymGen. Used by Binomial for <tt>n &gt;= 40</tt>.
+Constructor takes <i>n</i> and <i>p</i> as arguments. </p>
+
+<h3><font COLOR="#FF0000">Binomial2:</font></h3>
+
+<p>Binomial distribution with <tt>n &lt; 40</tt>. Uses DiscreteGen. Constructor takes <i>n</i>
+and <i>p</i> as arguments. </p>
+
+<h3><font COLOR="#FF0000">AddedRandom, SubtractedRandom, MultipliedRandom, ShiftedRandom,
+ReverseShiftedRandom, ScaledRandom, RepeatedRandom, SelectedRandom, AddedSelectedRandom:</font></h3>
+
+<p>These are used by SumRandom and MixedRandom. </p>
+
+<p>&nbsp; </p>
+
+<h2><a NAME="generating"></a><font COLOR="#FF0000">Generating numbers from other
+distributions:</font></h2>
+
+<table BORDER="0" CELLSPACING="4" CELLPADDING="4">
+  <tr>
+    <th ALIGN="LEFT" VALIGN="TOP"><b>Distribution type</b></th>
+    <th ALIGN="LEFT" VALIGN="TOP"><b>Method</b></th>
+    <th ALIGN="LEFT" VALIGN="TOP"><b>Example</b></th>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Continuous finite unimodal density (no parameters, can calculate density)</td>
+    <td VALIGN="TOP">Use <a HREF="#posgenx">PosGenX</a>, <a HREF="#symgenx">SymGenX</a> or <a
+    HREF="#asymgenx">AsymGenX</a>.</td>
+    <td VALIGN="TOP"></td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Continuous finite unimodal density (with parameters, can calculate
+    density)</td>
+    <td VALIGN="TOP">Derive a new class from <a HREF="#posgen">PosGen</a>, <a HREF="#symgen">SymGen</a>
+    or <a HREF="#asymgen">AsymGen</a>, over-ride <i>Density</i>.</td>
+    <td VALIGN="TOP">Gamma2</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Can calculate inverse of distribution</td>
+    <td VALIGN="TOP">Transform <a HREF="#random">uniform random</a> number.</td>
+    <td VALIGN="TOP">Pareto</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Transformation of supported random number</td>
+    <td VALIGN="TOP">Derive a new class from the existing class</td>
+    <td VALIGN="TOP">ChiSq1</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Transformation of several random numbers</td>
+    <td VALIGN="TOP">Derive new class from <a HREF="#random">Random</a>; generate the new
+    random number from the existing generators.</td>
+    <td VALIGN="TOP">ChiSq</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Density with infinite singularity</td>
+    <td VALIGN="TOP">Transform a random variable generated by <a HREF="#posgen">PosGen</a>, <a
+    HREF="#symgen">SymGen</a> or <a HREF="#asymgen">AsymGen</a>.</td>
+    <td VALIGN="TOP">Gamma1</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Distribution with several modes</td>
+    <td VALIGN="TOP">Breakdown into a <a HREF="#mixed">mixture</a> of unimodal distributions.</td>
+    <td VALIGN="TOP"></td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Linear or quadratic combination of supported random numbers</td>
+    <td VALIGN="TOP">Use <a HREF="#sum">SumRandom</a>.</td>
+    <td VALIGN="TOP"></td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Mixture of supported random numbers</td>
+    <td VALIGN="TOP">Use <a HREF="#mixed">MixedRandom</a>.</td>
+    <td VALIGN="TOP"></td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Discrete distribution (&lt; 100 possible values)</td>
+    <td VALIGN="TOP">Use <a HREF="#discretegen">DiscreteGen</a>.</td>
+    <td VALIGN="TOP">Poisson2</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">Discrete distribution (many possible values)</td>
+    <td VALIGN="TOP">Use <a HREF="#posgen">PosGen</a>, <a HREF="#symgen">SymGen</a> or <a
+    HREF="#asymgen">AsymGen</a>.</td>
+    <td VALIGN="TOP">Poisson1</td>
+  </tr>
+</table>
+
+<p>&nbsp; </p>
+
+<h2><a NAME="other"></a><font COLOR="#FF0000">Other people's code:</font></h2>
+
+<p>The gamma function and Shell sort routines are adapted from <i>Numerical Recipes in C</i>
+by Press, Flannery, Teukolsky, Vetterling published by the Cambridge University Press. </p>
+
+<p>&nbsp; </p>
+
+<h2><a NAME="files"></a><font COLOR="#FF0000">Files included in this package:</font></h2>
+
+<table BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%">
+  <tr>
+    <td VALIGN="TOP">readme.txt</td>
+    <td VALIGN="TOP">readme file</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">newran.htm</td>
+    <td VALIGN="TOP">this file</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">newran.h</td>
+    <td VALIGN="TOP">header file for <i>newran</i></td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">newran.cpp</td>
+    <td VALIGN="TOP">main code file</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">extreal.h</td>
+    <td VALIGN="TOP">header file for <i>extended reals</i></td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">extreal.cpp</td>
+    <td VALIGN="TOP">code file for <i>extended reals</i></td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">boolean.h</td>
+    <td VALIGN="TOP">definition of <i>bool</i></td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">include.h</td>
+    <td VALIGN="TOP">option file</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">tryrand.cpp</td>
+    <td VALIGN="TOP">test file</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">tryrand1.cpp</td>
+    <td VALIGN="TOP">called by tryrand - histograms of simple examples</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">tryrand2.cpp</td>
+    <td VALIGN="TOP">called by tryrand - histograms of advanced examples</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">tryrand3.cpp</td>
+    <td VALIGN="TOP">called by tryrand - statistical tests</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">tryrand4.cpp</td>
+    <td VALIGN="TOP">called by tryrand - test permutations</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">hist.cpp</td>
+    <td VALIGN="TOP">called by tryrand - draw histogram</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">tryrand.txt</td>
+    <td VALIGN="TOP">output from tryrand</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">nrcc.mak</td>
+    <td VALIGN="TOP">make file for CC compiler</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">nrgnu.mak</td>
+    <td VALIGN="TOP">make file for gnu G++ compiler</td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP">nrwat.mak</td>
+    <td VALIGN="TOP">makefile for Watcom 32 bit 10a compiler</td>
+  </tr>
+</table>
+
+<p>&nbsp; </p>
+
+<h2><a NAME="class"></a><font COLOR="#FF0000">Class structure:</font></h2>
+
+<p>The following diagram gives the class hierarchy of the package. </p>
+
+<pre><font SIZE="-1"><b>ExtReal</b>.......................... <i>Extended real numbers
+
+</i><b>Random</b>........................... Uniform random number generator
+&nbsp;|
+&nbsp;+---Constant.................... Return a constant
+&nbsp;|
+&nbsp;+---PosGen...................... Used by PosGenX etc
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---PosGenX................ Positive random #s from decreasing density
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---Exponential............ Negative exponential rng
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---Gamma1................. Used by Gamma (shape parameter &lt; 1)
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---SymGen................. Used by SymGenX etc
+&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +---SymGenX........... Random numbers from symmetric density
+&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +---Cauchy............ Cauchy random number generator
+&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +---Normal............ Standard normal random number generator
+&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +---ChiSq1....... Used by ChiSq (one df)
+&nbsp;|&nbsp;
+&nbsp;+---AsymGen..................... Used by AsymGenX etc
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---AsymGenX............... Random numbers from asymmetric density
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---Poisson1............... Used by Poisson (mean &gt; 8)
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---Binomial1.............. Used by Binomial (n &gt;= 40)
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---NegativeBinomial....... Negative binomial random number generator
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---Gamma2................. Used by Gamma (shape parameter &gt; 1)
+&nbsp;|
+&nbsp;+---ChiSq....................... Non-central chi-squared rng
+&nbsp;|
+&nbsp;+---Gamma....................... Gamma random number generator
+&nbsp;|
+&nbsp;+---Pareto...................... Pareto random number generator
+&nbsp;|
+&nbsp;+---DiscreteGen................. Discrete random number generator
+&nbsp;|
+&nbsp;+---Poisson2.................... Used by Poisson (mean &lt;= 8)
+&nbsp;|
+&nbsp;+---Binomial2................... Used by Binomial (n &lt; 40)
+&nbsp;|
+&nbsp;+---Poisson..................... Poisson random number generator
+&nbsp;|
+&nbsp;+---Binomial.................... Binomial random number generator
+&nbsp;|
+&nbsp;+---SumRandom................... Sum of random numbers
+&nbsp;|
+&nbsp;+---MixedRandom................. Mixture of random numbers
+&nbsp;|
+&nbsp;+---MultipliedRandom............ Used by SumRandom
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---AddedRandom............ Used by SumRandom
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---SubtractedRandom....... Used by SumRandom
+&nbsp;|
+&nbsp;+---ShiftedRandom............... Used by SumRandom
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---ReverseShiftedRandom... Used by SumRandom
+&nbsp;|&nbsp;&nbsp;&nbsp; |
+&nbsp;|&nbsp;&nbsp;&nbsp; +---ScaledRandom........... Used by SumRandom
+&nbsp;|
+&nbsp;+---NegatedRandom.......... .... Used by SumRandom
+&nbsp;|
+&nbsp;+---RepeatedRandom.............. Used by SumRandom
+&nbsp;|
+&nbsp;+---AddedSelectedRandom......... Used by MixedRandom
+&nbsp;|
+&nbsp;+---SelectedRandom.............. Used by MixedRandom
+
+<b>RandomPermutation</b>................ Random permutation
+&nbsp;|
+&nbsp;+---RandomCombination........... Sorted random permutation</font></pre>
+
+<p>&nbsp; </p>
+
+<h2><a NAME="todo"></a><font COLOR="#FF0000">To do:</font></h2>
+
+<ul>
+  <li>More modern alternatives to the <a HREF="#random">LGM generator</a>;</li>
+  <li>Additional generator classes;</li>
+  <li>Better methods for combinations and permutations with large <tt>N</tt> and small <tt>M</tt>;</li>
+  <li>An alternative (slower) class for Poisson with short setup time.</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<h2><a name="history"></a><font COLOR="#FF0000">History:</font></h2>
+
+<p>August, 1998 - update exception package; work around problem with MS VC++ 5</p>
+
+<p>January, 1998 - version compatible with newmat09</p>
+
+<p>1995 - <em>newran</em> version, additional distributions</p>
+
+<p>1989 - initial version</p>
+
+<hr>
+
+<p><a HREF="#top">Go to top</a> </p>
+
+<p><a HREF="ol_doc.htm">To online documentation page</a>&nbsp; </p>
+</body>
+</html>

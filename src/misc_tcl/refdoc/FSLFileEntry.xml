@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!DOCTYPE FSLDOC SYSTEM "/usr/local/fsl/doc/fsl.dtd">
+
+<document type="man"
+          name="FSLFileEntry" section="3Tkl" author="Stuart Clare"
+          rootdir="../"
+	  affiliation="FMRIB Centre"
+	  year="2000">
+
+<section title="name">
+FSLFileEntry - A tix mega-widget generating a file entry box and browser.
+</section>
+
+<section title="synopsis">
+<em>FSLFileEntry</em> <italic>pathName ?options?</italic>
+</section>
+
+<section title="Widget-Specific Options">
+
+<p>
+<wdgtopt>-command</wdgtopt>
+<wdgtdbname>command</wdgtdbname>
+<wdgtclass>Command</wdgtclass>
+<wdgttext>
+Specifies the command that is run when a selection is made from the dialog box.  Note that the command string specified will be appended with the file/directory selected.
+</wdgttext>
+</p>
+
+<p>
+<wdgtopt>-dirasfile</wdgtopt>
+<wdgtdbname>dirasfile</wdgtdbname>
+<wdgtclass>Dirasfile</wdgtclass>
+<wdgttext>
+This option displays directories that contain the specified file as a selectable file.
+</wdgttext>
+</p>
+
+<p>
+<wdgtopt>-directory</wdgtopt>
+<wdgtdbname>directory</wdgtdbname>
+<wdgtclass>Directory</wdgtclass>
+<wdgttext>
+Specifies the starting directory for the file select dialog box.  Note that after creation the dialog box directory can be changed only by <code>[$pathname subwidget fsbox] subwidget fsbox config -directory $dirname</code>
+</wdgttext>
+</p>
+
+<p>
+<wdgtopt>-filterhist</wdgtopt>
+<wdgtdbname>filterhist</wdgtdbname>
+<wdgtclass>Filterhist</wdgtclass>
+<wdgttext>
+Specifies the global variable in which the filter history should be stored.  This enables multiple FSLFileEntry widgets to essentially share the same history.
+</wdgttext>
+</p>
+
+<p>
+<wdgtopt>-label</wdgtopt>
+<wdgtdbname>label</wdgtdbname>
+<wdgtclass>Label</wdgtclass>
+<wdgttext>
+Specifies the text to be used as a label for the FileEntry box.
+</wdgttext>
+</p>
+
+<p>
+<wdgtopt>-labelwidth</wdgtopt>
+<wdgtdbname>labelwidth</wdgtdbname>
+<wdgtclass>Labelwidth</wdgtclass>
+<wdgttext>
+Specifies the width of the label.
+</wdgttext>
+</p>
+
+<p>
+<wdgtopt>-pattern</wdgtopt>
+<wdgtdbname>pattern</wdgtdbname>
+<wdgtclass>Pattern</wdgtclass>
+<wdgttext>
+Specifies the matching pattern of the file names that should be listed in the Files listbox. For example "*.txt" matches all the filenames that end with ".txt". If this option is set to the empty string, the default pattern "*" will be used. 
+</wdgttext>
+</p>
+
+<p>
+<wdgtopt>-showdotfiles</wdgtopt>
+<wdgtdbname>showdotfiles</wdgtdbname>
+<wdgtclass>Showdotfiles</wdgtclass>
+<wdgttext>
+A boolean value indicating whether files with "." as their first character should be shown.  The default is set to false.
+</wdgttext>
+</p>
+
+<p>
+<wdgtopt>-title</wdgtopt>
+<wdgtdbname>title</wdgtdbname>
+<wdgtclass>Title</wdgtclass>
+<wdgttext>
+Specifies the title to be used on the file select dialog box.
+</wdgttext>
+</p>
+
+<p>
+<wdgtopt>-variable</wdgtopt>
+<wdgtdbname>variable</wdgtdbname>
+<wdgtclass>Variable</wdgtclass>
+<wdgttext>
+Specifies the global variable in which the value of the FileEntry should be stored. The value of the FileEntry will be automatically updated when this variable is changed.
+</wdgttext>
+</p>
+
+<p>
+<wdgtopt>-width</wdgtopt>
+<wdgtdbname>width</wdgtdbname>
+<wdgtclass>Width</wdgtclass>
+<wdgttext>
+Specifies the width of the entry box.
+</wdgttext>
+</p>
+
+</section>
+
+<section title="Description">
+
+The <em>FSLFileEntry</em> widget creates a file entry box, together with a browse button for file selection.  This has some of the functionality of tixFileEntry, but not all.  It's main feature is its use of the FSLFileDirDlg and FSLFileDirBox widgets which enable better control of the filters and the history.
+
+</section>
+</document>

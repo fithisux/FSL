@@ -1,0 +1,157 @@
+#! /bin/sh
+#
+# fix_OCMR_fieldmaps - script to hopefully fix the OCMR fieldmap conversion errors, mainly caused by dicom2ana or dicom2nifti
+#
+# Mark Jenkinson, Johannes Klein and Karla Miller, FMRIB Centre
+#
+# Copyright (C) 2004-2008 University of Oxford 
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+#
+# V1 2005_07_28 Johannes Klein/Mark Jenkinson, FMRIB Centre
+# V2 2007_07_05 KLM: added input for TE time (seems to be 2.46 now??)
+# V2 2007_07_06 KLM: added detection of magnitude image dimensions
+# V4 2007_09_15 KLM: changed to work with new fsltools
+# V5 2008_03_19 MJ: subsantially modified to do sanity checking and work with VARIAN - first supported version in FMRIB
+#
+
+usage() {
+ echo "Usage: `basename $0` <phase_image> <magnitude_image>"
+ echo " "
+ echo "  Attempts to fix two specific conversion errors in OCMR fieldmap scans"
+ echo "  - the z voxel-size and interleaved slices for magnitude scans"
+ echo "  - writes corrected images with *_fixed filenames"
+}
+
+
+
+if [ $# -lt 2 ] ; then
+  usage
+  exit 1
+fi
+
+if [ `$FSLDIR/bin/imtest $1` -ne 1 ]; then
+ echo "$1 not found/not an image file"
+ exit 1
+fi
+
+if [ `$FSLDIR/bin/imtest $2` -ne 1 ]; then
+ echo "$2 not found/not an image file"
+ exit 1
+fi
+
+phaseroot=`$FSLDIR/bin/remove_ext $1`
+absroot=`$FSLDIR/bin/remove_ext $2`
+
+# copy and change filetype
+$FSLDIR/bin/fslmaths ${phaseroot} ${phaseroot}_fixed
+$FSLDIR/bin/fslmaths ${absroot} ${absroot}_fixed
+
+fix=no;
+
+# check if voxel sizes seem sensible
+nt=`$FSLDIR/bin/fslval ${absroot}_fixed dim3`;
+ny=`$FSLDIR/bin/fslval ${absroot}_fixed dim2`;
+nx=`$FSLDIR/bin/fslval ${absroot}_fixed dim1`;
+dz=`$FSLDIR/bin/fslval ${absroot}_fixed pixdim3`;
+dy=`$FSLDIR/bin/fslval ${absroot}_fixed pixdim2`;
+dx=`$FSLDIR/bin/fslval ${absroot}_fixed pixdim1`;
+if [ `echo "$dz / $dx < 0.9" | bc -l` -eq 1 ] ; then
+    pdz=`$FSLDIR/bin/fslval ${phaseroot}_fixed pixdim3`
+    echo "Detected unusual z-voxel size of $dz mm in magnitude image"
+    echo "Making it equal to the z-voxel size of the phase image: $pdz mm" 
+    $FSLDIR/bin/fslhd -x ${absroot}_fixed > ${absroot}_hdr.txt
+    cat ${absroot}_hdr.txt | sed "s/dz =.*/dz = \'$pdz\'/" > ${absroot}_newhdr.txt
+    $FSLDIR/bin/fslcreatehd ${absroot}_newhdr.txt ${absroot}_fixed
+    fix=yes;
+fi
+
+# determine if we need to decimate magnitude image 
+#   (should not be needed if reconstruction from dicom was OK)
+nabs=`$FSLDIR/bin/fslval ${absroot}_fixed dim3`
+nphs=`$FSLDIR/bin/fslval ${phaseroot}_fixed dim3`
+nphs2=`echo "$nphs * 2" | bc`
+tmpnm=`$FSLDIR/bin/tmpnam`
+if [ $nabs -eq $nphs2 ]; then
+    echo "Detected dual echo magnitude image in single file - correcting..."
+    $FSLDIR/bin/fslslice ${absroot}_fixed ${tmpnm}_tmp_abs
+    $FSLDIR/bin/fslmerge -z ${tmpnm}_tmp_abs_echo1 ${tmpnm}_tmp_abs_slice_0*[02468].*
+    rm -rf ${tmpnm}_tmp_abs_slice*
+    $FSLDIR/bin/imrm ${absroot}_fixed
+    $FSLDIR/bin/fslmaths ${tmpnm}_tmp_abs_echo1 ${absroot}_fixed
+    fix=yes;
+fi
+
+rm -rf ${tmpnm}_tmp_ph* ${tmpnm}_tmp_abs*  ${absroot}_*hdr.txt
+
+# report if fix has been done
+if [ $fix = yes ] ; then
+    echo " "
+    echo "Corrected phase image written as ${phaseroot}_fixed"
+    echo "Corrected magnitude image written as ${absroot}_fixed"
+else
+    echo " "
+    echo "Finished"
+fi
+

@@ -1,0 +1,37 @@
+/* XPM */
+static const char *eraser[] = {
+/* columns rows colors chars-per-pixel */
+"28 28 3 1",
+"  c black",
+". c #FA7DDE",
+"X c none",
+/* pixels */
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX  XXXXXXXXXX",
+"XXXXXXXXXXXXXXX    XXXXXXXXX",
+"XXXXXXXXXXXXXX  ..  XXXXXXXX",
+"XXXXXXXXXXXXX  ...   XXXXXXX",
+"XXXXXXXXXXXX  ... ..  XXXXXX",
+"XXXXXXXXXXX  ... ...   XXXXX",
+"XXXXXXXXXX  ... ... ..  XXXX",
+"XXXXXXXXX  ... ... ...  XXXX",
+"XXXXXXXX  ... ... ...   XXXX",
+"XXXXXXX  ... ... ...  . XXXX",
+"XXXXXX  ... ... ...  .. XXXX",
+"XXXXX  ... ... ...  ... XXXX",
+"XXXX  ... ... ...  ...  XXXX",
+"XXXX  .. ... ...  ...  XXXXX",
+"XXXX    ... ...  ...  XXXXXX",
+"XXXX X  .. ...  ...  XXXXXXX",
+"XXXX XX   ...  ...  XXXXXXXX",
+"XXXX  XX  ..  ...  XXXXXXXXX",
+"XXXXX  XX    ...  XXXXXXXXXX",
+"XXXXXX  XX  ...  XXXXXXXXXXX",
+"XXXXXXX  XX ..  XXXXXXXXXXXX",
+"XXXXXXXX  X .  XXXXXXXXXXXXX",
+"XXXXXXXXX     XXXXXXXXXXXXXX",
+"XXXXXXXXXX   XXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+};

@@ -1,0 +1,57 @@
+#!/bin/sh
+
+#   imtest - test to see if a valid image file exists with this name (root)
+#
+#   Stephen Smith and Mark Jenkinson, FMRIB Image Analysis Group
+#
+#   Copyright (C) 1999-2004 University of Oxford
+#
+#   SHCOPYRIGHT
+
+# return 0 if no image exists or 1 if the image exists
+
+if [ $# -lt 1 ] ; then
+ echo "0";
+ exit;
+fi
+
+inputfile=$1
+
+
+
+for i in 1 2 3 4 5 6 7 8 9 10 11 12
+do
+if [ -h $inputfile ] ; then 
+inputfile=`readlink $inputfile`;
+fi
+done
+
+filename=`${FSLDIR}/bin/remove_ext $inputfile`;
+
+if [ -r ${filename}.nii ] || [ -r ${filename}.nii.gz ] ; then
+  echo "1";
+  exit;
+fi
+
+if [ -r ${filename}.mnc ] || [ -r ${filename}.mnc.gz ] ; then
+  echo "1";
+  exit;
+fi
+
+if [ ! -r ${filename}.hdr ] && [ ! -r ${filename}.hdr.gz ] ; then
+  # return 0 here as no header exists and no single image means no image!
+  echo "0";
+  exit;
+fi
+
+if [ ! -r ${filename}.img ] && [ ! -r ${filename}.img.gz ] ; then
+  # return 0 here as no img file exists and no single image means no image!
+  echo "0";
+  exit;
+fi
+
+# only gets to here if there was a hdr and an img file
+
+echo "1";
+exit;
+

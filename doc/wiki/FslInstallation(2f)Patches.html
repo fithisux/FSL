@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FslInstallation/Patches</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FslInstallation/Patches</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line867">
+<h1 id="Patches">Patches</h1>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line874">Patches are released for minor upgrades of FSL: e.g. 5.0.1 to 5.0.2 <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line874">Applying a patch depends on what Operating System you are using: <span class="anchor" id="line-10"></span><ol type="1"><li>Debian/Ubuntu <span class="anchor" id="line-11"></span><ul><li><p class="line862">The recommended way is to apply the patch with the neurodebian repository via <tt class="backtick">system&nbsp;update</tt> or <tt class="backtick">apt-get</tt> <span class="anchor" id="line-12"></span></li></ul></li><li>Binary packages - all other systems (Mac/Linux/Windows) <span class="anchor" id="line-13"></span><ul><li>Download the patch file ( see link below ) for your system (you can choose between an upgrade from the previous version - e.g. 5.0.1 to 5.0.2 - or an upgrade from the base version - e.g. 5.0.0 to 5.0.2) <span class="anchor" id="line-14"></span></li><li><p class="line862">The patch file is a <tt class="backtick">*.tar.gz</tt> file and needs to be unpacked in the right place with the following instructions <span class="anchor" id="line-15"></span></li><li>Put the patch file in a standard place (e.g. ~/Downloads/) <span class="anchor" id="line-16"></span></li><li><p class="line862">Start a terminal and do: <tt class="backtick">cd&nbsp;$FSLDIR/..</tt> <span class="anchor" id="line-17"></span></li><li><p class="line862">Then: <tt class="backtick">tar&nbsp;-zxvf&nbsp;~/Downloads/fsl-macosx-patch-5.0.2_from_5.0.1.tar.gz</tt> <span class="anchor" id="line-18"></span></li><li><p class="line862">Note that you must use the appropriate path and name of the patch file in the above command and may need to use <tt class="backtick">sudo</tt> before this if FSL was installed with <tt class="backtick">sudo</tt> (i.e. in a place you do not normally have write permissions) <span class="anchor" id="line-19"></span></li></ul></li><li>Source packages - all systems <span class="anchor" id="line-20"></span><ul><li>As above, download and install the source patch and then recompile following the usual source compilation installation instructions <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span></li></ul></li></ol><p class="line862">Patch files can be downloaded (for methods 2 or 3 above) from: <a class="http" href="http://fsl.fmrib.ox.ac.uk/fsldownloads/patches/">http://fsl.fmrib.ox.ac.uk/fsldownloads/patches/</a> <span class="anchor" id="line-23"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

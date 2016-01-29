@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Miscvis</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">Miscvis</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Overlay">Overlay</a><ol><li>
+<a href="#Introduction">Introduction</a></li><li>
+<a href="#Renderstats_GUI">Renderstats GUI</a></li></ol></li><li>
+<a href="#Slicer">Slicer</a></li></ol></div></div></li><li><a href="./Miscvis(2f)FAQ.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span>
+<h1 id="Overlay">Overlay</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867">
+<h2 id="Introduction">Introduction</h2>
+<span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line874">This tool allows you to combine a background image (raw FMRI or high resolution MRI) image with one or two statistics images. The statistics image(s) must be in registration with the background image. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line874">The different programs are: <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><ul><li><p class="line891"><tt class="backtick">Renderstats</tt> - GUI <span class="anchor" id="line-11"></span></li><li><p class="line891"><tt class="backtick">overlay</tt> - command-line program which does the actual combining of the input images and produces the colour rendered output image <span class="anchor" id="line-12"></span></li><li><p class="line891"><tt class="backtick">create_lut</tt> - command-line program which produces colour look-up-tables (these tell viewer programs such as slicer how to produce different colours given a colour-rendered image). <span class="anchor" id="line-13"></span></li></ul><p class="line867">
+<h2 id="Renderstats_GUI">Renderstats GUI</h2>
+<span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line862">Select all of the images, and then enter a threshold (<strong>Min</strong>) for the stats image(s). Any stats values below this will not appear in the colour rendered output. Any stats above <strong>Max</strong> will appear, all with the same colour as the <strong>Max</strong> value gets (ie yellow or light blue). You don't need to change the "Min" and "Max" settings unless you want to vary the display range - for example if the background image looks very dark when scaled to its min and max. <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line862">The <strong>colourmap type</strong> option lets you choose <strong>Solid colours</strong> (you don't see any sign of the background images within the colour blobs) or <strong>Transparent colours</strong> (you will see through the colour blobs to the background intensity). <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line862">In general the intensity values within colour rendered images bear no simple relationship to the original stats values. However, in the case of rendering <strong>Solid</strong> colours with <strong>Floating point</strong> output type, the red-yellow blobs will contain the actual values of the stats input image (but the blue blobs will not). <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line862">If you want to do 3D rendering in MEDx with the results of stats colour rendering, you should use solid colours and choose <strong>Integer</strong> output type. Then in the 3D rendering GUI either select <strong>Material Iso-Surface</strong> for solid 3D rendering or <strong>Transparent Summation</strong> for transparent rendering - the latter option means that activations just under the cortical surface will be visible. The images may appear quite dark - in this case you can always brighten them (after "printing" them to tiff files) using the program "display". <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line867">
+<h1 id="Slicer">Slicer</h1>
+<span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><p class="line874">Standard 2D picture display programs cannot read 3D / 4D NIFTI/Analyze images. Thus FSL includes SLICER, a set of utilities which take 3D images and produce 2D pictures of slices from within these files. These slices can be of axial, coronal or sagittal orientation. If two input images are specified (instead of just one), the first image is used as normal, but overlaid in red on top of this are image edges derived from the second input image. This can be useful for checking the results of registration. <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line874">The NIFTI and Analyze formats do not allow for colour image information to be stored. However, an unused part of the image header is used by some FSL programs to store information about suitable colour maps for use with certain images. For example, the colour activation images produced by FEAT contain such information. The programs in SLICER use this to use the right colour map when producing slice pictures. <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line874">The different SLICER programs are: <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><ul><li><p class="line891"><tt class="backtick">slicer</tt> - the main program which takes in one or two input images and produces as many separate output pictures of slices as are requested. The basic output options (-x, -y and -z) produce single slice pictures. The more advanced options (-a, -A and -S) produce montages of various slices. <tt class="backtick">slicer</tt> outputs PPM format pictures.  <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span></li><li class="gap"><p class="line891"><tt class="backtick">slices</tt> - a script which calls slicer with three default axial slices, three sagittal and three coronal, combines all 9 pictures into a single GIF picture and automatically calls the <tt class="backtick">display</tt> program to display this picture.  <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span></li><li class="gap"><p class="line891"><tt class="backtick">slicesdir</tt> - a script which takes in a list of images, and for each one, runs slicer to produce the same 9 default slicings as described above, combining them into a single GIF picture. A web page is then created which includes all of the GIF pictures - ie one for each input image. <span class="anchor" id="line-36"></span></li></ul><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-37"></span><a href="./CategoryOther.html">CategoryOther</a> <a href="./CategoryMiscvis.html">CategoryMiscvis</a> <span class="anchor" id="line-38"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

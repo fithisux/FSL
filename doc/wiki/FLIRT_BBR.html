@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FLIRT_BBR</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FLIRT_BBR</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line867"> <span class="anchor" id="line-6"></span>
+<h1 id="BBR_-_Boundary-Based_Registration">BBR - Boundary-Based Registration</h1>
+<span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line867">
+<h2 id="Introduction">Introduction</h2>
+<span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><ul><li>A new tool for EPI to structural registration proposed by Doug Greve (MGH, Boston) <span class="anchor" id="line-11"></span><ul><li><p class="line862">Greve &amp; Fischl, NeuroImage, 48(1), 2009 <span class="anchor" id="line-12"></span></li></ul></li><li><p class="line862">in FSL5 there is a new implementation in <a href="./FLIRT.html">FLIRT</a> (the default in <a href="./FEAT.html">FEAT</a>) <span class="anchor" id="line-13"></span></li><li><p class="line862">incorporates simultaneous fieldmap correction (previously done with <a href="./FUGUE.html">FUGUE</a>) <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span></li></ul><p class="line874">The method is based on white-matter boundaries and the fact that it is expected to see reliable changes in intensity across this boundary in the functional MR images, whereas the exterior grey-matter boundaries tend to be less reliable.  This means that: <span class="anchor" id="line-16"></span><ul><li>a segmentation of the structural is required (with some form of bias-field correction) <span class="anchor" id="line-17"></span></li><li>there must be some grey-white intensity contrast in the EPI (though it doesn't have to be good enough for segmentation) <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span></li></ul><p class="line874">Since only intensities near the white-matter boundary are used by BBR, it is likely to be more robust to a range of pathologies and artefacts in the EPI or the structural.  <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line867">
+<h2 id="How_it_works">How it works</h2>
+<span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line874">The white-matter boundary is mapped to the EPI image (usually using a 6 DOF transformation) and then samples of the EPI intensity are taken at a distance (default of 2mm) either side of points along this boundary (see Figure 1). The difference between the intensities in each pair is used to calculate the cost function.  To prevent it being unduly influenced by outliers, the difference is run through a sigmoid-like non-linear function to suppress the effect of very large differences.  The sign of the difference is also important and it is set-up to expect a higher intensity in the grey-matter in the EPI. <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><p class="line867"><img alt="BBRfig.png" class="attachment" src="attachments/FLIRT_BBR/BBRfig.png" title="BBRfig.png" width="700" /><br>
+Figure 1 <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line862">The implementation in <a href="./FLIRT.html">FLIRT</a> can be configured to give the user control of many of these parameters (e.g. <tt class="backtick">--bbrtype</tt>, <tt class="backtick">--bbrslope</tt>), and it also has simultaneous fieldmap-based distortion-correction built into it.  For this application it is necessary to have the fieldmap data aligned with the structural image, and this is typically done with a simple 6 DOF registration prior to using BBR (since both the fieldmap and structural image are effectively non-distorted).  The script <a href="./FLIRT(2f)UserGuide.html#epi_reg">epi_reg</a> is provided to handle this registration and other details of working with fieldmaps for this type of registration. <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line874">Results obtained using BBR are usually substantially better than alternative methods available with FLIRT and this is now the strongly recommended way to register EPI and structural images.  Viewing the transformed EPI with an overlay of the white-matter boundaries (as shown in Figure 1 above) is a very good way to assess the accuracy of the registration. <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

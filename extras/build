@@ -1,0 +1,136 @@
+#!/bin/sh
+
+buildIt() { #$1 folder $2 projname $3 doMake
+    if [ -d ${1}/${2} ] ; then
+	echo $'\n\n'
+	echo "Making project ${2}" ;
+	echo " " ;
+	cd ${1}/${2} ;
+	if [ X"$2" = "Xtcl" -o X"$2" = "Xtk" ] ; then
+	    cd unix ;
+	fi
+	if [ "${3}" = "1" ]; then
+            ${MAKE} distclean ;
+	fi    
+	echo `pwd`
+	if [ -x fslconfigure ] ; then
+	  echo "Running configure with FSL options" ;
+	  ./fslconfigure ;
+	fi
+	if [ "${3}" = "0" ]; then
+          return
+	fi  
+	if ${MAKE} ${MAKEOPTIONS} ; then 
+	    if ${MAKE} install ; then
+		${MAKE} distclean ;
+	    else
+		errorinstall="$errorinstall $2" ; export errorinstall ;
+	    fi
+	    if [ X"$2" = "Xtcl" -o X"$2" = "Xtk" ] ; then
+		cd ${1}/${2} ;
+		${MAKE} install
+	    fi	    
+	    
+	    echo " "
+	    echo " ------------------------- "
+	    echo "Successfully made ${2}";
+	else
+	    echo " "
+	    echo " ========================= "
+	    echo "ERROR::Could not make ${2} successfully" ;
+	    echo $'\n\n'
+	    errorprojs="$errorprojs ${2}" ; export errorprojs ;
+	fi
+    fi
+}
+
+if [ X${FSLDIR}X = XX ] ; then
+    echo "Please set FSLDIR first"
+    exit 1
+fi
+
+clean=$1;
+
+if [ ! -d ${FSLDIR} ] ; then
+    echo "Please set FSLDIR first"
+    exit 1
+fi
+
+echo "using FSLDIR as $FSLDIR"
+
+FSLESRCDIR=`pwd`/src
+FSLDEVDIR=`pwd`
+FSLCONFDIR=${FSLDIR}/config
+if [ -z "$FSLMACHTYPE" ]; then
+  FSLMACHTYPE=`${FSLDIR}/etc/fslconf/fslmachtype.sh`
+fi
+FSLEXTLIB=${FSLDEVDIR}/lib
+FSLEXTINC=${FSLDEVDIR}/include
+FSLEXTBIN=${FSLDEVDIR}/bin
+export FSLDIR FSLDEVDIR FSLCONFDIR FSLMACHTYPE FSLEXTLIB FSLEXTINC FSLEXTBIN
+
+MAKE=none
+if [ X"`make --version 2>&1 | grep -i gnu`"X != XX ] ; then
+   MAKE=make;
+else if [ X"`gmake --version 2>&1 | grep -i gnu`"X != XX ] ; then
+   MAKE=gmake;
+fi; fi
+if [ ${MAKE} = none ] ; then
+   echo "Could not find the gnu make utility in path" ;
+   exit 1 ;
+fi
+
+
+MAKEOPTIONS="${MAKEOPTIONS} FSLEXTLIB=${FSLEXTLIB} FSLEXTINC=${FSLEXTINC} FSLEXTBIN=${FSLEXTBIN}"
+
+errorprojs="" ; export errorprojs ;
+
+OS=`uname -s`
+BUILDZLIB=0
+BUILDICONV=0
+if [ X"${OS}" = "XDarwin" ]; then
+    # Are we running on a Mac Pre 10.8?
+    MAC_V=`uname -r | awk -F. '{ print $1 }'`
+    if [ ${MAC_V} -lt 12 ]; then
+	BUILDZLIB=1
+	BUILDICONV=1
+    fi
+fi
+PROJECTS="tcl tk"
+if [ ${BUILDZLIB} -eq 1 ]; then
+  PROJECTS="${PROJECTS} zlib"
+fi
+PROJECTS="${PROJECTS} libpng"
+if [ ${BUILDICONV} -eq 1 ]; then
+  PROJECTS="${PROJECTS} libiconv"
+fi
+PROJECTS="${PROJECTS} libgd libgdc libprob libcprob newmat cprob newran fftw"
+PROJECTS="${PROJECTS} boost libxml2-2.9.2 libxml++-2.34.0"
+for projname in $PROJECTS; do
+    if [ -d $FSLESRCDIR/$projname ] ; then
+       buildIt $FSLESRCDIR $projname 1 
+    elif [ "$projname"="boost" -a -d ${FSLEXTINC}/boost/boost ]; then
+       buildIt $FSLEXTINC boost 0
+    fi
+done
+
+echo $'\n\n'
+if [ "X${errorprojs}X" != XX ] ; then
+  echo "!!ERROR in BUILD!!" ;
+  echo "  Could not make the following projects successfully:" ;
+  echo "   $errorprojs" ;
+else
+  echo "BUILD successfully made all projects" ;
+fi
+if [ "X${errorinstall}X" != XX ] ; then
+  echo "!!ERROR in INSTALL!!" ;
+  echo "  Could not fully install the following projects successfully:" ;
+  echo "   $errorinstall" ;
+else
+  echo " ";
+fi
+echo " ";
+
+if [ "X${errorprojs}X" != XX -o "X${errorinstall}X" != XX ] ; then
+    exit 1
+fi

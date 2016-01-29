@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>SIENA/FAQ</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">SIENA/FAQ</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./SIENA.html">Introduction</a></li><li><a href="./SIENA(2f)UserGuide.html">User Guide</a></li><li>FAQ<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#What_type_of_images_can_I_use_in_SIENA.2BAC8-SIENAX.3F">What type of images can I use in SIENA/SIENAX?</a></li><li>
+<a href="#Can_I_get_regional.2BAC8-local_atrophy_or_change_values_using_SIENA.2BAC8-SIENAX.3F">Can I get regional/local atrophy or change values using SIENA/SIENAX?</a></li></ol></div></div></li></ol></div> <span class="anchor" id="line-2"></span>
+<h1 id="What_type_of_images_can_I_use_in_SIENA.2BAC8-SIENAX.3F">What type of images can I use in SIENA/SIENAX?</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line862">Good quality structural images should be used (T1-weighted, T2-weighted, PD, etc) where the in-plane resolution is better than 2mm (ideally 1mm). The slice thickness is less critical and can be substantially larger than the in-place resolution; see <a class="http" href="http://www.fmrib.ox.ac.uk/fslcourse/lectures/seg_struc/s_2300_normals.htm">test results from "normal" subjects</a> which shows that the error is almost independent of slice thickness in the range of 1mm to 6mm for 2D acquisitions. <span class="anchor" id="line-5"></span>Grey/White-matter contrast is not critical to the accuracy of the results as the computations are done using the outer-grey matter surface and the ventricle surface. <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line867">
+<h1 id="Can_I_get_regional.2BAC8-local_atrophy_or_change_values_using_SIENA.2BAC8-SIENAX.3F">Can I get regional/local atrophy or change values using SIENA/SIENAX?</h1>
+<span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line874">A regional breakdown of SIENAX results is available using the -r option. This gives peripheral GM volume and ventricular CSF volume, using standard-space masks.  <span class="anchor" id="line-11"></span>At present, research is being done to obtain finer regional discrimination. However, in the short term, there are no plans to release any code as to do that sensibly would require a much more sophisticated integration of nonlinear registration and structural segmentation. For the reasons given above it is likely that the regional measurements are less accurate than the numbers published for global measures (though within-subject repeatability should be similar as the masking should be consistent).  <span class="anchor" id="line-12"></span><hr /><p class="line874"> <span class="anchor" id="line-13"></span>CategoryFAQ <a href="./CategorySIENA.html">CategorySIENA</a> <span class="anchor" id="line-14"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

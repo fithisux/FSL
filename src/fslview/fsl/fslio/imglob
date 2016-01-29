@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+#   imglob - expand list of image filenames
+#   Stephen Smith, Mark Jenkinson and Matthew Webster FMRIB Image Analysis Group
+#   Copyright (C) 2009 University of Oxford 
+#   SHBASECOPYRIGHT
+
+import sys
+import os
+import glob
+
+setAvailable=True
+if sys.version_info < (2, 4):
+   import sets
+   from sets import Set
+   setAvailable=False
+
+def usage():
+    print "Usage: $0 [-extension/extensions] <list of names>"
+    print "       -extension for one image with full extension"
+    print "       -extensions for image list with full extensions"
+    sys.exit(1)
+
+def isImage(input,allExtensions):       #Returns whether an input filename has an image extension ( and the basename and extension pair )
+    for extension in allExtensions:
+       if input[-len(extension):] == extension:
+          return True, input[:-len(extension)], extension
+    return False, input, ''
+
+def removeImageExtension(input,allExtensions):
+    return isImage(input,allExtensions)[1]
+
+if len(sys.argv) <= 1:
+    usage()
+
+deleteExtensions=True
+primaryExtensions=['.nii.gz', '.nii', '.hdr.gz', '.hdr']
+secondaryExtensions=['.img.gz', '.img']
+allExtensions=primaryExtensions+secondaryExtensions
+validExtensions=primaryExtensions
+startingArg=1
+
+if sys.argv[1] == "-extensions":
+   validExtensions=allExtensions
+   deleteExtensions=False
+   startingArg=2
+if sys.argv[1] == "-extension":
+   deleteExtensions=False
+   startingArg=2
+    
+filelist=[]
+for arg in range(startingArg, len(sys.argv)):
+#      if isImage(sys.argv[arg],allExtensions)[0]:          #These enable a "pedantic" style mode currently not used
+#         filelist.extend(glob.glob(sys.argv[arg]))
+#      else:
+#         for currentExtension in validExtensions:
+#            filelist.extend(glob.glob(sys.argv[arg]+currentExtension))
+    for currentExtension in validExtensions:
+       filelist.extend(glob.glob(removeImageExtension(sys.argv[arg],allExtensions)+currentExtension))
+
+if deleteExtensions:
+    for file in range(0, len(filelist)):
+        filelist[file]=removeImageExtension(filelist[file],allExtensions)
+if setAvailable:
+   filelist=list(set(filelist))
+else:
+   filelist=list(Set(filelist))
+filelist.sort()
+
+for file in range(0, len(filelist)):
+    print filelist[file],
+    if file < len(filelist)-1:
+       print " ",

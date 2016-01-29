@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Mm</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">Mm</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><img align="right" alt="mmfit" class="attachment" src="attachments/Mm/mmfit.png" title="mmfit" /> <span class="anchor" id="line-2"></span>
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line874">Mixture modelling is an alternative method of carrying out inference on (i.e., thresholding) statistical maps such as t, f or z stat images output by FEAT. Instead of just making assumptions about the null part of the statistical distribution and making all inference with respect to that, mixture modelling explicitly models the null part and the activation part. We can thus carry out "alternate hypothesis testing" and ask a richer set of questions of the data. Here we also implement a spatial enhancement to the mixture modelling; we use a spatial Markov random field to regularise (smooth) the labelling of voxels into null, activated or "de"-activated. <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line862">For more detail on the spatial mixture modelling see <em>Mixture Models with Adaptive Spatial Regularisation for Segmentation with an Application to FMRI Data; Woolrich, M., Behrens, T., Beckmann, C., and Smith, S.; IEEE Trans. Medical Imaging, 24(1):1-11, 2005</em> and a related technical report <a class="http" href="http://www.fmrib.ox.ac.uk/analysis/techrep/#TR04MW1">TR04MW1</a>. <span class="anchor" id="line-7"></span><hr /><p class="line874"> <span class="anchor" id="line-8"></span>
+<h1 id="mm">mm</h1>
+<span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line874">Warning: this implementation of spatial mixture modelling is a beta release and has not been extensively tested! To run spatial mixture modelling on a statistic image (such as grot.feat/stats/zstat1) use the mm command-line program. The minimum syntax is: <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line867"><tt class="backtick">mm&nbsp;--mask=&lt;mask_image&gt;&nbsp;--sdf=&lt;stats_image&gt;</tt> <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line862">and the other main option that you might want to use is <tt class="backtick">--zfstatmode</tt> which tells mm not to fit a deactivation class. Just type mm to get the full help output. <span class="anchor" id="line-15"></span>The output from mm is summarised in a web-page named &lt;outputdir&gt;/MM.html and the probability of lying in each of the two or three segmentation classes (null, activation and de-activation) are found in &lt;outputdir&gt;/w1_mean, w2_mean and w3_mean. Note that the histogram plot in the web-page report will look less "nice" a fit than a non-spatial mixture model. This is because the final fitting is a balance between optimal histogram fitting of the class mixtures and the spatial processes which attempt to smooth voxel classification. <span class="anchor" id="line-16"></span><hr /><p class="line874"> <span class="anchor" id="line-17"></span><a href="./CategoryOther.html">CategoryOther</a> <a href="./CategoryMm.html">CategoryMm</a> <span class="anchor" id="line-18"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

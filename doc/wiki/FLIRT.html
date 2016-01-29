@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FLIRT</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FLIRT</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Research_Overview">Research Overview</a></li><li>
+<a href="#General_Advice">General Advice</a></li><li>
+<a href="#Template_Images">Template Images</a></li><li>
+<a href="#Non-linear_Registration">Non-linear Registration</a></li><li>
+<a href="#References">References</a></li></ol></div></div></li><li><a href="./FLIRT(2f)UserGuide.html">User Guide</a></li><li><a href="./FLIRT(2f)FAQ.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span>
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line874">FLIRT (FMRIB's Linear Image Registration Tool) is a fully automated robust and accurate tool for linear (affine) intra- and inter-modal brain image registration. <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867"><strong>New in FSL5:</strong> the BBR method was implemented for improved EPI to structural registration, with built in fieldmap-based distortion-correction (it will also run without fieldmaps). <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line874">If you use FLIRT in your research, please quote the articles: <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line867"><span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><div class="references"><span class="anchor" id="line-1-1"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/11516708">1.</a> M. Jenkinson and S.M. Smith. A global optimisation method for robust affine registration of brain images. Medical Image Analysis, 5(2):143-156, 2001. <span class="anchor" id="line-2-1"></span><span class="anchor" id="line-3-1"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/12377157">2.</a> M. Jenkinson, P.R. Bannister, J.M. Brady, and S.M. Smith. Improved optimisation for the robust and accurate linear registration and motion correction of brain images. <a class="nonexistent" href="./NeuroImage.html">NeuroImage</a>, 17(2):825-841, 2002. </div><span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line874">The different FLIRT programs are: <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><ul><li>Flirt - FLIRT GUI + InvertXFM, ApplyXFM, ConcatXFM <span class="anchor" id="line-21"></span></li><li>flirt - command-line FLIRT program <span class="anchor" id="line-22"></span></li><li>misc flirt utilities - associated command-line programs <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span></li></ul><p class="line867">
+<h1 id="General_Advice">General Advice</h1>
+<span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><p class="line874">Use the image with the best quality (tissue contrast and resolution) as the Reference image, otherwise poor registrations may occur (the inverse transformation can be found afterwards using the InvertXFM gui or the convert_xfm command-line utility). <span class="anchor" id="line-27"></span>Do use the default settings (especially in the GUI advanced options) as they have been carefully chosen. <span class="anchor" id="line-28"></span>Do use it for registering to the MNI standard brains as it has been extensively tested with these images. <span class="anchor" id="line-29"></span>For images showing pathology, consider using binary cost function weighting images - a zero for areas of a pathological nature and one elsewhere (do not put zero outside the brain). <span class="anchor" id="line-30"></span>Consider using the Group facility (GUI only) for running the registration on a collection of images (this is also easily achieved with the command-line version by scripting). <span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><p class="line867">
+<h1 id="Template_Images">Template Images</h1>
+<span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><p class="line862">Both linearly and non-linearly generated MNI152 template images (whole head, extracted brain, brain mask and skull) are included in <tt class="backtick">fsl/data/standard</tt>, courtesy of the MNI. <span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><p class="line867">
+<h1 id="Non-linear_Registration">Non-linear Registration</h1>
+<span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><p class="line862">Also see the FSL non-linear registration tool, <a href="./FNIRT.html">FNIRT</a>. Note that this requires an initial affine registration to be performed first using FLIRT. <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><p class="line867">
+<h1 id="References">References</h1>
+<span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><p class="line874">If you use FLIRT in your research, please make sure that you reference at least the first of the articles listed below, and ideally the complete list.  <span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><p class="line867"><span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><div class="references"><span class="anchor" id="line-1-2"></span><ul><li><p class="line862">Jenkinson, M., Bannister, P., Brady, J. M. and Smith, S. M.  Improved Optimisation for the Robust and Accurate Linear Registration and Motion Correction of Brain Images.  NeuroImage, 17(2), 825-841, 2002. <span class="anchor" id="line-2-2"></span></li><li>Jenkinson, M. and Smith, S. M.  A Global Optimisation Method for Robust Affine Registration of Brain Images. Medical Image Analysis, 5(2), 143-156, 2001. <span class="anchor" id="line-3-2"></span></li><li><p class="line862">Greve, D.N. and Fischl, B.  Accurate and robust brain image alignment using boundary-based registration. NeuroImage, 48(1):63-72, 2009. </li></ul></div><span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-51"></span><a href="./CategoryStructural.html">CategoryStructural</a> <a href="./CategoryFLIRT.html">CategoryFLIRT</a> <span class="anchor" id="line-52"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

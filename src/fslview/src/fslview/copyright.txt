@@ -1,0 +1,13 @@
+/*  FSLView - 2D/3D Interactive Image Viewer
+
+    Authors:    David Flitney 
+		Mark Jenkinson
+		Stephen Smith
+
+    FMRIB Image Analysis Group
+
+    Copyright (C) 2007 University of Oxford  */
+
+/*  CCOPYRIGHT */
+
+

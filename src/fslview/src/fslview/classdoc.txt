@@ -1,0 +1,9 @@
+//! @brief A class to demonstrate how to document
+//!
+//! This class serves no real purpose. It is merely an
+//! example of how to use doxygen to document your
+//! class definitions. Good Luck.
+//!
+//! @author Dave Flitney
+//! @version 1.0a
+//! @see FSL

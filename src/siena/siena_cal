@@ -1,0 +1,142 @@
+#!/bin/sh
+
+#   siena_cal - Self-calibration part of SIENA
+#
+#   Stephen Smith, FMRIB Image Analysis Group
+#
+#   Copyright (C) 1999-2004 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage() {
+    echo "Usage: siena_cal <input1_fileroot> <input2_fileroot> <scale> [siena_diff options]"
+    exit 1
+}
+
+if [ _$FSLDIR = _ ] ; then
+    FSLDIR=/usr/local/fsl
+    export FSLDIR
+fi
+
+[ "$2" = "" ] && Usage
+[ `${FSLDIR}/bin/imtest $1` = 0 ] && Usage
+input=`${FSLDIR}/bin/remove_ext $1`
+inputB=`${FSLDIR}/bin/remove_ext $2`
+
+m=$3
+M=`echo "5 k 1.0 $m / p" | dc -`
+shift 3
+
+o1=`${FSLDIR}/bin/fslval ${input} dim1`
+o2=`${FSLDIR}/bin/fslval ${input} dim2`
+o3=`${FSLDIR}/bin/fslval ${input} dim3`
+
+v1=`${FSLDIR}/bin/fslval ${input} pixdim1 | sed "s/-//g"`
+v2=`${FSLDIR}/bin/fslval ${input} pixdim2 | sed "s/-//g"`
+v3=`${FSLDIR}/bin/fslval ${input} pixdim3 | sed "s/-//g"`
+
+t1=`echo "5 k $m 1.0 - $o1 * $v1 * _0.5 * p" | dc -`
+t2=`echo "5 k $m 1.0 - $o2 * $v2 * _0.5 * p" | dc -`
+t3=`echo "5 k $m 1.0 - $o3 * $v3 * _0.5 * p" | dc -`
+
+echo "$m  0.0 0.0 $t1" >  ${input}_halfwayto_sc${input}.mat
+echo "0.0 $m  0.0 $t2" >> ${input}_halfwayto_sc${input}.mat
+echo "0.0 0.0 $m  $t3" >> ${input}_halfwayto_sc${input}.mat
+echo "0.0 0.0 0.0 1.0" >> ${input}_halfwayto_sc${input}.mat
+
+t1=`echo "5 k $M 1.0 - $o1 * $v1 * _0.5 * p" | dc -`
+t2=`echo "5 k $M 1.0 - $o2 * $v2 * _0.5 * p" | dc -`
+t3=`echo "5 k $M 1.0 - $o3 * $v3 * _0.5 * p" | dc -`
+
+echo "$M  0.0 0.0 $t1" >  sc${input}_halfwayto_${input}.mat
+echo "0.0 $M  0.0 $t2" >> sc${input}_halfwayto_${input}.mat
+echo "0.0 0.0 $M  $t3" >> sc${input}_halfwayto_${input}.mat
+echo "0.0 0.0 0.0 1.0" >> sc${input}_halfwayto_${input}.mat
+
+$FSLDIR/bin/imcp $input sc$input
+$FSLDIR/bin/imcp ${input}_brain_mask sc${input}_brain_mask
+$FSLDIR/bin/imcp ${input}_valid_mask_with_$inputB ${input}_valid_mask_with_sc$input
+
+${FSLDIR}/bin/siena_diff ${input} sc${input} $@ > ${input}_to_sc${input}.siena
+
+vm=`echo "10 k $m 6 ^ 1.0 - 100.0 * p" | dc -`
+cal=`grep PBVC ${input}_to_sc${input}.siena | awk '{print $2}' | sed "s/-//g"`
+corr=`echo "10 k $vm $cal / p" | dc -`
+
+#echo "$m $vm $cal $corr"
+echo $corr
+
+$FSLDIR/bin/imrm sc${input}.* \
+        sc${input}_brain_mask.* \
+	${input}_halfwayto_sc${input}_brain_seg.* \
+	${input}_halfwayto_sc${input}_mask.* \
+	${input}_halfwayto_sc${input}_stdmask.* \
+	sc${input}_halfwayto_${input}.* \
+	sc${input}_halfwayto_${input}_mask.* \
+	${input}_valid_mask_with_sc${input}.* \
+	${input}_halfwayto_sc${input}_valid_mask.*
+
+/bin/rm -f ${input}_halfwayto_sc${input}.mat sc${input}_halfwayto_${input}.mat \
+           ${input}_to_sc${input}.siena ${input}_halfwayto_sc${input}_brain.vol
+

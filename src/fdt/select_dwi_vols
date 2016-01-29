@@ -1,0 +1,34 @@
+#!/bin/sh
+
+if [ "$4" == "" ];then
+    echo ""
+    echo "Usage: select_dwi_vols.sh <data> <bvals> <output> <approx_bval(to within 100 s/mm2)> [-m|-v]"
+    echo " -m|-v : output mean|variance instead of concat"
+    echo ""
+    exit 1
+fi
+
+d=$1
+b=`cat $2`
+o=$3
+
+cnt=0
+list="" 
+for i in $b;do
+    j=`echo $i | awk -F"E" 'BEGIN{OFMT="%10.10f"} {print $1 * (10 ^ $2)}' `
+    j=${j/.*}   
+    j=`echo "$j - $4" |bc | awk ' { if($1>=0) { print $1} else {print $1*-1 }}'`
+    if [ $j -lt 100 ];then
+	if [ "${list}" == "" ];then
+	    list="${cnt}"
+	else
+	    list="${list},${cnt}"
+	fi
+    fi
+    cnt=$(($cnt + 1))
+done
+
+echo $FSLDIR/bin/fslselectvols -i $d -o $o --vols=$list $5
+$FSLDIR/bin/fslselectvols -i $d -o $o --vols=$list $5
+
+

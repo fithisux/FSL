@@ -1,0 +1,776 @@
+#!/bin/sh
+
+#{{{ copyright and script setup
+#
+#   Copyright (C) Eugene Duff 2004 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage() {
+	function=`basename $0`
+	echo Command-line editing of FSL design .\*fsf files 
+	echo
+	echo $function inputfsffile outputfsffile -option optionparam [-option optionparam] 
+	echo $function fsffiles -i fsffiles -option optionparam [-option optionparam]   \*\* Replaces existing files 
+	echo
+    echo -featwatcher x - set featwatcher off \(0\) or on \(1\)
+	echo -replace x y - basic global replace x with y \( e.g. Subj10/run2 Subj11/run3 \)
+    echo -analysis x - analysis type \(0 - reg/group 7 - full 1 - pre-stats 2 - stats 3 stats+post 4 post\)
+    echo -overwrite x - overwrite old dir 0 - yes 1 - no
+    echo -B0 x - B0 correction? 0 - no 1 - yes
+    echo -EPIes x - EPI echo spacing?
+    echo -EPIte x - EPI TE?
+	echo -structural x - sets structural image
+    echo -reg x - 0,1 turns registration on/off/
+	echo -outputdir x \(  level directory only \) 
+	echo -outputfulldir x 
+	echo -inputdirs x  \(not working\)
+	echo -inputfulldir x y - sets input x 
+	echo -smooth x - sets spatial smooth levels
+	echo -hpfilteron x - set highpass filter on/off \(1/0\)
+	echo -hpfilter x - set highpass filter to x
+	echo -motion x - add motion parameters to model 
+    echo -confoundevs x - add confound evs file to model
+	echo -hilevel x  - sets high level analysis to x \(3 - FE, 0 - ME OLS, 1 - ME FLAME, 2 - ME FLAME 1+2 \)  
+	echo -outlier x - sets FLAME outlier detection
+    echo -highresdof x
+    echo -set FEAT watcher x
+    echo -MELODIC x
+	echo 
+	echo -nevs_orig x - sets number of original EVs
+	echo -nevs_real x - sets number of real EVs
+	echo -tf x y temporal filtering for ev x on/off \(1/0\) 
+	echo -td x y temporal derivative for ev x on/off \(1/0\) \(does not update contrasts\) 
+	echo -evshape x y set shape of ev x to y 0: square 1: sinusoid 2: Custom \(1 entry per vol\) 3: Custom \(3 col\) 4: interaction 10: zeros 
+	echo -evcustom x set custom ev filename
+	echo -evcustomfulldir x  set custom ev full file location 
+    echo -evconv x y set ev convolution 0-none 1-Gauss 2-gamma 3-dbl gamma 4-gamma basis 
+	echo -evval x y z set higher level EV x val for input y to z
+	echo -evorth x y z orthogonalise ev x wrt y?
+	echo -evname x y set title for EV x to y
+	echo -evskip x y skip ev x in web report on/off \(1/0\) 
+	echo
+	echo -ncontrasts_orig x - sets number of original contrasts 
+	echo -ncontrasts_real x - sets number of real contrasts
+	echo -contrast_mode x - sets contrast mode real/orig 
+	echo -contrast_orig x y z
+	echo -contrast_real x y z
+	echo -contrast_orig_name x y
+	echo -contrast_real_name x y
+	echo -contrast_orig_show x y
+	echo -contrast_real_show x y
+	echo
+	echo -FNIRT x - sets FNIRT nonlinear reg on/off \(1/0\)
+	echo -FNIRTwarpres x
+    echo -bgim x - sts background image 1- mean highres 2 - first highres 3 - mean functional 4 - first functional 5 -std space
+    echo -alt_example_func x - sets alternative example_func 
+	 
+	exit
+}
+
+shiftpos() {
+	eval "pos=`echo $pos+1 | bc`"
+}
+
+[ "$1" = "" ] && Usage
+
+firstchar=`echo $1 | head -c 1`
+if [[ $firstchar == '-' ]]
+then	shift
+	firstchar=`echo $1 | head -c 1`
+
+	while [[ $firstchar != '-' ]] && [[ $firstchar != '' ]] 
+		do inputdirs="$inputdirs $1" 
+		shift 
+		firstchar=`echo $1 | head -c 1`
+	done
+
+	outputdirs=$inputdirs
+
+else	inputdirs=$1
+	outputdirs=$2
+	shift;shift
+fi
+
+opts=$@
+fsffile=`tmpnam`
+cnt=1;
+
+for input in $inputdirs; 
+do
+	cp $input $fsffile
+    fsffile=`cat $fsffile`
+	outfsffile=`echo $outputdirs | awk '{print $'$cnt'}'`
+	cnt=`echo $cnt + 1 | bc`
+	tempname=`tmpnam`
+	
+	pos=1;
+
+	pos2=2;
+	pos3=3;
+	pos4=4;
+	
+	in1=$(echo $opts | awk '{ print $'$pos'}')
+	in2=$(echo $opts | awk '{ print $'$pos2'}')
+	in3=$(echo $opts | awk '{ print $'$pos3'}')
+	in4=$(echo $opts | awk '{ print $'$pos4'}')
+
+	while [[ $in1 != '' ]]; do
+		
+		if [[ $in1 == '-replace' ]]
+		then
+			# convert "/"  
+			old=$(echo $in2 | sed 's/\//\\\//g')
+			new=$(echo $in3 | sed 's/\//\\\//g')
+
+			fsffile=$(echo  "$fsffile" | sed 's/'$old'/'$new'/g')
+			shiftpos; shiftpos; shiftpos
+
+		elif [[ $in1 == '-hilevel' ]]
+		then	
+            if [[ ${in2} == 'FE' ]];
+            then 
+			    fsffile=$(echo "$fsffile" | sed 's/mixed_yn) [0123]/mixed_yn) '3'/g')
+            elif [[ ${in2} == 'ME' ]];
+            then
+			    fsffile=$(echo "$fsffile" | sed 's/mixed_yn) [0123]/mixed_yn) '2'/g')
+            else
+                fsffile=$(echo "$fsffile" | sed 's/mixed_yn) [0123]/mixed_yn) '$in2'/g')
+            fi
+			
+			shiftpos; shiftpos
+
+
+
+		elif [[ $in1 == '-reg' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/reghighres_yn) [0-9].*/(reghighres_yn) '$in2'/g')
+			fsffile=$(echo "$fsffile" | sed 's/reg_yn) [0-9].*/(reg_yn) '$in2'/g')
+			fsffile=$(echo "$fsffile" | sed 's/regstandard_yn) [0-9].*/(regstandard_yn) '$in2'/g')
+		
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-FNIRT' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/regstandard_nonlinear_yn) [0-9].*/(regstandard_nonlinear_yn) '$in2'/g')
+		
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-FNIRTwarpres' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/regstandard_nonlinear_warpres) [0-9].*/(regstandard_nonlinear_warpres) '$in2'/g')
+		
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-highresdof' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/reghighres_dof) ./reghighres_dof) '$in2'/g')
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-bgim' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/bgimage) ./bgimage) '$in2'/g')
+		
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-FEATwatcher' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/watcher_yn) [0-9].*/watcher_yn) '$in2'/g')
+		
+			
+			shiftpos; shiftpos
+
+
+		elif [[ $in1 == '-MELODIC' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/melodic_yn) [0-9].*/melodic_yn) '$in2'/g')
+		
+			
+			shiftpos; shiftpos
+
+
+
+		elif [[ $in1 == '-nevs_orig' ]]
+		then	
+            
+            # determine original number of 
+
+			fsffile=$(echo "$fsffile" | sed 's/evs_orig) [0-9].*/evs_orig) '$in2'/g')
+			
+            
+            npts=`echo "$fsffile" | grep -o 'npts).*'  | sed 's/npts) //'`
+
+            for a in `seq $in2`; do
+                # Check if EVs exist 
+                if  echo "$fsffile" | grep -q "EV $a title" ;           
+                # If exist, add extra bits
+                then
+  
+                    # Set orthogonalisation, EB
+                    for b in `seq $in2`;do 
+                        # Check if orth exists:
+                        if  echo "$fsffile" | grep -q "ortho$a.$b)" ;             
+                        then :
+                        else
+                        txt=$txt"# Orthogonalise EV $a wrt EV $b\n\n"
+                        txt=$txt" set fmri(ortho$a.$b) 0\n\n"
+                         fi
+                    done
+
+                    # figure out where to put info 
+
+                    if echo "$fsffile" | grep -q "fmri(evg.*\.$a)" ;
+                    then
+                        lineno=`echo "$fsffile" | grep -n "evg.*\.$a)"  | tail -n 1 | sed 's/:.*//'`
+                    else
+                        lineno=`echo "$fsffile" | wc -l | sed 's/ .*//'` 
+                    fi
+                        
+                    fsffile=$(echo "$fsffile" | sed ''$lineno'a '"$txt"'') 
+                    
+
+                    txt=''
+
+                    # Set EV values to 0
+                    for b in `seq $npts`;do  
+                        # Check if EV exists
+                        if  echo "$fsffile" | grep -q "fmri(evg$b.$a)" ;
+                        then : 
+                        else
+                            txt=$txt"# Higher-level EV value for EV $a and input $b\n\n" 
+                            txt=$txt"set fmri(evg$b.$a) 0\n\n"
+                        fi
+                    done
+
+                    # figure out where to put info 
+
+                    if echo "$fsffile" | grep -q "fmri(evg.*\.$a)" ;
+                    then
+                        lineno=`echo "$fsffile" | grep -n "evg.*\.$a)"  | tail -n 1 | sed 's/:.*//'`
+                    else
+                        lineno=`echo "$fsffile" | wc -l | sed 's/ .*//'` 
+                    fi
+                       
+                    if [[ $txt != '' ]]
+                    then    fsffile=$(echo "$fsffile" | sed ''$lineno'a '"$txt"'') 
+                            
+                    fi
+                else
+
+                    # If not exist create extra orthogonalisation files
+                    txt=$txt" # EV $a title\n"
+                    txt=$txt" set fmri(evtitle$a) \"\"\n"
+                    txt=$txt"\n"
+                    txt=$txt" # Basic waveform shape (EV $a)\n"
+                    txt=$txt" # 0 : Square\n"
+                    txt=$txt" # 1 : Sinusoid\n"
+                    txt=$txt" # 2 : Custom (1 entry per volume)\n"
+                    txt=$txt" # 3 : Custom (3 column format)\n"
+                    txt=$txt" # 4 : Interaction\n"
+                    txt=$txt" # 10 : Empty (all zeros)\n"
+                    txt=$txt" set fmri(shape$a) 2\n"
+                    txt=$txt"\n"
+                    txt=$txt" # Convolution (EV $a)\n"
+                    txt=$txt" # 0 : None\n"
+                    txt=$txt" # 1 : Gaussian\n"
+                    txt=$txt" # 2 : Gamma\n"
+                    txt=$txt" # 3 : Double-Gamma HRF\n"
+                    txt=$txt" # 4 : Gamma basis functions\n"
+                    txt=$txt" # 5 : Sine basis functions\n"
+                    txt=$txt" # 6 : FIR basis functions\n"
+                    txt=$txt" set fmri(convolve$a) 2\n"
+                    txt=$txt"\n"
+                    txt=$txt" # Convolve phase (EV $a)\n"
+                    txt=$txt" set fmri(convolve_phase$a) 0\n"
+                    txt=$txt"\n"
+                    txt=$txt" # Apply temporal filtering (EV $a)\n"
+                    txt=$txt" set fmri(tempfilt_yn$a) 0\n"
+                    txt=$txt"\n"
+                    txt=$txt" # Add temporal derivative (EV $a)\n"
+                    txt=$txt" set fmri(deriv_yn$a) 0\n"
+                    txt=$txt"\n"
+                    txt=$txt" # Custom EV file (EV $a)\n"
+                    txt=$txt" set fmri(custom$a) \"dummy\"\n"
+                    txt=$txt"\n"
+
+                    # Set orthogonalisation, EB
+                    for b in `seq $in2`;do 
+                        txt=$txt"# Orthogonalise EV $a wrt EV $b\n\n"
+                        txt=$txt" set fmri(ortho$a.$b) 0\n\n"
+                    done
+
+                    # figure out where to put info 
+
+                    lastev=`echo $a-1 | bc`
+
+                    if echo "$fsffile" | grep -q "fmri(evg.*\.$lastev)" ;
+                    then
+                        lineno=`echo "$fsffile" | grep -n "evg.*\.$lastev)"  | tail -n 1 | sed 's/:.*//'`
+                    elif echo "$fsffile" | grep -q "confoundevs" ; 
+                    then
+                        lineno=`echo "$fsffile" | grep -n "confoundevs"  | tail -n 1 | sed 's/:.*//'`
+                    else 
+                        lineno=`echo "$fsffile" | wc -l | sed 's/ .*//'` 
+                    fi
+                    
+                    fsffile=$(echo "$fsffile" | sed ''$lineno'a '"$txt"'') 
+                    
+
+                    fi
+
+                    txt=''
+                    # Set EV values to 0
+                    for b in `seq $npts`;do  
+                        txt=$txt"# Higher-level EV value for EV $a and input $b\n\n" 
+                        txt=$txt"set fmri(evg$b.$a) 0\n\n"
+                    done
+                        
+                    # figure out where to put info 
+
+                    lastev=`echo $a-1 | bc`
+
+                    if echo "$fsffile" | grep -q "fmri(evg.*\.$lastev)" ;
+                    then
+                        lineno=`echo "$fsffile" | grep -n "evg.*\.$lastev)"  | tail -n 1 | sed 's/:.*//'`
+                    elif echo "$fsffile" | grep -q "confoundevs" ; 
+                    then
+                        lineno=`echo "$fsffile" | grep -n "confoundevs"  | tail -n 1 | sed 's/:.*//'`
+                    else 
+                        lineno=`echo "$fsffile" | wc -l | sed 's/ .*//'` 
+                    fi
+                    
+                    fsffile=$(echo "$fsffile" | sed ''$lineno'a '"$txt"'') 
+                    
+                    shiftpos; shiftpos
+        done
+
+		elif [[ $in1 == '-analysis' ]]
+		then
+
+			fsffile=$(echo "$fsffile" | sed 's/analysis) ./analysis) '$in2'/g')
+	    
+            if [[ $in2 == '1' ]];
+            then    fsffile=$(echo "$fsffile" | sed 's/stats_yn) ./stats_yn) '0'/g' | sed 's/poststats_yn) ./poststats_yn) '0'/g')
+            fi
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-featwatcher' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/featwatcher_yn) ./featwatcher_yn) '$in2'/g')
+		
+			shiftpos; shiftpos
+
+
+		elif [[ $in1 == '-overwrite' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/newdir_yn) ./newdir_yn) '$in2'/g')
+		
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-B0' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/regunwarp_yn) ./regunwarp_yn) '$in2'/g')
+		
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-EPIes' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/dwell) .*/dwell) '$in2'/g')
+		
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-EPIte' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/(te) .*/(te) '$in2'/g')
+		
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-nevs_real' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/evs_real) [0-9].*/evs_real) '$in2'/g')
+		
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-td' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/deriv_yn'$in2') [0-9].*/deriv_yn'$in2') '$in3'/g')
+		
+			
+			shiftpos; shiftpos; shiftpos
+		
+		elif [[ $in1 == '-tf' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/tempfilt_yn'$in2') [0-9].*/tempfilt_yn'$in2') '$in3'/g')
+		
+			
+			shiftpos; shiftpos; shiftpos
+			
+		elif [[ $in1 == '-evskip' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/skip'$in2') [0-9].*/skip'$in2') '$in3'/g')
+		
+			
+			shiftpos; shiftpos; shiftpos
+			
+		elif [[ $in1 == '-evshape' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/shape'$in2') [0-9].*/shape'$in2') '$in3'/g')
+		
+            # if 2 or 3, check if need to add lines to file
+            if [[ $in3 == 2 ]] || [[ $in3 == 3 ]] 
+            then
+
+                if  echo "$fsffile" | grep -q "custom$in2)" ;
+                then
+                    txt=''
+                else
+                    
+                    txt=$txt"# Custom EV file (EV $in2)\n\n"
+                    txt=$txt"set fmri(custom$2) \"\""
+
+                     # figure out where to put info 
+
+                    if echo "$fsffile" | grep -q "deriv_yn$2)" ;
+                    then
+                        lineno=`echo "$fsffile" | grep -n "deriv_yn$2)"  | tail -n 1 | sed 's/:.*//'`
+                    else
+                        lineno=`echo "$fsffile" | wc -l | sed 's/ .*//'` 
+                    fi
+                    
+                    echo $lineno
+                    fsffile=$(echo "$fsffile" | sed ''$lineno'a '"$txt"'') 
+                fi
+            fi
+                
+			
+			shiftpos; shiftpos; shiftpos
+		
+		elif [[ $in1 == '-evname' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/evtitle'$in2') ".*"/evtitle'$in2') "'$in3'"/g')
+		
+			
+			shiftpos; shiftpos; shiftpos
+
+		elif [[ $in1 == '-evcustom' ]]
+		then
+			newdir=$(echo $in3 | sed 's/\//\\\//g')
+			fsffile=$(echo "$fsffile" | sed 's/custom'$in2') "\(.*\)"/custom'$in2') "\1\/'$newdir'"/g')
+		
+			
+			shiftpos; shiftpos; shiftpos
+
+        elif [[ $in1 == '-evcustomfulldir' ]]
+		then
+			newdir=$(echo $in3 | sed 's/\//\\\//g')
+            
+			fsffile=$(echo "$fsffile" | sed 's/custom'$in2') ".*"/custom'$in2') "'$newdir'"/g') 
+		
+			
+			shiftpos; shiftpos; shiftpos
+
+		elif [[ $in1 == '-evval' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/evg'$in3'.'$in2') [0-9].*/evg'$in3'\.'$in2') '$in4'/g')
+		
+			
+			shiftpos; shiftpos; shiftpos; shiftpos
+
+
+		elif [[ $in1 == '-evconv' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/convolve'$in2').*/convolve'$in2') '$in3'/g')
+		
+			shiftpos; shiftpos; shiftpos
+
+		elif [[ $in1 == '-evorth' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/ortho'$in2'.'$in3') [0-9].*/ortho'$in2'\.'$in3') '$in4'/g')
+		
+			
+			shiftpos; shiftpos; shiftpos; shiftpos
+			
+		elif [[ $in1 == '-contrast_mode' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/con_mode) [a-z].*/con_mode) '$in2'/g' | sed 's/con_mode_old) [a-z].*/con_mode_old) '$in2'/g')
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-contrast_orig' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/con_orig'$in2'.'$in3') [0-9].*/con_orig'$in2'\.'$in3') '$in4'/g')
+		
+			shiftpos; shiftpos; shiftpos; shiftpos
+			
+		elif [[ $in1 == '-contrast_real' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/con_real'$in2'.'$in3') [0-9].*/con_real'$in2'\.'$in3') '$in4'/g')
+		
+			
+			shiftpos; shiftpos; shiftpos; shiftpos
+
+		elif [[ $in1 == '-contrast_orig_show' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/conpic_orig\.'$in2') [0-9].*/conpic_orig\.'$in2') '$in3'/g')
+		
+			
+			shiftpos; shiftpos; shiftpos
+		
+		elif [[ $in1 == '-contrast_orig_name' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/conname_orig\.'$in2') ".*"/conname_orig\.'$in2') "'$in3'"/g')
+		
+			
+			shiftpos; shiftpos; shiftpos
+
+		elif [[ $in1 == '-contrast_real_show' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/conpic_real\.'$in2') [0-9].*/conpic_real\.'$in2') '$in3'/g')
+		
+			
+			shiftpos; shiftpos; shiftpos
+		
+		elif [[ $in1 == '-contrast_real_name' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/conname_real\.'$in2') ".*"/conname_real\.'$in2') "'$in3'"/g')
+		
+			
+			shiftpos; shiftpos; shiftpos
+
+		elif [[ $in1 == '-smooth' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/smooth) [0-9].*/smooth) '$in2'/g')
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-hpfilteron' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/temphp_yn) [0-9].*/temphp_yn) '$in2'/g')
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-hpfilter' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/paradigm_hp) [0-9].*/paradigm_hp) '$in2'/g')
+			
+			shiftpos; shiftpos
+
+
+		elif [[ $in1 == '-motion' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/motionevs) [0-9].*/motionevs) '$in2'/g')
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-confoundevs' ]]
+		then
+            if [[ $in3 == '' ]]
+            then    fsffile=$(echo "$fsffile" | sed 's/confound_evs) [0-9].*/confound_evs) '$in2'/g')
+                    shiftpos;shiftpos
+            else
+
+			    newdir=$(echo $in3 | sed 's/\//\\\//g')
+			    fsffile=$(echo "$fsffile" | sed 's/\([^"]*confoundev_files(1) "\)\([^"]*\)"/\1'$newdir'"/g;s/confoundevs) [01].*/confoundevs) '$in2'/g' )
+		
+			    shiftpos; shiftpos; shiftpos
+            fi
+
+		elif [[ $in1 == '-outlier' ]]
+		then	
+			fsffile=$(echo "$fsffile" | sed 's/robust_yn) [01].*/robust_yn) '$in2'/g')
+			
+			shiftpos; shiftpos
+
+
+		elif [[ $in1 == '-ncontrasts_orig' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/ncon_orig) [0-9].*/ncon_orig) '$in2'/g')
+		
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-ncontrasts_real' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/ncon_real) [0-9].*/ncon_real) '$in2'/g')
+		
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-outputfulldir' ]]
+		then
+			newdir=$(echo $in2 | sed 's/\//\\\//g')
+			fsffile=$(echo "$fsffile" | sed 's/\([^"]*outputdir) "\)\([^"]*\)"/\1'$newdir'"/g' )
+		
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-outputdir' ]]
+		then
+			# dir=`echo "$fsffile" | grep outputdir | sed 's/[^"]*"\([^"]*\)"/\1/g'`
+			dir=`echo "$fsffile" | grep outputdir | awk '{ print $NF }'`
+
+			firstchar=`echo $dir | head -c 1`
+			lastchar=`echo $dir | tail -c 1`
+
+			if [[ $dir == '' ]]
+			then newdir=$in2
+			elif 	[[ $lastchar == / ]]
+			then 	newdir=$dir/$in2
+			else	newdir=`dirname $dir`/$in2
+				    newdir=`echo $newdir | sed 's/^.\//\//g'`
+			fi
+
+			newdir=$(echo $newdir | sed 's/\//\\\//g')
+			fsffile=$(echo "$fsffile" | sed 's/\([^\"]*outputdir) "\)\([^\"]*\)\"/\1'$newdir'\"/g')
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-inputdirs' ]]
+		then
+			## not working
+			dir=`cat "$fsffile" | grep feat_files\(1\) | sed 's/[^"]*"\([^"]*\)"/\1/g'`
+
+			firstchar=`echo $dir | head -c 1`
+			lastchar=`echo $dir | tail -c 1`
+			if [[ $dir == '' ]]
+			then newdir=$in2
+			elif 	[[ $lastchar == / ]]
+			then 	newdir=$dir/$in2
+			else	newdir=`dirname $dir`/$in2
+				newdir=$(echo $newdir | sed 's/^.\///g')
+			fi
+
+			newdir=$(echo $newdir | sed 's/\//\\\//g')
+			fsffile=$(echo "$fsffile" | sed 's/\([^\"]*feat_files(.) "\)\([^\"]*\)\"/\1'$newdir'\"/g')
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-inputfulldir' ]]
+		then
+			newdir=$(echo $in3 | sed 's/\//\\\//g')
+			fsffile=$(echo "$fsffile" | sed 's/\([^"]*feat_files('$in2') "\)\([^"]*\)"/\1'$newdir'"/g' )
+		
+			# adjust timepoints and TR
+
+            npts=`fslval $in3 dim4 | grep -o "[0-9.]*"`
+            TR=`fslval $in3 pixdim4 | grep -o "[0-9.]*"`
+
+			fsffile=$(echo "$fsffile" | sed 's/tr) .*/tr) '$TR'/g')
+			fsffile=$(echo "$fsffile" | sed 's/npts) .*/npts) '$npts'/g')
+
+			shiftpos; shiftpos; shiftpos
+
+		elif [[ $in1 == '-tr' ]]
+		then
+
+			fsffile=$(echo "$fsffile" | sed 's/tr) .*/tr) '$in2'/g')
+			
+			shiftpos; shiftpos
+
+
+		elif [[ $in1 == '-ncopeinputs' ]]
+		then
+			fsffile=$(echo "$fsffile" | sed 's/ncopeinputs) [0-9].*/ncopeinputs) '$in2'/g')
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-structural' ]]
+		then
+			newdir=$(echo $in2 | sed 's/\//\\\//g')
+			fsffile=$(echo "$fsffile" | sed 's/\([^"]*highres_files(.) "\)\([^"]*\)"/\1'$newdir'"/g' )
+			
+			shiftpos; shiftpos
+
+		elif [[ $in1 == '-alt_example_func' ]]
+		then
+			newdir=$(echo $in2 | sed 's/\//\\\//g')
+			fsffile=$(echo "$fsffile" | sed 's/\([^"]*alternative_example_func) "\)\([^"]*\)"/\1'$newdir'"/g' )
+			shiftpos; shiftpos
+
+		else
+			echo Error: no option $in1
+			exit
+		fi
+
+
+
+	pos2=$(echo $pos+1 | bc)
+	pos3=$(echo $pos+2 | bc)
+	pos4=$(echo $pos+3 | bc)
+
+	in1=$(echo $opts | awk '{ print $'$pos' }')
+	in2=$(echo $opts | awk '{ print $'$pos2' }')
+	in3=$(echo $opts | awk '{ print $'$pos3' }')
+	in4=$(echo $opts | awk '{ print $'$pos4' }')
+
+	done
+
+	echo "$fsffile" > $outfsffile
+
+done

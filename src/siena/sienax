@@ -1,0 +1,372 @@
+#!/bin/sh
+
+#   sienax - Structural Image Evaluation, including Normalisation, of Atrophy (X-sectional)
+#
+#   Stephen Smith, FMRIB Image Analysis Group
+#
+#   Copyright (C) 1999-2007 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage() {
+    cat <<EOF
+
+Usage: sienax <input> [options]
+
+  -o <output-dir> : set output directory (default output is <input>_sienax)
+  -d              : debug (don't delete intermediate files)
+  -B "betopts"    : options to pass to BET brain extraction (inside double-quotes), e.g. -B "-f 0.3"
+  -2              : two-class segmentation (don't segment grey and white matter separately)
+  -t2             : T2-weighted input image (default T1-weighted)
+  -t <t>          : ignore from t (mm) upwards in MNI152/Talairach space
+  -b <b>          : ignore from b (mm) downwards in MNI152/Talairach space (b should probably be negative)
+  -r              : regional - use standard-space masks to give peripheral cortex GM volume (3-class segmentation only) and ventricular CSF volume
+  -lm <mask>      : use lesion (or lesion+CSF) mask to remove incorrectly labelled "grey matter" voxels
+  -S "segopts"    : options to pass to FAST segmentation (inside double-quotes), e.g. -S "I 20"
+
+EOF
+    exit 1
+}
+
+[ _$1 = _ ] && Usage
+Io=`${FSLDIR}/bin/remove_ext $1`;
+[ `${FSLDIR}/bin/imtest ${Io}` = 0 ] && Usage
+thecommand="sienax $@"
+shift
+
+outdir=${Io}_sienax
+debug=0
+regional=0
+betopts=""
+segopts=""
+nseg=3
+stdroi=""
+origin3=37 # `fslval ${FSLDIR}/data/standard/MNI152_T1_2mm origin3`
+pixdim3=2  # `fslval ${FSLDIR}/data/standard/MNI152_T1_2mm pixdim3`
+imtype="-t 1"
+
+while [ _$1 != _ ] ; do
+
+    if [ $1 = -d ] ; then
+        debug=1
+        shift
+    elif [ $1 = -o ] ; then
+        outdir=$2
+        shift 2
+    elif [ $1 = -r ] ; then
+	regional=1
+        shift
+    elif [ $1 = -B ] ; then
+        betopts=$2
+        shift 2
+    elif [ $1 = -S ] ; then
+        segopts=$2
+        shift 2
+    elif [ $1 = -2 ] ; then
+        nseg=2
+        shift
+    elif [ $1 = -t2 ] ; then
+        imtype="-t 2"
+        shift
+    elif [ $1 = -t ] ; then
+	stdt=`echo $2 | sed 's/-/_/g'`
+	stdt=`echo "10 k $stdt $pixdim3 / $origin3 + p" | dc -`
+	stdroi="$stdroi -roi 0 1000000 0 1000000 0 $stdt 0 1"
+	shift 2
+    elif [ $1 = -b ] ; then
+	stdb=`echo $2 | sed 's/-/_/g'`
+	stdb=`echo "10 k $stdb $pixdim3 / $origin3 + p" | dc -`
+	stdroi="$stdroi -roi 0 1000000 0 1000000 $stdb 1000000 0 1"
+	shift 2
+    elif [ $1 = -lm ] ; then
+	lm=$2
+	shift 2
+    else
+	Usage
+    fi
+
+done
+
+if [ $regional = 1 ] ; then
+    if [ $nseg = 2 ] ; then
+	echo "Can't do regional analysis with 2-class segmentation"
+	exit
+    fi
+fi
+
+mkdir -p $outdir
+${FSLDIR}/bin/imcp $Io ${outdir}/I
+if [ _$lm != _ ] ; then
+    ${FSLDIR}/bin/imcp $lm ${outdir}/lesion_mask
+    lm=lesion_mask
+fi
+cd $outdir
+I=I
+
+echo '<HTML><HEAD><link REL="stylesheet" TYPE="text/css" href="file:'${FSLDIR}'/doc/fsl.css"><TITLE>FSL</TITLE></HEAD><BODY><hr><TABLE BORDER=0 WIDTH="100%"><TR><TD ALIGN=CENTER><H1>SIENAX Report</H1>'${thecommand}'<TD ALIGN=RIGHT><a href="'${FSLDIR}'/doc/index.html"><IMG BORDER=0 SRC="'${FSLDIR}'/doc//images/fsl-logo.jpg"></a></TR></TABLE>' > report.html
+
+echo "-----------------------------------------------------------------------" >  report.sienax
+echo ""                                                                        >> report.sienax
+echo " SIENA - Structural Image Evaluation, using Normalisation, of Atrophy"   >> report.sienax
+echo " part of FSL www.fmrib.ox.ac.uk/fsl"                                     >> report.sienax
+echo " running cross-sectional atrophy measurement: sienax version 2.6"        >> report.sienax
+echo " sienax $@"                                                              >> report.sienax
+echo ""                                                                        >> report.sienax
+
+echo "----------  extract brain  --------------------------------------------" >> report.sienax
+${FSLDIR}/bin/bet $I ${I}_brain -s -m $betopts >> report.sienax
+${FSLDIR}/bin/fslmaths ${I}_brain -sub `$FSLDIR/bin/fslstats ${I}_brain -p 0` -mas ${I}_brain_mask ${I}_brain -odt float
+${FSLDIR}/bin/overlay 0 0 $I -a ${I}_brain 1 `${FSLDIR}/bin/fslstats ${I}_brain -P 95` ${I}_brain_skull 0.9 1.1 ${I}_grot
+${FSLDIR}/bin/slicer ${I}_grot -a ${I}_bet.png
+${FSLDIR}/bin/imrm ${I}_grot
+echo "<hr><p><b>BET brain extraction results</b><p><IMG BORDER=0 SRC=\"${I}_bet.png\">" >> report.html
+
+echo ""                                                                        >> report.sienax
+echo "----------  register to standard space using brain and skull  --------" >> report.sienax
+echo "(do not worry about histogram warnings)"                                 >> report.sienax
+${FSLDIR}/bin/pairreg ${FSLDIR}/data/standard/MNI152_T1_2mm_brain ${I}_brain ${FSLDIR}/data/standard/MNI152_T1_2mm_skull ${I}_brain_skull ${I}2std.mat >> report.sienax 2>&1
+${FSLDIR}/bin/avscale ${I}2std.mat ${FSLDIR}/data/standard/MNI152_T1_2mm > ${I}2std.avscale
+xscale=`grep Scales ${I}2std.avscale | awk '{print $4}'`
+yscale=`grep Scales ${I}2std.avscale | awk '{print $5}'`
+zscale=`grep Scales ${I}2std.avscale | awk '{print $6}'`
+vscale=`echo "10 k $xscale $yscale * $zscale * p"|dc -`
+echo "VSCALING $vscale" >> report.sienax
+${FSLDIR}/bin/flirt -in $I -ref ${FSLDIR}/data/standard/MNI152_T1_2mm_brain -o ${I}2std -applyxfm -init ${I}2std.mat
+${FSLDIR}/bin/slicer ${I}2std ${FSLDIR}/data/standard/MNI152_T1_2mm_brain -a ${I}2std.png
+${FSLDIR}/bin/imrm ${I}2std
+echo "<hr><p><b>FLIRT standard space registration results</b><p><IMG BORDER=0 SRC=\"${I}2std.png\">" >> report.html
+
+echo ""                                                                        >> report.sienax
+echo "----------  mask with std mask  ---------------------------------------" >> report.sienax
+${FSLDIR}/bin/convert_xfm -inverse -omat ${I}2std_inv.mat ${I}2std.mat
+MASK=${FSLDIR}/data/standard/MNI152_T1_2mm_brain_mask_dil
+if [ "$stdroi" != "" ] ; then
+    ${FSLDIR}/bin/fslmaths $MASK $stdroi ${I}_stdmaskroi
+    MASK=${I}_stdmaskroi
+fi
+${FSLDIR}/bin/flirt -in $MASK -ref ${I}_brain -out ${I}_stdmask -applyxfm -init ${I}2std_inv.mat
+${FSLDIR}/bin/fslmaths ${I}_stdmask -thr 0.5 -bin ${I}_stdmask
+${FSLDIR}/bin/fslmaths ${I}_brain -mas ${I}_stdmask ${I}_stdmaskbrain
+${FSLDIR}/bin/overlay 0 0 -c $I -a ${I}_stdmask 0.9 3 ${I}_brain_mask 0.9 1.1 ${I}_grot
+${FSLDIR}/bin/slicer ${I}_grot -a ${I}_masks.png
+${FSLDIR}/bin/imrm ${I}_grot
+echo "<hr><p><b>Field-of-view and standard space masking</b><br>Red shows the standard-space-based brain mask combined with the field-of-view mask (if used). Blue shows the original BET-derived brain mask. Green shows the intersection of the two.<p><IMG BORDER=0 SRC=\"${I}_masks.png\">" >> report.html
+
+if [ $regional = 1 ] ; then
+    ${FSLDIR}/bin/flirt -in ${FSLDIR}/data/standard/MNI152_T1_2mm_strucseg_periph -ref ${I}_brain -out ${I}_stdmask_segperiph -applyxfm -init ${I}2std_inv.mat
+    ${FSLDIR}/bin/fslmaths ${I}_stdmask_segperiph -thr 0.5 -bin ${I}_stdmask_segperiph
+    ${FSLDIR}/bin/fslmaths ${FSLDIR}/data/standard/MNI152_T1_2mm_strucseg -thr 4.5 -bin ${I}_tmpmask
+    ${FSLDIR}/bin/flirt -in ${I}_tmpmask -ref ${I}_brain -out ${I}_stdmask_segvent -applyxfm -init ${I}2std_inv.mat
+    ${FSLDIR}/bin/fslmaths ${I}_stdmask_segvent -thr 0.5 -bin ${I}_stdmask_segvent
+    /bin/rm ${I}_tmpmask*
+fi
+
+echo ""                                                                        >> report.sienax
+echo "----------  segment tissue into types  --------------------------------" >> report.sienax
+if [ $nseg = 2 ] ; then
+    ${FSLDIR}/bin/fast -g -n 2 $imtype $segopts ${I}_stdmaskbrain >> report.sienax 2>&1
+    echo "" >> report.sienax
+    echo "----------  convert brain volume into normalised volume  --------------" >> report.sienax
+    echo "" >> report.sienax
+    echo "                   volume    unnormalised-volume" >> report.sienax
+    S=`${FSLDIR}/bin/fslstats ${I}_stdmaskbrain_pve_1 -m -v`
+    xa=`echo $S | awk '{print $1}'`
+    xb=`echo $S | awk '{print $3}'`
+    ubrain=`echo "2 k $xa $xb * 1 / p" | dc -`
+    nbrain=`echo "2 k $xa $xb * $vscale * 1 / p" | dc -`
+else
+    if [ _$lm != _ ] ; then
+	${FSLDIR}/bin/fslmaths $lm -bin -mul -1 -add 1 -mul ${I}_stdmaskbrain ${I}_stdmaskbrain -odt float
+    fi
+
+    ${FSLDIR}/bin/fast -g $imtype $segopts ${I}_stdmaskbrain >> report.sienax 2>&1
+
+    if [ _$lm != _ ] ; then
+	${FSLDIR}/bin/fslmaths $lm -bin -max ${I}_stdmaskbrain_pve_2 ${I}_stdmaskbrain_pve_2 -odt float
+	${FSLDIR}/bin/fslmaths $lm -bin -mul 3 -max ${I}_stdmaskbrain_seg ${I}_stdmaskbrain_seg -odt int
+    fi
+
+    echo "" >> report.sienax
+    echo "----------  convert brain volume into normalised volume  --------------" >> report.sienax
+    echo "" >> report.sienax
+    echo "tissue             volume    unnormalised-volume" >> report.sienax
+    if [ $regional = 1 ] ; then
+	${FSLDIR}/bin/fslmaths ${I}_stdmaskbrain_pve_1 -mas ${I}_stdmask_segperiph ${I}_stdmaskbrain_pve_1_segperiph -odt float
+	S=`${FSLDIR}/bin/fslstats ${I}_stdmaskbrain_pve_1_segperiph -m -v`
+	xa=`echo $S | awk '{print $1}'`
+	xb=`echo $S | awk '{print $3}'`
+	uxg=`echo "2 k $xa $xb * 1 / p" | dc -`
+	xg=`echo "2 k $xa $xb * $vscale * 1 / p" | dc -`
+	echo "pgrey              $xg $uxg (peripheral grey)" >> report.sienax
+
+	${FSLDIR}/bin/fslmaths ${I}_stdmaskbrain_pve_0 -mas ${I}_stdmask_segvent ${I}_stdmaskbrain_pve_0_segvent -odt float
+	S=`${FSLDIR}/bin/fslstats ${I}_stdmaskbrain_pve_0_segvent -m -v`
+	xa=`echo $S | awk '{print $1}'`
+	xb=`echo $S | awk '{print $3}'`
+	uxg=`echo "2 k $xa $xb * 1 / p" | dc -`
+	xg=`echo "2 k $xa $xb * $vscale * 1 / p" | dc -`
+	echo "vcsf               $xg $uxg (ventricular CSF)" >> report.sienax
+    fi
+    S=`${FSLDIR}/bin/fslstats ${I}_stdmaskbrain_pve_1 -m -v`
+    xa=`echo $S | awk '{print $1}'`
+    xb=`echo $S | awk '{print $3}'`
+    ugrey=`echo "2 k $xa $xb * 1 / p" | dc -`
+    ngrey=`echo "2 k $xa $xb * $vscale * 1 / p" | dc -`
+    echo "GREY               $ngrey $ugrey" >> report.sienax
+    S=`${FSLDIR}/bin/fslstats ${I}_stdmaskbrain_pve_2 -m -v`
+    xa=`echo $S | awk '{print $1}'`
+    xb=`echo $S | awk '{print $3}'`
+    uwhite=`echo "2 k $xa $xb * 1 / p" | dc -`
+    nwhite=`echo "2 k $xa $xb * $vscale * 1 / p" | dc -`
+    echo "WHITE              $nwhite $uwhite" >> report.sienax
+
+    ubrain=`echo "2 k $uwhite $ugrey + 1 / p" | dc -`
+    nbrain=`echo "2 k $nwhite $ngrey + 1 / p" | dc -`
+fi
+
+echo "BRAIN              $nbrain $ubrain" >> report.sienax
+
+${FSLDIR}/bin/overlay 1 1 -c ${I} -a ${I}_stdmaskbrain_seg 1.9 5 ${I}_render
+${FSLDIR}/bin/slicer ${I}_render -s 1 -x 0.4 gr${I}a.png -x 0.5 gr${I}b.png -x 0.6 gr${I}c.png -y 0.4 gr${I}d.png -y 0.5 gr${I}e.png -y 0.6 gr${I}f.png -z 0.4 gr${I}g.png -z 0.5 gr${I}h.png -z 0.6 gr${I}i.png
+${FSLDIR}/bin/pngappend gr${I}a.png + gr${I}b.png + gr${I}c.png + gr${I}d.png + gr${I}e.png + gr${I}f.png + gr${I}g.png + gr${I}h.png + gr${I}i.png ${I}_render.png
+/bin/rm gr${I}?.???
+
+echo "<hr><p><b>Final SIENAX segmentation results</b><p>Whole-brain segmentation<br><IMG BORDER=0 SRC=\"${I}_render.png\">" >> report.html
+
+if [ $regional = 1 ] ; then
+    ${FSLDIR}/bin/overlay 0 1 -c ${I} -a ${I}_stdmaskbrain_pve_1_segperiph 0.3 0.7 ${I}_periph_render
+    ${FSLDIR}/bin/overlay 0 1 -c ${I} -a ${I}_stdmaskbrain_pve_0_segvent   0.3 0.7 ${I}_vent_render
+    ${FSLDIR}/bin/slicer ${I}_periph_render -s 1 -x 0.4 gr${I}a.png -x 0.5 gr${I}b.png -x 0.6 gr${I}c.png -y 0.4 gr${I}d.png -y 0.5 gr${I}e.png -y 0.6 gr${I}f.png -z 0.4 gr${I}g.png -z 0.5 gr${I}h.png -z 0.6 gr${I}i.png
+    ${FSLDIR}/bin/pngappend gr${I}a.png + gr${I}b.png + gr${I}c.png + gr${I}d.png + gr${I}e.png + gr${I}f.png + gr${I}g.png + gr${I}h.png + gr${I}i.png ${I}_periph_render.png
+    ${FSLDIR}/bin/slicer ${I}_vent_render -s 1 -x 0.4 gr${I}a.png -x 0.5 gr${I}b.png -x 0.6 gr${I}c.png -y 0.4 gr${I}d.png -y 0.5 gr${I}e.png -y 0.6 gr${I}f.png -z 0.4 gr${I}g.png -z 0.5 gr${I}h.png -z 0.6 gr${I}i.png
+    ${FSLDIR}/bin/pngappend gr${I}a.png + gr${I}b.png + gr${I}c.png + gr${I}d.png + gr${I}e.png + gr${I}f.png + gr${I}g.png + gr${I}h.png + gr${I}i.png ${I}_vent_render.png
+    /bin/rm gr${I}?.???
+    echo "<p>Peripheral cortex masked segmentation<br><IMG BORDER=0 SRC=\"${I}_periph_render.png\"><p>Ventricle masked segmentation<br><IMG BORDER=0 SRC=\"${I}_vent_render.png\">" >> report.html
+fi
+
+if [ $debug = 0 ] ; then
+    /bin/rm -f `$FSLDIR/bin/imglob -extensions ${I}_brain* ${I}_stdmask*`
+    /bin/rm -f ${I}2std.avscale ${I}2std_inv.mat
+fi
+
+echo "<p>Estimated volumes:<br><pre>" >> report.html
+${FSLDIR}/bin/extracttxt unnormalised report.sienax >> report.html
+echo "</pre>" >> report.html
+
+echo ""
+echo "Finished. The SIENAX report can be viewed by pointing your web browser at:"
+echo file:`pwd`/report.html
+echo "Estimated normalised brain volume (NBV) ="
+echo "$nbrain"
+echo ""
+
+cat >> report.html <<EOF
+
+<hr><p><b>SIENAX Methods</b>
+
+<p>Brain tissue volume, normalised for subject head size, was
+estimated with SIENAX [Smith 2001, Smith 2002], part of FSL [Smith
+2004]. SIENAX starts by extracting brain and skull images from the
+single whole-head input data [Smith 2002b]. The brain image is then
+affine-registered to MNI152 space [Jenkinson 2001, Jenkinson 2002]
+(using the skull image to determine the registration scaling); this is
+primarily in order to obtain the volumetric scaling factor, to be used
+as a normalisation for head size. Next, tissue-type segmentation with
+partial volume estimation is carried out [Zhang 2001] in order to
+calculate total volume of brain tissue (including separate estimates
+of volumes of grey matter, white matter, peripheral grey matter and
+ventricular CSF).
+
+<font size=-1><em>
+<P>[Smith 2001] S.M. Smith, N.&nbsp;De&nbsp;Stefano, M.&nbsp;Jenkinson, and P.M. Matthews.
+<BR>&nbsp;&nbsp;&nbsp;Normalised accurate measurement of longitudinal brain change.
+<BR>&nbsp;&nbsp;&nbsp;Journal of Computer Assisted Tomography, 25(3):466-475, May/June 2001.
+
+<P>[Smith 2002] S.M. Smith, Y.&nbsp;Zhang, M.&nbsp;Jenkinson, J.&nbsp;Chen, P.M. Matthews, A.&nbsp;Federico, and N.&nbsp;De&nbsp;Stefano.
+<BR>&nbsp;&nbsp;&nbsp;Accurate, robust and automated longitudinal and cross-sectional brain change analysis.
+<BR>&nbsp;&nbsp;&nbsp;NeuroImage, 17(1):479-489, 2002.
+
+<P>[Smith 2004] S.M. Smith, M.&nbsp;Jenkinson, M.W. Woolrich, C.F. Beckmann, T.E.J. Behrens, H.&nbsp;Johansen-Berg, P.R. Bannister, M.&nbsp;De&nbsp;Luca, I.&nbsp;Drobnjak, D.E. Flitney, R.&nbsp;Niazy, J.&nbsp;Saunders, J.&nbsp;Vickers, Y.&nbsp;Zhang, N.&nbsp;De&nbsp;Stefano, J.M. Brady, and P.M. Matthews.
+<BR>&nbsp;&nbsp;&nbsp;Advances in functional and structural MR image analysis and
+  implementation as FSL.
+<BR>&nbsp;&nbsp;&nbsp;NeuroImage, 23(S1):208-219, 2004.
+
+<P>[Smith 2002b] S.M. Smith.
+<BR>&nbsp;&nbsp;&nbsp;Fast robust automated brain extraction.
+<BR>&nbsp;&nbsp;&nbsp;Human Brain Mapping, 17(3):143-155, November 2002.
+
+<P>[Jenkinson 2001] M.&nbsp;Jenkinson and S.M. Smith.
+<BR>&nbsp;&nbsp;&nbsp;A global optimisation method for robust affine registration of brain images.
+<BR>&nbsp;&nbsp;&nbsp;Medical Image Analysis, 5(2):143-156, June 2001.
+
+<P>[Jenkinson 2002] M.&nbsp;Jenkinson, P.R. Bannister, J.M. Brady, and S.M. Smith.
+<BR>&nbsp;&nbsp;&nbsp;Improved optimisation for the robust and accurate linear registration and motion correction of brain images.
+<BR>&nbsp;&nbsp;&nbsp;NeuroImage, 17(2):825-841, 2002.
+
+<P>[Zhang 2001] Y.&nbsp;Zhang, M.&nbsp;Brady, and S.&nbsp;Smith.
+<BR>&nbsp;&nbsp;&nbsp;Segmentation of brain MR images through a hidden Markov random field model and the expectation maximization algorithm.
+<BR>&nbsp;&nbsp;&nbsp;IEEE Trans. on Medical Imaging, 20(1):45-57, 2001.
+
+EOF
+

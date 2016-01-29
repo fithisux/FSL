@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>HelpOnFslDocumentation</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">HelpOnFslDocumentation</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Page_templates">Page templates</a></li><li>
+<a href="#Layout_of_documentation_-_using_sub-pages">Layout of documentation - using sub-pages</a></li><li>
+<a href="#Providing_a_contents_menu">Providing a contents menu</a></li><li>
+<a href="#Automated_FSL_list_searching">Automated FSL list searching</a></li><li>
+<a href="#Things_to_use.2BAC8-avoid">Things to use/avoid</a></li><li>
+<a href="#Categories">Categories</a></li><li>
+<a href="#Custom_styles">Custom styles</a></li></ol></div> <span class="anchor" id="line-4"></span>
+<h1 id="Page_templates">Page templates</h1>
+<span class="anchor" id="line-5"></span><p class="line874">We have included several templates to help with the creation of the documentation. So far the templates included are: <span class="anchor" id="line-6"></span><div><table><tbody><tr>  <td><p class="line891"><a href="./FslToolTemplate.html">FslToolTemplate</a></td>
+  <td><p class="line862">For creating your top-level tool page, see below for how to layout your documentation</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-7"></span><p class="line891"><a href="./FslToolSubpageTemplate.html">FslToolSubpageTemplate</a></td>
+  <td><p class="line862">For creating sub-pages for your tool</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-8"></span><p class="line891"><a href="./FslFaqTemplate.html">FslFaqTemplate</a></td>
+  <td><p class="line862">For creating FAQs</td>
+</tr>
+<tr>  <td><span class="anchor" id="line-9"></span><p class="line891"><a href="./CategoryTemplate.html">CategoryTemplate</a></td>
+  <td><p class="line891"><em>Built-in</em> For creating a new category to appear in the <tt class="backtick">Add&nbsp;to</tt> menu</td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-10"></span><p class="line874">To use a template, visit a non-existant page and choose from the left-hand column of the table displayed on the page creation page. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line867">
+<h1 id="Layout_of_documentation_-_using_sub-pages">Layout of documentation - using sub-pages</h1>
+<span class="anchor" id="line-13"></span><p class="line862">We recommend that all tools have a top-level page called <em>TOOLNAME</em> which contains two sections, an introduction and a list of references for this tool, eg for TBSS: <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line862">Pagename - <em>TBSS</em> <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line862">Section 1 - <em>Tract-Based Spatial Statistics</em> <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><ul><li style="list-style-type:none">Contains a summary of the tools purpose <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span></li></ul><p class="line862">Section 2 - <em>Referencing</em> <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><ul><li style="list-style-type:none">Contains the referencing details. Your references should be in a block delimited with: <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span></li></ul><p class="line867"><span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><pre><span class="anchor" id="line-1"></span>{{{#!wiki references
+<span class="anchor" id="line-2"></span>...
+<span class="anchor" id="line-3"></span>}}}</pre><span class="anchor" id="line-30"></span><p class="line874">which will automatically indent and italicise the text. To un-italicise a section use the italics Wiki markup. <span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><p class="line862">Then create sub-pages to contain the remainder of the content. Sub-pages are named <em>TOOLNAME/SUBPAGE</em>, eg <em>TBSS/Faq</em>. The required minimum pages are: <span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><ul><li><p class="line891">UserGuide <span class="anchor" id="line-35"></span></li><li>Faq <span class="anchor" id="line-36"></span></li><li><p class="line891">FurtherInformation <span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span></li></ul><p class="line874">although your tool may require additional sections. <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><p class="line867">FurtherInformation should contain the sections: <span class="anchor" id="line-41"></span><ul><li>Theory <span class="anchor" id="line-42"></span></li><li>Background information <span class="anchor" id="line-43"></span></li><li>Related web links <span class="anchor" id="line-44"></span></li><li>Future work <span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span></li></ul><p class="line867">
+<h1 id="Providing_a_contents_menu">Providing a contents menu</h1>
+<span class="anchor" id="line-47"></span><p class="line862">At the start of each tool page you should include a contents list, we have provided a macro which will automate this process <strong>FslToolContents</strong>. To prepare for it's use you must first create a contents list page for your tool, do this by creating a new page <em>TOOLNAME</em>/Contents containing the sub-page names, in the order you wish them to appear, one per line. Do not include any mark-up, comments etc, and do not include the <em>TOOLNAME</em> or Introduction in the list. eg: <span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><ul><li style="list-style-type:none"><span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span><pre><span class="anchor" id="line-1-1"></span> UserGuide
+<span class="anchor" id="line-2-1"></span> Faq
+<span class="anchor" id="line-3-1"></span> FurtherInformation</pre><span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span></li></ul><p class="line874">Now on each sub-page (and the TOOLNAME page) include, at the start of the page <span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span><ul><li style="list-style-type:none"><span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span><pre><span class="anchor" id="line-1-2"></span> &lt;&lt;FslToolContents&gt;&gt;</pre><span class="anchor" id="line-60"></span><span class="anchor" id="line-61"></span></li></ul><p class="line862">The macro automatically adds the link back to the TOOLNAME page (displayed as <em>Introduction</em>), adds a space to Wikiwords to aid readability and capitalises Faq. For the current page, no link is setup and a contents list is displayed for this section, generated from the headings (and sub-headings) of the page. Where one of the specified sub-pages doesn't exist, it won't appear in the contents list. For example, the above contents page would result in: <span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><p class="line867"><span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><span class="anchor" id="line-66"></span><span class="anchor" id="line-67"></span><span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span><span class="anchor" id="line-71"></span><pre><span class="anchor" id="line-1-3"></span>Contents
+<span class="anchor" id="line-2-2"></span>  1. Introduction
+<span class="anchor" id="line-3-2"></span>   1.1. Tract-Based Spatial Statistics
+<span class="anchor" id="line-4"></span>   1.2. Referencing
+<span class="anchor" id="line-5"></span>  2. User Guide
+<span class="anchor" id="line-6"></span>  3. FAQ
+<span class="anchor" id="line-7"></span>  4. Further Information</pre><span class="anchor" id="line-72"></span><span class="anchor" id="line-73"></span><p class="line867"><span class="anchor" id="line-74"></span><span class="anchor" id="line-75"></span><span class="anchor" id="line-76"></span><div class="note"><span class="anchor" id="line-1-1"></span><p class="line874">The contents list will only be displayed when these sub-pages actually exist on the system. This allows you to setup the documentation for your tool and gradually add sections without the contents page containing broken links. <span class="anchor" id="line-2-1"></span>If you have a single page and want a table of contents then use the built in <tt class="backtick">&lt;&lt;TableOfContents&gt;&gt;</tt> macro instead. </div><span class="anchor" id="line-77"></span><p class="line867">
+<h1 id="Automated_FSL_list_searching">Automated FSL list searching</h1>
+<span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span><p class="line867"><strong>FslSearchJiscMail</strong><br>
+ This macro can be called to create a link on the page which will add a form allowing you to search the FSL mailing list for the specified text, eg: <span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span><p class="line867"><span class="anchor" id="line-82"></span><span class="anchor" id="line-83"></span><pre><span class="anchor" id="line-1-4"></span> &lt;&lt;FslSearchJiscMail('TBSS')&gt;&gt;</pre><span class="anchor" id="line-84"></span><span class="anchor" id="line-85"></span><p class="line862">will give a search form which will search for <tt class="backtick">TBSS</tt> AND whatever the user enters into the text field.  <span class="anchor" id="line-86"></span><span class="anchor" id="line-87"></span><p class="line862">To search for <strong>only</strong> what the user specifies, call with no options: <span class="anchor" id="line-88"></span><span class="anchor" id="line-89"></span><p class="line867"><span class="anchor" id="line-90"></span><span class="anchor" id="line-91"></span><pre><span class="anchor" id="line-1-5"></span> &lt;&lt;FslSearchJiscMail&gt;&gt;</pre><span class="anchor" id="line-92"></span><span class="anchor" id="line-93"></span><p class="line867">
+<h1 id="Things_to_use.2BAC8-avoid">Things to use/avoid</h1>
+<span class="anchor" id="line-94"></span><p class="line867"><a href="./MoinMoin.html">MoinMoin</a> provides lots of mark up options for you to make your pages look nice. Read <a href="./HelpOnMoinWikiSyntax.html">HelpOnMoinWikiSyntax</a> for a full description of all the available options. I would strongly encourage you to use the <a href="./HelpOnParsers.html#highlight_parser">highlight</a> function when you are including source code/scripts in your page. For example, if you are documenting commands that should be entered into a BASH session <em>highlight</em> this with <span class="anchor" id="line-95"></span><span class="anchor" id="line-96"></span><p class="line867"><span class="anchor" id="line-97"></span><span class="anchor" id="line-98"></span><span class="anchor" id="line-99"></span><span class="anchor" id="line-100"></span><span class="anchor" id="line-101"></span><pre><span class="anchor" id="line-1-6"></span>{{{#!highlight console
+<span class="anchor" id="line-2-3"></span>cd $HOME
+<span class="anchor" id="line-3-3"></span>ls -l
+<span class="anchor" id="line-4-1"></span>}}}</pre><span class="anchor" id="line-102"></span><p class="line874">which gives <span class="anchor" id="line-103"></span><span class="anchor" id="line-104"></span><p class="line867"><span class="anchor" id="line-105"></span><span class="anchor" id="line-106"></span><span class="anchor" id="line-107"></span><span class="anchor" id="line-1-2"></span><div class="highlight console"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+function isnumbered(obj) {
+  return obj.childNodes.length && obj.firstChild.childNodes.length && obj.firstChild.firstChild.className == 'LineNumber';
+}
+function nformat(num,chrs,add) {
+  var nlen = Math.max(0,chrs-(''+num).length), res = '';
+  while (nlen>0) { res += ' '; nlen-- }
+  return res+num+add;
+}
+function addnumber(did, nstart, nstep) {
+  var c = document.getElementById(did), l = c.firstChild, n = 1;
+  if (!isnumbered(c)) {
+    if (typeof nstart == 'undefined') nstart = 1;
+    if (typeof nstep  == 'undefined') nstep = 1;
+    var n = nstart;
+    while (l != null) {
+      if (l.tagName == 'SPAN') {
+        var s = document.createElement('SPAN');
+        var a = document.createElement('A');
+        s.className = 'LineNumber';
+        a.appendChild(document.createTextNode(nformat(n,4,'')));
+        a.href = '#' + did + '_' + n;
+        s.appendChild(a);
+        s.appendChild(document.createTextNode(' '));
+        n += nstep;
+        if (l.childNodes.length) {
+          l.insertBefore(s, l.firstChild);
+        }
+        else {
+          l.appendChild(s);
+        }
+      }
+      l = l.nextSibling;
+    }
+  }
+  return false;
+}
+function remnumber(did) {
+  var c = document.getElementById(did), l = c.firstChild;
+  if (isnumbered(c)) {
+    while (l != null) {
+      if (l.tagName == 'SPAN' && l.firstChild.className == 'LineNumber') l.removeChild(l.firstChild);
+      l = l.nextSibling;
+    }
+  }
+  return false;
+}
+function togglenumber(did, nstart, nstep) {
+  var c = document.getElementById(did);
+  if (isnumbered(c)) {
+    remnumber(did);
+  } else {
+    addnumber(did,nstart,nstep);
+  }
+  return false;
+}
+</script>
+
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-ed6001b061e9c60b1e813b413a35d54ef64383d1\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-ed6001b061e9c60b1e813b413a35d54ef64383d1" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-ed6001b061e9c60b1e813b413a35d54ef64383d1_1">   1</a> </span><span class="LineAnchor" id="CA-ed6001b061e9c60b1e813b413a35d54ef64383d1_1"></span><span class="anchor" id="line-1-3"></span><span class="LineNumber">cd $HOME</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-ed6001b061e9c60b1e813b413a35d54ef64383d1_2">   2</a> </span><span class="LineAnchor" id="CA-ed6001b061e9c60b1e813b413a35d54ef64383d1_2"></span><span class="anchor" id="line-2-2"></span><span class="LineNumber"></span><span class="LineNumber">ls -l</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-ed6001b061e9c60b1e813b413a35d54ef64383d1_3">   3</a> </span><span class="LineAnchor" id="CA-ed6001b061e9c60b1e813b413a35d54ef64383d1_3"></span><span class="anchor" id="line-3-1"></span><span class="LineNumber"></span></span>
+</pre></div></div><span class="anchor" id="line-108"></span><p class="line874">or for Python code: <span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span><p class="line867"><span class="anchor" id="line-111"></span><span class="anchor" id="line-112"></span><span class="anchor" id="line-113"></span><span class="anchor" id="line-114"></span><pre><span class="anchor" id="line-1-7"></span>{{{#!highlight python
+<span class="anchor" id="line-2-4"></span>import matplotlib
+<span class="anchor" id="line-3-4"></span>}}}</pre><span class="anchor" id="line-115"></span><p class="line874">to give <span class="anchor" id="line-116"></span><span class="anchor" id="line-117"></span><p class="line867"><span class="anchor" id="line-118"></span><span class="anchor" id="line-119"></span><span class="anchor" id="line-1-4"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-632f05830d7c84f3a68dba8f28dc4de500eb61b9\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-632f05830d7c84f3a68dba8f28dc4de500eb61b9" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-632f05830d7c84f3a68dba8f28dc4de500eb61b9_1">   1</a> </span><span class="LineAnchor" id="CA-632f05830d7c84f3a68dba8f28dc4de500eb61b9_1"></span><span class="anchor" id="line-1-5"></span><span class="ResWord">import</span> <span class="ID">matplotlib</span></span>
+</pre></div></div><span class="anchor" id="line-120"></span><p class="line862">If you don't want line numbers, <tt class="backtick">add&nbsp;numbers=disable</tt> to the highlight control line. <span class="anchor" id="line-121"></span><span class="anchor" id="line-122"></span><p class="line867">
+<h1 id="Categories">Categories</h1>
+<span class="anchor" id="line-123"></span><p class="line867"><a href="./MoinMoin.html">MoinMoin</a> supports the concept of page categories. By tagging your pages with one or more categories you can use macros to search for pages in a category. We use this to automatically add your tool pages to the main menu of FSL tools. To specify the categories for your page, use the <em>Add to:</em> drop-down menu at the bottom of the page editor to select the categories. They are then appended to the page as the <strong>last line</strong> of the document, where they must stay for the search functions to work. Secondary categories can be added with the same menu, appearing in double square brackets, eg: <span class="anchor" id="line-124"></span><span class="anchor" id="line-125"></span><p class="line867"><span class="anchor" id="line-126"></span><span class="anchor" id="line-127"></span><pre><span class="anchor" id="line-1-8"></span>CategoryDiffusion [[CategoryTBSS]]</pre><span class="anchor" id="line-128"></span><p class="line862">would add your page to the Diffusion tools category and the TBSS category. If you wish to create a new category, for example CategoryScripting follow these steps: <span class="anchor" id="line-129"></span><span class="anchor" id="line-130"></span><ol type="1"><li><p class="line862">Visit the URL <em>SITE</em><a href="./HelpOnFslDocumentation(2f)CategoryScripting.html">/CategoryScripting</a> (in the case of the FSLdev Wiki, <tt class="backtick">https://fsl.fmrib.ox.ac.uk/fsl/fsldev/CategoryScripting</tt>). <span class="anchor" id="line-131"></span></li><li><p class="line862">When offered, choose to create a page using the CategoryTemplate <span class="anchor" id="line-132"></span></li><li><p class="line862">Modify this template, changing the <em>Describe the pages in this category...</em> part to reflect your new category. <span class="anchor" id="line-133"></span></li><li>Save the category. <span class="anchor" id="line-134"></span><span class="anchor" id="line-135"></span></li></ol><p class="line862">This will then appear in the <em>Add to:</em> drop-down. <span class="anchor" id="line-136"></span><span class="anchor" id="line-137"></span><p class="line874">To add a search for pages with a category, add the following macro to your page: <span class="anchor" id="line-138"></span><span class="anchor" id="line-139"></span><p class="line867"><span class="anchor" id="line-140"></span><span class="anchor" id="line-141"></span><pre><span class="anchor" id="line-1-9"></span>&lt;&lt;FullSearch(category:CategoryFunctional)&gt;&gt;</pre><span class="anchor" id="line-142"></span><p class="line867">
+<h1 id="Custom_styles">Custom styles</h1>
+<span class="anchor" id="line-143"></span><p class="line874">The FSL theme has the following additional styles defined: <span class="anchor" id="line-144"></span><span class="anchor" id="line-145"></span><ul><li><p class="line891"><em>centred</em> <span class="anchor" id="line-146"></span>This style will centre the item to which it has been applied. This is most useful for tables; to centre a table use: <span class="anchor" id="line-147"></span><span class="anchor" id="line-148"></span><span class="anchor" id="line-149"></span><pre><span class="anchor" id="line-1-10"></span> ||&lt;tableclass='centred'&gt;Cell1||Cell2||</pre><span class="anchor" id="line-150"></span></li><li><p class="line891"><em>references</em> <span class="anchor" id="line-151"></span>This can only be applied to a section of text, see above for usage <span class="anchor" id="line-152"></span><span class="anchor" id="line-153"></span></li></ul><p class="line862">If you need a specific style then please email me <tt>&lt;duncan&nbsp;AT&nbsp;fmrib&nbsp;DOT&nbsp;ox&nbsp;DOT&nbsp;ac&nbsp;DOT&nbsp;uk&gt;</tt> to ask about creating it. You can then use the defined style with the following: <span class="anchor" id="line-154"></span><span class="anchor" id="line-155"></span><p class="line867"><span class="anchor" id="line-156"></span><span class="anchor" id="line-157"></span><span class="anchor" id="line-158"></span><span class="anchor" id="line-159"></span><pre><span class="anchor" id="line-1-11"></span>{{{#!wiki mystylename
+<span class="anchor" id="line-2-5"></span>...
+<span class="anchor" id="line-3-5"></span>}}}</pre><span class="anchor" id="line-160"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

@@ -1,0 +1,144 @@
+<html>
+  <head>
+    <title>label-div</title>
+    <!--[if IE]>
+    <script type="text/javascript" src="FSLDIR/etc/js/excanvas.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="FSLDIR/etc/js/strftime-min.js"></script>
+    <script type="text/javascript" src="FSLDIR/etc/js/rgbcolor.js"></script>
+    <script type="text/javascript" src="FSLDIR/etc/js/dygraph-canvas.js"></script>
+    <script type="text/javascript" src="FSLDIR/etc/js/dygraph.js"></script>
+    <script type="text/javascript" src="PNMDATA.js"></script>
+  </head>
+  <body>
+<p><b>Cardiac and Respiratory Trace</b> with peak detection results (controls and command underneath):</p>
+    <table><tr>
+    <td valign="top"><div id="blahgraphdiv2"></div></td>
+    </tr></table>
+
+    <script type="text/javascript" name="scriptbits">
+      s = parent.statusframe.document.getElementById("remotelist");
+      mv = parent.statusframe.document.getElementById("remotestatus");
+      var w = 6400;
+      var hh = 200;
+      var mode = "Add";
+      var trace = "Respiratory";
+      var drange = -1;
+      var respaddlist = "";
+      var cardaddlist = "";
+      var respdellist = "";
+      var carddellist = "";
+      var basecommand = "PNMSTAGE2";
+      var comm = "";
+      s.innerHTML = basecommand;
+     g2 = null;
+    
+   g2 = new Dygraph(document.getElementById("blahgraphdiv2"),
+		    pnm_data,
+                       {
+                         labels: [ "Time", "Cardiac", "Cardiac Peaks", "Respiratory", "Respiratory Peaks" ],
+                         labelsDiv: document.getElementById("labels"),
+			   width: w,
+			   visibility: [false, false, true, true],
+
+		         pointClickCallback: function(e, p) {
+			   //s.innerHTML +=  mode + "  " + trace + ": "
+			   //  + p.xval + "<br/>";
+			   if (trace == "Respiratory") {
+			     if (mode == "Add") {
+			       if (respaddlist != "") { respaddlist = respaddlist + "," };
+			       respaddlist = respaddlist + p.xval;
+			     }
+			     if (mode == "Delete") {
+			       if (respdellist != "") { respdellist = respdellist + "," };
+			       respdellist = respdellist + p.xval;
+			     }
+			   }
+			   if (trace == "Cardiac") {
+			     if (mode == "Add") {
+			       if (cardaddlist != "") { cardaddlist = cardaddlist + "," };
+			       cardaddlist = cardaddlist + p.xval;
+			     }
+			     if (mode == "Delete") {
+			       if (carddellist != "") { carddellist = carddellist + "," };
+			       carddellist = carddellist + p.xval;
+			     }
+			   }
+			   comm=basecommand;
+			   if (respaddlist != "") { comm=comm+" --respadd="+respaddlist; }
+			   if (respdellist != "") { comm=comm+" --respdel="+respdellist; }
+			   if (cardaddlist != "") { comm=comm+" --cardadd="+cardaddlist; }
+			   if (carddellist != "") { comm=comm+" --carddel="+carddellist; }
+			   s.innerHTML = comm;
+			 },
+
+			 zoomCallback: function(minX, maxX, yRanges) {
+			   if (drange<0) { drange = maxX - minX; }
+			   if (maxX - minX > drange) { g2.resize(w,hh); } else { g2.resize(800,hh); }
+			   drange = maxX - minX;
+			 }
+
+                       });
+     setStatus();
+     g2.resize(w,hh);
+
+    function setStatus() {
+    	 mv.innerHTML = "Current Status: " + mode + "<br>Current Trace: " + trace;
+    };
+    
+     function change(el) {
+        if (parseInt(el.id) == 0) { 
+	  g2.setVisibility(0, el.checked);
+	  g2.setVisibility(1, el.checked);
+	  if (el.checked==1) { trace="Cardiac"; } else { trace="Respiratory"; }
+	}
+	if (parseInt(el.id) == 1) {
+	  g2.setVisibility(2, el.checked);
+	  g2.setVisibility(3, el.checked);
+	  if (el.checked==1) { trace="Respiratory"; } else { trace="Cardiac"; }
+	}
+	setStatus();
+     };
+
+
+    function tallerGraph() {
+ 	hh = hh * 2;
+	g2.resize(w,hh);
+         };
+
+    function shorterGraph() {
+ 	hh = hh / 2;
+	g2.resize(w,hh);
+         };
+
+    function zoominGraph() {
+ 	w = w * 2;
+	g2.resize(w,hh);
+         };
+
+    function zoomoutGraph() {
+ 	w = w / 2;
+ 	g2.resize(w,hh);
+       };
+
+   function setDeleteMode() {
+     mode="Delete";
+     setStatus();
+   };
+
+     function setAddMode() {
+       mode="Add";
+       setStatus();
+     };
+
+     function clearEvents() {
+       s.innerHTML = basecommand;
+       respaddlist="";
+       respdellist="";
+       cardaddlist="";
+       carddellist="";
+     };
+
+   </script>
+  </body>
+</html>

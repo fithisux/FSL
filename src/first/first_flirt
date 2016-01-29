@@ -1,0 +1,156 @@
+#!/bin/sh
+
+#   first_flirt - initial standard space registration before running the main part of FIRST
+#
+#   Brian Patenaude, Courtney Bishop and Mark Jenkinson, FMRIB Image Analysis Group
+#
+#   Copyright (C) 2006-2010 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage() {
+    echo ""
+    echo "Usage:   first_flirt <input_image> <output_basename> [options]"
+    echo ""
+    echo "-b        : input is already brain extracted"
+    echo "-d        : debug (don't delete intermediate files)"
+    echo "-inweight : use a weighting mask on the first registration"
+    echo "-strucweight <maskimage> : use a specific structure weighting mask (in standard space) for an (optional) third-stage registration step"
+    echo "-cort : use a weighting mask of the whole brain on the first registration (for specific models)"
+    echo "-cost <costfunction> : specify the costfunction to be used by all FLIRT calls"
+    echo ""
+    echo "e.g.:    first_flirt subject10rawT1 subject10rawT1_to_std_sub"
+    echo ""
+    exit 1
+}
+
+[ "$2" = "" ] && Usage
+[ `${FSLDIR}/bin/imtest $1` = 0 ] && Usage
+A=`${FSLDIR}/bin/remove_ext $1`
+B=`${FSLDIR}/bin/remove_ext $2`
+shift 2
+refim=MNI152_T1_1mm
+debug=0
+doCortAlignment=0
+
+inweightCom=""
+strucweight=""
+costCom=""
+while [ _$1 != _ ] ; do
+    if [ $1 = -d ] ; then
+        debug=1
+        shift
+    elif [ $1 = -b ] ; then
+	refim=MNI152_T1_1mm_brain
+        shift
+	elif [ $1 = "-cort" ] ; then
+		 doCortAlignment=1
+		 shift
+    elif [ $1 = -cost ] ; then
+        costCom="${1} ${2}"
+        shift 2
+    elif [ $1 = -inweight ] ; then
+        inweightCom="${1} ${2}"
+        shift 2
+    elif [ $1 = -strucweight ] ; then
+        strucweight="${2}"
+        shift 2
+    fi
+done
+
+echo "initial registration $doCortAlignment"
+${FSLDIR}/bin/flirt -in $A -out ${B}_tmp_stage1 -ref ${FSLDIR}/data/standard/${refim} -omat ${B}_tmp_stage1.mat $inweightCom $costCom
+
+echo "Stage 2: use subcortical mask"
+#do subcortical alignment
+${FSLDIR}/bin/flirt -in ${B}_tmp_stage1 -out ${B}_tmp_stage2 -ref ${FSLDIR}/data/standard/${refim} -omat ${B}_tmp_stage2.mat -nosearch -refweight ${FSLDIR}/data/standard/MNI152lin_T1_1mm_subbr_mask $costCom
+${FSLDIR}/bin/convert_xfm -omat ${B}.mat -concat ${B}_tmp_stage2.mat ${B}_tmp_stage1.mat 
+
+
+#generate registered images
+${FSLDIR}/bin/flirt -in ${A} -out ${B} -ref ${FSLDIR}/data/standard/${refim} -applyxfm -init ${B}.mat 
+
+if [ $doCortAlignment -eq 1 ] ; then 
+    #do hemisphere/cerebellum alignment
+    echo "Alternate Stage 2: Use brain mask"
+    ${FSLDIR}/bin/flirt -in ${B}_tmp_stage1 -out ${B}_tmp_cort_stage2 -ref ${FSLDIR}/data/standard/${refim} -omat ${B}_tmp_cort_stage2.mat -nosearch -refweight ${FSLDIR}/data/standard/MNI152_T1_1mm_first_brain_mask.nii.gz $costCom
+    
+    ${FSLDIR}/bin/convert_xfm -omat ${B}_cort.mat -concat ${B}_tmp_cort_stage2.mat ${B}_tmp_stage1.mat 
+    
+    ${FSLDIR}/bin/flirt -in ${A} -out ${B}_cort -ref ${FSLDIR}/data/standard/${refim} -applyxfm -init ${B}_cort.mat
+fi
+
+if [ X$strucweight != X ] ; then
+    ${FSLDIR}/bin/flirt -in ${A} -ref ${FSLDIR}/data/standard/${refim} -init ${B}.mat -out ${B} -omat ${B}_tmp_stage3.mat -refweight ${strucweight} -nosearch $costCom
+    cp ${B}_tmp_stage3.mat ${B}.mat
+fi
+
+
+
+if [ $debug = 0 ] ; then
+  /bin/rm ${B}_tmp_stage*
+fi
+
+exit 0
+

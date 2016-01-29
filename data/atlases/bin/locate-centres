@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#locate-centres probimage xmlfile
+
+nvols=`fslinfo $1 | grep \^dim4 | awk '{print $2}'`
+
+for ((n=0; n<$nvols; n++)) ; do
+  fslroi $1 roi $n 1
+  fslmaths roi -thr `fslstats roi -P 50` -bin -mul -1 -add 1 invroi
+  distancemap -i invroi -o distroi
+  coord=`fslstats distroi -x`
+  location=`grep 'index="'$n'"' $2 | sed -e "s/^.*\>\(.*\)\<.*$/\1/"`
+  echo $n $coord $location
+  X=`echo $coord | awk '{print $1}'`
+  Y=`echo $coord | awk '{print $2}'`
+  Z=`echo $coord | awk '{print $3}'`
+  cat $2 | sed -e 's?.*index="'$n'" *x=.*>\(.*\)<.*?<label index="'$n'" x="'$X'" y="'$Y'" z="'$Z'">\1</label>?' > temp
+  mv temp $2
+done
+imrm roi invroi distroi

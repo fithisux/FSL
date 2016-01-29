@@ -1,0 +1,298 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>AtlasOptionsDialogBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>AtlasOptionsDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>417</width>
+            <height>431</height>
+        </rect>
+    </property>
+    <property name="font">
+        <font>
+            <pointsize>11</pointsize>
+        </font>
+    </property>
+    <property name="caption">
+        <string>Atlas Inspector</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1_2</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>GroupBoxPanel</enum>
+            </property>
+            <property name="margin">
+                <number>1</number>
+            </property>
+            <property name="title">
+                <string>Atlas</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>6</number>
+                </property>
+                <property name="spacing">
+                    <number>4</number>
+                </property>
+                <widget class="QComboBox">
+                    <item>
+                        <property name="text">
+                            <string>None</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>m_atlasSelection</cstring>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>GroupBoxPanel</enum>
+            </property>
+            <property name="margin">
+                <number>1</number>
+            </property>
+            <property name="title">
+                <string>Structures</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>6</number>
+                </property>
+                <property name="spacing">
+                    <number>4</number>
+                </property>
+                <widget class="QListBox">
+                    <item>
+                        <property name="text">
+                            <string>None</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>m_structureList</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout14</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer4_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>288</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_addStructure</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>image0</iconset>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Permanently add this structure to the overlay list.</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="Line">
+                    <property name="name">
+                        <cstring>line1</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>HLine</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout40</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>m_locate</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Locate selected structure</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>m_superimpose</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Preview selected structure's probability map</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Ok</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                    <property name="flat">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="166">89504e470d0a1a0a0000000d494844520000000e0000000e08060000001f482dd10000006d49444154789cd5d1bd0980500c46d1efcac3ce525be7701d71239770065b17b075124190d858264fb0104c93e2e40712cc4c6fa28800588039f294195ae53cdcf814df3726a096343ad64a3a81c9b19ebb6073b0bcf3e15843f4476095b49b59e7f98faefafe1d191b249d115ebeca12f17cb6d0750000000049454e44ae426082</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>AtlasOptionsDialogBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>m_structureList</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>AtlasOptionsDialogBase</receiver>
+        <slot>structureSelected(int)</slot>
+    </connection>
+    <connection>
+        <sender>m_addStructure</sender>
+        <signal>clicked()</signal>
+        <receiver>AtlasOptionsDialogBase</receiver>
+        <slot>addStructure()</slot>
+    </connection>
+    <connection>
+        <sender>m_locate</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>AtlasOptionsDialogBase</receiver>
+        <slot>locate(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_superimpose</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>AtlasOptionsDialogBase</receiver>
+        <slot>superimpose(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_atlasSelection</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>AtlasOptionsDialogBase</receiver>
+        <slot>selectAtlas(const QString&amp;)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot access="private">locate(bool)</slot>
+    <slot access="private">structureSelected(int)</slot>
+    <slot access="private">superimpose(bool)</slot>
+    <slot access="private">addStructure()</slot>
+    <slot>selectAtlas(const QString&amp;)</slot>
+</slots>
+<layoutdefaults spacing="3" margin="6"/>
+</UI>

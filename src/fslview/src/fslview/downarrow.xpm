@@ -1,0 +1,22 @@
+/* XPM */
+static const char *downarrow[] = {
+"    16    13        5            1",
+". c #040404",
+"# c #808304",
+"a c None",
+"b c #f3f704",
+"c c #f3f7f3",
+"aaaaaaaaaaaaaaaa",
+"aaaaaaaaaaaaaaaa",
+"aaaaaaa...aaaaaa",
+"aaaaaaa...aaaaaa",
+"aaaaaaa...aaaaaa",
+"aaaaaaa...aaaaaa",
+"aaaa.........aaa",
+"aaaaa.......aaaa",
+"aaaaaa.....aaaaaa",
+"aaaaaaa...aaaaaa",
+"aaaaaaaa.aaaaaaa",
+"aaaaaaaaaaaaaaaa",
+"aaaaaaaaaaaaaaaa"
+};

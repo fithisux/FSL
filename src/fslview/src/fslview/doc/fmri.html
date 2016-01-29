@@ -1,0 +1,68 @@
+<link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+<h3>Viewing FMRI Data</h3>
+      
+<p>FSLView is able to load in FEAT output, and plot as timeseries the
+data versus the fitted model (and partial model fits), and also show
+the cluster tables produced by FEAT.  Start by loading a 4D functional
+data set - for example, open <i>filtered_func_data</i> from a
+<i>something.feat</i> &nbsp; FEAT output directory.
+
+<p>The displayed volume can be changed with the <i > Volume
+SpinBox</i> on the <a href="cursor.html"> Cursor Toolbar</a>.  The
+functional data can also be animated by pressing the <i >Movie</i>
+button <img valign=middle src="movie.png">. This automatically
+increments the <i >Volume SpinBox</i> and has the effect of showing
+all the volumes sequentially and looping back to the first volume when
+all volumes have been shown.
+
+<p>You probably also want to load in thresholded zstat images as
+colour overlays - for example, press <i>File -> Add</i> and select
+<i>thresh_zstat1</i> to load in.
+
+<p>To view timeseries plots of the FMRI data, select the 4D image
+(e.g., <i>filtered_func_data</i>) in the <a
+href="imagelist.html">Image List</a> and select <i >View ->
+Timeseries</i>. Note that FSLView will probably have already opened
+this for you, if you started by loading in "filtered_func_data".
+
+<p>A graph will be opened that shows the timeseries plot of the
+currently selected voxel. Clicking on the image with the left mouse
+button will update the plot with the timeseries of the new cursor
+position.
+
+<p>To see the fitted model timeseries, click on the <i>No
+model</i> menu button, and select <i>Full model only</i> to view the full
+fitted model. To see the partial fit relating to a single EV in the
+model, click on the relevant <i>PE</i> menu option. To see the partial
+fit relating to a contrast, select the appropriate <i>COPE</i> option.
+
+<p>If you click on the <i>-u</i> button the data will get
+demeaned for plotting, and now if you press the <i>%</i> button, you can
+view the timeseries scaled as % signal change.
+
+<p>You can also view the activation cluster tables produced by
+FEAT. Press <i>View -> Cluster Browser</i> and you can then select which
+zstatistic cluster table to view. If you click on a row in the table,
+the cursor in the image viewer will jump to the position of the
+maximum zstat value in that cluster.
+
+
+
+<!--         <p> -->
+<!--           To permanantly keep the current plot on the graph press the -->
+<!--           <i >Add series</i> button at the top of the graph.(the -->
+<!--           icon is a plus sign) The timeseries plot will now remain on the -->
+<!--           graph. The cursor can now be used to add further plots to the graph -->
+<!--           while the selected plots remain. -->
+<!--         </p> -->
+<!--         <p> -->
+<!--           The active plot is drawn in green and the inactive plots are drawn in -->
+<!--           blue. Clicking the mouse on an inactive plot will make the plot  -->
+<!--           active and will move the image cursor to the plot's coordinates.   -->
+<!--           Clicking on the <i >Remove Series</i> button (the icon -->
+<!--           is a minus sign) will cause the active plot to be removed from the  -->
+<!--           graph. -->
+<!--         </p> -->
+
+      
+    

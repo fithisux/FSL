@@ -1,0 +1,44 @@
+<link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+<h3>Different image views</h3>
+      
+<p>The images can be viewed in 3 kinds of of view, via the <i
+>View</i> menu:
+
+<ul>
+
+<li>Ortho - the default view showing axial, orthogonal and sagittal slices.
+
+<li>Lightbox - shows all axial slices simultaneously.
+
+<li>Single - shows only a single slice - the orientation can be
+switched between axial, orthogonal and sagittal <img valign=middle
+src="viewdir.png"> and you can also turn on auto-scrolling through the
+slices <img valign=middle src="autoscroll.png">.
+
+</ul>
+
+<p>You can open as many views as you like (though the viewer will get
+rather slow if you open too many). This includes opening more than one
+instance of any given type - for example, you might want to start with
+the <i>Ortho</i> view, then open another <i>Ortho</i> view, in which
+you have different images from the <a href="imagelist.html">Image
+List</a> turned on, so that you can move the cursor around in the
+volume and compare different images (<a href="twoorthos.png">see
+example</a>). If you close down all views then all loaded images will
+be discarded and you will have to re-open a file to start viewing
+again.
+
+<p>If you end up with too many open sub-windows to keep track of,
+<i>Window -> Tile</i> will auto-arrange them so that they are all
+visible simultaneously, and <i>Window -> Cascade</i> will place all
+sub-windows in a diagonal overlapping line, for you to select and
+adjust those of interest.
+
+<p> Moving the mouse over a slice while holding down the left mouse
+button will cause the cursor to move around the image.  The cursor
+position and value can be viewed on the <a href="cursor.html">Cursor
+Toolbar</a>.  It is also possible to move the cursor to any position
+by altering the values in the <a href="cursor.html">Cursor
+Toolbar</a>.  FSLView has "linked cursor" behaviour: as the cursor is
+moved around in one view it also moves in all other views.
+

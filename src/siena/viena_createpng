@@ -1,0 +1,89 @@
+#!/bin/sh
+
+# viena_createpng
+#
+# Script to create png images for VIENA HTML report.
+# Uses FSL routines and has as input intermediates from VIENA calculation.
+#
+#
+#   This code is released to the public domain.
+#
+#   The VIENA modification of SIENA was implemented at the Department of Radiology of the VU University Medical Center, Amsterdam, The Netherlands
+#   Authors: Hugo Vrenken, Ingrid Sluimer, Veronica Popescu, Ronald van Schijndel and Adriaan Versteeg. 
+#   Questions or comments can be sent to: H.Vrenken@vumc.nl
+# 
+#   Neither the VU University Medical Center, the University of Oxford, nor any of
+#   their employees imply any warranty of usefulness of this software
+#   for any purpose, and do not assume any liability for damages,
+#   incidental or otherwise, caused by any use of this document or software.
+
+
+
+A=A
+B=B
+
+# --- ventricle mask on inputs (halfway space)
+
+# ventricle mask in halfway space A to B
+# the range 0.9 3 gives red 
+${FSLDIR}/bin/overlay 0 0 -c \
+    ${A}_halfwayto_${B} -a \
+    ${A}_halfwayto_${B}_ventricle_region_bin 0.9 3 \
+    ${A}_halfwayto_${B}_ventricle_region_bin_grot
+
+${FSLDIR}/bin/slicer ${A}_halfwayto_${B}_ventricle_region_bin_grot -a \
+    ${A}_halfwayto_${B}_ventricle_region_bin.png
+
+${FSLDIR}/bin/imrm ${A}_halfwayto_${B}_ventricle_region_bin_grot
+
+# ventricle mask in halfway space B to A
+# the range 0.9 3 gives red 
+${FSLDIR}/bin/overlay 0 0 -c \
+    ${B}_halfwayto_${A} -a \
+    ${B}_halfwayto_${A}_ventricle_region_bin 0.9 3 \
+    ${B}_halfwayto_${A}_ventricle_region_bin_grot
+
+${FSLDIR}/bin/slicer ${B}_halfwayto_${A}_ventricle_region_bin_grot -a \
+    ${B}_halfwayto_${A}_ventricle_region_bin.png
+
+${FSLDIR}/bin/imrm ${B}_halfwayto_${A}_ventricle_region_bin_grot
+
+# --- flow within ventricle mask
+
+${FSLDIR}/bin/fslmaths ${A}_to_${B}_flow_ventricles -mul -1 ${A}_to_${B}_flowneg_ventricles
+
+${FSLDIR}/bin/overlay 0 0 \
+    ${A}_halfwayto_${B} -a \
+    ${A}_to_${B}_flow_ventricles 0.01 1 \
+    ${A}_to_${B}_flowneg_ventricles 0.01 1 \
+    ${A}_halfwayto_${B}_render_ventricles
+
+${FSLDIR}/bin/slicer ${A}_halfwayto_${B}_render_ventricles \
+    -s 1 \
+    -x 0.4 ven_gr${A}_halfwayto_${B}a.png \
+    -x 0.5 ven_gr${A}_halfwayto_${B}b.png \
+    -x 0.6 ven_gr${A}_halfwayto_${B}c.png \
+    -y 0.4 ven_gr${A}_halfwayto_${B}d.png \
+    -y 0.5 ven_gr${A}_halfwayto_${B}e.png \
+    -y 0.6 ven_gr${A}_halfwayto_${B}f.png \
+    -z 0.4 ven_gr${A}_halfwayto_${B}g.png \
+    -z 0.5 ven_gr${A}_halfwayto_${B}h.png \
+    -z 0.6 ven_gr${A}_halfwayto_${B}i.png
+
+${FSLDIR}/bin/pngappend ven_gr${A}_halfwayto_${B}a.png \
+    + ven_gr${A}_halfwayto_${B}b.png \
+    + ven_gr${A}_halfwayto_${B}c.png \
+    + ven_gr${A}_halfwayto_${B}d.png \
+    + ven_gr${A}_halfwayto_${B}e.png \
+    + ven_gr${A}_halfwayto_${B}f.png \
+    + ven_gr${A}_halfwayto_${B}g.png \
+    + ven_gr${A}_halfwayto_${B}h.png \
+    + ven_gr${A}_halfwayto_${B}i.png \
+    ${A}_halfwayto_${B}_render_ventricles.png
+
+/bin/rm ven_gr${A}_halfwayto_${B}?.???
+${FSLDIR}/bin/imrm ${A}_to_${B}_flowneg_ventricles ${A}_halfwayto_${B}_render_ventricles
+
+# --- end
+
+exit 0

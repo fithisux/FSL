@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>baycest/UserGuide</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">baycest/UserGuide</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./baycest.html">Introduction</a></li><li>User Guide<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Introduction">Introduction</a></li><li>
+<a href="#Running_BayCEST">Running BayCEST</a><ol><li>
+<a href="#Poolmat:_the_pool_specification_matrix">Poolmat: the pool specification matrix</a></li><li>
+<a href="#Dataspec:_data_specification">Dataspec: data specification</a></li><li>
+<a href="#Ptrain:_pulse_specification">Ptrain: pulse specification</a></li></ol></li><li>
+<a href="#Outputs">Outputs</a></li></ol></div></div></li></ol></div> <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line867">
+<h1 id="Introduction">Introduction</h1>
+<span class="anchor" id="line-6"></span><p class="line874">To run BayCEST you will need: <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><ul><li>Sampled CEST z-spectra (nifti image). <span class="anchor" id="line-9"></span></li><li>Mask to indicate what region of the data to be processed (nifti image) <span class="anchor" id="line-10"></span></li><li>A file specifying details of the pools to be included in the model: poolmat. <span class="anchor" id="line-11"></span></li><li>A file detailing the different samples contained within the data: dataspec. <span class="anchor" id="line-12"></span></li><li>A file detailing the pulse used for saturation: ptrain. <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span></li></ul><p class="line867">
+<h1 id="Running_BayCEST">Running BayCEST</h1>
+<span class="anchor" id="line-15"></span><p class="line874">BayCEST can be called from the command line with the following information: <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><ul><li style="list-style-type:none">--data=     Input data image file. <span class="anchor" id="line-18"></span></li><li style="list-style-type:none">--mask=   Mask image file. <span class="anchor" id="line-19"></span></li><li style="list-style-type:none">--output=  Output directory name (a new folder will be generated with this name). <span class="anchor" id="line-20"></span></li><li style="list-style-type:none">--pools=   Details of the pools within the model: poolmat. <span class="anchor" id="line-21"></span></li><li style="list-style-type:none">--spec=    Details of the samples in the data: dataspec. <span class="anchor" id="line-22"></span></li><li style="list-style-type:none">--ptrain=   Details of the saturation pulse shape: ptrain. <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span></li></ul><p class="line874">BayCEST also has a few advanced options: <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><ul><li style="list-style-type:none">--spatial    Turn on the spatial smoothing prior, this is recommended if processing in vivo data, it is generally not appropriate if there is no spatial structure in the data e.g. simulations. <span class="anchor" id="line-27"></span></li><li style="list-style-type:none">--t12prior   Incorporate uncertainty/variability in T1 and T2 value in the estimation. This treats T1 and T2 for each of the pools as extra parameters to be estimated from the data, but with tightly defined priors to avoid over fitting but allow T1 and T2 variability to be reflected in the results. <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span></li></ul><p class="line867">
+<h2 id="Poolmat:_the_pool_specification_matrix">Poolmat: the pool specification matrix</h2>
+<span class="anchor" id="line-30"></span><p class="line874">It is necessary to specify details about each of the pools that you wish to include within the model, including the water pool. The key details required are: <span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><ul><li>Centre frequency of the pool: for water in Hz for others specify relative to water (in ppm). <span class="anchor" id="line-33"></span></li><li>Exchange rate expected for the pool (in Hz). <span class="anchor" id="line-34"></span></li><li>T1 value for the pool (in s). <span class="anchor" id="line-35"></span></li><li>T2 value for the pool (in s). <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span></li></ul><p class="line874">This should take the form of an ascii matrix where each row corresponds to one pool, and each column is a parameter in the order: Frequency | rate | T1 | T2 . <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line874">The first row should refer to the water pool and the freqeuncy should be in Hz according to the field strength, otherwise a ppm value is expected. The exchange rate value for the water pool will be ignored, but should be included, i.e. enter a zero in that column. <span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><p class="line874">Example poolmats: <span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><ul><li style="list-style-type:none"><p class="line891"><a class="attachment" href="attachments/baycest(2f)UserGuide/cest_apt.mat" title="">cest_apt.mat</a> - APT <em>in vivo</em>: water plus amide at 3T. <span class="anchor" id="line-44"></span></li><li style="list-style-type:none"><p class="line891"><a class="attachment" href="attachments/baycest(2f)UserGuide/cest_apt_mt.mat" title="">cest_apt_mt.mat</a> - APT+MT <em>in vivo</em>: water plus amide and assymetric MT at 3T. <span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span></li></ul><p class="line867">
+<h2 id="Dataspec:_data_specification">Dataspec: data specification</h2>
+<span class="anchor" id="line-47"></span><p class="line874">Each individual volume in the data should contain a single sample from the z-spectrum. It is necessary to specify in the dataspec matrix for each sample: <span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><ul><li>Sampling frequency relative to water (in ppm). <span class="anchor" id="line-50"></span></li><li>B1 field strength of saturation (in Tesla). <span class="anchor" id="line-51"></span></li><li>The number of repetitions of the pulse used for saturation (integer). <span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span></li></ul><p class="line874">The data specification matrix should be an ascii matrix with one row for each volume in the data and the columns representing (in order): Frequency | B1 field | No. pulses . <span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span><p class="line874">For example: <span class="anchor" id="line-56"></span><div><table><tbody><tr>  <td><p class="line862">0 </td>
+  <td><p class="line862">0 </td>
+  <td><p class="line862">1 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-57"></span><p class="line862">3.5 </td>
+  <td><p class="line862">1E-06 </td>
+  <td><p class="line862">1 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-58"></span><p class="line862">3.5 </td>
+  <td><p class="line862">1E-06 </td>
+  <td><p class="line862">1 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><span class="anchor" id="line-61"></span><span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><p class="line874">In this example the first point is unsaturated, the second occurs at the APT centre frequency and the final sample is symmetrically placed at the other side of the water centre. Here it has been assumed that only a single pulse has been applied, e.g. continuous saturation. <span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><p class="line867">
+<h2 id="Ptrain:_pulse_specification">Ptrain: pulse specification</h2>
+<span class="anchor" id="line-66"></span><p class="line874">The pulse shape used for saturation should be discretized into a series of approximate segments that are then used within the model calculations. This is provided to BayCEST as an ascii matrix where each row is a time point in the approximation, the first entry in the row is the the magnitude of the pulse at that time (in relative units, i.e. the largest value at the peak of the pulse should be 1.0, the whole pulse is scaled by the B1 value specified in the dataspec matrix) and the second entry is time value (in seconds). It is assumed that the pulse starts at zero at time zero. Only a single cycle of the pulse scheme need be specified, BayCEST will automatically produce a pulse train using the number of repeats specified in the dataspec matrix (and in a computationally efficient manner). <span class="anchor" id="line-67"></span><span class="anchor" id="line-68"></span><ul><li style="list-style-type:none">Example pulse matrices: <span class="anchor" id="line-69"></span></li><li style="list-style-type:none"><p class="line891"><a class="attachment" href="attachments/baycest(2f)UserGuide/pulseshp_cont.mat" title="">pulseshp_cont.mat</a> - Continuous pulse with 2 s duration. <span class="anchor" id="line-70"></span></li><li style="list-style-type:none"><p class="line891"><a class="attachment" href="attachments/baycest(2f)UserGuide/pulseshp_gauss.mat" title="">pulseshp_gauss.mat</a> - Gaussian pulse with a 40 ms duration and 50% duty cycle divided into 32 segments. <span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span></li></ul><p class="line867">
+<h1 id="Outputs">Outputs</h1>
+<span class="anchor" id="line-73"></span><p class="line874">The primary outputs of BayCEST are estimates of the various parameters in the multi-pool model. These can be found within the output directory all beginning with 'mean_'. Each of the pools are labelled by a letter in the order they appear in the poolmat matrix. The parameters returned are: <span class="anchor" id="line-74"></span><span class="anchor" id="line-75"></span><ul><li><p class="line862">mean_M0<em>i</em>_r - the magnetization of pool <em>i</em> relative to water (mean_M0a will refer to the magnetization of the water pool in native units of the data). <span class="anchor" id="line-76"></span></li><li><p class="line862">mean_k<em>i</em>a - the exchange rate of pool <em>i</em> with pool a (water). Note the exchanges between pools other than water are assumed to be negligible. <span class="anchor" id="line-77"></span></li><li>mean_ppm_off - the offset of the water centre frequency, due to B0 field inhomogeneity (in ppm). <span class="anchor" id="line-78"></span></li><li><p class="line862">mean_ppm_<em>i</em> - the offset of the pool centre frequency relative to water (in ppm). Note there will not be a result for pool a since this is water and its offset is given in mean_ppm_off. <span class="anchor" id="line-79"></span></li><li><p class="line862">mean_T1<em>i</em> and mean_T2<em>i</em> - T1 and T2 values for the pool (if using --t12prior). These should not necessarily be taken as accurate estimates for T1 and T2 values since the data is not well suited to such estimation, but may indicate where T1 and T2 variations occur. However, the uncertainty in T1 and T2 values will have been incororated into the uncertainty estimates on the other parameters. It is most likely that these will reflect the values entered in the poolmat matrix, this is normal. <span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span></li></ul><p class="line874">A modelfit image is also generated which can be compared to the data to visualise the fit of the model to the data. <span class="anchor" id="line-82"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

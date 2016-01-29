@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>SUSAN</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">SUSAN</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867">
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line874">SUSAN noise reduction uses nonlinear filtering to reduce noise in an image (2D or 3D) whilst preserving the underlying structure. It does this by only averaging a voxel with local voxels which have similar intensity. <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line862">The old SUSAN research page can be found <a class="http" href="http://users.fmrib.ox.ac.uk/~steve/susan/">here</a>. If you use SUSAN in your research, please make sure that you reference the article: <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line867"><span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><div class="references"><span class="anchor" id="line-1-1"></span><p class="line874">S.M. Smith and J.M. Brady. SUSAN - a new approach to low level image processing. International Journal of Computer Vision, 23(1):45–78, May 1997. </div><span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-12"></span>
+<h1 id="Susan_GUI">Susan GUI</h1>
+<span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line867">
+<h2 id="Main_Options">Main Options</h2>
+<span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line867"><strong>Dimensionality</strong>: by default a 3D image will be processed in full 3D mode. If you want to process each slice separately, select 2D. <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line867"><strong>Brightness threshold</strong>: this allows SUSAN to discriminate between noise and the underlying image. Ideally, the value should be set greater than the noise level and less than the contrast of the underlying image. Edges of contrast smaller than this threshold will tend to be blurred by SUSAN whereas those of greater contrast will not be. <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line867"><strong>Mask SD</strong>: this determines the spatial extent of the smoothing. The mask is basically Gaussian with standard deviation (in image units - e.g. mm) set by the user. However, for a small, fast, flat response 3x3 or 3x3x3 voxel mask, set SD to 0. <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line867">
+<h2 id="Advanced_Options">Advanced Options</h2>
+<span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line867"><strong>Use median when no neighbourhood is found</strong>: by default, when the local neighbourhood of similar brightness voxels is empty, a local median filter is used. This allows the correction of impulse ("salt-and-pepper") noise. This feature can be turned off if desired. In this case, when no neighbourhood is found, the original intensity of the voxel of interest remains unchanged. <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><p class="line867"><strong>Separate images to find USAN from</strong>: if the local area to be smoothed over is to be found from an image (or images) other than the main input image, this can be input here. <span class="anchor" id="line-27"></span><hr /><p class="line874"> <span class="anchor" id="line-28"></span>
+<h2 id="susan_Command_Line_Program">susan Command Line Program</h2>
+<span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><p class="line862">This is the program called by the GUI. Type <tt class="backtick">susan</tt> to get the usage help. <span class="anchor" id="line-31"></span><hr /><p class="line874"> <span class="anchor" id="line-32"></span><a href="./CategoryStructural.html">CategoryStructural</a> <a href="./CategorySUSAN.html">CategorySUSAN</a> <span class="anchor" id="line-33"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

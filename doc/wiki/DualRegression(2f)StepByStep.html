@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>DualRegression/StepByStep</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">DualRegression/StepByStep</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./DualRegression.html">Introduction</a></li><li><a href="./DualRegression(2f)UserGuide.html">User Guide</a></li><li><a href="./DualRegression(2f)Faq.html">FAQ</a></li></ol></div> <span class="anchor" id="line-4"></span>
+<h1 id="Step_by_Step_Guide">Step by Step Guide</h1>
+<span class="anchor" id="line-5"></span><p class="line867">
+<h2 id="Resting_state_analysis_.28with_dual_regression.29">Resting state analysis (with dual regression)</h2>
+<span class="anchor" id="line-6"></span><ul><li><p class="line891"><a href="./InitialProcessing.html">Initial processing</a> (dicom conversion, fslreorient2std, brain extraction for structurals) <span class="anchor" id="line-7"></span></li><li><p class="line862">[ Optional: denoise individual datasets with <a href="./FIX.html">FIX</a> or via manual classification and denoising ] <span class="anchor" id="line-8"></span></li><li><p class="line862">Run <em>concat ICA</em> via the <a href="./MELODIC.html">Melodic GUI</a> for all sessions/subjects (go through each tab and fill in appropriate information) <span class="anchor" id="line-9"></span><ul><li><p class="line891"><em>Misc</em> tab: defaults are fine <span class="anchor" id="line-10"></span></li><li><p class="line891"><em>Data</em> tab: select session/subject dataset (if multiple sessions per subject exist then include individual sessions as separate inputs, and do not concatenate the data) <span class="anchor" id="line-11"></span></li><li><p class="line891"><em>Pre-Stats</em> tab: the defaults here represent our general recommendations <span class="anchor" id="line-12"></span></li><li><p class="line891"><em>Registration</em> tab: we recommend using a <tt class="backtick">Main&nbsp;structural&nbsp;image</tt>, with <tt class="backtick">BBR</tt>, plus <tt class="backtick">nonlinear</tt> registration to the <tt class="backtick">Standard&nbsp;space</tt> <span class="anchor" id="line-13"></span></li><li><p class="line891"><em>Stats</em> tab: select <tt class="backtick">Multi-session&nbsp;temporal&nbsp;concatenation</tt> <span class="anchor" id="line-14"></span></li><li><p class="line891"><em>Post-Stats</em> tab: the settings here are unimportant in this instance <span class="anchor" id="line-15"></span></li></ul></li><li>Check the webpage output, especially the registrations <span class="anchor" id="line-16"></span></li><li>Look at output components and decide what networks are of interest <span class="anchor" id="line-17"></span></li><li>Run the Glm GUI (for higher-level analysis)  <span class="anchor" id="line-18"></span><ul><li><p class="line862">Setup an appropriate group design (e.g. unpaired group difference) - the <tt class="backtick">Wizard</tt> offers some simple/common designs <span class="anchor" id="line-19"></span></li><li><p class="line862">Save the design (need <tt class="backtick">.mat</tt> and <tt class="backtick">.con</tt> files later) <span class="anchor" id="line-20"></span></li></ul></li><li><p class="line862">Run the <a href="./DualRegression(2f)UserGuide.html">dual_regression</a> script, from the directory where the melodic outputs were written (use the GLM design files, <tt class="backtick">melodic_IC</tt> image, <tt class="backtick">.filelist</tt> file)  <span class="anchor" id="line-21"></span></li><li>Look at the outputs from dual regression <span class="anchor" id="line-22"></span><ul><li><p class="line862">These outputs are from <a href="./Randomise(2f)UserGuide.html">randomise</a> and the *corrp* images are the crucial ones to view (these are the multiple comparison corrected p-values, stored as 1-p values)  <span class="anchor" id="line-23"></span></li></ul></ul><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

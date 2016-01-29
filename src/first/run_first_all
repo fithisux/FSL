@@ -1,0 +1,303 @@
+#!/bin/sh
+
+#   run_first_all - wrapper script for "run_first" (which wraps "first" - the main FIRST fitting)
+#
+#   Brian Patenaude, Stephen Smith and Mark Jenkinson, FMRIB Image Analysis Group
+#
+#   Copyright (C) 2006-2009 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage() {
+    echo ""
+    echo "Usage: `basename $0` [options] -i <input_image> -o <output_image>"
+    echo ""
+    echo "Optional arguments:"
+    echo "  -m <method>      : method must be one of auto, fast, none or a (numerical) threshold value"
+    echo "  -b               : input is already brain extracted"
+    echo "  -s <name>        : run only on one specified structure (e.g. L_Hipp) or a comma separated list (no spaces)"
+    echo "  -a <img2std.mat> : use affine matrix (do not re-run registration)"
+    echo "  -3               : use 3-stage affine registration (only currently for hippocampus)"
+    echo "  -d               : do not cleanup image output files (useful for debugging)"
+    echo "  -v               : verbose output"
+    echo "  -h               : display this help message"
+    echo ""
+    echo "e.g.:  `basename $0` -i im1 -o output_name "
+    exit 1
+}
+
+
+#########################################################################################################
+
+
+# deal with options
+structs="L_Accu L_Amyg L_Caud L_Hipp L_Pall L_Puta L_Thal R_Accu R_Amyg R_Caud R_Hipp R_Pall R_Puta R_Thal BrStem";
+BETdone=no;
+verbose=no;
+doReg=yes;
+bmeth=auto;
+cleanUp=yes;
+threestage=no;
+
+if [ $# -eq 0 ] ; then Usage; exit 0; fi
+# also accept old syntax for now (without -b option): <input_image> <threshold> <output_image>
+if [ $# -eq 3 ] ; then
+  iname=$1;
+  bmeth="$2";
+  oname=$3;
+else
+    args=`getopt i:o:m:s:a:bd3vh $*`
+    if [ $? != 0 ] ; then 
+	Usage
+    fi
+    set -- $args
+    for i
+      do
+      case "$i"
+	  in
+	  -b)
+	      BETdone=yes; 
+	      flirtopts="-b" ; 
+	      shift;;
+	  -3)
+	      threestage="yes";
+	      shift;;
+	  -v)
+	      verbose=yes; 
+	      shift;;
+	  -h)
+	      Usage;
+	      exit 0;;
+	  -d)
+	      cleanUp=no;
+	      shift;;
+	  -i)
+	      iname="$2";
+	      shift 2;;
+	  -o)
+	      oname="$2";
+	      shift 2;;
+	  -m)
+	      bmeth="$2";
+	      shift 2;;
+	  -a)
+	      doReg=no; 
+	      affmat="$2";
+	      if [ ! -f $affmat ] ; then
+		  echo "Error: cannot find affine matrix $affmat"
+		  exit 1
+	      fi
+	      shift 2;;
+	  -s)
+	      structs=`echo "$2" | sed 's/,/ /g'`;
+	      shift 2;;
+      esac
+    done
+fi
+
+if [ `${FSLDIR}/bin/imtest $iname` = 0 ] ; then
+    echo "Error: cannot find image $iname"
+    exit 1
+fi
+iname=`${FSLDIR}/bin/remove_ext $iname`
+
+if [ $bmeth = FAST ] ; then bmeth=fast; fi
+if [ $bmeth = NONE ] ; then bmeth=none; fi
+if [ $bmeth = AUTO ] ; then bmeth=auto; fi
+if [ $bmeth != fast ] && [ $bmeth != auto ] && [ $bmeth != none ] ; then
+    thresh=$bmeth;
+    bmeth=thresh;
+fi
+
+oname=`$FSLDIR/bin/remove_ext $oname`;
+
+if [ $verbose = yes ] ; then echo "STRUCTURES: $structs" ; fi
+
+# now do the work
+
+logdir=${oname}.logs
+if [ ! -d $logdir ] ; then mkdir $logdir ; fi
+
+FLIRTJOBHOLD="";
+if [ $doReg = yes ] ; then
+    if [ -w `dirname $iname` ] ; then
+	matname=${iname}_to_std_sub;
+    else
+	matname=${oname}_in_to_std_sub;
+    fi
+    if [ $threestage = yes ] ; then
+	flirtopts="$flirtopts -strucweight $FSLDIR/data/standard/MNI152_T1_1mm_Hipp_mask_dil8"
+    fi
+    if [ $verbose = yes ] ; then echo ${FSLDIR}/bin/first_flirt $iname ${matname} $flirtopts ; fi
+    FLIRTID=`${FSLDIR}/bin/fsl_sub -l $logdir -T 15 ${FSLDIR}/bin/first_flirt $iname ${matname} $flirtopts`
+    FLIRTJOBHOLD="-j $FLIRTID"
+    affmat=${matname}.mat
+fi
+COM=${oname}.com
+/bin/rm -f ${COM}*
+
+imscorr=""
+imsfirst=""
+
+for s in $structs; do
+    modelN=336
+    bcorr=1;
+    intref=0;
+    S_FIRST_4=`awk 'BEGIN {print substr("'$s'",3,4)}'`
+    case "${S_FIRST_4}" in 
+	Accu)
+	    nmodes=50
+	    ;;
+	Amyg)
+	    nmodes=50;
+	    intref=1;
+	    ;;
+	Caud)
+	    nmodes=30;
+	    intref=1;
+	    ;;
+	Hipp)
+	    nmodes=30;
+	    intref=1;
+	    ;;
+	Late)
+	    nmodes=40;
+	    intref=1;
+	    ;;
+	Pall)
+	    nmodes=40;
+	    bcorr=0;	   
+	    ;;
+	Puta)
+	    nmodes=40;
+	    bcorr=0;	
+	    ;;
+	Thal)
+	    nmodes=40;
+	    bcorr=0;	
+	    ;;
+	Stem)
+	    nmodes=40;
+	    ;;
+	*)
+	    echo "Structure $s unknown"
+	    exit 1
+	    
+    esac
+    
+    if [ "X$affmat" = X ] ; then
+	echo "Error: affine matrix not specified";
+	exit 1
+    fi
+    #run_first , choose between normal and intref
+    imfirst="${oname}-${s}_first"
+    imsfirst="${imsfirst} ${imfirst}"
+    if [ $intref = 0 ] ; then 
+	if [ $bcorr -eq 1 ] ; then 
+	    ${FSLDIR}/bin/fslecho "${FSLDIR}/bin/run_first -i $iname -t ${affmat} -n $nmodes -o ${imfirst} -m ${FSLDIR}/data/first/models_${modelN}_bin/${s}_bin.bmv\c" >> $COM
+	else
+	    ${FSLDIR}/bin/fslecho "${FSLDIR}/bin/run_first -i $iname -t ${affmat} -n $nmodes -o ${imfirst} -m ${FSLDIR}/data/first/models_${modelN}_bin/05mm/${s}_05mm.bmv\c" >> $COM
+	fi
+    else
+	S_CUT=`awk 'BEGIN {print substr("'$s'",1,1)}'`
+	${FSLDIR}/bin/fslecho "${FSLDIR}/bin/run_first -i $iname -t ${affmat} -n $nmodes -o ${imfirst} -m ${FSLDIR}/data/first/models_${modelN}_bin/intref_thal/${s}.bmv -intref ${FSLDIR}/data/first/models_336_bin/05mm/${S_CUT}_Thal_05mm.bmv\c" >> $COM
+    fi
+    
+    imcorr="${oname}-${s}_corr"
+    imscorr="${imscorr} ${imcorr}"
+    ##boundary correction
+    if [ $bmeth = auto ] ; then
+	# default is to use none for Thal,Puta,Pall and fast for the rest
+	btype=fast;
+	if [ $bcorr -ne 1 ] ; then btype=none; fi
+    else
+	btype=$bmeth;
+	if [ $bmeth = thresh ] ; then btype="thresh -t $thresh"; fi
+    fi
+   ${FSLDIR}/bin/fslecho "; ${FSLDIR}/bin/first_boundary_corr -s ${imfirst} -o ${imcorr} -i $iname -b $btype" >> $COM
+done
+
+if [ $verbose = yes ] ; then cat $COM ; fi
+FIRSTID=`${FSLDIR}/bin/fsl_sub -l $logdir -T 60 -N first $FLIRTJOBHOLD -t $COM`
+
+if [ $btype = thresh ] ; then 
+    threshnop=`echo $thresh | sed 's/\.//g'`
+    methname=th${threshnop} ;
+else
+    methname=$btype ;
+fi
+
+numstruct=`echo $structs | wc -w`;
+if [ $numstruct -gt 1 ] ; then 
+    ${FSLDIR}/bin/fslecho "${FSLDIR}/bin/fslmerge -t ${oname}_all_${methname}_firstseg ${imscorr} ; ${FSLDIR}/bin/fslmerge -t ${oname}_all_${methname}_origsegs ${imsfirst} ; ${FSLDIR}/bin/first_mult_bcorr -i $iname -u ${oname}_all_${methname}_origsegs -c ${oname}_all_${methname}_firstseg -o ${oname}_all_${methname}_firstseg" > ${COM}2
+    if [ $verbose = yes ] ; then cat ${COM}2 ; fi
+    MERGEID=`$FSLDIR/bin/fsl_sub -l $logdir -T 15 -N first_post -j $FIRSTID -t ${COM}2`
+    MERGEHOLD="-j $MERGEID"
+    
+    if [ $cleanUp = yes ] ; then
+	echo "${FSLDIR}/bin/imrm ${oname}-*_first* ${oname}-*_corr*" > ${COM}3
+	if [ $verbose = yes ] ; then cat ${COM}3 ; fi
+	$FSLDIR/bin/fsl_sub -l $logdir -T 5 -N clean_up $MERGEHOLD -t ${COM}3 
+    fi
+fi

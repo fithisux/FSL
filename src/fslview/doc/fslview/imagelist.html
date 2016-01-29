@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+    <title>Layer Tool</title>
+  </head>
+  <body>
+    <h3>Organising the display with the Layer Tool</h3>
+
+    <p>Each graphical view renders a combination of the stored
+      images according to the settings of that view's layer tool. You can
+      think of the view as being the result of observing a stack of overlaid layers
+      with different visibility, transparency, colour, etc., settings.</p>
+
+    <p>The top of the layer list <font color="red">(7)</font> represents the uppermost layer
+      of the rendered stack. Rendering is evaluated from the bottom up so
+      layers higher up the list obscure those lower down.</p>
+
+    <table>
+      <tr>
+	<td>
+	  <ul>
+	    <li>The "Visibilty" checkbox <font color="red">(1)</font> toggles whether or not a given
+	      layer is visible. You can also toggle this property by simply
+	      double-clicking on the relevant layer in the layer list.</li>
+	    <li>Each layer can be locked using the "Lock"
+	      checkbox <font color="red">(2)</font>. This property determines if a given
+	      layer can be edited or not. By default freshly loaded layers
+	      are locked, but new layers, those created with the "Create
+	      Mask" menu option, are un-locked by default and can be
+	      edited immediately.</li>
+	    <li>The "Transparency" slider <font color="red">(3)</font>
+	      determines how the selected layer blends with the layers
+	      below it. A value of 1 makes any voxel
+	      above <a href="./bricon.html">threshold</a> completely
+	      obscure the same voxel in the layer below, while a value
+	      of 0 means this image makes no contribution to the
+	      rendered stack.</li>
+	    <li>The "Layer Up" <font color="red">(4)</font>, and
+	      "Layer Down" <font color="red">(5)</font>, buttons move
+	      the selected layer up or down the stack. Items lower
+	      down are obscured by those higher up the stack.</li>
+	    <li>The "Info" button <font color="red">(6)</font> calls
+	      up the <a href="imageinfo.html">layer info dialog</a>
+	      where you can get a fuller description of an images
+	      properties as well as modify some advanced options such
+	      as the look up table to be used.</li>
+	    <li>The "Layer List" box <font color="red">(7)</font> indicates the order in which
+	      the layers will be evaluated along with visual feedback of that
+	      layers display settings.</li>
+	  </ul>
+	</td>
+	<td>
+	  <img src="layer-tool.png">
+	</td>
+      </tr>
+    </table>
+
+    <p> The layer marked with chevrons <font color="red">(8)</font> to
+      the right of it is the "main layer". This layer is the first one
+      loaded during any given session and cannot be removed from the
+      list as much of the viewer's display capabilities are determined
+      from this layer's attributes.
+
+  </body>
+</html>

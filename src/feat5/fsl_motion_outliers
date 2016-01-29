@@ -1,0 +1,427 @@
+#!/bin/sh -e
+
+#   fsl_motion_outliers - detect motion outliers (timepoints) and create EVs to 
+#	eliminate these images from the GLM
+#
+#   Mark Jenkinson, FMRIB Image Analysis Group
+#
+#   Copyright (C) 2008 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+usage()
+{
+    echo "Usage: `basename $0` -i <input 4D image> -o <output confound file> [options]"
+    echo "   (old version)  `basename $0` <unfiltered 4D image> <number of dummy scans> <output confound file>"
+    echo " "
+    echo "Options: -m <mask image>      use supplied mask image for calculating metric"
+    echo "         -s <filename>        save metric values (e.g. DVARS) as text into specified file"
+    echo "         -p <filename>        save metric values (e.g. DVARS) as a graphical plot (png format)"
+    echo "         -t <path>            [Optional] Path to the location where temporary files should be created. Defaults to /tmp"
+    echo "         --refrms             use RMS intensity difference to reference volume as metric [default metric]"
+    echo "         --dvars              use DVARS as metric"
+    echo "         --refmse             Mean Square Error version of --refrms (used in original version of fsl_motion_outliers)"
+    echo "         --fd                 use FD (framewise displacement) as metric"
+    echo "         --fdrms              use FD with RMS matrix calculation as metric"
+    echo "         --thresh=<val>       specify absolute threshold value (otherwise use box-plot cutoff = P75 + 1.5*IQR)"
+    echo "         --nomoco             do not run motion correction (assumed already done)"
+    echo "         --dummy=<val>        number of dummy scans to delete (before running anything and creating EVs)"
+    echo "         -v                   verbose mode"
+    echo " "
+}
+
+
+get_opt1() {
+    arg=`echo $1 | sed 's/=.*//'`
+    echo $arg
+}
+
+
+get_arg1() {
+    if [ X`echo $1 | grep '='` = X ] ; then 
+	echo "Option $1 requires an argument" 1>&2
+	exit 1
+    else 
+	arg=`echo $1 | sed 's/.*=//'`
+	if [ X$arg = X ] ; then
+	    echo "Option $1 requires an argument" 1>&2
+	    exit 1
+	fi
+	echo $arg
+    fi
+}
+
+
+get_arg2() {
+    if [ X$2 = X ] ; then
+	echo "Option $1 requires an argument" 1>&2
+	exit 1
+    fi
+    echo $2
+}
+
+
+# default options
+mask=
+abs_thresh=
+do_moco=yes;
+use_abs_thresh=no;
+metric=refrms;
+do_make_mask=yes;
+verbose=no;
+ndel=0;
+cleanup=yes;
+sqrtcom="-sqrt";
+savefile="";
+plotfile="";
+tmppath=""
+
+if [ $# -eq 0 ] ; then usage; exit 0; fi
+if [ $# -lt 3 ] ; then usage; exit 1; fi
+niter=0;
+while [ $# -ge 1 ] ; do
+    niter=`echo $niter + 1 | bc`;
+    iarg=`get_opt1 $1`;
+    case "$iarg"
+	in
+	-i)
+	    mcf=`get_arg2 $1 $2`;
+	    shift 2;;
+	-o)
+	    outfile=`get_arg2 $1 $2`;
+	    shift 2;;
+	-m)
+	    do_make_mask=no;
+	    mask=`get_arg2 $1 $2`;
+	    shift 2;;
+	-s)
+	    savefile=`get_arg2 $1 $2`;
+	    shift 2;;
+	-p)
+	    plotfile=`get_arg2 $1 $2`;
+	    shift 2;;
+	-t)
+	    tmppath=`get_arg2 $1 $2`;
+	    shift 2;;
+	--nomoco)
+	    do_moco=no;
+	    shift;;
+	--nocleanup)
+	    cleanup=no;
+	    shift;;
+	--refrms)
+	    metric=refrms;
+	    shift;;
+	--refmse)
+	    metric=refrms;
+	    sqrtcom=""
+	    shift;;
+	--dvars)
+	    metric=dvars;
+	    shift;;
+	--fd)
+	    metric=fd;
+	    shift;;
+	--fdrms)
+	    metric=fdrms;
+	    shift;;
+	--dummy)
+	    ndel=`get_arg1 $1`;
+	    shift;;
+	--thresh)
+	    use_abs_thresh=yes;
+	    abs_thresh=`get_arg1 $1`;
+	    shift;;
+	-v)
+	    verbose=yes; 
+	    shift;;
+	-h)
+	    usage;
+	    exit 0;;
+	*)
+	    if [ `echo $1 | sed 's/^\(.\).*/\1/'` = "-" ] ; then 
+		if [ $niter = 1 -a $# -eq 3 ] ; then
+		    mcf=$1;
+		    ndel=$2;
+		    outfile=$3;
+		    shift 2;
+		else
+		    usage;
+		    echo "Unrecognised option $1" 1>&2
+		    exit 1
+		fi
+	    fi
+	    shift;;
+    esac
+done
+
+
+
+
+#### PARSE OPTIONS
+mcf=`$FSLDIR/bin/remove_ext $mcf`;
+outfile=`$FSLDIR/bin/remove_ext $outfile`;
+if [ X$ndel = X ] ; then ndel=0; fi
+if [ $do_make_mask = no ] ; then mask=`$FSLDIR/bin/remove_ext $mask`; fi
+if [ $verbose = yes ] ; then echo "mcf = $mcf ; outfile = $outfile ; ndel = $ndel ; mask = $mask ; do_moco = $do_moco ; thresh = $abs_thresh ; use_thresh = $use_abs_thresh ; metric = $metric"; fi
+
+# sanity checks
+if [ $do_moco = no ] ; then
+  if [ $metric = fd -o $metric = fdrms ] ; then
+      echo "Cannot use metrics FD or FDRMS without motion correction";
+      exit 2;
+  fi
+fi
+
+# output dir creation
+outdir=`$FSLDIR/bin/tmpnam`;
+
+# If there is a preferred location for temporary files, use that, else default to /tmp (set by tmpnam)
+if [ X${tmppath} != X ] ; then
+  outdir=${tmppath}/`basename ${outdir}` 
+fi
+
+if [ X${outdir} = X ] ; then
+  echo "Could not create tmp directory"
+  exit 2;
+fi
+mkdir ${outdir}_mc
+
+
+#### DELETE DUMMY SCANS
+nvol=`$FSLDIR/bin/fslval $mcf dim4`;
+nvol=`echo $nvol - $ndel | bc`;
+if [ $ndel -gt 0 ] ; then
+    $FSLDIR/bin/fslroi $mcf ${outdir}_mc/invol $ndel $nvol
+    mcf=${outdir}_mc/invol
+fi
+
+
+#### MOTION CORRECTION
+refnum=`$FSLDIR/bin/fslval $mcf dim4`;
+refnum=`echo $refnum / 2 | bc`;
+if [ $do_moco = yes ] ; then
+    # run mcflirt
+    $FSLDIR/bin/mcflirt -in $mcf -out ${outdir}_mc/fmri_mcf -mats -plots -refvol $refnum -rmsrel -rmsabs
+else 
+    $FSLDIR/bin/imcp $mcf ${outdir}_mc/fmri_mcf
+fi
+mcf=${outdir}_mc/fmri_mcf
+
+tmax=`$FSLDIR/bin/fslval ${mcf} dim4`;
+tmax1=`echo $tmax - 1 | bc`;
+
+
+#### MASK and calculate intensity normalisation values
+if [ $do_make_mask = yes ] ; then
+    mask=${outdir}_mc/mask
+    thr2=`$FSLDIR/bin/fslstats $mcf -P 2`;
+    thr98=`$FSLDIR/bin/fslstats $mcf -P 98`;
+    robthr=`echo "$thr2 + 0.1 * ( $thr98 - $thr2 )" | bc -l`;
+    $FSLDIR/bin/fslmaths $mcf -Tmean -thr $robthr -bin $mask
+else
+    $FSLDIR/bin/fslmaths $mask -thr 0.5 -bin ${outdir}_mc/mask
+    mask=${outdir}_mc/mask
+fi
+# normalise by percentage of mask voxels and by median value within the brain
+brainmed=`$FSLDIR/bin/fslstats ${mcf} -k ${mask} -P 50`;
+maskmean=`$FSLDIR/bin/fslstats ${mask} -m`;
+if [ $verbose = yes ] ; then echo "brainmed = $brainmed ; maskmean = $maskmean" ; fi
+
+
+#### CALCULATE METRIC 
+#  The output is a 1x1x1x(N-1) nifti image called res_mse_diff
+#  The jth point represents motion changes between timepoints j and (j+1)
+#  After this the code will add a point at the start
+if [ $metric = dvars ] ; then
+    # generate DVARS
+    $FSLDIR/bin/fslroi $mcf ${mcf}1 0 $tmax1
+    $FSLDIR/bin/fslroi $mcf ${mcf}2 1 $tmax1
+    $FSLDIR/bin/fslmaths ${mcf}2 -sub ${mcf}1 -mas ${mask} -sqr -Xmean -Ymean -Zmean -div $maskmean $sqrtcom ${outdir}_mc/res_mse_diff -odt float
+    $FSLDIR/bin/fslmaths ${outdir}_mc/res_mse_diff -div $brainmed -mul 1000 ${outdir}_mc/res_mse_diff
+
+elif [ $metric = refrms ] ; then
+    # generate example functional image
+    $FSLDIR/bin/fslroi $mcf ${outdir}_mc/exf $refnum 1
+    exf=${outdir}_mc/exf
+    # generate residual mean square error (average across each 3D volume)
+    if [ $verbose = yes ] ; then echo "Generating residual mean square error"; fi
+    $FSLDIR/bin/fslmaths $mcf -sub $exf -mas ${mask} -div $brainmed -sqr -Xmean -Ymean -Zmean -div $maskmean $sqrtcom ${outdir}_mc/res_mse -odt float
+    # now form difference (to remove slow trends - still obvious in mse)
+    $FSLDIR/bin/fslroi ${outdir}_mc/res_mse ${outdir}_mc/res_mse0 0 1 0 1 0 1 0 $tmax1
+    $FSLDIR/bin/fslroi ${outdir}_mc/res_mse ${outdir}_mc/res_mse1 0 1 0 1 0 1 1 $tmax1
+    $FSLDIR/bin/fslmaths ${outdir}_mc/res_mse1 -sub ${outdir}_mc/res_mse0 -abs ${outdir}_mc/res_mse_diff
+
+elif [ $metric = fd ] ; then
+    ${FSLDIR}/bin/fslascii2img ${outdir}_mc/fmri_mcf.par 1 1 $tmax 6 1 1 1 1 ${outdir}_mc/res_mse_par
+    ${FSLDIR}/bin/fslroi ${outdir}_mc/res_mse_par ${outdir}_mc/res_mse_par_rot_full 0 3 
+    ${FSLDIR}/bin/fslroi ${outdir}_mc/res_mse_par ${outdir}_mc/res_mse_par_trans_full 3 3
+    # calculate time differences of all parameters
+    ${FSLDIR}/bin/fslroi ${outdir}_mc/res_mse_par_rot_full ${outdir}_mc/res_mse_par_rot0 0 1 0 1 0 $tmax1
+    ${FSLDIR}/bin/fslroi ${outdir}_mc/res_mse_par_rot_full ${outdir}_mc/res_mse_par_rot1 0 1 0 1 1 $tmax1
+    ${FSLDIR}/bin/fslmaths ${outdir}_mc/res_mse_par_rot1 -sub ${outdir}_mc/res_mse_par_rot0 ${outdir}_mc/res_mse_par_rot
+    ${FSLDIR}/bin/fslroi ${outdir}_mc/res_mse_par_trans_full ${outdir}_mc/res_mse_par_trans0 0 1 0 1 0 $tmax1
+    ${FSLDIR}/bin/fslroi ${outdir}_mc/res_mse_par_trans_full ${outdir}_mc/res_mse_par_trans1 0 1 0 1 1 $tmax1
+    ${FSLDIR}/bin/fslmaths ${outdir}_mc/res_mse_par_trans1 -sub ${outdir}_mc/res_mse_par_trans0 ${outdir}_mc/res_mse_par_trans
+    # multiply rots (radians) by 50mm and add up with abs translations to get FD in Power et al, 2011
+    ${FSLDIR}/bin/fslmaths ${outdir}_mc/res_mse_par_rot -abs -mul 50 ${outdir}_mc/res_mse_par_rot
+    ${FSLDIR}/bin/fslmaths ${outdir}_mc/res_mse_par_rot -Tmean -mul 3 ${outdir}_mc/res_mse_par_rotsum
+    ${FSLDIR}/bin/fslmaths ${outdir}_mc/res_mse_par_trans -abs -Tmean -mul 3 ${outdir}_mc/res_mse_par_transsum
+    ${FSLDIR}/bin/fslmaths ${outdir}_mc/res_mse_par_transsum -add ${outdir}_mc/res_mse_par_rotsum ${outdir}_mc/res_mse_diffZ
+    ${FSLDIR}/bin/fsl2ascii ${outdir}_mc/res_mse_diffZ ${outdir}_mc/res_mse_diff.txt
+    grep [0-9] ${outdir}_mc/res_mse_diff.txt0* > ${outdir}_mc/res_mse_diff.txt
+    ${FSLDIR}/bin/fslascii2img ${outdir}_mc/res_mse_diff.txt 1 1 1 $tmax1 1 1 1 1 ${outdir}_mc/res_mse_diff
+
+elif [ $metric = fdrms ] ; then
+    ${FSLDIR}/bin/fslascii2img ${outdir}_mc/fmri_mcf_rel.rms 1 1 1 $tmax1 1 1 1 1 ${outdir}_mc/res_mse_diff
+
+else
+    echo "Metric $metric is not supported"
+    exit 1;
+fi
+
+
+### SAVE VALUES AND/OR PLOT
+# Need to add a zero at the start in each case (see full explanation below)
+if [ X${savefile} != X ] ; then
+    $FSLDIR/bin/fsl2ascii ${outdir}_mc/res_mse_diff ${outdir}_mc/vals.txt
+    echo "0" > ${savefile}
+    cat ${outdir}_mc/vals.txt[0-9]* | grep [0-9] >> ${savefile}
+    rm ${outdir}_mc/vals.txt[0-9]*
+fi
+if [ X${plotfile} != X ] ; then
+    $FSLDIR/bin/fsl2ascii ${outdir}_mc/res_mse_diff ${outdir}_mc/vals.txt
+    echo "0" > ${outdir}_mc/vals.txt
+    cat ${outdir}_mc/vals.txt[0-9]* | grep [0-9] >> ${outdir}_mc/vals.txt
+    rm ${outdir}_mc/vals.txt[0-9]*
+    $FSLDIR/bin/fsl_tsplot -i ${outdir}_mc/vals.txt -t "Motion outlier metric: $metric" -x "time" -y "metric value" -o ${plotfile}
+fi
+
+#### CALCULATING OUTLIERS
+if [ $verbose = yes ] ; then echo "Calculating outliers"; fi
+# Calculate thresholds
+if [ $use_abs_thresh = yes ] ; then
+    threshv=$abs_thresh
+else
+    # calculate box-plot outlier limits
+    pv=`$FSLDIR/bin/fslstats ${outdir}_mc/res_mse_diff -p 25 -p 75`;
+    p25=`echo $pv | awk '{ print $1 }'`;
+    p75=`echo $pv | awk '{ print $2 }'`;
+    threshv=`echo "$p75 + 1.5 * ( $p75 - $p25 )" | bc -l`
+fi
+if [ $verbose = yes ] ; then echo "Range of metric values: `$FSLDIR/bin/fslstats ${outdir}_mc/res_mse_diff -R`" ; fi
+
+$FSLDIR/bin/fslmaths ${outdir}_mc/res_mse_diff -thr $threshv -bin ${outdir}_mc/outliers
+# Add a point at the start to fix timing (as inputs from previous section contain forward diffs)
+# If there is a step change then the induced intensity artefact will be associated with the first timepoint _after_ the change, so a change between timepoints j and (j+1) should create a confound spike at timepoint j+1
+#      e.g.  3 1 2 696 1  =>  0 0 1 1 for res_mse 
+#              => 0 0 0 1 0  and   0 0 0 0 1  as EVs 
+# the following lines put a zero at the start of outliers
+$FSLDIR/bin/fslroi ${outdir}_mc/outliers ${outdir}_mc/one 0 1 0 1 0 1 0 1
+$FSLDIR/bin/fslmaths ${outdir}_mc/one -mul 0 ${outdir}_mc/zero
+$FSLDIR/bin/fslmerge -t ${outdir}_mc/outliers ${outdir}_mc/zero ${outdir}_mc/outliers
+nmax=`$FSLDIR/bin/fslstats ${outdir}_mc/outliers -V | awk '{ print $1 }'`
+if [ $verbose = yes ] ; then echo "Found $nmax outliers over $threshv"; fi
+
+
+#### GENERATE EVs (one spike per EV)
+if [ $verbose = yes ] ; then echo "Generating EVs"; fi
+# get index values of all non-zero events in res_mse
+if [ -f $outfile ] ; then rm -f $outfile ; fi
+nvals="";
+n=0;
+while [ $n -lt $tmax ] ; do
+  $FSLDIR/bin/fslmaths ${outdir}_mc/outliers -roi 0 1 0 1 0 1 $n 1 ${outdir}_mc/stp
+  val=`$FSLDIR/bin/fslstats ${outdir}_mc/stp -V | awk '{ print $1 }'`;
+  if [ $val -gt 0 ] ; then
+      nvals="$nvals $n";
+      $FSLDIR/bin/fslmeants -i ${outdir}_mc/stp -o ${outdir}_mc/singleev;
+      if [ -f $outfile ] ; then	  
+	  paste -d ' ' $outfile ${outdir}_mc/singleev > ${outfile}2
+	  cp ${outfile}2 $outfile
+	  rm -f ${outfile}2
+      else
+	  cp ${outdir}_mc/singleev $outfile
+      fi
+  fi
+  n=`echo "$n + 1" | bc`;
+done
+
+if [ $verbose = yes ] ; then echo "Found spikes at $nvals"; fi
+
+
+# CLEANUP
+if [ $cleanup = yes ] ; then
+    if [ X${outdir}_mc != X ] ; then
+	if [ -d ${outdir}_mc ] ; then
+	    rm -rf ${outdir}_mc
+	fi
+	if [ X${outdir} != X ] ; then
+           if [ -e ${outdir} ] ; then
+ 	     rm ${outdir}
+ 	   fi  
+	fi
+    fi
+fi
+

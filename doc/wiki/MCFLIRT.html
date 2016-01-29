@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>MCFLIRT</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">MCFLIRT</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867">
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-2"></span><p class="line862">MCFLIRT is an intra-modal motion correction tool designed for use on fMRI time series and based on optimization and registration techniques used in <a href="./FLIRT.html">FLIRT</a>, a fully automated robust and accurate tool for linear (affine) inter- and inter-modal brain image registration. <span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line862">For more detail on MCFLIRT, see the <a class="https" href="https://www2.fmrib.ox.ac.uk/analysis/research/mcflirt/mcflirt">MCFLIRT web page</a>. <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line874">If you use MCFLIRT in your research, please quote the journal reference: <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line867"><span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><div class="references"><span class="anchor" id="line-1-1"></span><p class="line862">Jenkinson, M., Bannister, P., Brady, J. M. and Smith, S. M.  Improved Optimisation for the Robust and Accurate Linear Registration and Motion Correction of Brain Images. NeuroImage, 17(2), 825-841, 2002. </div><span class="anchor" id="line-11"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-12"></span>
+<h1 id="How_it_works">How it works</h1>
+<span class="anchor" id="line-13"></span><p class="line874">MCFLIRT loads the time-series in its entirity and will default to the middle volume as an initial template image. A coarse 8mm search for the motion parameters is then carried out using the cost function specified followed by two subsequent searches at 4mm using increasingly tighter tolerances. All optimizations use trilinear interpolation. <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line874">As part of the initial 8mm search, an identity transformation is assumed between the middle volume and the adjacent volume. The transformation found in this first search is then used as the estimate for the transformation between the middle volume and the volume beyond the adjacent one. This scheme should lead to much faster optimization and greater accuracy for the majority of studies where subject motion is minimal. In the pathalogical cases, this scheme does not penalise the quality of the final correction. <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line874">If mean registration is used, the curent motion correction parameters are applied to the time-series, the volumes are averaged to create a new template image and the same 3-stage correction is carried out using this new mean image as a template. <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line862">Finally, if a 4-stage correction has been specified, a further optimization pass is carried out using sinc interpolation (internally) for greater accuracy. This step is significantly more time-consuming than the previous part of the correction, which should take in the order of 10 minutes for a 100 volume timeseries.  This internal interpolation is independent of the final resampling interpolation (as specified by <tt class="backtick">sinc_final</tt> or <tt class="backtick">spline_final</tt>). <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line874">The scheme has the added advantage of `sensible' handling of the end slices in a volume. In other schemes, voxels which move out of the Field of View (FOV) due to (often slight) movement of the head are either excluded from further calculations or treated as zero-value. In order to retain as much useful information in the data as possible, the volumes are padded by doubling the first and last slices in the z-plane so that we can interpolate from locations outside the FOV using appropriate values. <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-24"></span>
+<h1 id="Usage_and_options">Usage and options</h1>
+<span class="anchor" id="line-25"></span><p class="line867"><tt class="backtick">mcflirt&nbsp;-in&nbsp;&lt;infile&gt;&nbsp;[options]</tt> <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line874">Available options are: <span class="anchor" id="line-28"></span><div><table><tbody><tr>  <td><p class="line862">-out, -o </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862">default is infile_mcf </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-29"></span><p class="line862">-cost </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> {mutualinfo,woods,corratio,normcorr,normmi,leastsquares} : default is normcorr </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-30"></span><p class="line862">-bins </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862">default is 256 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-31"></span><p class="line862">-dof </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862">default is 6 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-32"></span><p class="line862">-refvol </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862">default is middle volume </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-33"></span><p class="line862">-scaling </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862">default is 6.0 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-34"></span><p class="line862">-smooth </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862">default is 1.0 - controls smoothing in cost function </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-35"></span><p class="line862">-rotation </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862">specify scaling factor for rotation optimization tolerances </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-36"></span><p class="line862">-verbose </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862">0 is least and default </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-37"></span><p class="line862">-stages </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862">default is 3. 4 specifies final (internal) sinc interpolation </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-38"></span><p class="line862">-init </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862">initial transform matrix to apply to all vols </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-39"></span><p class="line862">-gdt </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">run search on gradient images </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-40"></span><p class="line862">-edge </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">run search on contour images </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-41"></span><p class="line862">-meanvol </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">register timeseries to mean volume (overrides -refvol option) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-42"></span><p class="line862">-stats </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">produce variance and std. dev. images </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-43"></span><p class="line862">-sinc_final </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">applies final transformations (resampling) using sinc interpolation </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-44"></span><p class="line862">-spline_final </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">applies final transformations (resampling) using spline interpolation </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-45"></span><p class="line862">-mats </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">save transformation matricies in subdirectory outfilename.mat </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-46"></span><p class="line862">-plots </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">save transformation parameters in file outputfilename.par </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-47"></span><p class="line862">-report </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">report progress to screen </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-48"></span><p class="line862">-help </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">print this information </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-54"></span>
+<h1 id="General_Advice">General Advice</h1>
+<span class="anchor" id="line-55"></span><ul><li>For rapid registration, high-quality corrections can be performed using only 3-stage optimization with the mean template <span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span></li></ul><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-58"></span><a href="./CategoryFunctional.html">CategoryFunctional</a> <a href="./CategoryMCFLIRT.html">CategoryMCFLIRT</a> <span class="anchor" id="line-59"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

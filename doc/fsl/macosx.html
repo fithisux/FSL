@@ -1,0 +1,254 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="Content-Type"
+content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../fsl.css" />
+<link rel="stylesheet" type="text/css" href="install.css" />
+<title>FSL</title></head><body>
+
+<iframe width="100%" scrolling="no" frameborder="0" src="top.html">Broken</iframe>
+
+<h1>Installing FSL on Apple Mac</h1>
+<p>
+Thanks to Robert Coghill for sponsoring the Apple port.
+</p>
+<p>Contents:</p>
+<ul>
+<li><a href="#prereq">Prerequisites</a></li>
+<li><a href="#autoinst">FSL install script</a>
+<ul><li><a href="#autoenv">Configuring your account for FSL usage using the install script</a></li></ul></li>
+<li><a href="#checkinst">Checking the installation</a></li>
+<li><a href="#gui">Running the GUIs</a></li>
+<li><a href="#matlab">Using Matlab Libraries</a></li>
+<li><a href="#fhelp">Further help</a></li>
+<li><a href="#maninst">Advanced: Manual installation</a></li>
+</ul>
+<hr /><a id="prereq"></a><h2>Prerequisites</h2>
+<p>Before you install FSL you should first ensure that you have the X11 windowing system installed. To do this, look for the X11 application in the Utilities folder within the Applications folder (switch to the Finder and hit Apple-Shift-U to open the Utilities folder); by default versions of Mac OS X prior to 10.5 doesn't normally come with this installed (you'll almost certainly need X11 later for things other than FSL anyway).
+</p>
+<p>If you do not have X11 then install it from the OS X Install CD. Insert the CD, open it in the Finder, scroll down to the <i>Optional Installs.mpkg</i> package and double click to launch the installer (in Mac OS X 10.5, the package is in the <i>Optional Installs</i> folder). Click through until the custom install window appears, expose the Applications section and select X11. Now click on 'Install'</p>
+<div class="centred">
+      <table class="centred">
+      <tr><td><img src="images/install_step_1.png" title='Step 1' alt="Open the Optional installs package"/></td><td><img src="images/install_step_2.png" title='Step 2' alt="Click continue in the welcome screen"/></td></tr>
+      <tr><td><img src="images/install_step_3.png" title='Step 3' alt="Click continue at the license agreement"/></td><td><img src="images/install_step_4.png" title='Step 4' alt="Agree to the license"/></td></tr>
+      <tr><td><img src="images/install_step_5.png" title='Step 5' alt="Select your boot disk - usually 'MacIntosh HD"/></td><td><img src="images/install_step_6.png" title='Step 6' alt="Select X11 from the list of applications to install"/></td></tr>
+      </table>
+</div>
+<hr /><a id="autoinst"></a><h2>FSL Install Script</h2>
+<p>An automated installer, <a href="fsl_installer.sh">fsl_installer.sh</a> is available to carry out the installation (or application of a patch). In addition it will install FSLView into /Applications, automatically configure your environment to enable you to run FSL and (on Mac OS X 10.4) will configure the Apple Terminal application to allow the launching of X11 applications from it. Finally, if you use <i>Matlab</i> it will configure your <i>startup.m</i> file to allow you to use the FSL Matlab functions.
+</p>
+<ul><li><a href="fsl_installer.sh">fsl_installer.sh</a> - Version 1.6 09/02/2012</li></ul>
+<h3>Running the installer</h3>
+<p>
+Once you have downloaded the installer, open a <i>Terminal</i> (look in the <i>Utilities</i> folder in <i>Applications</i>), change to the folder containing the downloaded file (for example if you downloaded to your Desktop):</p>
+<pre>cd ~/Desktop</pre>
+<p>(On Mac OS X 10.5, Safari defaults to downloading files into ~/Downloads)</p>
+<p>
+ and run it with:
+</p>
+<pre>sh fsl_installer.sh</pre>
+<p>
+Assuming that this folder also contains the FSL distribution tar file and you wish to install into <i>/usr/local</i> then just press Return when the installer asks a question, to accept the defaults. Be aware that you may need Administrator priviledges to install into certain folders on your computer - <i>/usr/local</i> being an example, the installer will ask for your password if necessary to allow this.
+</p>
+<p>
+For more information on controlling the installer, run it with the <i>-h</i> option.
+</p>
+<hr />
+<a id="autoenv"></a><h3>Configuring your account for FSL usage using the install script</h3>
+<p>
+In addition to installing the FSL programs, the install script is also capable of configuring your user account to enable you to run the FSL programs. If your user account was used to run the installer when installing the FSL programs, this will have already been done, but you may also want to configure additional accounts. To do this, log in as the user wishing to run FSL and execute the installer with the <i>-e</i> option, eg:
+</p>
+<pre>sh fsl_installer.sh -e</pre>
+<hr /><a id="checkinst"></a><h2>Checking the installation</h2>
+<p>
+  Test that the environment and command line tools are set up correctly by doing the following:
+</p>
+<ul>
+  <li> Quit the Terminal program and start it again </li>
+  <li> Check that your environment is correct by typing:
+    <pre>echo $FSLDIR</pre>
+    This should display the name of the directory that you installed FSL in.
+  </li>
+  <li> Check that your path is correct by typing:
+    <pre>flirt -version</pre>
+    which should display a line like:
+    <pre>FLIRT version 5.4.2</pre>
+    (although the version number might be different). 
+  </li>
+</ul>
+<p>
+In general, to run the FSL tools from the command line (within a terminal) you need to enter the program name in lower case (e.g. <i>bet</i>). Typing a command on its own (without any arguments or options) gives you a help message for that command.
+</p>
+<p>
+A more complete test of the FSL installation can be run at this point
+by using the testing and evaluation suite <a href="feeds.html">FEEDS</a>.
+</p>
+<hr /><a id="gui"></a><h2>Running the GUIs</h2>
+<h3>Mac OS X 10.4</h3>
+<p>
+Once you have checked the environment and command line programs, as described above, then start <i>X11</i> (click on it in the <i>Utilities</i> folder inside the <i>Applications</i> folder). All of the FSL GUIs should now work. To run a GUI version of a program you can either type its capitalised name with an additional '_gui' appended in the terminal (e.g. <i>Bet_gui</i>), or you can start the main FSL GUI by just typing <i>fsl</i>.
+</p>
+<h3>Mac OS X 10.5</h3>
+<p>
+There is no need to launch <i>X11.app</i> before starting any of the FSL GUIs, the X11 system automatically launches. To run a GUI version of a program you can either type its capitalised name with an additional '_gui' appended in the terminal (e.g. <i>Bet_gui</i>), or you can start the main FSL GUI by just typing <i>fsl</i>.
+</p>
+<p>
+If you have upgraded from 10.4, then you may have a <i>.bash_profile</i> (or <i>.tcshrc</i> or <i>.cshrc</i>) that breaks this behaviour. If you installed using the fsl_installer.sh script then download the current version, <a href="fsl_installer.sh">fsl_installer.sh</a>, and re-run using the <i>-e</i> option from a terminal:
+</p>
+<pre>
+cd ~/Downloads
+sh fsl_installer.sh -e
+</pre>
+<p>
+assuming that your web browser downloads to the folder <i>~/Downloads</i>.
+If you have manually added this to your shell setup file then look for a line that changes/sets the <i>DISPLAY</i> environment variable and remove it. New shells will then behave as expected.
+</p>
+<p>Also note that at this time, Apple's <i>X11.app</i> as shipped, has a large number of bugs and performance issues. Until such time as an offical release corrects these problems, you may see significant improvements by installing the testing release available at <a href='http://www.x.org/wiki/XDarwin'>http://www.x.org/wiki/XDarwin</a> (follow the instructions for a <i>Binary installation</i>).
+</p>
+<hr /><a id="matlab"></a><h2>Using Matlab libraries</h2>
+<p>FSL ships with several Matlab scripts for loading Analyze files. These libraries are dependant on FSL environment variables which aren't set in the Mac OS X Desktop environment, so won't run in a Matlab session started from the /Applications/MATLAB.app launcher. There are two options:
+</p>
+<ol>
+<li>Run Matlab from a correctly configured Terminal (assuming Matlab 7.4 - adjust as appropriate for your version)
+  <pre>/Applications/MATLAB74/bin/matlab</pre>
+or
+</li>
+<li>Configure the FSL environment variable in your ~/matlab/startup.m file (create it if it doesn't already exist) - add the following (assuming FSL installed in /usr/local):
+  <pre>setenv( 'FSLDIR', '/usr/local/fsl');
+fsldir = getenv('FSLDIR');
+fsldirmpath = sprintf('%s/etc/matlab',fsldir);
+path(path, fsldirmpath);
+clear fsldir fsldirmpath;</pre>
+</li>
+</ol>
+<hr /><a id="fhelp"></a><h2>Further help</h2>
+<p>If any problems occur when installing or running the FSL tools, please consult the FSL FAQ. This also contains instructions on how to join and use the FSL email list to ask specific questions which are not covered in the FAQ.
+</p>
+<hr />
+<a id="maninst"></a><h2>Manual Installation</h2>
+<ol>
+  <li> <a id='md5'>Verify the download</a>
+    <ul>
+      <li> Visit our <a href="/fsl/cgi-bin/fslchecksums.pl">checksums page</a> to download the MD5 sum file that matches the <emph>.tar.gz</emph> package you have downloaded. Make sure that the <emph>.md5</emph> file is in the same directory as the downloaded FSL distribution file.</li>
+      <li> Open up a <i>Terminal</i> (you can find this application in <i>Utilities</i> folder inside the <i>Applications</i> folder).</li>
+      <li> In the terminal, change to the directory where you downloaded the FSL distribution, e.g.
+	<pre>cd ~/Downloads</pre>
+      </li>
+      <li> Check the file with
+	<pre>fsl=`ls -1 fsl-4.*-macosx.tar.gz`; md5 $fsl | diff -q - $fsl.md5</pre>
+	<strong>NB</strong> ` is on the key to the left of Z on the UK Mac keyboard, or to the left of 1 on the US Mac keyboard 
+      </li>
+      <li> If there is a problem with the download then you will receive a message like:
+	<pre>Files .... and .... differ</pre>
+      </li>
+    </ul>
+  <li> Unpack the FSL distribution
+    <ul>
+      <li> Open up a <i>Terminal</i> (you can find this application in <i>Utilities</i> folder inside the <i>Applications</i> folder).</li>
+      <li> In the terminal, change to the directory where you want FSL installed, e.g.
+	<pre>cd /usr/local</pre>
+      </li>
+      <li> Unpack the fsl download file - for example, if you downloaded it onto your Downloads folder,
+	<pre>tar -zxvf ~/Downloads/fsl-*-macosx.tar.gz</pre>
+	(omit the z in the -zxvf if your computer has already uncompressed the tarfile for you).
+	This will create a directory called fsl in the current directory which will contain all the required files for FSL and FSLView. Note that you might need to add <i>sudo</i> to the start of the tar command if you don't automatically have the right to create files in <i>/usr/local</i>. 
+      </li>
+    </ul>
+    </li>
+  <li> Install the applications
+  <ul>
+  <li>
+    To get a clickable application icon FSLView, open a file browser in the top-level <i>fsl</i> directory, e.g.
+    <pre>open /usr/local/fsl</pre>
+    and drag the <i>fslview.app</i> directory into your <i>Applications</i> folder or your Desktop.
+  </li>
+  <li> Find out which shell you are running.
+    In a terminal, type:
+    <pre>help</pre>
+    the output will be either a list of commands, in which case you are using the bash shell, or an error saying &quot;command not found&quot; or similar message, in which case you are using the tcsh or csh shell.
+  </li>
+  </ul>
+  </li>
+  <li> Set up your user environment.
+    <h3>If you are using the bash shell (the default)</h3>
+    <ul>
+      <li> In a running terminal type:
+	<pre>cd 
+touch .bash_profile
+open -a TextEdit .bash_profile</pre>
+	This will bring up a TextEdit window
+      </li>
+      <li> Select <i>Make Plain Text</i> from the Format menu if it is available (if only <i>Make Rich Text</i> is there then do nothing as it is already in plain text mode) </li>
+      <li> In the window type the following lines at the end of the document (or better still, use copy and paste to do this):
+	<pre>FSLDIR=/usr/local/fsl
+. ${FSLDIR}/etc/fslconf/fsl.sh
+PATH=${FSLDIR}/bin:${PATH}
+export FSLDIR PATH
+</pre>
+<p>
+  Note that the second line starts with a dot (i.e. full stop or period), then a space, then <i>${FSLDIR}/etc/fslconf/fsl.sh</i> - <b>the dot and space are very important!</b>
+</p>
+<p>
+For Mac OS X 10.4 and earlier (<b>NOT</b> Mac OS X 10.5), also include the following:
+</p>
+<pre>
+if [ -z "$DISPLAY" -a "X$TERM_PROGRAM" = "XApple_Terminal" ]; then
+  X11_FOLDER=/tmp/.X11-unix
+  currentUser=`id -u`
+  userX11folder=`find $X11_FOLDER -name 'X*' -user $currentUser -print 2>&amp;1 | tail -n 1`
+  if [ -n "$userX11folder" ]; then
+    displaynumber=`basename ${userX11folder} | grep -o '[[:digit:]]\+'`
+    if [ -n "$displaynumber" ]; then
+      DISPLAY=localhost:${displaynumber}
+      export DISPLAY
+    else
+      echo "Warning: DISPLAY not configured as X11 is not running"
+    fi
+  else
+    echo "Warning: DISPLAY not configured as X11 is not running"
+  fi
+fi</pre>
+</li>
+    <li> Change the line <i>FSLDIR=/usr/local/fsl</i> and replace <i>/usr/local/fsl</i> with the directory name of the place where you installed FSL.</li>
+    <li> Save the file and exit TextEdit </li>
+    </ul>
+  <h3>If you are using the tcsh or the csh shell</h3>
+    <ul>
+      <li> In a running terminal type:
+	<pre>cd 
+touch .cshrc
+open -a TextEdit .cshrc</pre>
+	This will bring up a TextEdit window
+      </li>
+      <li> Select <i>Make Plain Text</i> from the Format menu if it is available (if only <i>Make Rich Text</i> is there then do nothing as it is already in plain text mode) </li>
+      <li> In the window copy and paste the following in at the end of the document:
+	<pre>setenv FSLDIR /usr/local/fsl
+source ${FSLDIR}/etc/fslconf/fsl.csh
+setenv PATH ${FSLDIR}/bin:${PATH}</pre>
+	<p>For Mac OS X 10.4 and earlier (<b>NOT</b> Mac OS X 10.5), also include the following:</p>
+	<pre>
+if ( $?TERM_PROGRAM ) then
+ if ( "X$TERM_PROGRAM" == "XApple_Terminal" ) then; if ( ! $?DISPLAY ) then
+      set X11_FOLDER=/tmp/.X11-unix; set currentUser=`id -u`; set userX11folder=`find $X11_FOLDER -name 'X*' -user $currentUser -print | tail -n 1`
+      if ( "X$userX11folder" != "X" ) then
+        set displaynumber=`basename ${userX11folder} | grep -o '[[:digit:]]\+'`
+        if ( "X$displaynumber" != "X" ) then
+          setenv DISPLAY localhost:${displaynumber}
+        else; echo "Warning: DISPLAY not configured as X11 is not running"
+        endif
+      else
+        echo "Warning: DISPLAY not configured as X11 is not running"
+      endif
+    endif 
+  endif
+endif
+	</pre>
+      </li>
+      <li> Change the line <i>setenv FSLDIR /usr/local/fsl</i> and replace <i>/usr/local/fsl</i> with the directory name of the place where you installed FSL.</li>
+      </ul>
+    </li>
+</ol>
+</body>
+</html>

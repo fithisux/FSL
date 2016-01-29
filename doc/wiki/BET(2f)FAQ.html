@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>BET/FAQ</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">BET/FAQ</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./BET.html">Introduction</a></li><li><a href="./BET(2f)UserGuide.html">User Guide</a></li><li>FAQ<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#BET_does_not_give_me_good_results_-_what_can_I_do.3F">BET does not give me good results - what can I do?</a></li><li>
+<a href="#What_do_the_-f_and_-g_options_in_BET_do.3F">What do the -f and -g options in BET do?</a></li><li>
+<a href="#Can_I_use_BET_with_animal_brains.3F">Can I use BET with animal brains?</a></li></ol></div></div></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="BET_does_not_give_me_good_results_-_what_can_I_do.3F">BET does not give me good results - what can I do?</h1>
+<span class="anchor" id="line-4"></span><p class="line862">Firstly, check that the input image is OK. This can be done using <tt class="backtick">slices</tt> as described in the first part of the <a href="./FLIRT(2f)FAQ.html#My_FLIRT_registration_doesn.27t_work_well_-_what_can_I_do.3F">flirt checklist</a>. <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line874">If the image contains a lot of neck (large superior-inferior FOV), then the default centre used by BET is often poor. This can be fixed by using the -c option to select good centre coordinates. Note that these coordinates are in voxels, not mm, so if you are using voxel coordinates (starting at 0 in the corner) then you must multiply these coordinates by the voxel dimensions - as the (0,0,0)mm point is in the corner, not in the middle of the image. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line862">If all of the above appears to be OK, then the main parameters to alter in BET are the -f and -g parameters which can cause general expansion or contraction of the brain segmentation. Note that very local errors are unlikely to be fixed by varying these parameters. For more information about these parameters see: <a href="./BET(2f)FAQ.html#What_do_the_-f_and_-g_options_in_BET_do.3F">What do the -f and -g options in BET do</a>? <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line867">
+<h1 id="What_do_the_-f_and_-g_options_in_BET_do.3F">What do the -f and -g options in BET do?</h1>
+<span class="anchor" id="line-11"></span><p class="line862">The <tt class="backtick">-f</tt> option in BET is used to set a fractional intensity threshold which determines where the edge of the final segmented brain is located. The default value is 0.5 and the valid range is 0 to 1. A smaller value for this threshold will cause the segmented brain to be larger and should be used when the overall result from BET is too small (inside the brain boundary). Obviously, larger values for this threshold have the opposite effect (making the segmented brain smaller). This parameter does not normally need to be used, but sometimes requires tuning for specific scanners/sequences to get the best results. It is not advisable to tune it for each individual image in general. <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line862">The <tt class="backtick">-g</tt> option in BET causes a gradient change to be applied to the previous threshold value. That is, the value of the <tt class="backtick">-f</tt> intensity threshold will vary from the top to the bottom of the image, centred around the value specified with the <tt class="backtick">-f</tt> option. The default value for this gradient option is 0, and the valid range is -1 to +1. A positive value will cause the intensity threshold to be smaller at the bottom of the image and larger at the top of the image. This will have the effect of increasing the estimated brain size in the bottom slices and reducing it in the top slices. <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line867">
+<h1 id="Can_I_use_BET_with_animal_brains.3F">Can I use BET with animal brains?</h1>
+<span class="anchor" id="line-16"></span><p class="line862">Past experience is that BET will work with brains from some animals, like monkeys, but will not work well with others, like rats. What is crucial is that there is a sufficient band of dark intensity (csf or skull) surrounding the brain. When this is not true (e.g. because of a relatively large brain stem/spinal cord) then the brain outline tends to expand well beyond the brain boundary and is very obviously wrong. In any case, the best strategy is to try BET on some example images and see if it succeeds. However, it is necessary to use the <tt class="backtick">-c</tt> and <tt class="backtick">-r</tt> options to make it work on non human-sized brains. When setting these options note that (1) the co-ordinates of the centre are most easily found using FSLView to select a position in the middle of the brain, and recording the mm co-ordinate values, and (2) for animals, the initial radius, set via <tt class="backtick">-r</tt>, should be set for the <em>brain</em> size, not the head size. <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-19"></span>CategoryFAQ <a href="./CategoryBET.html">CategoryBET</a> <span class="anchor" id="line-20"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:31
+</body>
+</html>

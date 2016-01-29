@@ -1,0 +1,7 @@
+./bootstrap.sh --with-libraries=system,filesystem,regex,chrono,serialization,date_time,thread,log --libdir=${FSLEXTLIB} --includedir=. --prefix=${FSLDEVDIR}
+
+if [ `$FSLDIR/etc/fslconf/fslmachtype.sh | grep llvm` ] 
+   then LLVMLIBS="toolset=clang cxxflags=\"-stdlib=libc++\" linkflags=\"-stdlib=libc++\""
+fi
+
+./b2 link=static install ${LLVMLIBS}

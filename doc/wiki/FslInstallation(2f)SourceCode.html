@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FslInstallation/SourceCode</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FslInstallation/SourceCode</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FslInstallation.html">Introduction</a></li><li><a href="./FslInstallation(2f)MacOsX.html">Mac Os X</a></li><li><a href="./FslInstallation(2f)Linux.html">Linux</a></li><li><a href="./FslInstallation(2f)Windows.html">Windows</a></li><li>Source Code<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Compiling_Source_Distribution">Compiling Source Distribution</a></li><li>
+<a href="#Using_the_compiled_binaries">Using the compiled binaries</a></li><li>
+<a href="#Compiling_FSLView">Compiling FSLView</a></li></ol></div></div></li><li><a href="./FslInstallation(2f)ShellSetup.html">Shell Setup</a></li><li><a href="./FslInstallation(2f)Faq.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="Compiling_Source_Distribution">Compiling Source Distribution</h1>
+<span class="anchor" id="line-4"></span><p class="line874">If you have not taken a precompiled version, you will require: <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><ul><li>GNU make <span class="anchor" id="line-7"></span></li><li>GNU install <span class="anchor" id="line-8"></span></li><li>GCC C/C++ compiler (versions gcc-4.0, 4.1, 4.2 and 4.4 are known to work in general although 4.2 upwards is recommended). <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span></li></ul><p class="line862">We provide source code for TCL/TK 8.4.19, but you may wish to provide your own version (perhaps as shipped with your OS), in which case delete the words tcl and tk from the <tt class="backtick">build</tt> script in the extras directory of the FSL sources to save build time. Then do the following (this if for the bash shell; if you are using tcsh amend appropriately): <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><ol type="1"><li><p class="line862">Make a folder to build the source code in, for example <tt class="backtick">~/fslbuild</tt> <span class="anchor" id="line-13"></span></li><li>Put the tar file into your build location, and unpack the sources : <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><span class="anchor" id="line-1-1"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-650b525c852e72557678670ba57a7c7777209de2" lang="en"><span class="line"><span class="anchor" id="line-1-2"></span><span class="ResWord">cd</span> ~/fslbuild</span>
+<span class="line"><span class="anchor" id="line-2-1"></span>tar zxf fsl-5.0.0-sources.tar.gz</span>
+</pre></div></div><span class="anchor" id="line-18"></span></li><li>Set the main FSL environment variables (for version 5.0.6 and above you first need to uncomment the lines related to FSLCONFDIR and FSLMACHTYPE in $FSLDIR/etc/fslconf/fsl.sh): <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><span class="anchor" id="line-1-3"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-135eccd20fcd2236d41daf1450716198fb58bdc6" lang="en"><span class="line"><span class="anchor" id="line-1-4"></span><span class="ResWord">export </span><span class="ID">FSLDIR</span>=<span class="String">`</span><span class="ResWord">pwd</span><span class="String">`</span>/fsl</span>
+<span class="line"><span class="anchor" id="line-2-2"></span>. <span class="ResWord">${</span><span class="ID">FSLDIR</span><span class="ResWord">}</span>/etc/fslconf/fsl.sh</span>
+</pre></div></div><span class="anchor" id="line-23"></span></li><li>Then check if your machine/compiler is supported by default: <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><span class="anchor" id="line-1-5"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-80aaf514ae714a8c9ea7094cc00cce6fa8bd2810" lang="en"><span class="line"><span class="anchor" id="line-1-6"></span>ls <span class="ID">$FSLDIR</span>/config/<span class="ID">$FSLMACHTYPE</span></span>
+</pre></div></div><span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span></li></ol><p class="line862">If the above directory does not exist (the <tt class="backtick">ls</tt> returns an error): <span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><ul><li><p class="line862">Select the closest match from the directories in <tt class="backtick">$FSLDIR/config</tt> and do the following: <span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><span class="anchor" id="line-1-7"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-e6f34d6e9f134e4a73580dc8d52dbaac8cdf7551" lang="en"><span class="line"><span class="anchor" id="line-1-8"></span>cp -r <span class="ID">$FSLDIR</span>/config/closestmatch <span class="ID">$FSLDIR</span>/config/<span class="ID">$FSLMACHTYPE</span></span>
+</pre></div></div><span class="anchor" id="line-34"></span></li><li><p class="line862">Depending on how different your machine and compiler are from the closest match, you may need to edit the files inside the <tt class="backtick">$FSLDIR/config/$FSLMACHTYPE</tt> directory which set the local paths and variables for things like install commands, compiler flags, etc. <span class="anchor" id="line-35"></span></li><li><p class="line862">If you wish to use your vendor supplied TCL/TK (or other third-party libraries,  eg libpng) then edit the file <tt class="backtick">$FSLDIR/config/$FSLMACHTYPE/externallibs.mk</tt> to point at the header files for these libraries. <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span></li></ul><p class="line874">Once this test is done then the sources can be built with: <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line867"><span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><span class="anchor" id="line-1-9"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-a90ba958c0ff9a6a536b135f08ad6cf9c3c438db" lang="en"><span class="line"><span class="anchor" id="line-1-10"></span><span class="ResWord">cd</span> <span class="ID">$FSLDIR</span></span>
+<span class="line"><span class="anchor" id="line-2-3"></span>./build</span>
+</pre></div></div><span class="anchor" id="line-43"></span><p class="line862">If you want to re-make a particular package in <tt class="backtick">$FSLDIR/src</tt> (e.g. <tt class="backtick">flirt</tt>) then first set the <tt class="backtick">FSLDEVDIR</tt> environment variable to the same as <tt class="backtick">FSLDIR</tt> and then just type: <span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><p class="line867"><span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><span class="anchor" id="line-1-11"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-8ac56d2d6c13acc3594f87eb880d15f820a757b2" lang="en"><span class="line"><span class="anchor" id="line-1-12"></span>make install</span>
+</pre></div></div><span class="anchor" id="line-48"></span><p class="line874">inside the relevant directory. <span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><p class="line867">
+<h1 id="Using_the_compiled_binaries">Using the compiled binaries</h1>
+<span class="anchor" id="line-51"></span><p class="line862">Whilst you can use the binaries from the build location, you will most likely want to move them to a centralised location so all users on the machine can use them. FSLDIR is self contained, so you can move/copy the entire contents to another location, eg <tt class="backtick">/usr/local</tt> and then configure your environment to point your shell and the FSL tools to this location. Do this as per these <a href="./FslInstallation(2f)ShellSetup.html">instructions</a>. <span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span><p class="line867">
+<h1 id="Compiling_FSLView">Compiling FSLView</h1>
+<span class="anchor" id="line-54"></span><p class="line862">For instructions on compiling FSLView, see <a href="./FslInstallation(2f)SourceCode(2f)FslView.html">here</a>. <span class="anchor" id="line-55"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

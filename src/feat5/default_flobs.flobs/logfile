@@ -1,0 +1,3 @@
+/usr/local/fsl/bin/halfcosbasis --hf=/tmp/flobs_rtSk40.txt --nbfs=3 --ns=28 --logdir=/tmp/flobs_rtSk40.flobs --nhs=1000 --res=0.05 
+---------------------------------------------
+

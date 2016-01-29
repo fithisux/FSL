@@ -1,0 +1,19 @@
+#!/bin/sh
+cppflags="-I${FSLEXTINC}"
+ldflags="-L${FSLEXTLIB}"
+configure_opts="--prefix=${FSLDEVDIR} --program-prefix=fsl --disable-threads --enable-shared"
+
+configure_script=${FSLDIR}/config/${FSLMACHTYPE}/configure.sh
+tcltk_configure_script=${FSLDIR}/config/${FSLMACHTYPE}/tcltkconfigure.sh
+tcl_configure_script=${FSLDIR}/config/${FSLMACHTYPE}/tclconfigure.sh
+
+if [ -f ${tcl_configure_script} ]; then
+    . ${tcl_configure_script}
+elif [ -f ${tcltk_configure_script} ]; then
+    . ${tcltk_configure_script}
+elif [ -f ${configure_script} ]; then
+    . ${configure_script}
+fi
+
+echo "CFLAGS=\"${cflags}\" CPPFLAGS=\"${cppflags}\" LDFLAGS=\"${ldflags}\" ./configure ${tcl_conf_opts} ${configure_opts}"
+CFLAGS="${cflags}" CPPFLAGS="${cppflags}" LDFLAGS="${ldflags}" ./configure ${configure_opts} 

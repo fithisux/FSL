@@ -1,0 +1,37 @@
+#!/bin/sh
+
+if [ $# -ne 2 ] ; then
+  echo "Usage: `basename $0` <input text file> <output text file>"
+  echo "Ensures standard UNIX line endings in output text file"
+  exit 0
+fi
+
+file=$1
+outfile=$2
+
+if [ $file = $outfile ] ; then
+  # make a temporary to avoid the original being wiped
+  tmpfile=`$FSLDIR/bin/tmpnam`
+  cp $file $tmpfile
+  origfile=$file
+  file=$tmpfile
+fi
+
+ftype=`printf "FsLRaNdOmfSlrAnDOMFsLRaNdOmfSlrAnDOMFsLRaNdOmfSlrAnDOMFsLRaNdOm" | cat - $file | file -`
+if [ `echo "$ftype" | grep -i "ascii text" | wc -w` -gt 0 ] ; then
+    if [ `echo "$ftype" | grep -i "CRLF line terminators" | wc -w` -gt 0 ] ; then
+	cat $file | tr -d '\r' > $outfile
+    elif [ `echo "$ftype" | grep -i "CR line terminators" | wc -w` -gt 0 ] ; then
+	cat $file | tr '\r' '\n' > $outfile
+    else
+	cp $file $outfile
+    fi
+else
+    echo "File $file is not a text file"
+    exit 1
+fi 
+
+if [ X$tmpfile != X ] ; then
+    rm $tmpfile
+fi
+

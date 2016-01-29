@@ -1,0 +1,104 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../fsl.css" />
+<link rel="stylesheet" type="text/css" href="install.css" />
+<title>FSL</title></head><body>
+
+<IFRAME width="100%" scrolling="no" frameborder="0" src="top.html">Broken</IFRAME>
+
+<h3>Compiling Source Distribution</h3> 
+<p> If you have not taken a precompiled version, you will require:
+</p>
+<ul>
+<li><a href="http://ftp.gnu.org/gnu/make/">GNU make</a>
+ - this should be named <kbd>gmake</kbd> to make sure that FSL uses this rather
+than any other &quot;make&quot; in your path.
+</li>
+<li><a href="http://ftp.gnu.org/gnu/coreutils/">GNU
+install</a> (part of the GNU core utils project) - this should be named
+ <kbd>ginstall</kbd> to make sure that FSL uses this rather than any other
+ &quot;install&quot; in your path.
+</li>
+<li><a href="http://gcc.gnu.org">GCC C/C++
+compiler</a> (versions from gcc-3.4 to gcc-4.1 seem to work fine in
+general).
+</li>
+</ul>
+<p>
+In addition, the following are required (Note: sometimes these binaries can be
+taken from one of the other FSL binary distributions if the operating system
+and machines are similar - e.g. certain varieties of linux on PC machines):
+</p>
+<ul>
+<li><a href="http://www.tcl.tk/">Tcl and Tk</a>
+version 8.4.14 - configure both with <b>configure --prefix=$FSLDIR</b> before making and installing.
+</li>
+</ul>
+<p>
+Note that if you are building these yourself, you will want to delete
+the words <kbd>tcl</kbd> and <kbd>tk</kbd> from the build script in the
+<kbd>extras</kbd> directory of the FSL sources. Otherwise the build may
+ overwrite your newly created binaries for these packages.
+</p>
+<p>Then do the following check (this if for the bash shell; if you are
+using tcsh amend appropriately):
+</p>
+<ol>
+<li> Set the main FSL environment variable:
+<pre>export FSLDIR=&lt;??wherever fsl is unpacked??&gt;</pre>
+<i>e.g. export FSLDIR=/usr/local/fsl </i>
+</li>
+<li> Then source the FSL environment setup script:
+<pre>. ${FSLDIR}/etc/fslconf/fsl.sh</pre>
+</li>
+<li> Then check if your machine/compiler is supported by default:
+<pre>ls $FSLDIR/config/$FSLMACHTYPE</pre>
+</li>
+</ol>
+<p>
+If the above directory does not exist (the <kbd>ls</kbd> returns an error):
+</p>
+<ul>
+<li>
+Select the closest match from the directories in 
+<kbd>$FSLDIR/config</kbd> and do the following:
+<pre>
+cp -r $FSLDIR/config/<i>closestmatch</i> $FSLDIR/config/$FSLMACHTYPE
+</pre>
+</li>
+<li>
+Depending on how different your machine and compiler are from the
+closest match, you may need to edit the files inside the
+<kbd>$FSLDIR/config/$FSLMACHTYPE</kbd> directory which set the
+local paths and variables for things like install commands, compiler
+flags, etc.
+</li>
+</ul>
+<p>
+Once this test is done then the sources can be built simply by doing:
+</p>
+<pre>
+cd $FSLDIR
+./build
+</pre>
+<p>If you want to re-make a particular package in <kbd>$FSLDIR/src</kbd>
+(e.g. flirt) then first set the <kbd>FSLDEVDIR</kbd> environment variable to the
+same as FSLDIR and then just type </p>
+<pre>
+make install</pre>
+<p>
+inside the relevant directory.
+</p>
+<h3>Using the compiled binaries</h3>
+<p>Before use you will need to configure your environment to allow the FSL
+binaries to be located by the system. Do this as per the instructions in the
+<a href="linux.html#env">Linux installation</a> guide.
+</p>
+<h3>Compiling FSLView</h3> 
+<p>
+For instructions on compiling FSLView, see <a href="http://www.fmrib.ox.ac.uk/fsl/fslviewbuild/">here</a>.
+</p>
+</body></html>

@@ -1,0 +1,118 @@
+#!/bin/sh
+
+if [ $# -lt 1 ] ; then
+  echo "Usage: $0 <list of projects>"
+  exit 2 ;
+fi
+
+strict=false;  export strict;
+if [ X$1 = X-strict ] ; then
+  strict=true;  export strict;
+fi
+PROJECTS="$@" ; export PROJECTS ;
+
+FSLDIR=`pwd`
+FSLDEVDIR=${FSLDIR}
+FSLCONFDIR=${FSLDIR}/config
+FSLMACHTYPE=`${FSLDIR}/etc/fslconf/fslmachtype.sh`
+export FSLDIR FSLDEVDIR FSLCONFDIR FSLMACHTYPE
+
+buildmessages="" ; export buildmessages ;
+
+if [ $strict = false ] ; then
+
+  # If this machine doesn't exist in standard config, link to the generic form
+  if [ ! -d ${FSLCONFDIR}/${FSLMACHTYPE} ] ; then
+     ( cd ${FSLCONFDIR} ; ln -s generic ${FSLMACHTYPE} ; buildmessages="WARNING: Did not find specific configuration for ${FSLMACHTYPE} - trying generic version instead";  echo "$buildmessages" ; )
+  fi
+
+fi
+
+
+# Determine which make command to use
+MAKE=none
+if [ X"`make --version 2>&1 | grep -i gnu`"X != XX ] ; then
+   MAKE=make;
+elif [ X"`gmake --version 2>&1 | grep -i gnu`"X != XX ] ; then
+   MAKE=gmake;
+fi
+if [ ${MAKE} = none ] ; then
+   echo "Could not find the gnu make utility in path" ;
+   exit 1 ;
+fi
+
+
+errorprojs="" ; export errorprojs ;
+errorinstall="" ; export errorinstall ;
+
+for projname in $PROJECTS; do
+
+    if [ X"${projname}" = "Xextras" -a -d ${FSLDIR}/extras ] ; then
+	here=`pwd`
+	cd ${FSLDIR}/extras ; ./build ;
+	if [ $? -ne 0 ]; then
+	    errorprojs="extras $errorprojs"; export errorprojs
+	fi
+	cd ${here}
+	MAKEOPTIONS="${MAKEOPTIONS} FSLEXTLIB=${FSLDIR}/extras/lib FSLEXTINC=${FSLDIR}/extras/include" ;
+    elif [ -d $FSLDIR/src/$projname ] ; then
+
+	  echo " " ;
+	  echo " " ;
+	  echo "Making project src/$projname" ;
+	  echo " " ;
+	  cd $FSLDIR/src/$projname ;
+	  ${MAKE} distclean ;
+	  if [ -x fslconfig ] ; then
+	    ./fslconfig ;
+	  fi
+	  if ${MAKE} -k ${MAKEOPTIONS} ; then 
+	    if ${MAKE} install ; then
+	      installok=true;
+	      # Clean up after ourselves
+	      ${MAKE} distclean ;
+	    else 
+	      installok=false;
+	      errorinstall="$errorinstall $projname" ; export errorinstall ;
+            fi
+	    echo " "
+	    echo " ------------------------- "
+	    echo "Successfully made $projname";
+	    if [ $installok = false ]  ; then
+	      echo " "
+	      echo "ERROR::Could not install $projname successfully" ;
+	    fi
+	  else
+	    echo " "
+	    echo " ========================= "
+	    echo "ERROR::Could not make $projname successfully" ;
+	    echo " "
+	    echo " "
+	    errorprojs="$errorprojs $projname" ; export errorprojs ;
+	  fi
+    fi
+done
+
+cd $FSLDIR
+
+echo " ";
+echo " ";
+echo " ";
+if [ "X${errorprojs}X" != XX ] ; then
+  echo "!!ERROR in BUILD!!" ;
+  echo "  Could not make the following projects successfully:" ;
+  echo "   $errorprojs" ;
+else
+  echo "BUILD successfully made all projects" ;
+fi
+echo " ";
+if [ "X${errorinstall}X" != XX ] ; then
+  echo "!!ERROR in INSTALL!!" ;
+  echo "  Could not fully install the following projects successfully:" ;
+  echo "   $errorinstall" ;
+else
+  echo " ";
+fi
+echo " ";
+echo "${buildmessages}"
+

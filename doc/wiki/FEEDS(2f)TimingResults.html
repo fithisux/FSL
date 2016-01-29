@@ -1,0 +1,675 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FEEDS/TimingResults</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FEEDS/TimingResults</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FEEDS.html">Introduction</a></li><li><a href="./FEEDS(2f)Downloading.html">Downloading</a></li><li><a href="./FEEDS(2f)Running.html">Running</a></li><li>Timing Results<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#FEEDS_Timings_Tables">FEEDS Timings Tables</a><ol><li>
+<a href="#FSL_5.0.4">FSL 5.0.4</a></li><li>
+<a href="#FSL_5.0.0">FSL 5.0.0</a></li><li>
+<a href="#FSL_4.1.0-5">FSL 4.1.0-5</a></li><li>
+<a href="#FSL_4.0.2-3">FSL 4.0.2-3</a></li><li>
+<a href="#FSL_4.0.0">FSL 4.0.0</a></li><li>
+<a href="#FSL_3.3">FSL 3.3</a></li><li>
+<a href="#FSL_3.2">FSL 3.2</a></li><li>
+<a href="#FSL_3.1">FSL 3.1</a></li><li>
+<a href="#FSL_3.0">FSL 3.0</a></li><li>
+<a href="#FSL_1.3">FSL 1.3</a></li></ol></li></ol></div></div></li><li><a href="./FEEDS(2f)UsingData.html">Using Data</a></li></ol></div> <span class="anchor" id="line-5"></span>
+<h1 id="FEEDS_Timings_Tables">FEEDS Timings Tables</h1>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line862">These tables give the output of running <tt class="backtick">/usr/bin/time&nbsp;./RUN&nbsp;all</tt> in the top level FEEDS directory; this is user CPU time, i.e. the time with a <tt class="backtick">u</tt> by it. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line862">If you are interested in adding your timings to this table, email us with the full output of running the test, along with a description of your hardware, the output of <tt class="backtick">uname&nbsp;-a</tt> and the version of the compiler (if any) that you used to compile FSL. Note that a timing is not very meaningful if you do not have enough RAM for the test to run without needing to do any swapping. <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line867">
+<h2 id="FSL_5.0.4">FSL 5.0.4</h2>
+<span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><div><table><tbody><tr>  <td><p class="line862"> Hardware </td>
+  <td><p class="line862">  OS </td>
+  <td><p class="line862"> time(s) </td>
+  <td><p class="line862"> speed(relative) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-14"></span><p class="line862"> Apple 15" Mac<tt class="backtick"></tt>Book Pro Retina 2.8 GHz Intel Core i7 (Turbo to 3.7GHz) 16GB </td>
+  <td><p class="line862"> Mac OS X 10.8.4 </td>
+  <td><p class="line862"> 1002 </td>
+  <td><p class="line862"> 1.0 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-15"></span><p class="line862"> Dell Desktop, Intel(R) Core(TM) i7-3770 CPU (Quad-core) @ 3.40GHz 16GB </td>
+  <td><p class="line862"> Red<tt class="backtick"></tt>Hat Enterprise Linux Workstation 6.4 </td>
+  <td><p class="line862"> 1270 </td>
+  <td><p class="line862"> 1.27 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-16"></span><p class="line862"> Dell M610 blade, 2x Intel Xeon E5640 Quad-core @ 2.67GHz 64GB </td>
+  <td><p class="line862"> CentOS 6.4 </td>
+  <td><p class="line862"> 1871 </td>
+  <td><p class="line862"> 1.87 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-17"></span><p class="line862"> Transtec (Super<tt class="backtick"></tt>Micro) Super<tt class="backtick"></tt>Blade, 2x Intel Xeon X5365 Quad-core @ 3.0GHz 32GB </td>
+  <td><p class="line862"> CentOS 6.4 </td>
+  <td><p class="line862"> 1879 </td>
+  <td><p class="line862"> 1.88 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-18"></span><p class="line862"> Dell C6145 2 units of 4x AMD Opteron(tm) Processor 6328 Octo-core @ 3.2GHz 512GB </td>
+  <td><p class="line862"> Red<tt class="backtick"></tt>Hat Enterprise Linux 6.4 </td>
+  <td><p class="line862"> 1637 </td>
+  <td><p class="line862"> 1.63 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-19"></span><p class="line862"> Tyan 2U server, 4x AMD Opteron 8431 @ 2.4GHz 128GB </td>
+  <td><p class="line862"> CentOS 6.4 </td>
+  <td><p class="line862"> 3026 </td>
+  <td><p class="line862"> 3.02 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line867"><span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><div class="note"><span class="anchor" id="line-1-1"></span><p class="line862">Apple 15" Mac<tt class="backtick"></tt>Book Pro Retina 2.8 GHz Intel Core i7 (Turbo to 3.7GHz) 16GB (4 cores, 8 'threads') parallel running times: <span class="anchor" id="line-2-1"></span><span class="anchor" id="line-3-1"></span><ul><li style="list-style-type:none"><div><table><tbody><tr>  <td><p class="line862"> how many simultaneous FEEDS? </td>
+  <td><p class="line862"> real </td>
+  <td><p class="line862"> user </td>
+  <td><p class="line862"> Turbo clock speed </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-4-1"></span><p class="line862"> 1 </td>
+  <td><p class="line862"> 1027 </td>
+  <td><p class="line862"> 1002 </td>
+  <td><p class="line862"> 3.7GHz </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-5-1"></span><p class="line862"> 4 </td>
+  <td><p class="line862"> 1310 </td>
+  <td><p class="line862"> 1286 </td>
+  <td><p class="line862"> 3.3GHz </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-6-1"></span><p class="line862"> 8 </td>
+  <td><p class="line862"> 2080 </td>
+  <td><p class="line862"> 1970 </td>
+  <td><p class="line862"> 3.2GHz </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-7-1"></span><p class="line862"> 12 </td>
+  <td><p class="line862"> 3130 </td>
+  <td><p class="line862"> 1970 </td>
+  <td><p class="line862"> 3.2GHz </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-8-1"></span><span class="anchor" id="line-9-1"></span></li></ul><p class="line874">Conclusions: using all 4 cores nearly as fast as just 1. After this, not much gain, although if one has (e.g.) 8 processes to run, it's faster to run all 8 simultaneously than to run 4 at once and then the other 4, assuming everything can fit in RAM. </div><span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><p class="line867">
+<h2 id="FSL_5.0.0">FSL 5.0.0</h2>
+<span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><div><table><tbody><tr>  <td><p class="line862"> Hardware </td>
+  <td><p class="line862">  OS </td>
+  <td><p class="line862"> time(s) </td>
+  <td><p class="line862"> speed(relative) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-37"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Pro 17' laptop 2.3GHz Intel Core i7 8GB </td>
+  <td><p class="line862"> OS X 10.6.8 </td>
+  <td><p class="line862"> 1153 </td>
+  <td><p class="line862"> 1.00 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line867">
+<h2 id="FSL_4.1.0-5">FSL 4.1.0-5</h2>
+<span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><p class="line867"><span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><div class="note"><span class="anchor" id="line-1-2"></span><p class="line862">Apple Mac<tt class="backtick"></tt>Book Pro 17' laptop 2.3GHz Intel Core i7 8GB (4 cores, 8 'threads')   parallel running times: <span class="anchor" id="line-2-2"></span><span class="anchor" id="line-3-2"></span><ul><li style="list-style-type:none"><div><table><tbody><tr>  <td><p class="line862"> 1 at a time: </td>
+  <td><p class="line862"> 1127 real </td>
+  <td><p class="line862"> 1093 user </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-4-2"></span><p class="line862"> 4 at a time (average timings): </td>
+  <td><p class="line862"> 1378 real </td>
+  <td><p class="line862"> 1335 user </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-5-2"></span><p class="line862"> 8 at a time (average timings): </td>
+  <td><p class="line862"> 2312 real </td>
+  <td><p class="line862"> 2193 user </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-6-2"></span><span class="anchor" id="line-7-2"></span></li></ul><p class="line874">Conclusion: using all 4 cores nearly as fast as just 1, but not much point using more processes than cores. </div><span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span><div><table><tbody><tr>  <td><p class="line862"> Hardware </td>
+  <td><p class="line862">  OS </td>
+  <td><p class="line862"> time(s) </td>
+  <td><p class="line862"> speed(relative) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-52"></span><p class="line862"> Intel Core i7-2600K 16GB </td>
+  <td><p class="line862"> Ubuntu </td>
+  <td><p class="line862"> 954 </td>
+  <td><p class="line862"> 0.52 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-53"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Pro 17' laptop 2.3GHz Intel Core i7 8GB </td>
+  <td><p class="line862"> OS X 10.6.7 </td>
+  <td><p class="line862"> 1093 </td>
+  <td><p class="line862"> 0.61 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-54"></span><p class="line862"> Dell Precision T7500 Xeon W5590 3.33GHz 64 Bit 12GB </td>
+  <td><p class="line862"> Ubuntu </td>
+  <td><p class="line862"> 1201 </td>
+  <td><p class="line862"> 0.67 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-55"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Pro 17' laptop 2.66GHz Intel Core i7 8GB </td>
+  <td><p class="line862"> OS X 10.6.3 </td>
+  <td><p class="line862"> 1430 </td>
+  <td><p class="line862"> 0.79 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-56"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Pro 17' laptop 2.93GHz core 2 duo 64bit 8GB </td>
+  <td><p class="line862"> OS X 10.5.6 </td>
+  <td><p class="line862"> 1638 </td>
+  <td><p class="line862"> 0.91 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-57"></span><p class="line862"> Dell Power<tt class="backtick"></tt>Edge 2950 Server 2xQuad<tt class="backtick"></tt>Core 3.16GHz Xeon 32GB </td>
+  <td><p class="line862"> RH EL 5 </td>
+  <td><p class="line862"> 1675 </td>
+  <td><p class="line862"> 0.93 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-58"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Pro 15' laptop 2.8GHz core 2 duo 64bit 4GB </td>
+  <td><p class="line862"> OS X 10.5.5 </td>
+  <td><p class="line862"> 1694 </td>
+  <td><p class="line862"> 0.94 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-59"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Pro 17' laptop 2.6GHz core 2 duo 64bit 4GB </td>
+  <td><p class="line862"> OS X 10.5.4 </td>
+  <td><p class="line862"> 1801 </td>
+  <td><p class="line862"> 1 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-60"></span><p class="line862"> Apple Mac Pro 2.8GHz 8-core 64bit 8GB </td>
+  <td><p class="line862"> OS X 10.5.4 </td>
+  <td><p class="line862"> 1823 </td>
+  <td><p class="line862"> 1.01 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-61"></span><p class="line862"> Dell Optiplex 960 3.4GHz 2-core 4GB </td>
+  <td><p class="line862"> Ubuntu </td>
+  <td><p class="line862"> 2115 </td>
+  <td><p class="line862"> 1.17 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><p class="line867">
+<h2 id="FSL_4.0.2-3">FSL 4.0.2-3</h2>
+<span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><div><table><tbody><tr>  <td><p class="line862"> Hardware </td>
+  <td><p class="line862">  OS </td>
+  <td><p class="line862"> time(s) </td>
+  <td><p class="line862"> speed(relative) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-66"></span><p class="line862"> Apple Mac Pro 3.2GHz 8-core 64bit 2GB </td>
+  <td><p class="line862"> OS X 10.5.2 </td>
+  <td><p class="line862"> 1406 </td>
+  <td><p class="line862"> 1.22 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-67"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Pro 17' laptop 2.6GHz core 2 duo 64bit 4GB </td>
+  <td><p class="line862"> OS X 10.5.2 </td>
+  <td><p class="line862"> 1553 </td>
+  <td><p class="line862"> 1.10 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-68"></span><p class="line862"> Apple Mac Pro 3.2GHz 8-core 64bit 2GB </td>
+  <td><p class="line862"> OS X 10.5.1 </td>
+  <td><p class="line862"> 1556 </td>
+  <td><p class="line862"> 1.10 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-69"></span><p class="line862"> Transtec Blade Dual quad-core Xeon 3GHz </td>
+  <td><p class="line862"> CentOS 5.1 </td>
+  <td><p class="line862"> 1648 </td>
+  <td><p class="line862"> 1.04 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-70"></span><p class="line862"> Apple Mac Pro 3GHz 8-core 64bit 4GB </td>
+  <td><p class="line862"> OS X 10.5.1 </td>
+  <td><p class="line862"> 1714 </td>
+  <td><p class="line862"> 1 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-71"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Pro 15' laptop 2.33GHz core 2 duo 64bit </td>
+  <td><p class="line862"> OS X 10.5.2 </td>
+  <td><p class="line862"> 1814 </td>
+  <td><p class="line862"> 0.94 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-72"></span><p class="line862"> Transtec Blade Dual quad-core Xeon 2.33GHz </td>
+  <td><p class="line862"> CentOS 5.1 </td>
+  <td><p class="line862"> 1951 </td>
+  <td><p class="line862"> 0.88 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-73"></span><p class="line862"> Apple iMac 2.33GHz core 2 duo 64bit 2GB </td>
+  <td><p class="line862"> OS X 10.5.1 </td>
+  <td><p class="line862"> 2050 </td>
+  <td><p class="line862"> 0.84 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-74"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Air laptop 1.8GHz core 2 duo 64bit 2GB       </td>
+  <td><p class="line862"> OS X 10.5.2 </td>
+  <td><p class="line862"> 2641 </td>
+  <td><p class="line862"> 0.65 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-75"></span><p class="line862"> Sunfire X4100 2x AMD Opteron 280 dual core 2.4GHz 64bit </td>
+  <td><p class="line862"> FC5 </td>
+  <td><p class="line862"> 2720 </td>
+  <td><p class="line862"> 0.63 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-76"></span><span class="anchor" id="line-77"></span><p class="line867">
+<h2 id="FSL_4.0.0">FSL 4.0.0</h2>
+<span class="anchor" id="line-78"></span><div><table><tbody><tr>  <td><p class="line862"> Hardware </td>
+  <td><p class="line862">  OS </td>
+  <td><p class="line862"> time(s) </td>
+  <td><p class="line862"> speed(relative) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-79"></span><p class="line862"> Intel Core 2 Quad 64bit desktop 2.40GHz 4Gb </td>
+  <td><p class="line862"> Centos 5 </td>
+  <td><p class="line862"> 2165 </td>
+  <td><p class="line862"> 1.35 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-80"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Pro Intel 15' laptop 2.4GHz core 2 duo 64bit </td>
+  <td><p class="line862"> OS X 10.4.10 </td>
+  <td><p class="line862"> 2901 </td>
+  <td><p class="line862"> 1 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-81"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Pro Intel 15' laptop 2.33GHz core 2 duo 64bit </td>
+  <td><p class="line862"> OS X 10.4.10 </td>
+  <td><p class="line862"> 3038 </td>
+  <td><p class="line862"> 0.95 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-82"></span><p class="line862"> Portable One UX520 Core Duo 2GHz 2Gb </td>
+  <td><p class="line862"> XP/VirtualBox/Ubuntu </td>
+  <td><p class="line862">      3215 </td>
+  <td><p class="line862"> 0.90 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-83"></span><p class="line862"> Apple Mac<tt class="backtick"></tt>Book Intel 13' laptop 2.0GHz core 2 duo 64bit </td>
+  <td><p class="line862"> OS X 10.4.10 </td>
+  <td><p class="line862"> 3500 </td>
+  <td><p class="line862"> 0.83 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-84"></span><p class="line862"> Sunfire X4100 2x AMD Opteron 280 dual core 2.4GHz 64bit </td>
+  <td><p class="line862"> FC5 </td>
+  <td><p class="line862"> 4220 </td>
+  <td><p class="line862"> 0.69 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-85"></span><p class="line862"> Dell Precision dual Xeon 2.4GHz 2GB </td>
+  <td><p class="line862"> <a class="nonexistent" href="./OpenSuse.html">OpenSuse</a> 10.2 </td>
+  <td><p class="line862"> 5536 </td>
+  <td><p class="line862"> 0.52 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-86"></span><span class="anchor" id="line-87"></span><p class="line867">
+<h2 id="FSL_3.3">FSL 3.3</h2>
+<span class="anchor" id="line-88"></span><span class="anchor" id="line-89"></span><div><table><tbody><tr>  <td><p class="line862"> Hardware </td>
+  <td><p class="line862">  OS </td>
+  <td><p class="line862"> time(s) </td>
+  <td><p class="line862"> speed(relative) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-90"></span><p class="line862"> Apple Mac`Book Pro Intel 15' laptop 2.33GHz core 2 duo 64bit (64bit compilation) </td>
+  <td><p class="line862"> OS X 10.4.8 </td>
+  <td><p class="line862"> 2011 </td>
+  <td><p class="line862"> 0.68 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-91"></span><p class="line862"> AMD Athlon 2x dual core 4400+ 64bit </td>
+  <td><p class="line862"> Ubuntu </td>
+  <td><p class="line862"> 2095 </td>
+  <td><p class="line862"> 0.71 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-92"></span><p class="line862"> Apple Mac`Book Pro Intel 15' laptop 2.33GHz core 2 duo 64bit </td>
+  <td><p class="line862"> OS X 10.4.8 </td>
+  <td><p class="line862"> 2300 </td>
+  <td><p class="line862"> 0.78 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-93"></span><p class="line862"> Sunfire X4100 2x AMD Opteron 280 dual core 2.4GHz 64bit </td>
+  <td><p class="line862"> FC5 </td>
+  <td><p class="line862"> 2594 </td>
+  <td><p class="line862"> 0.88 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-94"></span><p class="line862"> AMD Athlon dual core 4400+ 64bit </td>
+  <td><p class="line862"> Suse 10 </td>
+  <td><p class="line862"> 2740 </td>
+  <td><p class="line862"> 0.93 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-95"></span><p class="line862"> AMD Athlon dual core 4400+ 64bit </td>
+  <td><p class="line862"> Ubuntu 6.06 </td>
+  <td><p class="line862"> 2827 </td>
+  <td><p class="line862"> 0.96 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-96"></span><p class="line862"> Apple Power Mac G5 quad 2.5GHz </td>
+  <td><p class="line862"> OS X 10.4.5 </td>
+  <td><p class="line862"> 2946 </td>
+  <td><p class="line862"> 1 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-97"></span><p class="line862"> Apple Mac`Book Intel 13' laptop 2GHz </td>
+  <td><p class="line862"> OS X 10.4.6 </td>
+  <td><p class="line862"> 3099 </td>
+  <td><p class="line862"> 1.05 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-98"></span><p class="line867">|| Apple Mac`Book Pro Intel 15' laptop 2.16GHz || OS X 10.4.6 || 3134 || 1.06 ||  <span class="anchor" id="line-99"></span><span class="anchor" id="line-100"></span><p class="line867">
+<h2 id="FSL_3.2">FSL 3.2</h2>
+<span class="anchor" id="line-101"></span><span class="anchor" id="line-102"></span><div><table><tbody><tr>  <td><p class="line862"> Hardware </td>
+  <td><p class="line862">  OS </td>
+  <td><p class="line862"> time(s) </td>
+  <td><p class="line862"> speed(relative) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-103"></span><p class="line862"> AMD Athlon dual core 4400 gcc-64bit </td>
+  <td><p class="line862"> Suse 10 </td>
+  <td><p class="line862"> 2750 </td>
+  <td><p class="line862"> 0.45 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-104"></span><p class="line862"> AMD Athlon dual 2.45GHz 64bit </td>
+  <td><p class="line862"> Suse 9.1 </td>
+  <td><p class="line862"> 3026 </td>
+  <td><p class="line862"> 0.50 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-105"></span><p class="line862"> Apple XServe G5 dual 2.3GHz gcc-64bit </td>
+  <td><p class="line862"> OS X 10.4 </td>
+  <td><p class="line862"> 3177 </td>
+  <td><p class="line862"> 0.52 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-106"></span><p class="line862"> Apple XServe G5 dual 2GHz </td>
+  <td><p class="line862"> OS X 10.3.5 </td>
+  <td><p class="line862"> 3990 </td>
+  <td><p class="line862"> 0.66 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-107"></span><p class="line862"> Intel Xeon dual 2.8GHz </td>
+  <td><p class="line862"> Suse 9.1 </td>
+  <td><p class="line862"> 4067 </td>
+  <td><p class="line862"> 0.67 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-108"></span><p class="line862"> AMD Athlon dual 2.1GHz </td>
+  <td><p class="line862"> Redhat 9 </td>
+  <td><p class="line862"> 4144 </td>
+  <td><p class="line862"> 0.68 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-109"></span><p class="line862"> Compaq Alpha ES40 667MHz gcc-64bit </td>
+  <td><p class="line862"> TRU64 5.1 </td>
+  <td><p class="line862"> 6070 </td>
+  <td><p class="line862"> 1 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-110"></span><p class="line862"> Apple Power`Book G4 15' laptop 1.67GHz </td>
+  <td><p class="line862"> OS X 10.3.5 </td>
+  <td><p class="line862"> 6177 </td>
+  <td><p class="line862"> 1.02 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-111"></span><p class="line862"> Apple Power`Book G4 15' laptop 1.5GHz        </td>
+  <td><p class="line862"> OS X 10.3.5 </td>
+  <td><p class="line862"> 6738 </td>
+  <td><p class="line862"> 1.11 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-112"></span><p class="line862"> Apple Mac Mini G4 1.25GHz 512MB </td>
+  <td><p class="line862"> OS X 10.3.5 </td>
+  <td><p class="line862"> 7755 </td>
+  <td><p class="line862"> 1.28 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-113"></span><p class="line862"> Intel Pentium III dual 1.4GHz </td>
+  <td><p class="line862"> Redhat 7 </td>
+  <td><p class="line862"> 8507 </td>
+  <td><p class="line862"> 1.40 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-114"></span><span class="anchor" id="line-115"></span><p class="line867">
+<h2 id="FSL_3.1">FSL 3.1</h2>
+<span class="anchor" id="line-116"></span><span class="anchor" id="line-117"></span><div><table><tbody><tr>  <td><p class="line862"> Hardware </td>
+  <td><p class="line862">  OS </td>
+  <td><p class="line862"> time(s) </td>
+  <td><p class="line862"> speed(relative) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-118"></span><p class="line862"> Dual Intel Xeon 3GHz HT </td>
+  <td><p class="line862"> Redhat 9 </td>
+  <td><p class="line862"> 1519 </td>
+  <td><p class="line862"> 0.66 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-119"></span><p class="line862"> AthlonXP 3000+ </td>
+  <td><p class="line862"> SuSE 9.1 </td>
+  <td><p class="line862"> 1605 </td>
+  <td><p class="line862"> 0.69 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-120"></span><p class="line862"> Pentium IV 3GHz </td>
+  <td><p class="line862"> SuSE 9.1 </td>
+  <td><p class="line862"> 1634 </td>
+  <td><p class="line862"> 0.71 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-121"></span><p class="line862"> Apple Power`Mac G5 Dual 2GHz </td>
+  <td><p class="line862"> OS X 10.2 </td>
+  <td><p class="line862"> 1840 </td>
+  <td><p class="line862"> 0.80 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-122"></span><p class="line862"> AMD Athlon 2.1GHz (gcc3) </td>
+  <td><p class="line862"> Redhat 9 </td>
+  <td><p class="line862"> 2106 </td>
+  <td><p class="line862"> 0.91 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-123"></span><p class="line862"> Centrino 1.7GHz Vaio Z1XSP laptop </td>
+  <td><p class="line862"> SuSE 9.1 </td>
+  <td><p class="line862"> 2100 </td>
+  <td><p class="line862"> 0.91 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-124"></span><p class="line862"> Centrino 1.7GHz Samsung laptop </td>
+  <td><p class="line862"> SUSE 9.0 </td>
+  <td><p class="line862"> 2295 </td>
+  <td><p class="line862"> 0.99 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-125"></span><p class="line862"> Compaq Alpha ES40 667MHz </td>
+  <td><p class="line862"> TRU64 5.1 </td>
+  <td><p class="line862"> 2313 </td>
+  <td><p class="line862"> 1 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-126"></span><p class="line862"> AMD Dual Athlon 1.8GHz (gcc3) </td>
+  <td><p class="line862"> Redhat 8 </td>
+  <td><p class="line862"> 2417 </td>
+  <td><p class="line862"> 1.04 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-127"></span><p class="line862"> Pentium IV 2.6GHz </td>
+  <td><p class="line862"> Windows XP / Cygwin </td>
+  <td><p class="line862"> 2464 </td>
+  <td><p class="line862"> 1.07 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-128"></span><p class="line862"> Centrino 1.5GHz Vaio laptop </td>
+  <td><p class="line862"> Redhat 9 </td>
+  <td><p class="line862"> 2575 </td>
+  <td><p class="line862"> 1.11 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-129"></span><p class="line862"> AMD Athlon 1.6GHz </td>
+  <td><p class="line862"> Redhat 7 </td>
+  <td><p class="line862"> 3124 </td>
+  <td><p class="line862"> 1.35 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-130"></span><p class="line862"> Pentium III Dual 1.4GHz </td>
+  <td><p class="line862"> Redhat 9 </td>
+  <td><p class="line862"> 3214 </td>
+  <td><p class="line862"> 1.39 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-131"></span><p class="line862"> HP nc4000 laptop - Pentium M 1.4GHz </td>
+  <td><p class="line862"> Windows XP / Cygwin </td>
+  <td><p class="line862"> 3925 </td>
+  <td><p class="line862"> 1.70 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-132"></span><p class="line862"> Pentium III 1GHz Vaio laptop </td>
+  <td><p class="line862"> Redhat 7.1 </td>
+  <td><p class="line862">4217 </td>
+  <td><p class="line862"> 1.82 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-133"></span><p class="line862"> Apple Power`Book G4 17-inch laptop 1GHz </td>
+  <td><p class="line862"> OS X 10.2.6 </td>
+  <td><p class="line862"> 4289 </td>
+  <td><p class="line862"> 1.85 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-134"></span><p class="line862"> Pentium III 1GHz Vaio laptop </td>
+  <td><p class="line862"> Windows XP / Cygwin </td>
+  <td><p class="line862"> 4505 </td>
+  <td><p class="line862"> 1.95 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-135"></span><p class="line862"> Apple Power`Book G4 12-inch laptop 867MHz </td>
+  <td><p class="line862"> OS X 10.2.4 </td>
+  <td><p class="line862"> 5438 </td>
+  <td><p class="line862"> 2.35 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-136"></span><p class="line862"> Apple Power`Book G4 15-inch laptop 667MHz </td>
+  <td><p class="line862"> OS X 10.1 </td>
+  <td><p class="line862"> 6550 </td>
+  <td><p class="line862"> 2.83 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-137"></span><p class="line862"> Sun Ultra-30 300MHz </td>
+  <td><p class="line862"> Solaris 5.6 </td>
+  <td><p class="line862"> 14756 </td>
+  <td><p class="line862"> 6.38 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-138"></span><p class="line862"> SGI O2 150MHz </td>
+  <td><p class="line862"> IRIX 6.3 </td>
+  <td><p class="line862"> 25039 </td>
+  <td><p class="line862"> 10.83 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-139"></span><span class="anchor" id="line-140"></span><p class="line867">
+<h2 id="FSL_3.0">FSL 3.0</h2>
+<span class="anchor" id="line-141"></span><span class="anchor" id="line-142"></span><div><table><tbody><tr>  <td><p class="line862"> Hardware </td>
+  <td><p class="line862">  OS </td>
+  <td><p class="line862"> time(s) </td>
+  <td><p class="line862"> speed(relative) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-143"></span><p class="line862"> AMD Dual Athlon 1.8GHz (gcc3) </td>
+  <td><p class="line862"> Redhat 8 </td>
+  <td><p class="line862"> 2259 </td>
+  <td><p class="line862"> 0.74 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-144"></span><p class="line862"> Compaq Alpha ES40 667MHz </td>
+  <td><p class="line862"> TRU64 5.1 </td>
+  <td><p class="line862"> 3050 </td>
+  <td><p class="line862"> 1 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-145"></span><p class="line862"> AMD Athlon 1.6GHz </td>
+  <td><p class="line862"> Redhat 7 </td>
+  <td><p class="line862"> 3083 </td>
+  <td><p class="line862"> 1.01 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-146"></span><p class="line862"> Pentium III Dual 1.4GHz </td>
+  <td><p class="line862"> Redhat 8 </td>
+  <td><p class="line862"> 4014 </td>
+  <td><p class="line862"> 1.32 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-147"></span><p class="line862"> Pentium III 1GHz Vaio laptop </td>
+  <td><p class="line862"> Windows XP / Cygwin </td>
+  <td><p class="line862"> 4300 </td>
+  <td><p class="line862"> 1.41 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-148"></span><p class="line862"> Pentium III 1GHz Vaio laptop </td>
+  <td><p class="line862"> Redhat 7.1 </td>
+  <td><p class="line862"> 4389 </td>
+  <td><p class="line862"> 1.44 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-149"></span><p class="line862"> Apple Dual G4 867MHz </td>
+  <td><p class="line862"> OS X 10.2.1 </td>
+  <td><p class="line862"> 4737 </td>
+  <td><p class="line862"> 1.55 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-150"></span><p class="line862"> Apple Power`Book G4 12-inch laptop 867MHz </td>
+  <td><p class="line862"> OS X 10.2.4 </td>
+  <td><p class="line862"> 5097 </td>
+  <td><p class="line862"> 1.67 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-151"></span><p class="line862"> Apple Power`Book G4 15-inch laptop 667MHz </td>
+  <td><p class="line862"> OS X 10.1 </td>
+  <td><p class="line862"> 6480 </td>
+  <td><p class="line862"> 2.12 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-152"></span><p class="line862"> Pentium III 733 </td>
+  <td><p class="line862"> Redhat 7.1 </td>
+  <td><p class="line862"> 7507 </td>
+  <td><p class="line862"> 2.46 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-153"></span><p class="line862"> SGI Origin 200 180MHz </td>
+  <td><p class="line862"> IRIX 6.5 </td>
+  <td><p class="line862"> 12650 </td>
+  <td><p class="line862"> 4.15 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-154"></span><p class="line862"> Sun Ultra-30 300MHz </td>
+  <td><p class="line862"> Solaris 5.6 </td>
+  <td><p class="line862"> 19900 </td>
+  <td><p class="line862"> 6.52 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-155"></span><span class="anchor" id="line-156"></span><p class="line867">
+<h2 id="FSL_1.3">FSL 1.3</h2>
+<span class="anchor" id="line-157"></span><span class="anchor" id="line-158"></span><div><table><tbody><tr>  <td><p class="line862"> Hardware </td>
+  <td><p class="line862">  OS </td>
+  <td><p class="line862"> time(s) </td>
+  <td><p class="line862"> speed(relative) </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-159"></span><p class="line862"> AMD Athlon 1.6GHz </td>
+  <td><p class="line862"> Redhat 7 </td>
+  <td><p class="line862"> 39 </td>
+  <td><p class="line862"> 0.85 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-160"></span><p class="line862"> Pentium IV 2GHz </td>
+  <td><p class="line862"> Redhat 7.2 </td>
+  <td><p class="line862"> 44 </td>
+  <td><p class="line862"> 0.98 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-161"></span><p class="line862"> Compaq Alpha ES40 667MHz </td>
+  <td><p class="line862"> TRU64 5.1 </td>
+  <td><p class="line862"> 46  </td>
+  <td><p class="line862"> 1 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-162"></span><p class="line862"> Pentium IV 1.5GHz </td>
+  <td><p class="line862"> Redhat 7.1 </td>
+  <td><p class="line862"> 54 </td>
+  <td><p class="line862"> 1.2 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-163"></span><p class="line862"> AMD Athlon 1.2GHz </td>
+  <td><p class="line862"> Redhat 7.1 </td>
+  <td><p class="line862"> 58 </td>
+  <td><p class="line862"> 1.3 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-164"></span><p class="line862"> Compaq Alpha EV6 500MHz </td>
+  <td><p class="line862"> TRU64 5.1 </td>
+  <td><p class="line862"> 69 </td>
+  <td><p class="line862"> 1.5 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-165"></span><p class="line862"> AMD Athlon 1GHz </td>
+  <td><p class="line862"> Redhat 7.0 </td>
+  <td><p class="line862"> 72 </td>
+  <td><p class="line862"> 1.6 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-166"></span><p class="line862"> Apple Dual G4 800MHz </td>
+  <td><p class="line862"> OS X.1 / Darwin 1.4 </td>
+  <td><p class="line862"> 78 </td>
+  <td><p class="line862"> 1.7 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-167"></span><p class="line862"> Pentium III 1GHz Vaio laptop </td>
+  <td><p class="line862"> Redhat 7.1 </td>
+  <td><p class="line862"> 82 </td>
+  <td><p class="line862"> 1.8 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-168"></span><p class="line862"> Pentium III 800MHz </td>
+  <td><p class="line862"> Redhat 6.2 </td>
+  <td><p class="line862"> 88 </td>
+  <td><p class="line862"> 1.9 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-169"></span><p class="line862"> Apple Power`Book G4 laptop 667MHz </td>
+  <td><p class="line862"> OS X.1 / Darwin 1.4 </td>
+  <td><p class="line862"> 100 </td>
+  <td><p class="line862"> 2.2 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-170"></span><p class="line862"> Sun Blade-1000 USIII 750MHz </td>
+  <td><p class="line862"> Solaris 5.8 </td>
+  <td><p class="line862"> 116 </td>
+  <td><p class="line862">2.5 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-171"></span><p class="line862"> Pentium III 500MHz </td>
+  <td><p class="line862"> Redhat 7.1 </td>
+  <td><p class="line862"> 138 </td>
+  <td><p class="line862"> 3 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-172"></span><p class="line862"> SGI Origin 200 180MHz </td>
+  <td><p class="line862"> IRIX 6.5 </td>
+  <td><p class="line862"> 183 </td>
+  <td><p class="line862"> 4 </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-173"></span><p class="line862"> Sun Ultrasparc II 300MHz </td>
+  <td><p class="line862"> Solaris 5.6 </td>
+  <td><p class="line862"> 287 </td>
+  <td><p class="line862"> 6.2 </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-174"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

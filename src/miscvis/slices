@@ -1,0 +1,188 @@
+#!/bin/sh
+
+#   slices - call slicer with default cuts and display
+#
+#   Stephen Smith,Mark Jenkinson and Matthew Webster, FMRIB Image Analysis Group
+#
+#   Copyright (C) 1999-2014 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+
+Usage() {
+    echo ""
+    echo "Usage: slices <input> [input2] [-s scale] [-i <intmin> <intmax>] [-o <output gif>]"
+    echo ""
+    exit 1
+}
+
+[ "$1" = "" ] && Usage
+
+if [ _$FSLDIR = _ ] ; then
+    FSLDIR=/usr/local/fsl
+    export FSLDIR
+fi
+
+# NEED PARSING IN ORDER TO HAVE A -o OPTION
+outputname=""
+# if statement checks if -o option was given
+if [ `echo "$@" | grep -- -o | wc -w` -gt 0 ] ; then
+    # extract the <output gif> name if the -o option is present
+    outputname=`echo "$@" | sed 's/.*-o *\([^ ]*\).*/\1/'`;
+fi
+
+if [ `$FSLDIR/bin/imtest $1` -eq 0 ] ; then
+echo "cannot read file $1"
+exit 1
+fi
+
+f=`${FSLDIR}/bin/tmpnam /tmp/\`${FSLDIR}/bin/remove_ext $1 | sed "s/\//_/g"\``
+
+# deal with complex images separately
+if [ X`${FSLDIR}/bin/fslval $1 datatype` = X32 ] ; then
+  nm1=${f}_abs
+  nm2=${f}_ph
+  nm0=`${FSLDIR}/bin/remove_ext $1`;
+  if [ X$1 != X ] ; then
+    shift ;
+  fi
+  ${FSLDIR}/bin/fslcomplex -realpolar $nm0 $nm1 $nm2
+  ${FSLDIR}/bin/slices $nm1 $@
+  ${FSLDIR}/bin/slices $nm2 $@
+  ${FSLDIR}/bin/imrm $nm1 $nm2
+  exit 0
+fi  
+
+# deal with 2D and 3D images separately
+
+if [ X`${FSLDIR}/bin/fslval $1 dim3` = X1 ] ; then
+  # 2D case
+  slicenum=-0
+  im1=`${FSLDIR}/bin/remove_ext $1`;
+  if [ X$2 != X ] ; then
+    shift ;
+    im2=`${FSLDIR}/bin/remove_ext $1`;
+  fi
+  if [ X$1 != X ] ; then
+    shift ;
+  fi
+  if [ X$im2 != X ] ; then
+    if [ `$FSLDIR/bin/imtest $im2` -eq 1 ] ; then
+      # make a stacked version for getting edges
+      ${FSLDIR}/bin/fslmerge -z ${f}b $im1 $im1 $im1
+      ${FSLDIR}/bin/fslmerge -z ${f}c $im2 $im2 $im2
+      im1=${f}b
+      im2=${f}c
+      slicenum=-1
+    fi
+  fi
+
+  # NEED PARSING IN ORDER TO HAVE A -o OPTION
+  opts="$@"
+  # remove the "-o <output gif>" from the command line list
+  opts=`echo $opts | sed 's/-o *[^ ]*//'`;
+  if ${FSLDIR}/bin/slicer $im1 $im2 $opts -z $slicenum ${f}a.png ; then 
+    retval=0; # do nothing 
+  else
+    exit -1;
+  fi
+  ${FSLDIR}/bin/pngappend ${f}a.png ${f}.gif
+
+else
+  # 3D case
+
+  # NEED PARSING IN ORDER TO HAVE A -o OPTION
+  opts="$@"
+  # remove the "-o <output gif>" from the command line list
+  opts=`echo $opts | sed 's/-o *[^ ]*//'`;
+
+  if ${FSLDIR}/bin/slicer $opts -x 0.4 ${f}a.png -x 0.5 ${f}b.png -x 0.6 ${f}c.png -y 0.4 ${f}d.png -y 0.5 ${f}e.png -y 0.6 ${f}f.png -z 0.4 ${f}g.png -z 0.5 ${f}h.png -z 0.6 ${f}i.png ; then
+    retval=0; # do nothing 
+  else
+    exit -1;
+  fi
+  
+  ${FSLDIR}/bin/pngappend ${f}a.png + ${f}b.png + ${f}c.png - ${f}d.png + ${f}e.png + ${f}f.png - ${f}g.png + ${f}h.png + ${f}i.png ${f}.gif
+
+fi
+
+# if using the -o option then just copy the file, otherwise display it
+if [ X$outputname != X ] ; then
+    cp ${f}.gif $outputname
+else
+    if [ X`uname | grep CYGWIN`X != XX ] ; then
+	/cygdrive/c/Program\ Files/Internet\ Explorer/IEXPLORE.EXE C:/cygwin${f} &
+    elif [ X`uname | grep -i darwin`X != XX ] ; then
+	g=`${FSLDIR}/bin/tmpnam $f`.gif ;
+	cp $f $g ;
+	open ${f}.gif ;
+    else
+	$FSLWISH ${FSLDIR}/tcl/display.tcl $f.gif &
+    fi
+fi
+
+\rm -f ${f}a.png ${f}b.png ${f}c.png ${f}d.png ${f}e.png ${f}f.png ${f}g.png ${f}h.png ${f}i.png 
+
+( sleep 20 ; \rm -f ${f}.gif ) &
+

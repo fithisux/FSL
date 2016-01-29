@@ -1,0 +1,83 @@
+$Id: TODO,v 1.6 2007/07/30 09:59:32 cowboy Exp $
+
+--------------------------------
+
+Version 1 - 16/12/2002
+
+image display: 
+	lightbox (all slices)
+	ortho (three orthogonal views)
+control of: 
+	zoom,
+	translation,
+	intensity,
+	contrast
+
+image information display when cursor clicked: 
+	voxel coords, 
+	mm coords, 
+	voxel intensity
+
+dual display of two images (for purposes of evaluating: stats overlay,
+registration quality, segmentation quality) - all methods:
+	colour overlay eg of 1 or 2 stats images onto underlying image
+	two displays, 
+	linked cursors,
+        like mni "register"
+
+4D data: 
+	associate a 3D image with a 4D dataset; 
+	click in image and view timeseries.
+  	view more than one time series at a time...or a grid of ts views
+
+histogram display
+
+movies of:
+	slices through a volume or 
+	slices (or 3-ortho-views) through 4D
+
+--------------------------------
+
+Version 2 - Summer 2003
+
+tweaks from version 1
+
+ROIs
+  mask painting
+  simple "graphics" at least cuboids
+  thresholding / map pixels  -> connected components
+
+image summary stats computing
+  selectivity via thresholds or ROI
+
+dual display options
+	colour edges from one image onto another
+	chequerboard
+	shading like Rueckert's program
+
+4D data: associate a 3D image with a 4D dataset; click in image and
+view timeseries.
+  also via XFMs including (later) warps.
+  for FMRI results, plot timeseries vs fitted model.
+
+FileManager and LookUpTable classes moved to Storage directory.
+
+--------------------------------
+
+Version 3 - bteot
+
+histogram fitting
+ROI stuff
+  region filling
+  edge following
+volume rotations (interactive)	&re-ordering axes
+3D surface rendering
+call certain fslview functionaloiy  from command line (eg offline
+rendering)
+and vice versa
+processing functions
+	fslmaths
+	ip
+
+--------------------------------
+

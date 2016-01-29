@@ -1,0 +1,19 @@
+#!/bin/sh
+
+if [ $# -ge 1 ] ; then
+  PROJECTS="$@";
+else
+  PROJECTS="extras utils znzlib niftiio fslio giftiio miscmaths newimage libhfunc libvis first_lib \ 
+meshclass fslvtkio misc_tcl basisfield warpfns bint shapeModel MVdisc fslvtkconv fslsurface libmeshutils newmesh \
+avwutils basil bet2 cluster dpm copain tissue fast4 feat5 film filmbabe flirt fabber baycest \
+fslpres fslvbm mcflirt melodic misc_c miscvis mm nma gps \
+randomise siena slicetimer susan tbss fnirt fugue asl_mfree \
+ifit load_varian load_dicom misc_scripts fdt first possum sgeutils \
+flameo oxford_asl relax qboot topup ptx2 lesions eddy dwssfp verbena";
+fi
+
+echo "Building projects - see build.log file for progress..."
+./config/common/buildproj $PROJECTS > ./build.log 2>&1
+echo "Finished build : end of log file shows ..."
+tail -10 build.log
+

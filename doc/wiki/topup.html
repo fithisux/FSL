@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>topup</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">topup</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#topup_-_A_tool_for_estimating_and_correcting_susceptibility_induced_distortions">topup - A tool for estimating and correcting susceptibility induced distortions</a></li><li>
+<a href="#Referencing">Referencing</a></li></ol></div></div></li><li><a href="./topup(2f)TopupUsersGuide.html">Topup Users Guide</a></li><li><a href="./topup(2f)ApplytopupUsersGuide.html">Applytopup Users Guide</a></li><li><a href="./topup(2f)ExampleTopupFollowedByApplytopup.html">Example Topup Followed By Applytopup</a></li><li><a href="./topup(2f)Faq.html">FAQ</a></li><li><a href="./topup(2f)TopupFurtherInformation.html">Topup Further Information</a></li><li><a href="./topup(2f)ApplytopupFurtherInformation.html">Applytopup Further Information</a></li></ol></div> <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line867">
+<h1 id="topup_-_A_tool_for_estimating_and_correcting_susceptibility_induced_distortions">topup - A tool for estimating and correcting susceptibility induced distortions</h1>
+<span class="anchor" id="line-8"></span><p class="line874">Diffusion imaging is typically performed using diffusion weighted spin-echo EPI images. These images will be very sensitive to non-zero off-resonance fields. Such fields will be caused by the susceptibility distribution of the subjects head (known as a susceptibility-induced off-resonance field) and by eddy currents (EC) from the rapid switching of the diffusion weighting gradients (known as an eddy current-induced off-resonance field). In addition to that a diffusion protocol can be quite long, making it almost inevitable that the subject will move. <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line862">The susceptibility induced field will be (to a first approximation) constant for all the acquired images, which means that the set of images will be internally consistent. It is a problem mainly because it will cause a geometric mismatch between the structural images (which are typically unaffected by distortions) and the diffusion image. <tt class="backtick">topup</tt> is a tool for estimating the susceptibility induced field. In order to estimate and correct also for EC-induced distortions one will either need to run a tool like e.g. <tt class="backtick">eddy_correct</tt> prior to running <tt class="backtick">applytopup</tt>. Or one can feed the output from <tt class="backtick">topup</tt> into the <tt class="backtick">eddy</tt> tool. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line862">The method that <tt class="backtick">topup</tt> uses to find the susceptibility off-resonance field is to use two, or more, acquisitions where the acquisition parameters are different so that the mapping field-&gt;distortions are different. A typical example of this is two acquisitions with opposing polarities of the phase-encode blips which means that the same field leads to distortion going in opposing directions in the two acquisitions. <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line862">Given the two images and knowledge of the acquisition parameters <tt class="backtick">topup</tt> will then attempt to estimate the field by finding the field that when applied to the two volumes will maximise the similarity of the unwarped volumes. The similarity is gauged by the sum-of-squared differences between the unwarped images. This measure allows us to use Gauss-Newton for jointly finding the field and any movement that may have occurred between the two acquisitions.    <span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-17"></span>
+<h1 id="Referencing">Referencing</h1>
+<span class="anchor" id="line-18"></span><p class="line874">If you use topup in your research, please make sure that you reference at least the first of the articles listed below, and ideally the complete list. For your convenience, we provide example text (short and more details versions), which you are welcome to use in your methods description. <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line867"><em>Brief summary text:</em> "Data was collected with reversed phase-encode blips, resulting in pairs of images with distortions going in opposite directions. From these pairs the susceptibility-induced off-resonance field was estimated using a method similar to that described in [Andersson 2003] as implemented in FSL [Smith 2004] and the two images were combined into a single corrected one." <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line867"><span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><div class="references"><span class="anchor" id="line-1-1"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/14568458">[Andersson 2003]</a> J.L.R. Andersson, S. Skare, J. Ashburner How to correct susceptibility distortions in spin-echo echo-planar images: application to diffusion tensor imaging. NeuroImage, 20(2):870-888, 2003. <span class="anchor" id="line-2-1"></span><span class="anchor" id="line-3-1"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/15501092">[Smith 2004]</a> S.M. Smith, M. Jenkinson, M.W. Woolrich, C.F. Beckmann, T.E.J. Behrens, H. Johansen-Berg, P.R. Bannister, M. De Luca, I. Drobnjak, D.E. Flitney, R. Niazy, J. Saunders, J. Vickers, Y. Zhang, N. De Stefano, J.M. Brady, and P.M. Matthews. Advances in functional and structural MR image analysis and implementation as FSL. NeuroImage, 23(S1):208-219, 2004. </div><span class="anchor" id="line-27"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

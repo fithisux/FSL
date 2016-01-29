@@ -1,0 +1,18 @@
+  %!VEST-LUT
+%%BeginInstance
+<<
+/SavedInstanceClassName /ClassLUT 
+/PseudoColorMinimum 0.00
+/PseudoColorMaximum 1.00
+/PseudoColorMinControl /Low 
+/PseudoColorMaxControl /High 
+/PseudoColormap [
+<-color{0,0,0}->
+<-color{1,0,0}->
+<-color{1,0.84,0}->
+<-color{0.176,0.737,0.827}->
+]
+>>
+
+%%EndInstance
+%%EOF

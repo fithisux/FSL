@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>POSSUM</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">POSSUM</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Research_Overview">Research Overview</a></li></ol></div></div></li><li><a href="./POSSUM(2f)UserGuide.html">User Guide</a></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="Research_Overview">Research Overview</h1>
+<span class="anchor" id="line-4"></span><p class="line862">POSSUM (Physics-Oriented Simulated Scanner for Understanding MRI) is a software tool that produces realistic simulated MRI and FMRI images or time series. POSSUM is part of <a href="./FSL.html">FSL</a> (FMRIB's Software Library). POSSUM has an easy-to-use graphical user interface (GUI) and its component programs can also be run from the command line. POSSUM includes tools for the pulse sequence generation, signal generation, noise addition and image reconstruction. <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line874">POSSUM requires a gradient echo pulse sequence, a segmented object with known tissue parameters, and (optionally) a motion sequence. The way the Bloch equations are solved, by tracking and updating the magnetisation vector through time for every object voxel, allows the changes that occur during the acquisition of one TR to be modelled and then carried through to the acquisition of the next TR, making it possible to simulate spin history effects, motion during the readout periods and interactions that these have with Bo inhomogeneities. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line874">The simulator has the capability to turn on or off various subject- and scanner- related effects, which is not possible in real scanning and therefore has a wide range of applications. These applications include the simulation and removal of various artifacts, both in MRI and FMRI. Furthermore, by generating the "ground truth", the FMRI simulator can be used for evaluation and validation of software tools for FMRI analysis methods (e.g. motion correction, registration, statistical analysis of images, etc.). <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line874">If you use POSSUM in your research, please make sure that you reference at least the first of the articles listed below, and ideally the complete list. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line867"><span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><div class="references"><span class="anchor" id="line-1-1"></span><ul><li>I Drobnjak, G Pell and M Jenkinson. Simulating the effects of time-varying magnetic fields with a realistic simulated scanner. Magnetic Resonance Imaging, 28(7), 1014-21, 2010. <span class="anchor" id="line-2-1"></span></li><li>I Drobnjak, D Gavaghan, E Süli, J Pitt-Francis and M Jenkinson.  Development of an FMRI Simulator for Modelling Realistic Rigid-Body Motion Artifacts.  Magnetic Resonance in Medicine, 56(2), 364-380, 2006. </li></ul></div><span class="anchor" id="line-16"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-17"></span><a href="./CategoryOther.html">CategoryOther</a> <a href="./CategoryPOSSUM.html">CategoryPOSSUM</a> <span class="anchor" id="line-18"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

@@ -1,0 +1,91 @@
+<html>
+  <head>
+    <link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+    <title>3D Controls</title>
+  </head>
+  <body>
+    <h3>3D Controls</h3>
+
+    <h4>The toolbar</h4>
+
+    <img src="3D-toolbar.png">
+
+    <p>The options button<font color="red">(1)</font> brings up
+      a <a href="3D-dialog.html">dialog window</a> which can be used
+      to control lighting and surface extraction parameters.</p>
+
+    <p>The camera button<font color="red">(2)</font> saves a snapshot of the 3D view as a TIFF image.</p>
+
+    <p>Add a mesh to the scene<font color="red">(3)</font> and modify
+      mesh parameters<font color="red">(4)</font>.</p>
+
+    <p>Set the main image threshold<font color="red">(5)</font>. This
+      value determines the threshold to be used when seperating out
+      the surface usually used to represent the pial surface.</p>
+
+    <p>Turn on/off clipping<font color="red">(6)</font>. When on
+      the <a href="#box">clipping box</a> can be used to cut into the
+      volume and reveal the structures and surface inside.</p>
+
+    <h4>Keyboard controls</h4>
+    <table cellspacing="10">
+
+      <tr><th>Key</th><th>Effect</th></tr>
+
+      <tr><td>r</td><td>Reset the <a href="#camera">camera</a>
+	  position to centre all visible elements.</td></tr>
+
+      <tr><td>b</td><td>Toggle the viewing/manipulation of
+	  the <a href="#box">clipping box</a>.</td></tr>
+
+      <tr><td>w</td><td>View-as-wireframe.</td></tr>
+
+      <tr><td>s</td><td>View-as-solid objects.</td></tr>
+
+      <tr><td>x</td><td>Toggle the x-<a href="#plane">plane</a>.</td></tr>
+
+      <tr><td>y</td><td>Toggle the y-plane.</td></tr>
+
+      <tr><td>z</td><td>Toggle the z-plane.</td></tr>
+
+      <tr><td>3</td><td>Turn on 3D stereoscopic pair rendering. You
+	  will need a pair of red/green goggles to view this
+	  mode.</td></tr>
+
+    </table>
+
+    <a name="camera"><h4>Camera controls</h4></a>
+
+    <p>You can use the mouse to rotate, translate and/or zoom the camera
+    in the given view. The mouse controls are as follows:</p>
+    
+    <table cellspacing="10">
+      <tr><td>left-button</td><td>Rotate the scene. Use the meta-key to
+	  rotate around the current display Z direction.</td></tr>
+      <tr><td>middle-button</td><td>Translate the scene.</td></tr>
+      <tr><td>right-button</td><td>Zoom the camera.</td></tr>
+    </table>  
+
+    <a name="box"><h4>The Clipping box</h4></a>
+
+    <p>The clipping surfaces and the control points can be used to
+      translate, rotate, and scale the clipping box.</p>
+
+    <p>Grabbing the central control point allows the user to translate
+      the box along the screen X and Y axes. The same effect can be
+      acchieved with a mouse middle-click anywhere in the box.</p>
+
+    <img src="3D-box.png" width="400">
+
+    <a name="plane"><h4>X,Y,Z Slice Planes</h4></a>
+
+    <p>Turning on these plane widgets allows you to sample arbitrary
+      slices in the given plane. To move a plane along it's orthogonal
+      axis use the middle button to select it then drag it to the
+      desired position (Plane widgets are not fixed in plane and can
+      be tipped by dragging them at the edge - a blue border appears
+      when selected).</p>
+
+    <img src="3D-xyz.png" width="400">
+  </body>
+</html>

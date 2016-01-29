@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<atlas version="1.0">
+  <header>
+    <name>Mars TPJ connectivity-based parcellation</name>
+    <shortname>TPJ CBP</shortname>
+    <type>Probabilistic</type>
+    <images>
+      <imagefile>/MarsTPJParcellation/TPJ_thr25_2mm</imagefile>
+      <summaryimagefile>/MarsTPJParcellation/TPJ_thr50_summaryimage_2mm</summaryimagefile>
+    </images>
+    <images>
+      <imagefile>/MarsTPJParcellation/TPJ_thr25_1mm</imagefile>
+      <summaryimagefile>/MarsTPJParcellation/TPJ_thr50_summaryimage_1mm</summaryimagefile>
+    </images>
+  </header>
+  <data>
+<label index="0" x="16" y="44" z="46">TPJa</label>
+<label index="1" x="18" y="35" z="49">TPJp</label>
+  </data>
+</atlas>

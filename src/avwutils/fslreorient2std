@@ -1,0 +1,122 @@
+#!/bin/sh
+
+#   reorientation script
+#
+#   Matthew Webster
+#   FMRIB Image Analysis Group
+#
+#   Copyright (C) 2012 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+if [ $# -lt 1 ] ; then 
+  echo "Usage: `basename $0` <input_image> [output_image]"
+  echo " "
+  echo "`basename $0` is a tool for reorienting the image to match the"
+  echo "approximate orientation of the standard template images (MNI152)."
+  echo "It only applies 0, 90, 180 or 270 degree rotations."
+  echo "It is not a registration tool."
+  echo "It requires NIfTI images with valid orientation information"
+  echo "in them (seen by valid labels in FSLView).  This tool"
+  echo "assumes the labels are correct - if not, fix that before using this."
+  echo "If the output name is not specified the equivalent transformation"
+  echo " matrix is written to the standard output"
+  echo " "
+  exit 1
+fi
+
+img=`$FSLDIR/bin/remove_ext $1`;
+outimg=$2;
+
+if [ `$FSLDIR/bin/imtest $img` = 0 ] ; then
+  echo "ERROR: Could not find image $1" 1>&2
+  exit 2
+fi
+
+scode=`$FSLDIR/bin/fslval $img sform_code`;
+qcode=`$FSLDIR/bin/fslval $img qform_code`;
+if [ $scode = 0 -a $qcode = 0 ] ; then
+  echo "ERROR: Orientation information not stored in ${1}!" 1>&2
+  echo "Cannot reslice without orientation information (i.e. need valid labels in FSLView)" 1>&2
+  echo "The NIfTI image must contain a non-zero code for either the sform or the qform" 1>&2
+  echo " - check your reconstruction/conversion software to try and fix this" 1>&2
+  exit 3
+fi
+
+pattern=sto_xyz
+if [ $scode = 0 ] ; then
+  pattern=qto_xyz
+fi
+$FSLDIR/bin/fslhd $img | grep $pattern | awk '{ print $2 " " $3 " " $4 " " $5  }' > ${outimg}_nii.mat
+det=`$FSLDIR/bin/avscale ${outimg}_nii.mat | grep Determinant | awk '{ print $3 }'`;
+if [ X`echo "if ( $det < 0 ) { 1 }" | bc -l` = X1 ] ; then
+    # radiological case (negative determinant)
+    $FSLDIR/bin/fslswapdim $img RL PA IS $outimg
+else
+    $FSLDIR/bin/fslswapdim $img LR PA IS $outimg
+fi
+
+# clean up
+rm -f ${outimg}_nii.mat
+

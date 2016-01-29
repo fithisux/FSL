@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>other</title>
+</head>
+
+<body>
+
+<b>Instructions:</b>
+<ol>
+  <li> Adjust the (horizontal) zoom and vertical
+size with the buttons below, and then
+choose to delete or add detected peaks in the appropriate trace.
+  <li> You can zoom into a selection by highlighting (click and drag)
+  and return to normal by double clicking (away from the traces - and
+  be patient as zooms and rescalings can be slow)
+  <li> Click on the graph (near
+the trace) to add or delete peaks - but you do not need to be too
+exact as it will select the nearest peak to delete or it will add a
+peak at the nearest local maximum of the trace. The Clear button will clear
+all peaks identified so far.
+  <li>The command you
+need to run next is displayed at the bottom.  Note that nothing
+will be displayed on this graph here - just cut and paste the command
+and run it in the terminal.
+</ol>
+
+<hr>
+<p>
+<table><tr><td><b>Plot Resizing:</b> &nbsp;
+     <input type="button" value="Zoom Out" onclick="parent.plotframe.zoomoutGraph()"> &nbsp;
+     <Input type="button" value="Zoom In" onclick="parent.plotframe.zoominGraph()"> &nbsp;
+     <input type="button" value="Taller" onclick="parent.plotframe.tallerGraph()"> &nbsp;
+     <input type="button" value="Shorter" onclick="parent.plotframe.shorterGraph()">
+ </p>
+</td><td> &nbsp;</td><td width="1px" bgcolor="#707070"><BR></td><td> &nbsp;</td><td>
+<table><tr><td>
+<b>Displayed plots:</b> &nbsp;</td>
+<td>
+  <input type=checkbox id="0" onClick="parent.plotframe.change(this)">
+      <label for="0"> Cardiac</label><br/>
+      <input type=checkbox id="1" checked onClick="parent.plotframe.change(this)">
+      <label for="1"> Respiratory</label>
+</td></tr></table>
+</td></tr></table>
+<hr>
+<table><tr><td>
+  <b>Editing functions:</b> &nbsp;
+     <input type="button" value="Delete Peaks" onclick="parent.plotframe.setDeleteMode()"> &nbsp;
+     <input type="button" value="Add Peaks" onclick="parent.plotframe.setAddMode()"> &nbsp;
+     <input type="button" value="Clear" onclick="parent.plotframe.clearEvents()"> &nbsp;
+</td><td> &nbsp;</td><td width="1px" bgcolor="#707070"><BR></td><td> &nbsp;</td><td>
+<p id="remotestatus">
+
+</p>
+</td></tr></table>
+<hr>
+<b>Command to run next:</b>
+<p id="remotelist">
+
+</p>
+
+</body> </html>

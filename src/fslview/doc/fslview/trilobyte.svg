@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg3677"
+   sodipodi:version="0.32"
+   inkscape:version="0.45"
+   width="162"
+   height="120"
+   version="1.0"
+   sodipodi:docbase="/usr/people/flitney/fslview/docs/fslview"
+   sodipodi:docname="trilobyte.svg"
+   inkscape:export-filename="/usr/people/flitney/fslview/docs/fslview/trilobyte.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:modified="TRUE">
+  <metadata
+     id="metadata3682">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3680" />
+  <sodipodi:namedview
+     inkscape:window-height="581"
+     inkscape:window-width="697"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     guidetolerance="10.0"
+     gridtolerance="10.0"
+     objecttolerance="10.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     inkscape:zoom="4"
+     inkscape:cx="81"
+     inkscape:cy="60"
+     inkscape:window-x="124"
+     inkscape:window-y="151"
+     inkscape:current-layer="svg3677" />
+  <g
+     id="g4673"
+     transform="matrix(1.5,0,0,1.5,-86.437503,-29.9375)">
+    <path
+       id="path4671"
+       d="M 62.807645,65.266374 L 60.202922,50.494257 L 80.145281,46.977881 L 100.08764,43.461504 L 102.69236,58.233622 L 105.29709,73.005739 L 85.354727,76.522115 L 65.412368,80.038491 L 62.807645,65.266374 z "
+       style="fill:#000000" />
+    <image
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/usr/people/flitney/fslview/docs/fslview/trilobyte.png"
+       transform="matrix(0.9848078,-0.1736482,0.1736482,0.9848078,0,0)"
+       y="58.153969"
+       x="49.100536"
+       id="image3684"
+       height="30"
+       width="40.5"
+       sodipodi:absref="/usr/people/flitney/fslview/docs/fslview/fsl-logo.jpg"
+       xlink:href="fsl-logo.jpg" />
+  </g>
+  <g
+     id="g4663"
+     transform="matrix(1.5,0,0,1.5,-38.655,-54.295002)"
+     style="fill:#0000ff"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90">
+    <text
+       sodipodi:linespacing="125%"
+       id="text3686"
+       y="74"
+       x="65.5"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#0000ff;fill-opacity:0.51592353;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:American Typewriter"
+       xml:space="preserve"><tspan
+         y="74"
+         x="65.5"
+         id="tspan3688"
+         sodipodi:role="line">?</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3690"
+       y="72.940002"
+       x="63.959999"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:American Typewriter"
+       xml:space="preserve"><tspan
+         y="72.940002"
+         x="63.959999"
+         id="tspan3692"
+         sodipodi:role="line">?</tspan></text>
+  </g>
+</svg>

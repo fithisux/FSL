@@ -1,0 +1,671 @@
+#!/bin/bash
+
+#   mainfeatreg
+#
+#   Matthew Webster, FMRIB Image Analysis Group
+#
+#   Copyright (C) 2011 University of Oxford
+
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+usage() {
+  echo "Usage: `basename $0` <feat_directory> [-pngs]"
+  echo "-a <file>        fieldmap image ( for unwarping ). Also enables unwarping mode"
+  echo "-b <file>        magnitude image basename ( for unwarping  - looks for basename and basename_brain )"
+  echo "-c <file>        non-linear configuration ( default T1_2_MNI152_2mm )"
+  echo "-d <directory>   registration directory"
+  echo "-e <number>      echo time"
+  echo "-f <number>      signal loss threshold"
+  echo "-g <number>      echo spacing"
+  echo "-h <file>        high-res structural image"
+  echo "-i <file>        input image"
+  echo "-j <file>        initial high-res structural image"
+  echo "-k <number>      unwarp direction"
+  echo "-l <file>        write to log file"
+  echo "-o               update files only"
+  echo "-n <file>        non-linear reg"
+  echo "-r <file>        write to html registration report"
+  echo "-R <file>        write to html unwarping report"
+  echo "-s <file>        standard image"
+  echo "-u <number>      initial high-res DOF"
+  echo "-v <number>      initial high-res search"
+  echo "-w <number>      high-res DOF"
+  echo "-x <number>      high-res search"
+  echo "-y <number>      standard DOF"
+  echo "-z <number>      standard search"
+  echo "-F <number>      FEAT version parameter"
+}
+
+if [ $# -lt 2 ] 
+    then
+    usage
+    exit 1
+fi
+
+
+runCommand() { #$1 logFile $2 command $3
+writeToFile $1 0 1 "\n$2"
+output=`sh -c "$2"`
+if [ x$1 != x ] 
+    then echo $output >> $1 2>&1
+else
+    echo $output
+fi
+output=`echo $output | tail -n 1`
+if [ "${3}" != "" ]
+   then eval ${3}=\"$output\"
+fi
+}
+
+writeToFile() { #$1 OutputFile ( if any ) $2 Overwrite/Append ( 1 overwrite, 0 append ) $3 Concatenate Logs ( 0 do nothing 1 concatenate ) $4 string
+if [ x$1 != x ]
+   then
+   if [ $2 != 1 ]
+      then
+      printf  "$4\n" >> $1
+   else
+      printf  "$4\n" > $1
+   fi
+fi
+if [ $3 = 1 -a -d logs ]
+   then
+   cat logs/* > report_log.html
+fi
+
+}
+
+new_file() { #$1 name 
+if [ -f $1 -o -d $1 ] 
+   then
+   new_file ${1}-
+   /bin/mv $1 ${1}-
+   return 0
+fi
+}
+
+createSliceReport() { #$1 image1 $2 image2 $3 report $4 link prefix $5 Legend $6 log
+    runCommand $6 "${FSLDIR}/bin/slicer $1 $2 -s 2 -x 0.35 sla.png -x 0.45 slb.png -x 0.55 slc.png -x 0.65 sld.png -y 0.35 sle.png -y 0.45 slf.png -y 0.55 slg.png -y 0.65 slh.png -z 0.35 sli.png -z 0.45 slj.png -z 0.55 slk.png -z 0.65 sll.png ; ${FSLDIR}/bin/pngappend sla.png + slb.png + slc.png + sld.png + sle.png + slf.png + slg.png + slh.png + sli.png + slj.png + slk.png + sll.png ${1}1.png ; ${FSLDIR}/bin/slicer $2 $1 -s 2 -x 0.35 sla.png -x 0.45 slb.png -x 0.55 slc.png -x 0.65 sld.png -y 0.35 sle.png -y 0.45 slf.png -y 0.55 slg.png -y 0.65 slh.png -z 0.35 sli.png -z 0.45 slj.png -z 0.55 slk.png -z 0.65 sll.png ; ${FSLDIR}/bin/pngappend sla.png + slb.png + slc.png + sld.png + sle.png + slf.png + slg.png + slh.png + sli.png + slj.png + slk.png + sll.png ${1}2.png ; ${FSLDIR}/bin/pngappend ${1}1.png - ${1}2.png ${1}.png; /bin/rm -f sl?.png ${1}2.png"
+    if [ "$1" != "example_func2standard" ]
+	then
+	runCommand $6 "/bin/rm ${1}1.png"
+    fi
+
+    writeToFile $3 0 0 "$5"
+    writeToFile $3 0 0 "<br><a href=\"${4}${1}.png\"><IMG BORDER=0 SRC=\"${4}${1}.png\" WIDTH=2000></a>"
+}
+
+createSmallSliceReport() { #$1 inputImage $2 report $3 log $4 Legend
+runCommand $3 "${FSLDIR}/bin/slicer $1 -s 3 -x 0.35 sla.png -x 0.45 slb.png -x 0.55 slc.png -x 0.65 sld.png -y 0.35 sle.png -y 0.45 slf.png -y 0.55 slg.png -y 0.65 slh.png -z 0.35 sli.png -z 0.45 slj.png -z 0.55 slk.png -z 0.65 sll.png ; ${FSLDIR}/bin/pngappend sla.png + slb.png + slc.png + sld.png + sle.png + slf.png + slg.png + slh.png + sli.png + slj.png + slk.png + sll.png ${1}.png; rm sl?.png"
+writeToFile ${2} 0 0 "${4}"
+}
+
+preprocessFieldmaps() { # $1 logfile $2 htmlReport
+# generate mask for fmap_mag (accounting for the fact that either mag or phase might have been masked in some pre-processing before being enter to FEAT)
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap_mag_brain -bin FM_UD_fmap_mag_brain_mask -odt short"
+# remask by the non-zero voxel mask of the fmap_rads image (as prelude may have masked this differently before)
+# NB: need to use cluster to fill in holes where fmap=0
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap -abs -bin -mas FM_UD_fmap_mag_brain_mask -mul -1 -add 1 -bin FM_UD_fmap_mag_brain_mask_inv" 
+runCommand $1 "${FSLDIR}/bin/cluster -i FM_UD_fmap_mag_brain_mask_inv -t 0.5 --no_table -o FM_UD_fmap_mag_brain_mask_idx"
+runCommand $1 "${FSLDIR}/bin/fslstats FM_UD_fmap_mag_brain_mask_idx -R | awk '{ print \$2 }'" maxidx
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap_mag_brain_mask_idx -thr $maxidx -bin -mul -1 -add 1 -bin -mas FM_UD_fmap_mag_brain_mask FM_UD_fmap_mag_brain_mask"
+        
+# refine mask (remove edge voxels where signal is poor)
+runCommand $1 "${FSLDIR}/bin/fslstats FM_UD_fmap -k FM_UD_fmap_mag_brain_mask -P 50" meanValue
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap -sub $meanValue -mas FM_UD_fmap_mag_brain_mask FM_UD_fmap"
+runCommand $1 "${FSLDIR}/bin/fslstats FM_UD_fmap_mag_brain -P 98" thresh50
+
+thresh50=`awk "BEGIN {print $thresh50 / 2.0}"`
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap_mag_brain -thr $thresh50 -bin FM_UD_fmap_mag_brain_mask50"
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap_mag_brain_mask -ero FM_UD_fmap_mag_brain_mask_ero"
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap_mag_brain_mask_ero -add FM_UD_fmap_mag_brain_mask50 -thr 0.5 -bin FM_UD_fmap_mag_brain_mask"
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap -mas FM_UD_fmap_mag_brain_mask FM_UD_fmap"
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap_mag_brain -mas FM_UD_fmap_mag_brain_mask FM_UD_fmap_mag_brain"
+# run despiking filter just on the edge voxels
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap_mag_brain_mask -ero FM_UD_fmap_mag_brain_mask_ero"
+runCommand $1 "$FSLDIR/bin/fugue --loadfmap=FM_UD_fmap --savefmap=FM_UD_fmap_tmp_fmapfilt --mask=FM_UD_fmap_mag_brain_mask --despike --despikethreshold=2.1"
+runCommand $1 "$FSLDIR/bin/fslmaths FM_UD_fmap -sub FM_UD_fmap_tmp_fmapfilt -mas FM_UD_fmap_mag_brain_mask_ero -add FM_UD_fmap_tmp_fmapfilt FM_UD_fmap"
+runCommand $1 "/bin/rm -f FM_UD_fmap_tmp_fmapfilt* FM_UD_fmap_mag_brain_mask_ero* FM_UD_fmap_mag_brain_mask50* FM_UD_fmap_mag_brain_i*"
+    
+# now demedian
+runCommand $1 "${FSLDIR}/bin/fslstats FM_UD_fmap -k FM_UD_fmap_mag_brain_mask -P 50" medianValue
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap -sub $medianValue -mas FM_UD_fmap_mag_brain_mask FM_UD_fmap"
+
+# create report picture of fmap overlaid onto whole-head mag image
+runCommand $1 "${FSLDIR}/bin/fslstats FM_UD_fmap -R | awk '{ print \$1 }'" fmapmin
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap -sub $fmapmin -add 10 -mas FM_UD_fmap_mag_brain_mask grot"
+runCommand $1 "${FSLDIR}/bin/fslstats grot -l 1 -p 0.1 -p 95" fmapminmax
+runCommand $1 "${FSLDIR}/bin/overlay 0 0 FM_UD_fmap_mag -a grot $fmapminmax fmap+mag"
+
+createSmallSliceReport fmap+mag $2 $1 "<p>Brain-masked B0 fieldmap in colour, overlaid on top of fieldmap magnitude image<br>
+<a href=\"reg/unwarp/fmap+mag.png\"><IMG BORDER=0 SRC=\"reg/unwarp/fmap+mag.png\" WIDTH=1200></a>"
+
+# get a sigloss estimate and make a siglossed mag for forward warp
+epi_te=`awk "BEGIN {print $echoTime / 1000.0}"`
+runCommand $1 "${FSLDIR}/bin/sigloss -i FM_UD_fmap --te=$epi_te -m FM_UD_fmap_mag_brain_mask -s FM_UD_fmap_sigloss"
+siglossthresh=`awk "BEGIN {print 1.0 - ( $signalLossThreshold / 100.0 )}"`
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap_sigloss -mul FM_UD_fmap_mag_brain FM_UD_fmap_mag_brain_siglossed -odt float"
+
+
+runCommand $1 "${FSLDIR}/bin/fslmaths FM_UD_fmap_sigloss -thr $siglossthresh FM_UD_fmap_sigloss -odt float"
+runCommand $1 "${FSLDIR}/bin/overlay 1 0 FM_UD_fmap_mag_brain -a FM_UD_fmap_sigloss 0 1 FM_UD_sigloss+mag"
+
+createSmallSliceReport FM_UD_sigloss+mag $2 $1  "<p>Thresholded signal loss weighting image<br>
+<a href=\"reg/unwarp/FM_UD_sigloss+mag.png\"><IMG BORDER=0 SRC=\"reg/unwarp/FM_UD_sigloss+mag.png\" WIDTH=1200></a>"
+}
+
+
+
+runFlirt() { # $1 in $2 ref $3 dof $4 search $5 interp $6 report $7 in_weighting $8 nonlinearwarpres $9 logfile ${10} fnirt config
+    out=${1}2${2}
+    dof=$3
+    if [ "$dof" = 3 ]
+       then dof="6 -schedule ${FSLDIR}/etc/flirtsch/sch3Dtrans_3dof"
+    fi
+    doBBR=0;
+    if [ "$dof" = "BBR" ]
+    then
+       doBBR=1
+    fi
+#Check for existing registrations
+    if [ `${FSLDIR}/bin/imtest ${1}2${2}_warp` = 1 ]
+	then runCommand $9 "${FSLDIR}/bin/applywarp --ref=$2 --in=$1 --out=$out --warp=${1}2${2}_warp"
+    elif [ -f  ${1}2${2}.mat ]
+             then 
+	     runCommand $9 "${FSLDIR}/bin/flirt -ref $2 -in $1 -out $out -applyxfm -init ${1}2${2}.mat -interp $5"
+	     writeToFile $logFile 0 1 "Found file: ${1}2${2}.mat."
+    else #We need to generate transforms
+	     writeToFile $logFile 0 1 "did not find file: ${1}2${2}.mat. Generating transform."
+           
+	if [ $doBBR = 0 ]
+	    then 
+	    runCommand $9 "${FSLDIR}/bin/flirt -in $1 -ref $2 -out $out -omat ${out}.mat -cost corratio -dof $dof -searchrx -$4 $4 -searchry -$4 $4 -searchrz -$4 $4 -interp $5 $7"
+	elif [ $doUnwarping = 1 ]
+	    then
+	    echoSpacingSeconds=`awk "BEGIN {print $echoSpacing / 1000}"`
+	    runCommand $9 "${FSLDIR}/bin/epi_reg --epi=$1 --t1=$2_head --t1brain=$2 --out=$out --fmap=unwarp/FM_UD_fmap --fmapmag=unwarp/FM_UD_fmap_mag --fmapmagbrain=unwarp/FM_UD_fmap_mag_brain --echospacing=$echoSpacingSeconds --pedir=$phaseEncodingDirection"
+	    runCommand $9 "mv ${out}_fieldmap2str.mat unwarp/FM_UD_fmap_mag_brain2str.mat"
+            runCommand $9 "mv ${out}_fieldmaprads2epi.mat unwarp/FM_UD_fmap2epi.mat"
+	    runCommand $9 "${FSLDIR}/bin/immv ${out}_fieldmaprads2epi_shift unwarp/FM_UD_fmap2epi_shift"
+	    runCommand $9 "${FSLDIR}/bin/immv ${out}_fieldmap2str unwarp/FM_UD_fmap_mag_brain2str"
+	    cd unwarp
+            runCommand $9 "${FSLDIR}/bin/fslstats FM_UD_fmap2epi_shift -R -P 1 -P 99" shiftminmax
+            shiftminR=`echo $shiftminmax | awk {'print $1'}`
+            shiftmaxR=`echo $shiftminmax | awk {'print $2'}`
+            shiftminr=`echo $shiftminmax | awk {'print $3'}`
+            shiftminr=`awk "BEGIN {print $shiftminr * -1.0}"`
+            shiftmaxr=`echo $shiftminmax | awk {'print $4'}`
+	    
+	    runCommand $9 "${FSLDIR}/bin/flirt -ref ../$1 -in FM_UD_fmap_mag_brain -applyxfm -init FM_UD_fmap2epi.mat -out EF_UD_fmap_mag_brain" 
+            runCommand $9 "${FSLDIR}/bin/fslmaths FM_UD_fmap2epi_shift -mul -1 grot"
+            runCommand $9 "${FSLDIR}/bin/overlay 1 0 EF_UD_fmap_mag_brain -a FM_UD_fmap2epi_shift 0.0001 $shiftmaxr grot 0.0001 $shiftminr EF_UD_shift+mag"
+	    createSmallSliceReport EF_UD_shift+mag $htmlReport2 $9 "<p>Unwarping shift map, in voxels &nbsp;&nbsp;&nbsp; ${shiftminR} <IMG BORDER=0 SRC=\"reg/unwarp/.ramp2.gif\"> 0 <IMG BORDER=0 SRC=\"reg/unwarp/.ramp.gif\"> ${shiftmaxR}<br>
+<a href=\"reg/unwarp/EF_UD_shift+mag.png\"><IMG BORDER=0 SRC=\"reg/unwarp/EF_UD_shift+mag.png\" WIDTH=1200></a>"
+            runCommand $9 "/bin/cp ${FSLDIR}/etc/luts/ramp.gif .ramp.gif"
+            runCommand $9 "/bin/cp ${FSLDIR}/etc/luts/ramp2.gif .ramp2.gif"
+
+	    #Generate fieldmap_mag2highres with WM edges
+	    runCommand $9 "overlay 0 0 FM_UD_fmap_mag_brain2str -a ../${out}_fast_wmedge 0.001 5 fieldmap2edges"
+
+	    createSmallSliceReport fieldmap2edges  $htmlReport2 $9 "<p>White matter edges, overlaid on top of fieldmap image<br>
+<a href=\"reg/unwarp/fieldmap2edges.png\"><IMG BORDER=0 SRC=\"reg/unwarp/fieldmap2edges.png\" WIDTH=1200></a>"
+
+	    #Compare fieldmap against highres and vice versa
+	    createSliceReport FM_UD_fmap_mag_brain2str ../highres $htmlReport2 "reg/unwarp/" "<p>Registration of fieldmap to highres" $9
+	    #Compare example func distorted and undistorted to highres
+	    runCommand $9 "${FSLDIR}/bin/flirt -ref ../highres -in ../$1 -out ${1}_distorted2highres -applyxfm -init ../${1}2highres.mat -interp $5"
+	    createSliceReport ${1}_distorted2highres ../highres $htmlReport2 "reg/unwarp/" "<p>Registration of $1 to highres without fieldmap correction"  $9
+	    createSliceReport ../${1}2highres ../highres $htmlReport2 "reg/unwarp/" "<p>Registration of $1 to highres with fieldmap correction" $9
+	    runCommand $9 "${FSLDIR}/bin/convert_xfm -inverse -omat highres2${1}.mat ../${1}2highres.mat "
+	    runCommand $9 "${FSLDIR}/bin/applywarp -i ../${1}2highres -r ../${1} --premat=highres2${1}.mat -o ${1}_undistorted" 
+
+
+	    runCommand $9 "${FSLDIR}/bin/overlay  0 0 ${1}_distorted2highres -a ../${out}_fast_wmedge 0.001 10 grot"
+	    runCommand $9 "${FSLDIR}/bin/slicer grot -c -s 3 -x 0.35 sla.png -x 0.45 slb.png -x 0.55 slc.png -x 0.65 sld.png -y 0.35 sle.png -y 0.45 slf.png -y 0.55 slg.png -y 0.65 slh.png -z 0.35 sli.png -z 0.45 slj.png -z 0.55 slk.png -z 0.65 sll.png ; ${FSLDIR}/bin/pngappend sla.png + slb.png + slc.png + sld.png + sle.png + slf.png + slg.png + slh.png + sli.png + slj.png + slk.png + sll.png EF_D_edges.gif"
+	    runCommand $9 "${FSLDIR}/bin/overlay  0 0 ../${1}2highres -a ../${out}_fast_wmedge 0.001 10 grot"
+	    runCommand $9 "${FSLDIR}/bin/slicer grot    -s 3 -x 0.35 sla.png -x 0.45 slb.png -x 0.55 slc.png -x 0.65 sld.png -y 0.35 sle.png -y 0.45 slf.png -y 0.55 slg.png -y 0.65 slh.png -z 0.35 sli.png -z 0.45 slj.png -z 0.55 slk.png -z 0.65 sll.png ; ${FSLDIR}/bin/pngappend sla.png + slb.png + slc.png + sld.png + sle.png + slf.png + slg.png + slh.png + sli.png + slj.png + slk.png + sll.png EF_U_edges.gif"
+	    runCommand $9 "${FSLDIR}/bin/whirlgif -o EF_UD_movie.gif -time 50 -loop 0 EF_D_edges.gif EF_U_edges.gif 2>&1; /bin/rm -f sla* slb* slc* sld* sle* slf* slg* slh* sli* slj* slk* sll* grot*"
+	    writeToFile $htmlReport2 0 0 "<p>Movie of undistorted and distorted ( marked with a red dot ) ${1} images<br>
+<a href=\"reg/unwarp/EF_UD_movie.gif\"><IMG BORDER=0 SRC=\"reg/unwarp/EF_UD_movie.gif\" WIDTH=1200></a>
+<br>"
+	     runCommand $9 "${FSLDIR}/bin/imcp ${1}_undistorted ../$1"  #replace the old fieldmap distorted low_res with the fieldmap corrected version
+	     cd ${outputDirectory}/reg
+	else
+	    runCommand $9 "${FSLDIR}/bin/epi_reg --epi=$1 --t1=$2_head --t1brain=$2 --out=$out"
+	fi
+
+	if [ "${8}" != "" ]  #Run fnirt as we have nonlinearwarpres
+	    then
+	    immv ${1}2${2} ${1}2${2}_linear
+	    runCommand $9 "${FSLDIR}/bin/fnirt --iout=${1}2${2}_head --in=${1}_head --aff=${1}2${2}.mat --cout=${1}2${2}_warp --iout=${1}2${2} --jout=${1}2${1}_jac --config=${10} --ref=${2}_head --refmask=${2}_mask --warpres=${8},${8},${8}"
+	    runCommand $9 "${FSLDIR}/bin/applywarp -i ${1} -r ${2} -o ${1}2${2} -w ${1}2${2}_warp" #check if we need this
+
+	fi
+     fi
+
+    if [ -f ${1}2${2}.mat ]
+	then runCommand $9 "${FSLDIR}/bin/convert_xfm -inverse -omat ${2}2${1}.mat ${out}.mat"
+    fi
+    if [ -f ${1}2${2}_warp ]
+	then runCommand $9 "invwarp -w ${1}2${2}_warp -o ${2}2{1}_warp -r ${2}"
+    fi
+
+    createSliceReport $out $2 $6 "reg/" "<p>Registration of $1 to $2" $9
+
+}
+
+
+outputDirectory=`pwd`
+htmlReport="/dev/null"
+htmlReport2="/dev/null"
+logFile="/dev/null"
+nonLinearResolution=""
+inputImage=""
+initialHighresImage=""
+initialHighresDof=3
+initialHighresSearch=0
+highresImage=""
+highresDof=6
+highresSearch=90
+standardImage=""
+standardDof=12
+standardSearch=90
+onlyUpdate=0
+doUnwarping=0
+fnirtConfig="T1_2_MNI152_2mm"
+echoTime=-1
+signalLossThreshold=-1
+echoSpacing=-1
+phaseEncodingDirection=-1
+featVersion=1.00
+
+
+while getopts ":a:b:c:d:e:f:g:h:i:j:l:h:n:op:r:R:s:u:v:w:x:y:z:F:" Option
+do
+  case $Option in
+    a     ) 
+	  echo "Option -a ( fieldmap image ) selected with  argument \"$OPTARG\""   #output directory
+	  fieldmapImage=$OPTARG
+	  doUnwarping=1
+	  ;;
+    b     ) 
+	  echo "Option -b ( field ) selected with  argument \"$OPTARG\""   #output directory
+	  magnitudeImage=$OPTARG
+	  ;;
+    c     ) 
+	  echo "Option -c ( fnirt config ) selected with  argument \"$OPTARG\""   #output directory
+	  fnirtConfig=$OPTARG
+	  ;;
+    d     ) 
+	  echo "Option -d ( output directory ) selected with  argument \"$OPTARG\""   #output directory
+	  outputDirectory=$OPTARG
+	  ;;
+    e     ) 
+	  echo "Option -e ( echo time ) selected with  argument \"$OPTARG\""   #output directory
+	  echoTime=$OPTARG
+	  ;;
+    f     ) 
+	  echo "Option -f ( signal loss Threshold ) selected with  argument \"$OPTARG\""   #output directory
+	  signalLossThreshold=$OPTARG
+	  ;;
+    g     ) 
+	  echo "Option -g ( echo spacing ) selected with  argument \"$OPTARG\""   #output directory
+	  echoSpacing=$OPTARG
+	  ;;
+    h     ) 
+	  echo "Option -h ( high-res structural image ) selected with  argument \"$OPTARG\""   #high-res structural image
+	  highresImage=$OPTARG
+	  ;;
+    i     ) 
+	  echo "Option -i ( main input ) input with argument \"$OPTARG\""       #main input ( example func )
+	  inputImage=$OPTARG
+	  ;;
+    j     ) 
+	  echo "Option -j ( initial high-res image ) input with argument \"$OPTARG\""       #initial high-res structural image
+	  initialHighresImage=$OPTARG
+	  ;;
+    l     ) 
+	  echo "Option -l ( logfile )input with argument \"$OPTARG\""       #log file
+	  logFile=$OPTARG
+	  ;;
+    n     )
+	  echo "Option -n ( use nonlinear reg ) input with argument \"$OPTARG\""                  #nonlinear registration
+	  nonLinearResolution=$OPTARG
+	  ;;
+    o     )
+          echo "Option -o only update ( don't back up/create new reg directory"
+	  onlyUpdate=1
+	  ;;
+    p     ) 
+	  echo "Option -p ( phase encoding direction ) selected with  argument \"$OPTARG\""   #write to html report
+	  phaseEncodingDirection=$OPTARG
+	  ;;
+    r     ) 
+	  echo "Option -r ( html registration report ) selected with  argument \"$OPTARG\""   #write to html report
+	  htmlReport=$OPTARG
+	  ;;
+    R    ) 
+	  echo "Option -R ( html unwarping report ) selected with  argument \"$OPTARG\""   #write to html report
+	  htmlReport2=$OPTARG
+	  ;;
+    s     ) 
+	  echo "Option -s ( standard image ) selected with  argument \"$OPTARG\""   #standard image
+	  standardImage=$OPTARG
+	  ;;
+    u     ) 
+	  echo "Option -u ( initial highres dof ) selected with  argument \"$OPTARG\""   #initial highres dof
+	  initialHighresDof=$OPTARG
+	  ;;
+    v     ) 
+	  echo "Option -v ( initial highres search ) selected with  argument \"$OPTARG\""   #initial highres search
+	  initialHighresSearch=$OPTARG
+	  ;;
+    w     ) 
+	  echo "Option -w ( highres dof ) selected with  argument \"$OPTARG\""   #highres dof
+	  highresDof=$OPTARG
+	  ;;
+    x     ) 
+	  echo "Option -x ( highres search ) selected with  argument \"$OPTARG\""   #highres search
+	  highresSearch=$OPTARG
+	  ;;
+    y     ) 
+	  echo "Option -y ( standard dof ) selected with  argument \"$OPTARG\""   #standard dof
+	  standardDof=$OPTARG
+	  ;;
+    z     ) 
+	  echo "Option -z ( standard search ) selected with  argument \"$OPTARG\""   #standard search
+	  standardSearch=$OPTARG
+	  ;;
+    F     ) 
+	  echo "Option -F ( FEAT version parameter ) selected with  argument \"$OPTARG\""   #standard search
+	  featVersion=$OPTARG
+	  ;;
+    *     ) echo "Unimplemented option chosen."
+	  ;;   # Default.
+  esac
+done
+
+cd $outputDirectory
+
+writeToFile $logFile 0 0 "</pre><hr>Registration<br><pre>"
+writeToFile $htmlReport 1 0 "<HTML><HEAD><link REL=\"stylesheet\" TYPE=\"text/css\" href=\".files/fsl.css\">
+<TITLE>FSL</TITLE></HEAD><BODY><OBJECT data=\"report.html\"></OBJECT>"
+
+if [ $doUnwarping = 1 ] #Initialise files
+    then
+    writeToFile $htmlReport 0 0 "<A HREF=\"report_unwarp.html\" target=\"_top\">Unwarping</A><hr>"
+fi
+
+writeToFile $htmlReport 0 0 "<h2>Registration</h2>
+
+<hr><p><b>Analysis methods</b><br>
+FMRI data processing was carried out using FEAT (FMRI Expert Analysis Tool) Version $featVersion, part of FSL (FMRIB's Software Library, www.fmrib.ox.ac.uk/fsl). Registration to high resolution structural and/or standard space images was carried out using FLIRT [Jenkinson 2001, 2002]." 
+
+if [ "$nonLinearResolution" != "" ] 
+    then
+    writeToFile $htmlReport 0 0 "Registration from high resolution structural to standard space was then further refined using FNIRT nonlinear registration [Andersson 2007a, 2007b]."
+fi
+
+writeToFile $htmlReport 0 0  "<p><b>References</b><br>
+[<a href=\"http://www.fmrib.ox.ac.uk/analysis/techrep/#TR00MJ2\">Jenkinson 2001</a>] M. Jenkinson and S.M. Smith. A Global Optimisation Method for Robust Affine Registration of Brain Images. Medical Image Analysis 5:2(143-156) 2001.<br>
+[<a href=\"http://www.fmrib.ox.ac.uk/analysis/techrep/#TR02MJ1\">Jenkinson 2002</a>] M. Jenkinson, P. Bannister, M. Brady and S. Smith. Improved Optimisation for the Robust and Accurate Linear Registration and Motion Correction of Brain Images. NeuroImage 17:2(825-841) 2002.<br>"
+
+if [ "$nonLinearResolution" != "" ]
+    then 
+    writeToFile $htmlReport 0 0 "
+[<a href=\"http://www.fmrib.ox.ac.uk/analysis/techrep/#TR07JA1\">Andersson 2007a</a>] J.L.R. Andersson, M. Jenkinson and S.M. Smith. Non-linear optimisation. FMRIB technical report TR07JA1, 2007.<br>
+[<a href=\"http://www.fmrib.ox.ac.uk/analysis/techrep/#TR07JA2\">Andersson 2007b</a>] J.L.R. Andersson, M. Jenkinson and S.M. Smith. Non-linear registration, aka Spatial normalisation. FMRIB technical report TR07JA2, 2007.<br>
+"
+fi
+
+writeToFile $htmlReport 0 0 "<hr>
+<!--regsummarystart-->
+<!--regsummarystop-->
+"
+
+#Start the registrations/unwarping proper
+if [ $onlyUpdate != 1 ]
+    then 
+    new_file ${outputDirectory}/reg
+    runCommand $logFile "/bin/mkdir -p ${outputDirectory}/reg"
+fi
+cd ${outputDirectory}/reg
+
+if [ `${FSLDIR}/bin/imtest example_func` = 0 ]
+    then ${FSLDIR}/bin/imcp $inputImage example_func
+fi
+
+if [ $doUnwarping = 1 ] #Initialise files
+    then
+
+    writeToFile $htmlReport2 1 0 "<HTML><HEAD><link REL=\"stylesheet\" TYPE=\"text/css\" href=\".files/fsl.css\">
+<TITLE>FSL</TITLE></HEAD><BODY><OBJECT data=\"report.html\"></OBJECT>
+<h2>Unwarping</h2>
+
+<hr><p><b>Analysis methods</b><br>FMRI data processing was carried out using FEAT (FMRI Expert Analysis Tool) Version $fmri(version), part of FSL (FMRIB's Software Library, www.fmrib.ox.ac.uk/fsl).
+<hr><p><b>References</b><br>
+[<a href=\"http://www.fmrib.ox.ac.uk/analysis/techrep/#TR01MJ1\">Jenkinson 2003</a>] M. Jenkinson. A fast, automated, n-dimensional phase unwrapping algorithm. Magnetic Resonance in Medicine 49(1):193-197 2003.<br>
+[<a href=\"http://www.fmrib.ox.ac.uk/~mark/work/hbm2004.ps\">Jenkinson 2004</a>] M. Jenkinson. Improving the registration of B0-disorted EPI images using calculated cost function weights. Tenth Int. Conf. on Functional Mapping of the Human Brain 2004.<br>"
+
+    mkdir unwarp
+    cd unwarp
+    runCommand $logFile "${FSLDIR}/bin/fslmaths ../example_func EF_D_example_func"
+    runCommand $logFile "${FSLDIR}/bin/fslmaths $fieldmapImage FM_UD_fmap"
+
+    if [ `${FSLDIR}/bin/imtest $magnitudeImage` = 1 ]
+    then
+    runCommand $logFile "${FSLDIR}/bin/fslmaths `${FSLDIR}/bin/remove_ext $magnitudeImage` FM_UD_fmap_mag_brain"
+
+	magnitudeHead=${magnitudeImage/_brain/}
+	if [ `${FSLDIR}/bin/imtest $magnitudeHead` != 1 ] 
+	    then magnitudeHead=$magnitudeImage
+	fi
+	runCommand $logFile "${FSLDIR}/bin/fslmaths $magnitudeHead  FM_UD_fmap_mag"
+	runCommand $logFile "${FSLDIR}/bin/fslstats FM_UD_fmap_mag_brain -V | awk '{ print \$1 }'" nzvox
+	runCommand $logFile "${FSLDIR}/bin/fslstats FM_UD_fmap_mag_brain -v | awk '{ print \$1 }'" nvox
+	frac_nzvox=`awk "BEGIN {print $nzvox / $nvox}"`
+	writeToFile $logFile 0 1 "$frac_nzvox"
+        if [ `expr $frac_nzvox \> 0.9` = 1 ]
+	    then
+            writeToFile $logFile 0 1 "Error: Brain-extracted fieldmap appears to still contain non-brain voxels. Aborting unwarping"
+	    exit 1
+         fi
+    fi 
+    preprocessFieldmaps $logFile $htmlReport2
+fi
+
+cd ${outputDirectory}/reg
+
+if [ `${FSLDIR}/bin/imtest ./unwarp/EF_UD_fmap_sigloss` = 1 ] # test for weighting image from fieldmap unwarping to use with example_func
+    then
+    ef_weighting_flag="-inweight unwarp/EF_UD_fmap_sigloss"
+fi
+
+
+#{{{ setup flirt files
+
+if [ `${FSLDIR}/bin/imtest $initialHighresImage` = 1 ]
+    then
+    runCommand $logFile "${FSLDIR}/bin/fslmaths `${FSLDIR}/bin/remove_ext $initialHighresImage` initial_highres"
+    else if [ "$initialHighresImage" != "" ]
+         then
+         writeToFile $logFile 0 1 "Warning - registration to initial_highres turned on but
+no initial_highres image specified in setup file or in
+FEAT directory! Will not register to initial_highres."
+	 initialHighresImage=""
+	 fi
+fi 
+
+if [ `${FSLDIR}/bin/imtest $highresImage` = 1 ]
+    then
+    runCommand $logFile "${FSLDIR}/bin/fslmaths `${FSLDIR}/bin/remove_ext $highresImage` highres"
+    if [ "$nonLinearResolution" != "" -o $highresDof = "BBR" ]
+	then
+	highresHead=${highresImage/_brain/}
+	if [ `${FSLDIR}/bin/imtest $highresHead` != 1 ] 
+	    then highresHead=$highresImage
+	fi
+	runCommand $logFile "${FSLDIR}/bin/fslmaths $highresHead  highres_head"
+	highresSegmentationRoot=`${FSLDIR}/bin/remove_ext $highresImage`
+	highresSegmentationRoot=${highresSegmentationRoot/_brain/}
+	if [ `${FSLDIR}/bin/imtest ${highresSegmentationRoot}_brain_wmseg` = 1 ]
+        then
+	    runCommand $logFile "${FSLDIR}/bin/fslmaths ${highresSegmentationRoot}_brain_wmseg highres_wmseg"
+	elif [ `${FSLDIR}/bin/imtest ${highresSegmentationRoot}_wmseg` = 1  ] 
+	then
+	    runCommand $logFile "${FSLDIR}/bin/fslmaths ${highresSegmentationRoot}_wmseg highres_wmseg"
+	fi
+	if [ "$nonLinearResolution" != "" ]
+	then
+	   warpfileName=`${FSLDIR}/bin/remove_ext ${highresImage}`2`${FSLDIR}/bin/remove_ext \`basename ${standardImage}\``_warp
+	   matfileName=`${FSLDIR}/bin/remove_ext ${highresImage}`2`${FSLDIR}/bin/remove_ext \`basename ${standardImage}\``.mat
+	   writeToFile $logFile 0 1 "Checking for $warpfileName and $matfileName"
+	   if [ `${FSLDIR}/bin/imtest $warpfileName` = 1 ]
+	   then
+	       if [ -f $matFileName ]
+	       then
+		  runCommand $logFile "${FSLDIR}/bin/fslmaths $warpfileName highres2standard_warp"
+		  runCommand $logFile "cp $matfileName highres2standard.mat"
+	       else
+		  writeToFile $logFile 0 1 "$matfileName not found, $warpfileName will not be used"
+	       fi
+	   fi
+	fi
+    fi
+    else if [ "$highresImage" != "" ]
+         then
+         writeToFile $logFile 0 1 "Warning - registration to highres turned on but
+no highres image specified in setup file or in
+FEAT directory! Will not register to highres."
+	 highresImage=""
+	 fi
+fi 
+
+if [ `${FSLDIR}/bin/imtest $standardImage` = 1 ]
+    then
+    runCommand $logFile "${FSLDIR}/bin/fslmaths `${FSLDIR}/bin/remove_ext $standardImage` standard"
+    if [ "$nonLinearResolution" != "" ]
+	then
+	standardHead=${standardImage/_brain/}
+	if [ `${FSLDIR}/bin/imtest $standardHead` != 1 ] 
+	    then standardHead=$standardImage
+	fi
+	runCommand $logFile "${FSLDIR}/bin/fslmaths $standardHead standard_head"
+	standardMaskName=`${FSLDIR}/bin/remove_ext $standardImage`_mask_dil
+	if [ `${FSLDIR}/bin/imtest $standardMaskName` = 1 ] 
+	    then
+	    runCommand $logFile "${FSLDIR}/bin/fslmaths $standardMaskName standard_mask"
+	else 
+	    runCommand $logFile "${FSLDIR}/bin/fslmaths ${standardImage} -bin -dilF -dilF standard_mask -odt char"	
+	fi
+    fi
+fi
+
+#Do registrations:
+if [ `${FSLDIR}/bin/imtest initial_highres` = 0 -a `${FSLDIR}/bin/imtest highres` = 0 -a `${FSLDIR}/bin/imtest standard` = 0 ]
+    then 
+    writeToFile $logFile 0 1 "Error: you have not selected any images to register to!"
+    exit 1
+elif [ `${FSLDIR}/bin/imtest highres` = 0 ]  # $1 in $2 ref $3 dof $4 search $5 interp $6 report $7 in_weighting $8 nonlinearwarpres $9 logfile
+         then runFlirt example_func standard $standardDof $standardSearch trilinear $htmlReport "$ef_weighting_flag" "" $logFile ""
+elif [ `${FSLDIR}/bin/imtest initial_highres` = 0 ]
+         then runFlirt example_func highres $highresDof $highresSearch trilinear $htmlReport "$ef_weighting_flag" "" $logFile "" #need to signal BBR
+else 
+    runFlirt example_func initial_highres $initialHighresDof $initialHighresSearch trilinear $htmlReport "$ef_weighting_flag" "" $logFile ""
+    runFlirt initial_highres highres  $highresDof $highresSearch trilinear $htmlReport "" "" $logFile "" #need to signal BBR
+fi
+if  [ `${FSLDIR}/bin/imtest highres` = 1 -a `${FSLDIR}/bin/imtest standard` = 1 ]
+    then runFlirt highres standard $standardDof $standardSearch trilinear $htmlReport "" "$nonLinearResolution" $logFile $fnirtConfig
+fi
+
+#Do missing upscales
+if [ `${FSLDIR}/bin/imtest highres` = 1 -a `${FSLDIR}/bin/imtest initial_highres` = 1 ] #Then we must have an initialHighresImage present
+    then
+    runCommand $logFile "${FSLDIR}/bin/convert_xfm -omat example_func2highres.mat -concat initial_highres2highres.mat example_func2initial_highres.mat"
+    if [ `${FSLDIR}/bin/imtest initial_highres2highres_warp` = 1 ]
+    then
+	runCommand $logFile "${FSLDIR}/bin/convert_xfm -inverse -omat highres2example_func.mat example_func2highres.mat"
+	runCommand $logFile "${FSLDIR}/bin/convertwarp --ref=highres --premat=example_func2initial_highres.mat --warp1=initial_highres2highres_warp --out=example_func2highres_warp --relout"
+	runCommand $logFile "${FSLDIR}/bin/applywarp -i example_func -r example_func -o example_func -w example_func2highres_warp --postmat=highres2example_func.mat"
+    fi
+    runFlirt example_func highres "" "" trilinear $htmlReport "" "" $logFile ""
+fi
+if [ `${FSLDIR}/bin/imtest standard` = 1 -a `${FSLDIR}/bin/imtest highres` = 1 ] #Then we must have an highresImage present
+    then
+    runCommand $logFile "${FSLDIR}/bin/convert_xfm -omat example_func2standard.mat -concat highres2standard.mat example_func2highres.mat"
+    if [ `${FSLDIR}/bin/imtest highres2standard_warp` = 1 ] #Nonlinear registation occured
+	then runCommand $logFile "${FSLDIR}/bin/convertwarp --ref=standard --premat=example_func2highres.mat --warp1=highres2standard_warp --out=example_func2standard_warp"
+    fi
+    runFlirt example_func standard "" "" trilinear $htmlReport "" "" $logFile ""
+fi
+#Now replace the original TOP level example func with the undistorted version, and save the original distorted version
+if [ `${FSLDIR}/bin/imtest example_func2highres_warp` = 1 ] 
+   then
+   runCommand $logFile "${FSLDIR}/bin/imcp ../example_func ../example_func_distorted" 
+   runCommand $logFile "${FSLDIR}/bin/imcp example_func ../example_func" 
+fi
+
+writeToFile $htmlReport 0 0 "</BODY></HTML>"
+writeToFile $htmlReport2 0 0 "</BODY></HTML>"
+
+exit 0

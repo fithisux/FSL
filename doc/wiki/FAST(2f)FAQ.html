@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FAST/FAQ</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FAST/FAQ</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FAST.html">Introduction</a></li><li>FAQ<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#How_can_I_get_the_total_volume_of_CSF.2BAC8-White-Matter.2BAC8-Grey-Matter_from_FAST.3F">How can I get the total volume of CSF/White-Matter/Grey-Matter from FAST?</a></li><li>
+<a href="#What_is_the_difference_between_partial_volume_estimation_.28PVE.29_and_tissue-type_probability_in_FAST.3F">What is the difference between partial volume estimation (PVE) and tissue-type probability in FAST?</a></li><li>
+<a href="#How_can_I_perform_multi-channel_segmentation_with_FAST.3F">How can I perform multi-channel segmentation with FAST?</a></li></ol></div></div></li></ol></div> <span class="anchor" id="line-2"></span>
+<h1 id="How_can_I_get_the_total_volume_of_CSF.2BAC8-White-Matter.2BAC8-Grey-Matter_from_FAST.3F">How can I get the total volume of CSF/White-Matter/Grey-Matter from FAST?</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line862">The best estimate of volume for any of the segmented matter types is obtained by summing up the partial volume estimates (PVE) which should be saved as separate outputs using the <tt class="backtick">-e</tt> and <tt class="backtick">-ov</tt> options. To obtain the sum, the easiest way is to use <tt class="backtick">fslstats</tt> to get the mean value and the total volume - the product of these values is then equal to the desired volume. For example, if <tt class="backtick">mybrain_pve_0</tt> is the output corresponding to the CSF segmentation, then the <tt class="backtick">fslstats</tt> calls are:  <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867"><tt class="backtick">fslstats&nbsp;mybrain_pve_0&nbsp;-m</tt><br>
+ <span class="anchor" id="line-7"></span><tt class="backtick">fslstats&nbsp;mybrain_pve_0&nbsp;-v</tt> <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line874">The resulting mean value from the first call should then be multiplied by the first output of the second call to get the volume in voxels, or by the second output of the second call to get the volume in mm^3. <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line874">Note that to get a good estimate of intracranial CSF volume it is necessary to use an input image to FAST that has good contrast between CSF and skull. A T2-weighted image is suitable for this, but a normal T1-weighted image is not. <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line867">
+<h1 id="What_is_the_difference_between_partial_volume_estimation_.28PVE.29_and_tissue-type_probability_in_FAST.3F">What is the difference between partial volume estimation (PVE) and tissue-type probability in FAST?</h1>
+<span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line874">Technically the probability maps give the probability that a voxel is completely grey matter, or completely white matter, or completely CSF. PVE on the other hand gives the best estimate of the proportion of grey matter, white matter or CSF in a voxel. <span class="anchor" id="line-17"></span>Normally there is only a small difference between the two cases due to the almost linear nature of the intensity mixing and also the estimation methods. One practical difference in the estimation using the <tt class="backtick">-e</tt> (PVE) option is that it takes the partial volume vector for each voxel and spatially regularises it using a second MRF. Therefore this is likely to be closer to "the truth" than the simple probability outputs. <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line867">
+<h1 id="How_can_I_perform_multi-channel_segmentation_with_FAST.3F">How can I perform multi-channel segmentation with FAST?</h1>
+<span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line862">To perform multi-channel segmentation it is necessary to have at least two images (taken with different MR sequences - e.g. T1-weighted and T2-weighted) which have already been registered and resampled into a common space - normally the native space of one of the inputs (see FLIRT for more details on registration). On the command line, the utility <tt class="backtick">mfast</tt> must then be used, whereas the GUI for FAST deals with both single and multi-channel segmentation.  <span class="anchor" id="line-23"></span><hr /><p class="line874"> <span class="anchor" id="line-24"></span>CategoryFAQ <a href="./CategoryFast.html">CategoryFAST</a> <span class="anchor" id="line-25"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

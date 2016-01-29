@@ -1,0 +1,252 @@
+#!/bin/sh
+
+#   standard_space_roi - align input image to standard space and
+#   output ROI version of input that matches the standard space FOV
+#
+#   Stephen Smith, FMRIB Image Analysis Group
+#
+#   Copyright (C) 2005-2007 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+# {{{ Usage()
+
+Usage() {
+    cat <<EOF
+
+Usage: standard_space_roi <input> <output> [options] [flirt options]
+
+This masks the input and/or reduces its FOV, on the basis of a
+standard space image or mask, that is transformed into the space
+of the input image.
+
+Masking options (applied before FOV-reduction):
+  -maskFOV           : mask output using transformed standard space FOV (default)
+  -maskMASK <mask>   : mask output using transformed standard space mask
+  -maskNONE          : do not mask output
+
+FOV-reduction options:
+  -roiFOV            : cut down input FOV using bounding box of the transformed standard space FOV (default)
+  -roiMASK <mask>    : cut down input FOV using nonbackground bounding box of the transformed standard space mask
+  -roiNONE           : do not cut down input FOV
+
+With either MASK option, <mask> must be in the same space as the standard space reference image.
+
+Other options:
+  -ssref <ref_image> : standard space reference image to use (default ${FSLDIR}/data/standard/MNI152_T1)
+  -altinput <image>  : alternative input image to apply the ROI to (instead of the one used to register to the reference)
+  -d                 : debug (don't delete intermediate files)
+  -b                 : betpremask, equivalent to: -maskMASK ${FSLDIR}/data/standard/MNI152_T1_2mm_brain_mask_dil -roiNONE
+
+All above options must come before any flirt options.
+
+EOF
+    exit 1
+}
+
+# }}}
+
+# {{{ parse main arguments
+
+[ _$2 = _ ] && Usage
+
+in=`${FSLDIR}/bin/remove_ext $1`
+if [ `${FSLDIR}/bin/imtest $in` = 0 ] ; then
+    echo "Input image $in not valid"
+    exit 1
+fi
+shift
+
+out=`${FSLDIR}/bin/remove_ext $1`
+shift
+
+# }}}
+# {{{ parse other options
+
+debug=0
+standard=${FSLDIR}/data/standard/MNI152_T1_2mm
+inapply=$in
+roi=1
+mask=1
+
+while [ _$1 != _ ] ; do
+
+    if [ $1 = -d ] ; then
+        debug=1
+        shift
+    elif [ $1 = -b ] ; then
+        maskthr="-thr 0.5"
+	mask=2
+        maskmask=${FSLDIR}/data/standard/MNI152_T1_2mm_brain_mask_dil
+	roi=3
+        shift
+    elif [ $1 = -ssref ] ; then
+	[ _$2 = _ ] && Usage
+	standard=$2
+	shift 2
+	if [ `${FSLDIR}/bin/imtest $standard` = 0 ] ; then
+	    echo "standard space reference image not valid"
+	    exit 1
+	fi
+    elif [ $1 = -altinput ] ; then
+	[ _$2 = _ ] && Usage
+	inapply=$2
+	shift 2
+	if [ `${FSLDIR}/bin/imtest $inapply` = 0 ] ; then
+	    echo "Input image $inapply not valid"
+	    exit 1
+	fi
+
+    elif [ $1 = -roiFOV ] ; then
+        roi=1
+        shift
+    elif [ $1 = -roiMASK ] ; then
+        roi=2
+	[ _$2 = _ ] && Usage
+	roimask=$2
+	shift 2
+	if [ `${FSLDIR}/bin/imtest $roimask` = 0 ] ; then
+	    echo "Image $roimask not valid"
+	    exit 1
+	fi
+    elif [ $1 = -roiNONE ] ; then
+        roi=3
+        shift
+
+    elif [ $1 = -maskFOV ] ; then
+        mask=1
+        shift
+    elif [ $1 = -maskMASK ] ; then
+        mask=2
+	[ _$2 = _ ] && Usage
+	maskmask=$2
+	shift 2
+	if [ `${FSLDIR}/bin/imtest $maskmask` = 0 ] ; then
+	    echo "Image $maskmask not valid"
+	    exit 1
+	fi
+    elif [ $1 = -maskNONE ] ; then
+        mask=3
+        shift
+
+    else
+	break
+    fi
+
+done
+
+# echo debug=$debug
+# echo standard=$standard
+# echo inapply=$inapply
+# echo roi=$roi
+# echo mask=$mask
+# echo roimask=$roimask
+# echo maskmask=$maskmask
+# echo flirtopts=$@
+
+# }}}
+# {{{ do the work...
+
+${FSLDIR}/bin/flirt -in $in -ref $standard -o ${out}_tmp_to_std -omat ${out}_tmp_to_std.mat $@
+${FSLDIR}/bin/convert_xfm -inverse -omat ${out}_tmp_to_std_inv.mat ${out}_tmp_to_std.mat
+
+X=`${FSLDIR}/bin/fslval $standard dim1` ; X=`echo "$X 2 - p" | dc -`
+Y=`${FSLDIR}/bin/fslval $standard dim2` ; Y=`echo "$Y 2 - p" | dc -`
+Z=`${FSLDIR}/bin/fslval $standard dim3` ; Z=`echo "$Z 2 - p" | dc -`
+
+# first do masking, if requested
+if [ $mask -lt 3 ] ; then
+    if [ $mask = 1 ] ; then
+	${FSLDIR}/bin/fslmaths $standard -mul 0 -add 1 -roi 1 $X 1 $Y 1 $Z 0 1 ${out}_tmp_standard_mask -odt float
+    else
+	${FSLDIR}/bin/fslmaths $maskmask -bin ${out}_tmp_standard_mask -odt float
+    fi
+    ${FSLDIR}/bin/flirt -ref $in -in ${out}_tmp_standard_mask -o ${out}_tmp_standard_mask_to_in -applyxfm -init ${out}_tmp_to_std_inv.mat
+    ${FSLDIR}/bin/fslmaths ${out}_tmp_standard_mask_to_in $maskthr ${out}_tmp_standard_mask_to_in
+    ${FSLDIR}/bin/fslmaths $inapply -mas ${out}_tmp_standard_mask_to_in ${out}_tmp_masked
+    inapply=${out}_tmp_masked
+fi
+
+# then cut down FOV, if requested
+if [ $roi -lt 3 ] ; then
+    if [ $roi = 1 ] ; then
+	${FSLDIR}/bin/fslmaths $standard -mul 0 -add 1 -roi 1 $X 1 $Y 1 $Z 0 1 ${out}_tmp_standard_roi -odt float
+    else
+	${FSLDIR}/bin/fslmaths $roimask -bin ${out}_tmp_standard_roi -odt float
+    fi
+    ${FSLDIR}/bin/flirt -ref $in -in ${out}_tmp_standard_roi -o ${out}_tmp_standard_roi_to_in -applyxfm -init ${out}_tmp_to_std_inv.mat
+    ${FSLDIR}/bin/fslroi $inapply $out `${FSLDIR}/bin/fslstats ${out}_tmp_standard_roi_to_in -w`
+else
+    ${FSLDIR}/bin/imcp $inapply $out
+fi
+
+# }}}
+# {{{ cleanup temporary files
+
+if [ $debug = 0 ] ; then
+    /bin/rm ${out}_tmp*
+fi
+
+# }}}
+

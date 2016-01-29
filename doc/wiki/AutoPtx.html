@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>AutoPtx</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">AutoPtx</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><img align="right" alt="autoPtx_example.jpg" class="attachment" src="attachments/AutoPtx/autoPtx_example.jpg" title="autoPtx_example.jpg" width="300" /> <span class="anchor" id="line-2"></span> <span class="anchor" id="line-3"></span><hr /><p class="line874"> <span class="anchor" id="line-4"></span>
+<h1 id="Overview">Overview</h1>
+<span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867">AutoPtx v0.1.1 is a set of simple scripts and mask images to run probabilistic tractography in subject-native space using pre-defined protocols. AutoPtx requires a working version of FSL and has been tested on Linux and Mac. The protocols (i.e. seed, target, exclusion and stop masks) were initially developed to allow measuring registration performance for diffusion MRI [1] and have been defined in standard space based on the protocols described in [2-5]. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line874">The process consists of two stages, a preprocessing stage (‘autoPtx_1_preproc’) and a tractography stage (‘autoPtx_2_launchTractography’). In short, the preprocessing stage runs a tensor fit, performs a registration and launches the bedpostx probabilistic model fit for each subject. The tractography stage runs probtrackx for each subject and for each white matter structure.  <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line867">AutoPtx is available under a licence similar to the FSL license, which is distributed with the plugin. If you use the plugin in your research, please reference [1]. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line867">
+<h1 id="Running_autoPtx">Running autoPtx</h1>
+<span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line862">First, download the Plugin  <a class="attachment" href="attachments/AutoPtx/autoPtx_0_1_1.tgz" title="">autoPtx_0_1_1.tgz</a>   and unpack with <tt>tar&nbsp;xvfz&nbsp;autoPtx_0_1_1.tgz</tt> <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line862">Both the <a href="./FDT(2f)UserGuide.html#BEDPOSTX">probabilistic model fit</a>, started by autoPtx_1_preproc, and the <a href="./FDT(2f)UserGuide.html#PROBTRACKX_-_probabilistic_tracking_with_crossing_fibres">probabilistic tractography</a>, started by autoPtx_2_launchTractography, use ‘fsl_sub’ to process the computionally heaviest tasks on a cluster (if available). Both autoPtx scripts, preproc and launchTractography, should be run consecutively in an interactive shell. <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line874">To determine for which tracts the tractography is going to be performed, the launchTractography script reads the ‘structureList’ textfile. This file defines for each individual tract (left and right separate) the maximum run time and the seed count multiplier (listed in the table below). The seed count multiplier is based on a a tradeoff between run time and the observed number of particles in each tract, and can easily be customised if desired. <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line867">
+<h1 id="White_matter_tracts_available">White matter tracts available</h1>
+<span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><p class="line874">White matter tracts for which protocols are available are listed in the following table. Protocols with left/right homologues are indicated in column ‘l/r’. If a protocol contains a stop mask, the anatomical position of this mask relative to the tract is listed under the ‘stop’ column. The number of seed points per voxel is listed in the ‘seed #’ column. Tracts that are generated twice with inverted target-seed regions and then summed are listed under ‘Inv’. <span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><div><table><tbody><tr>  <td><p class="line862"> </td>
+  <td><p class="line862"> l/r </td>
+  <td><p class="line862"> stop </td>
+  <td><p class="line862"> Seed # (*1000) </td>
+  <td><p class="line862"> Inv </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-29"></span><p class="line862"> <strong>Brainstem tracts</strong> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-30"></span><p class="line862"> Middle cerebellar peduncle </td>
+  <td><p class="line862"> - </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> 4.4 </td>
+  <td><p class="line862"> + </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-31"></span><p class="line862"> Medial lemniscus </td>
+  <td><p class="line862"> + </td>
+  <td><p class="line862"> superior </td>
+  <td><p class="line862"> 1.2 </td>
+  <td><p class="line862"> - </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-32"></span><p class="line862"> <strong>Projection fibers</strong> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-33"></span><p class="line862"> Corticospinal tract </td>
+  <td><p class="line862"> + </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> 4 </td>
+  <td><p class="line862"> - </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-34"></span><p class="line862"> Acoustic radiation </td>
+  <td><p class="line862"> + </td>
+  <td><p class="line862"> medial </td>
+  <td><p class="line862"> 10 </td>
+  <td><p class="line862"> + </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-35"></span><p class="line862"> Anterior thalamic radiation </td>
+  <td><p class="line862"> + </td>
+  <td><p class="line862"> posterior </td>
+  <td><p class="line862"> 1 </td>
+  <td><p class="line862"> - </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-36"></span><p class="line862"> Superior thalamic radiation </td>
+  <td><p class="line862"> + </td>
+  <td><p class="line862"> inferior </td>
+  <td><p class="line862"> 0.8 </td>
+  <td><p class="line862"> - </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-37"></span><p class="line862"> Posterior thalamic radiation </td>
+  <td><p class="line862"> + </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> 20 </td>
+  <td><p class="line862"> - </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-38"></span><p class="line862"> <strong>Association fibers</strong> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-39"></span><p class="line862"> Superior longitudinal fasciculus </td>
+  <td><p class="line862"> + </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> 0.4 </td>
+  <td><p class="line862"> + </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-40"></span><p class="line862"> Inferior longitudinal fasciculus </td>
+  <td><p class="line862"> + </td>
+  <td><p class="line862"> anterior </td>
+  <td><p class="line862"> 1.2 </td>
+  <td><p class="line862"> - </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-41"></span><p class="line862"> Inferior fronto-occipital fasciculus </td>
+  <td><p class="line862"> + </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> 4.4 </td>
+  <td><p class="line862"> - </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-42"></span><p class="line862"> Uncinate fasciculus </td>
+  <td><p class="line862"> + </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> 1.2 </td>
+  <td><p class="line862"> - </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-43"></span><p class="line862"> <strong>Limbic system fibers</strong> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-44"></span><p class="line862"> Cingulate gyrus part of cingulum </td>
+  <td><p class="line862">  + </td>
+  <td><p class="line862"> anterior &amp; posterior </td>
+  <td><p class="line862"> 3 </td>
+  <td><p class="line862"> - </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-45"></span><p class="line862"> Parahippocampal part of cingulum </td>
+  <td><p class="line862">  + </td>
+  <td><p class="line862"> superior &amp; inferior </td>
+  <td><p class="line862"> 20 </td>
+  <td><p class="line862"> - </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-46"></span><p class="line862"> <strong>Callosal fibers</strong> </td>
+  <td><p class="line862">  </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-47"></span><p class="line862"> Forceps minor </td>
+  <td><p class="line862">  - </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> 0.6 </td>
+  <td><p class="line862"> + </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-48"></span><p class="line862"> Forceps major </td>
+  <td><p class="line862">  - </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> 0.6 </td>
+  <td><p class="line862"> + </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><p class="line867">
+<h1 id="Adding_tracts">Adding tracts</h1>
+<span class="anchor" id="line-53"></span><span class="anchor" id="line-54"></span><p class="line874">To add a protocol for automated tractography, create a folder in the ‘protocols’ folder, with the name of the tract and specify the following: <span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><div><table><tbody><tr>  <td><p class="line862"> Name </td>
+  <td><p class="line862"> Required </td>
+  <td><p class="line862"> Content </td>
+  <td><p class="line862"> Description </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-57"></span><p class="line862"> seed </td>
+  <td><p class="line862"> * </td>
+  <td><p class="line862"> Mask image </td>
+  <td><p class="line862"> Seed mask in FMRIB-58 1mm space </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-58"></span><p class="line862"> target </td>
+  <td><p class="line862"> * </td>
+  <td><p class="line862"> Mask image </td>
+  <td><p class="line862"> Target mask in FMRIB-58 1mm space </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-59"></span><p class="line862"> stop </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862">  Mask image </td>
+  <td><p class="line862"> Stop mask in FMRIB-58 1mm space </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-60"></span><p class="line862"> exclude </td>
+  <td><p class="line862"> * (may be empty image) </td>
+  <td><p class="line862"> Mask image </td>
+  <td><p class="line862"> Exclude mask in FMRIB-58 1mm space </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-61"></span><p class="line862"> invert </td>
+  <td><p class="line862"> </td>
+  <td><p class="line862"> Empty text file </td>
+  <td><p class="line862"> Indicates a 2nd run with inverted seed and target masks </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><p class="line874">Then add the new protocol name to the ‘structureList’ textfile, and run the launchTractography script. <span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-66"></span><span class="anchor" id="line-67"></span><p class="line867">
+<h1 id="Visualizing_tracts">Visualizing tracts</h1>
+<span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span><p class="line874">To visualize the tracts in FSLView, the ‘autoPtx_prepareForDisplay’ script can be used. This script applies a (user defined) threshold on the tract density images and generates a script for viewing the subjects in FSLView. The tract image shown above is generated with this approach. <span class="anchor" id="line-70"></span><span class="anchor" id="line-71"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-72"></span><span class="anchor" id="line-73"></span><p class="line867">
+<h1 id="References">References</h1>
+<span class="anchor" id="line-74"></span><span class="anchor" id="line-75"></span><p class="line862">[1] De Groot, M., Vernooij, M.W., Klein, S., Ikram, M.A., Vos, F.M., Smith, S.M., Niessen, W.J., Andersson, J.L.R., 2013. Improving alignment in Tract-based spatial statistics: Evaluation and optimization of image registration. NeuroImage, 76, 400-411. <span class="anchor" id="line-76"></span><span class="anchor" id="line-77"></span><p class="line874">[2] Mori, Susumu, Kaufmann, Walter E, Davatzikos, C., Stieltjes, Bram, Amodei, L., Fredericksen, Kim, Pearlson, Godfrey D, Melhem, E.R., Solaiyappan, Meiyappan, Raymond, G. V, Moser, H.W., Van Zijl, P.C.M., 2002. Imaging cortical association tracts in the human brain using diffusion-tensor-based axonal tracking. Magnetic Resonance in Medicine 47, 215–223. <span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span><p class="line862">[3] Stieltjes, B, Kaufmann, W E, Van Zijl, P.C., Fredericksen, K, Pearlson, G D, Solaiyappan, M, Mori, S, 2001. Diffusion tensor imaging and axonal tracking in the human brainstem. NeuroImage 14, 723–735. <span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span><p class="line862">[4] Wakana, S., Caprihan, A., Panzenboeck, M.M., Fallon, J.H., Perry, M., Gollub, R.L., Hua, K., Zhang, J., Jiang, H., Dubey, P., Blitz, A., Van Zijl, P., Mori, Susumu, 2007. Reproducibility of quantitative tractography methods applied to cerebral white matter. NeuroImage 36, 630–644. <span class="anchor" id="line-82"></span><span class="anchor" id="line-83"></span><p class="line874">[5] Wakana, S., Jiang, H., Nagae-Poetscher, L.M., Van Zijl, P.C.M., Mori, Susumu, 2004. Fiber Tract–based Atlas of human white matter anatomy. Radiology 230, 77–87 <span class="anchor" id="line-84"></span><span class="anchor" id="line-85"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-86"></span><a href="./CategoryOther.html">CategoryOther</a> <a class="nonexistent" href="./CategoryAutoPtx.html">CategoryAutoPtx</a> <span class="anchor" id="line-87"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:31
+</body>
+</html>

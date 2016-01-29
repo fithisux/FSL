@@ -1,0 +1,22 @@
+#!/bin/sh
+
+#   imrm - remove image files
+#
+#   Stephen Smith and Mark Jenkinson, FMRIB Image Analysis Group
+#
+#   Copyright (C) 1999-2004 University of Oxford
+#
+#   SHCOPYRIGHT
+
+if [ $# -lt 1 ] ; then
+  echo "Usage: $0 <list of image names to remove>"
+  echo "NB: filenames can be basenames or not"
+  exit 1;
+fi
+
+for f in $@ ; do
+  fn=`${FSLDIR}/bin/remove_ext $f`;
+  # do the rm silently
+  /bin/rm -f ${fn}.img ${fn}.hdr ${fn}.hdr.gz ${fn}.img.gz ${fn}.nii ${fn}.nii.gz ${fn}.mnc ${fn}.mnc.gz
+done
+

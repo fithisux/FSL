@@ -1,0 +1,388 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="Content-Type"
+content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../fsl.css" />
+<link rel="stylesheet" type="text/css" href="install.css" />
+<title>FSL</title></head><body>
+
+<IFRAME width="100%" scrolling="no" frameborder="0" src="top.html">Broken</IFRAME>
+
+<h1>Running FSL under Windows XP and Vista</h1>
+<p>
+We recommend using a UNIX-based computer (such as a Linux PC, Apple or
+Sun) for carrying out data analysis. However, if this is not available
+then you can use FSL on a Windows computer by running the Linux
+version of FSL inside a "virtual Linux machine" (a VM), using a freely
+available program called VMware Player by <a href='http://www.vmware.com'>VMware</a>.
+This is fairly easy to setup, and we provide basic installation instructions below,
+but please note that we cannot in general offer further help for the setup and
+maintenance of the virtual machine itself - we just offer support on
+the running of FSL within it.
+</p>
+<h2>System Requirements</h2>
+<ul>
+<li>Windows XP or Vista (32bit or 64bit, tested on Business edition)</li>
+<li>Dual core CPU/ multiple CPU recommended</li>
+<li>2GB RAM minimum</li>
+<li>Minimum 10GB, up to 30GB, of free disc space (VM image expands as 
+necessary up to this limit)</li>
+</ul>
+<h2>Introduction and Dependencies</h2>
+<p>
+The software package VMware Player emulates the core hardware of 
+an x86 machine allowing you to run a second operating system 'in a 
+window'. Virtualisation technology allows the programs running in this 
+VM to achieve speeds approaching that of programs running natively in 
+Windows, as the CPU instruction set doesn't need to be emulated.
+</p>
+<p>
+The FSL VM (FSLvm) is configured with 1GB of RAM, a virtual hard disk 
+that can grow to 30GB in size, shared (<i>NAT</i>) networking, (ie it 
+shares the network connection of your local computer), virtual sound 
+hardware and virtual CD-ROM and floppy drives.
+</p>
+<p>Before you can run the FSL virtual machine, you need to install a 
+Virtual Machine player package. We support the use of version 2.5.x of 
+VMware's free 
+<a href="http://www.vmware.com/products/player/">VMware 
+Player</a> software. Download the software from VMware's site and 
+install this package by following VMware's instructions. Once it is 
+installed and your computer has been restarted, launch VMware Player 
+to complete initial setup.
+</p>
+<h2>The FSL Virtual Machine</h2>
+<p>
+Once VMware Player is installed, download the FSLvm from below.
+The FSLvm is compatible with both Windows XP and Windows Vista and
+is available in two flavours, a 32 bit version for the majority of
+Windows installations and a 64 bit version for 64 bit Windows Vista.
+</p>
+<p class="hint">To find out which version you require see this 
+<a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;827218">Microsoft
+document</a>
+</p>
+<p class="centred">
+<a href="http://www.fmrib.ox.ac.uk/fsldownloads/FSL_vm5_32.zip">FSLvm [32bit]</a>
+<a href="http://www.fmrib.ox.ac.uk/fsldownloads/FSL_vm5_64.zip">FSLvm [64bit]</a>
+</p>
+<h3>Verifying the download</h3>
+<p>To confirm that the FSLvm package has downloaded correctly, download the 
+appropriate MD5 hash file below to the same folder you downloaded the FSLvm to
+and use <a href='http://www.md5summer.org'>MD5summer</a> to check the files. 
+</p>
+<p class="centred">
+<a href="http://www.fmrib.ox.ac.uk/fsldownloads/md5sums/FSL_vm5_32.zip.md5">FSLvm [32bit] MD5 sum</a>
+<a href="http://www.fmrib.ox.ac.uk/fsldownloads/md5sums/FSL_vm5_64.zip.md5">FSLvm [64bit] MD5 sum</a>
+</p>
+<h4>Using MD5summer</h4>
+<p>
+Run md5summer once as an administrator and choose to associate the <i>.md5</i>
+extension with md5summer. Now double click on the downloaded md5 sum file and
+wait while md5summer checks the file, a green circle to the left of the file
+name confirms the file's integrity.
+</p>
+<h2>FSLvm Installation</h2>
+<p><img class="floatright" src="images/extract_all_files_vista.jpg" alt="Unzipping" title="Unzipping" /></p>
+<p>FSLvm is a fairly minimal install of the CentOS 5 Linux
+distribution and is provided as a zip file. To install, decompress the
+downloaded FSLvm by double clicking on the zip file and clicking on
+'Extract all files' in the resulting Windows Explorer window.</p>
+<p>
+The Windows zip expansion wizard will launch. Extract the files to an
+appropriate location; VMware Player creates a folder in your Documents
+folder called <i>Virtual Machines</i> (<i>My Virtual Machines</i> 
+under Windows XP) when run for the first time, which is intended for 
+this purpose. Under Windows XP, be sure to create a folder 
+(eg <i>fsl_vm5_32</i> or <i>fsl_vm5_64</i> as appropriate) to contain
+the files if you have more than one VM as the Windows XP zip expansion 
+wizard does not preserve the top level folder of the zip archive.</p>
+<h2>VMware Player Usage and Configuration</h2>
+<p>
+Detailed VMware Player application usage instructions are available 
+from the VMware Player menu's 'Help' entry.</p>
+<h3>Initial setup</h3>
+<p>Now that the FSLvm is installed, launch VMware Player from the 
+<i>Start</i> menu and click on the 'Open' icon. In the Open dialogue, 
+browse to the uncompressed FSLvm folder, <i>fsl_vm5_32</i> or <i>fsl_vm5_64</i> 
+and double click on the <i>fsl_vm5_32</i> or <i>fsl_vm5_64</i> file within.
+</p>
+<div class="floatright"><img src="images/vmx_file.jpg" alt="VM icon" title="VM icon" /></div>
+<p>
+Subsequent to the initial launch, the FSLvm will appear in the 
+list of <i>Recent Virtual Machines</i> allowing a quick launch.</p>
+<p>The first time FSLvm is started VMware Player will ask if 
+the VM was moved or copied, choose <i>I copied it</i>.
+</p>
+<p>
+Depending on your Windows computer's hardware, you may also 
+receive additional messages like...
+</p>
+<blockquote>
+Cannot connect virtual device floppy0. No corresponding device is available on the host.
+
+Would you like an attempt to be made to connect the virtual device every time you power on the virtual machine?
+</blockquote>
+<p>
+This means that VMware Player cannot locate a floppy disc drive 
+on your computer. Select <i>No</i> and you will not be informed 
+of this again. If, instead, it warns you about <i>device IDE 1:0</i> 
+then it is unable to find a CD ROM drive. Again choose <i>No</i> 
+to dismiss this warning permanently.
+</p> 
+<p>The FSLvm will now boot, a process that will take several 
+minutes, don't worry about the 'Failed' messages that appear next
+to the following items (this is normal behavior):
+</p>
+<ul>
+<li>Mounting local filesystems</li>
+<li>Mounting HGFS shares</li>
+<li>Mounting other filesystems</li>
+</ul>
+<p>
+Once the boot process has completed, you will be presented 
+with a graphical login screen (initially a textual login screen will
+appear - wait a little longer for the desktop environment to start).
+Log in as the user:
+</p>
+<pre>fsl</pre>
+<p> and password </p>
+<pre>fsluser</pre>
+<p>After a few moments you will be presented with the Linux desktop 
+environment. 
+</p>
+<p>Before continuing, you should take a moment to verify that you have 
+the correct keyboard layout. The FSLvm is configured with a British
+keyboard; users with a different keyboard layout can change by visiting
+<i>System->Preferences->Keyboard</i> from the menu at the top of the screen.
+This will open the keyboard configurator. Switch to the <i>Layouts</i> tab and
+click the large <i>+</i> symbol to add a keyboard layout.</p>
+<div class="floatright"><img src="images/linux_keyboard.png" alt="Linux keyboard configuration" title="Linux keyboard configuration" /></div>
+<p>In the windows that appears choose an appropriate layout from the 
+pane on the left (you can drag the divider to see the name of the layout
+better). Some layouts have alternatives which can be viewed by clicking
+on the disclosure triangle. However, in most cases the top-level layout
+will be appropriate. Then select the check box next to your new keyboard 
+layout to make this the default. Finally, deselect <i>Separate group for
+each window</i>.
+</p>
+<p>
+Once you have the correct keyboard layout, the first task you should 
+undertake is to reset a few passwords to more secure values.</p>
+<p>Right click on the desktop and choose <i>Open Terminal</i> from 
+the menu. In the terminal window that opens, type the following:</p>
+<pre>
+passwd
+</pre>
+<p>When prompted, enter the current password </p>
+<pre>fsluser</pre>
+<p> and then enter a new password, twice - choose a secure password 
+(see this <a href="http://en.wikipedia.org/wiki/Password_strength">Wikipedia 
+entry</a> for advice on password selection).
+</p>
+<p>Next you will need to change the password of the <i>root</i> user in 
+the FSLvm, do this by issuing the following commands in a terminal 
+window:</p>
+<pre>
+/bin/su -
+</pre>
+<p>Enter the current root password,<p> 
+<pre>fslroot</pre>
+<p>You are now the system Super User. To change this user's password type:</p>
+<pre>
+passwd
+</pre>
+<p>Again, when prompted, enter a new password twice - choose a 
+<b>different</b> secure password.</p>
+<p><b>Important:</b> Do not forget these passwords, as you will lose 
+access to FSLvm and all the files stored within it without them.</p>
+<p>Now type:</p>
+<pre>
+exit
+</pre>
+<p>to return to the normal user account.</p>
+<h4>Installing FSL</h4>
+<p>You can now install FSL, FSLvm requires the <a href="/fsldownloads">Linux CentOS5 32bit
+or CentOS5 64bit version</a> depending on whether you are running the 32 or
+64 bit VM. See the <a href="linux.html">Linux installation instructions</a> to 
+continue with the installation of FSL. Note that as the FSLvm comes preconfigured
+for internet access, so the easiest way to continue the install is to
+follow these instructions with the Firefox web-browser inside the FSLvm.</p>
+<h4>Accessing your Windows files</h4>
+<p>There are four options for transferring/accessing files stored on 
+your Windows disk in the FSLvm, presented in order of ease of use:</p>
+<ol>
+  <li>Drag-and-drop
+  <p>The VMware Player application supports the dragging and dropping of files 
+from Windows into the FSLvm. To transfer files select them in the Windows 
+Explorer and then drag them into your FSLvm window and drop in the folder 
+you would like it to reside in (or onto the Desktop).</p>
+  </li>
+  <li>VMware Player file sharing
+  <p class="floatleft"><img src="images/sharingpane.jpg" alt="Setting up file shares" title="Setting up file shares" /></p>
+  <p>
+  File sharing has been configured in the FSLvm to share the entire C: 
+drive to the FSLvm. However, due to the potential security risk this poses, 
+VMware Player disables this functionality by default.</p>
+  <p>Before changing the sharing settings first create a folder to share. 
+Put this folder somewhere appropriate in your home folder. To enable 
+sharing and to point it to this new folder, start up the FSLvm and visit 
+the VMware Player menu and open the <i>Shared Folders...</i> dialogue.</p>
+
+  <p class="floatright"><img src="images/browseforfoldertoshare.jpg" alt="Browse to the folder to share" title="Browse to the folder to share" /></p>
+  <p>&nbsp;</p>
+  <p>To enable sharing permanently select the <i>Always Enabled</i> radio 
+button. Now select the pre-configured share and click on the 
+<i>Properties</i> button. This will open another dialogue box allowing you 
+to change the name the share will appear as in Linux and to change the 
+Windows file path for the shared folder. Click on the <i>Browse</i> button 
+and locate the folder you created earlier.</p>
+  <p>Click on the <i>OK</i> buttons to dismiss the dialogues. You should 
+now restart your FSLvm (only necessary the first time you enable sharing) 
+by choosing <i>System->Shutdown</i> from the top menu bar in the Linux 
+desktop and clicking on the <i>Reboot</i> button when prompted on what 
+to do.</p>
+  <p>You may now access files held within this shared folder through the 
+path <i>/mnt/hgfs</i>. To navigate there through the graphical file browser, 
+double click on <i>Computer</i> on the desktop and then, in the resulting 
+window, double click on <i>Filesystem</i>. This will open a folder showing 
+the folder <i>/</i> from where you can navigate to <i>mnt</i> and then 
+<i>hgfs</i>. Within here will be the shared folder, named as specified in 
+the <i>Shared Folders</i> dialogue.</p>
+  <p><b>Warning: Do not attempt to modify the same files in this shared 
+folder in both operating systems at once - bad things will happen!</b></p>
+  </li>
+  <li>Using external media:
+  <p>If you connect a USB storage device whilst VMware Player is running 
+and has the input focus it will allow Linux to see the storage device. In 
+most cases it will automatically mount and an icon will appear on the Linux 
+desktop. Linux has read-only support for NTFS, so you will need to create 
+an <i>ext3</i> (Linux support only) disk partition or use <i>FAT32</i> 
+format which can be read on both OSes. <b>Note: FAT32 is not supported for 
+storing files that you are actively accessing with the FSL tools.</b>
+  </p>
+  </li>
+</ol>
+<h4>Network access</h4>
+<p>The FSLvm is configured to share your network connection, and so has 
+full access to the Internet out of the box. You can also access your FSLvm 
+from Windows over this internal network with tools like 
+<a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/">puTTY</a> 
+(a SSH terminal client).</p>
+<p>To identify the IP address of the FSLvm, in a terminal in the FSLvm type:</p>
+<pre>/sbin/ifconfig | grep -C 1 'eth0'</pre>
+<p>You are looking for the dotted quartet printed after <i>inet addr:</i></p>
+<p>Connection to the host is now possible using this address as the hostname 
+to connect to within puTTY.</p>
+<h3>Shutting down</h3>
+<p>Under normal circumstances you should just close the FSLvm window, this 
+will suspend the FSLvm to disk allowing quick restoration of your session 
+at a later date. However, sometimes it may be necessary to shutdown the 
+FSLvm entirely (say if you are moving it to a new computer). To do this, 
+choose <i>System->Shutdown</i> from the Linux desktop menu. Once Linux has 
+shut down VMware Player will exit.
+</p>
+<h3>Resetting a hung FSLvm</h3>
+<p>If the FSLvm appears to have frozen, you can force a reset by selecting 
+<i>Reset</i> from the Troubleshooting menu.</p>
+<h3>Updating the FSLvm</h3>
+<p>From time to time the Linux vendor will issue security updates which in 
+general should be installed to keep the FSLvm secure.</p>
+<p>When updates are available a message window will appear in the top right 
+of the Linux desktop advising you of what updated packages are available. 
+Clicking on the icon associated with this message will open the package 
+update utility which can be used to update the system. You will be asked for
+the root password that you set when installing the FSLvm before being allowed
+to install these updates.</p>
+<p><b>Warning:</b> Be aware, that any updates listed as 'kernel' updates 
+change the core of the operating system, and will result in the accelerated 
+drivers installed in the FSLvm to cease to function. To restore this 
+functionality it is necessary to update the <i>vmware-tools</i>, as this 
+driver package is termed. To do this, log in as the root user and open a 
+terminal window. Within this window type:
+</p>
+<pre>vmware-config-tools.pl</pre>
+<p>You will now be asked a series of questions. Hit return to accept the default
+to all of the questions. Once the installation is complete you should reboot 
+the FSLvm to allow the changes to take effect.</p>
+<h3>Increasing the amount of memory available to FSLvm</h3>
+<p>The default allocation of 1GB is only suitable for light use of the FSL 
+software suite. For more demanding analyses you will need to increase the 
+amount of available memory allocated to the virtual machine. Before you 
+change this setting you should find out how much memory your computer. Under
+Windows XP, open the Start menu and right click on <i>My Computer</i>. From
+the pop-up menu choose <i>Properties</i> and look in the Computer information 
+area, note this value.</p>
+<div class="centred">
+<img src="images/winxp_properties.png" alt="Right click on My Computer and select Properties..." />
+<img src="images/winxp_memory.png" alt="Look here for your memory total" />
+</div>
+<p>Under Vista, follow the <a href="http://windowshelp.microsoft.com/Windows/en-US/help/479a7531-57ad-43c1-91b1-3f46a0e1761e1033.mspx">instructions available on Microsoft's support site</a> to find out your total 
+memory capacity.</p>
+<p>With this in mind, you can calculate the amount of memory you can safely
+allocate to the FSLvm by following the advice below.</p>
+<dl>
+<dt>Windows XP</dt><dd>Take 1024MB off the value reported</dd>
+<dt>Windows Vista</dt><dd>Take 2048MB off the value reported</dd>
+</dl>
+<p>By way of example if you have a Windows Vista computer with 4GB of RAM you
+can safely increase the FSLvm memory allocation to 2GB.</p>
+<p>To change the memory allocation of FSLvm, start the VM and then from the 
+<i>VMware Player</i> menu, choose <i>Change Memory Allocation...</i> from the 
+<i>Troubleshoot</i> sub-menu. In the dialogue that opens type the value you have
+calculated as being optimal into the memory total box. As indicated in this
+window once you have clicked <i>OK</i> you will need to restart the VM.</p>
+<div class="centred"><img src="images/vmplayer_tsmenu.png" alt="Opening the Change Memory Allocation dialoge" />
+<img src="images/changemem.png" alt="Changing the memory allocation" />
+</div>
+<h3>Increasing the amount of disk space available to FSLvm</h3>
+<p>Increasing the size of the virtual disk is not possible with the free VMware
+Player application (it can be done with the commercially available VMware Workstation),
+so if you require additional disk space we would recommend adding an additional USB
+hard drive to your system and dedicating it's use to Linux. For correct FSL operation, the
+drive should be formatted with the Linux <i>ext3</i> filesystem. Follow these steps to
+carry out this formatting process.
+</p>
+<ol>
+<li>Start with the drive disconnected</li>
+<li>Click inside the running VM window so that you are controlling Linux</li>
+<li>Connect the USB drive</li>
+<li><b>If</b> the drive mounts and appears on your Linux desktop, right click and choose
+to un-mount it. Most probably you will have a drive formatted as NTFS, so you may see this
+warning that Linux <i>Cannot mount volume</i> - Click <i>OK</i>.<br />
+Unfortunately, Centos won't let you format the device at this point, so you need to format
+via the command line.</li>
+<li>Open a terminal and become the root user:<br />
+<pre>su -</pre><br />
+(enter the root password when prompted)<br />
+<b style="fontsize: +1pt">The next step is disruptive and will destroy everything on the 
+drive you specify, so be extra certain that this is the correct disk</b></li>
+<li>Run the partitioning tool:<br />
+<pre>parted</pre><br />
+You are now in an interactive partition editor.</li>
+<li>Find your disk:<br />
+<pre>print all</pre><br />
+Locate your external drive (look for the <i>Model:</i> entry that matches your disk) and 
+note down the Disk field (<i>/dev/sdX</i>) (this will probably be /dev/sdb) and the numbers
+of any existing partition number(s)</li>
+<li><pre>select /dev/sdX</pre><br />
+(replace <i>X</i> with the letter you determined above)</li>
+<li><pre>rm Y</pre><br />
+where <i>Y</i> is the partition number you noted. Repeat until you have deleted all the partitions
+on the disk</li>
+<li><pre>print</pre><br />
+to confirm that they are all gone</li>
+<li><pre>mkpart primary 1 ZGB</pre><br />
+where <i>Z</i> is the size of the disk in question (eg 250GB), hit return to any prompts</li>
+<li><pre>quit</pre></li>
+<li>Make a file system on the partition<br />
+<pre>mkfs -t ext3 /dev/sdX</pre><br />
+(<i>X</i> as above)</li>
+<li>Disconnect the drive and reconnect it and it should automatically mount. Open <i>Computer</i>
+on your desktop and you should see the drive, and it can be accessed at /media/disk (or some
+variant on that).</li>
+</ol>
+</body>
+</html>

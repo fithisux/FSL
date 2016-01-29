@@ -1,0 +1,158 @@
+#!/bin/sh
+
+#   updatefeatreg
+#
+#   Mark Jenkinson & Steve Smith, FMRIB Image Analysis Group
+#
+#   Copyright (C) 1999-2008 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+usage() {
+  echo "Usage: `basename $0` <feat_directory> [-pngs]"
+  echo "   Updates all inverse and concatenated transforms in a first-level"
+  echo "        FEAT run, as well as the images in the FEAT report,"
+  echo "        based on the fundamental registration matrices:"
+  echo "          i.e. example_func2highres.mat , highres2standard.mat"
+  echo "        This allows for manual/other correction of the registrations"
+}
+
+regupdate() {
+    if [ -f ${1}2${2}.mat ] && [ -f ${2}2${3}.mat ] ; then
+	echo concatenating ${1}2${2}.mat and ${2}2${3}.mat
+	${FSLDIR}/bin/convert_xfm -omat ${1}2${3}.mat -concat ${2}2${3}.mat ${1}2${2}.mat
+    fi
+}
+
+invupdate() {
+    if [ -f ${1}.mat ] ; then
+	a=`echo $1 | awk -F 2 '{print $1}'`
+	b=`echo $1 | awk -F 2 '{print $2}'`
+	echo inverting ${1}.mat
+	${FSLDIR}/bin/convert_xfm -inverse -omat ${b}2${a}.mat ${1}.mat
+    fi
+}
+
+picupdate() {
+    if [ `${FSLDIR}/bin/imtest $1` = 1 ] && [ `${FSLDIR}/bin/imtest $2` = 1 ] && [ -f ${1}2${2}.mat ] ; then
+	out=${1}2${2}
+	echo creating summary picture for ${out}
+	if [ $1 = "example_func" ] && [ $2 = "standard" ] && [ `${FSLDIR}/bin/imtest highres2standard_warp` = 1 ] ; then
+	    ${FSLDIR}/bin/applywarp --ref=$2 --in=$1 --out=$out --warp=highres2standard_warp --premat=${1}2highres.mat
+	elif [ $1 = "highres" ] && [ $2 = "standard" ] && [ `${FSLDIR}/bin/imtest highres2standard_warp` = 1 ] ; then
+	    ${FSLDIR}/bin/applywarp --ref=$2 --in=$1 --out=$out --warp=highres2standard_warp
+	else
+	    ${FSLDIR}/bin/flirt -ref $2 -in $1 -out $out -applyxfm -init ${out}.mat
+	fi
+	${FSLDIR}/bin/slicer $out $2 -s 2 -x 0.35 sla.png -x 0.45 slb.png -x 0.55 slc.png -x 0.65 sld.png -y 0.35 sle.png -y 0.45 slf.png -y 0.55 slg.png -y 0.65 slh.png -z 0.35 sli.png -z 0.45 slj.png -z 0.55 slk.png -z 0.65 sll.png
+	${FSLDIR}/bin/pngappend sla.png + slb.png + slc.png + sld.png + sle.png + slf.png + slg.png + slh.png + sli.png + slj.png + slk.png + sll.png ${out}1.png
+	${FSLDIR}/bin/slicer $2 $out -s 2 -x 0.35 sla.png -x 0.45 slb.png -x 0.55 slc.png -x 0.65 sld.png -y 0.35 sle.png -y 0.45 slf.png -y 0.55 slg.png -y 0.65 slh.png -z 0.35 sli.png -z 0.45 slj.png -z 0.55 slk.png -z 0.65 sll.png
+	${FSLDIR}/bin/pngappend sla.png + slb.png + slc.png + sld.png + sle.png + slf.png + slg.png + slh.png + sli.png + slj.png + slk.png + sll.png ${out}2.png
+	${FSLDIR}/bin/pngappend ${out}1.png - ${out}2.png ${out}.png
+	/bin/rm sl?.png
+    fi
+}
+
+
+dirnm=$1
+
+if [ X${dirnm}X = XX ] ; then
+  usage 
+  exit 1;
+fi
+
+if [ X${dirnm}X = X.X ] ; then
+  dirnm=`pwd`;
+fi
+
+if [ ! -d $dirnm ] ; then
+  usage 
+  echo " "
+  echo "$dirnm is not a valid directory"
+  exit -1
+fi
+
+cd ${dirnm}/reg
+
+if [ -d unwarp ]; then
+    echo " " 
+    echo "Error: updatefeatreg cannot be used when the FEAT data has had B0 unwarping applied"
+    exit -1
+fi
+
+regupdate example_func initial_highres highres
+regupdate example_func highres standard
+
+invupdate example_func2initial_highres
+invupdate initial_highres2highres
+invupdate example_func2highres
+invupdate highres2standard
+invupdate example_func2standard
+
+picupdate example_func initial_highres
+picupdate initial_highres highres
+picupdate example_func highres
+picupdate highres standard
+picupdate example_func standard
+

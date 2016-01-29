@@ -1,0 +1,35 @@
+<html>
+<head>
+<script type="text/javascript">
+ xmlhttp=new XMLHttpRequest();
+
+  xmlhttp.onreadystatechange=function()
+  {
+    var redirecting=0;
+    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+       redirecting=1;
+       window.location.href = "http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FEAT/UserGuide#Featquery_-_FEAT_Results_Interrogation";
+    }
+
+    if (xmlhttp.readyState==4 && xmlhttp.status != 200 && redirecting==0)
+    {
+       window.location.href = "../wiki/FEAT/UserGuide#Featquery_-_FEAT_Results_Interrogation.html";
+    }
+  }
+
+ xmlhttp.open("GET","http://fsl.fmrib.ox.ac.uk/fsldownloads/latest-version.txt?var=" + Math.floor(Math.random() * 1000),true);
+ xmlhttp.send(); 
+
+ setTimeout( function(){window.location.href = "../wiki/FEAT/UserGuide#Featquery_-_FEAT_Results_Interrogation.html"}, 10000 );
+    
+
+
+
+</script>
+
+</head>
+<body>
+<h2> Attempting to connect to online documentation, will revert to offline documentation if unavailable</h2>
+</body>
+</html>

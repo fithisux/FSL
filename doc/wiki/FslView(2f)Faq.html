@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FslView/Faq</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FslView/Faq</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"> <span class="anchor" id="line-4"></span>
+<h1 id="Support_and_Bug-reporting">Support and Bug-reporting</h1>
+<span class="anchor" id="line-5"></span><p class="line862">To report specific FSLView bugs then please either email the FSL email list, or email <tt>&lt;ANTISPAM&nbsp;fslview&nbsp;DASH&nbsp;bugs&nbsp;AT&nbsp;fmrib&nbsp;DOT&nbsp;ox&nbsp;DOT&nbsp;ac&nbsp;DOT&nbsp;uk&gt;</tt>, summarising the nature of the bug in the email subject header. Please also state the version of FSLView that is exhibiting the bug.  <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line867">
+<h1 id="Error_while_building_moc_briconwidget.cxx">Error while building moc_briconwidget.cxx</h1>
+<span class="anchor" id="line-8"></span><p class="line862">This is probably due to a badly installed Qwt plugin. The instructions on how to install the plugin can be found in the <a href="./FslInstallation(2f)SourceCode(2f)FslView.html#Qwt">FslView compilation guide</a>. <span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line862">Following these instructions, the plugin should have been installed into the plugins/designer directory in your Qt installation directory. If you choose to install it elsewhere then the Qt tools: <tt class="backtick">designer</tt>; <tt class="backtick">moc</tt>; <tt class="backtick">uic</tt>, etc., won't be able to find it. To tell Qt tools where to find the plugin use the designer tool's preferences which has a place where you can add custom directories to the <tt class="backtick">Plugin&nbsp;Paths</tt>. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line862">A quick test of the plugin is to run Qt's <tt class="backtick">designer</tt> application. If the plugin is okay you'll see a Qwt pane in the tools on the left-hand side which will be filled with the Qwt widgets. <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line867">
+<h1 id="When_I_try_to_run_FSLView_I_get_an_error_about_libexpat">When I try to run FSLView I get an error about libexpat</h1>
+<span class="anchor" id="line-15"></span><p class="line874">Some Linux OSes (for example SuSE) may give the error: <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><pre><span class="anchor" id="line-1"></span>/usr/local/fsl/bin/fslview_bin: error while loading shared libraries: libexpat.so.0: cannot open shared object file: No such file or directory</pre><span class="anchor" id="line-19"></span><p class="line862">when launching FSLView. To fix this issue you need to use the Linux package manager (YaST on SuSE) to install the package <tt class="backtick">libexpat0</tt> (or <tt class="backtick">compat-libexpat1</tt> if you can't find this package). <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line867">
+<h1 id="When_I_try_to_run_FSLView_I_get_an_error_about_GLIBCXX_3.4.4">When I try to run FSLView I get an error about GLIBCXX_3.4.4</h1>
+<span class="anchor" id="line-22"></span><p class="line874">If you see an error like: <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><pre><span class="anchor" id="line-1-1"></span>/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.4' not found (required by...</pre><span class="anchor" id="line-26"></span><p class="line862">then you have too modern a version of libstdc++. Most Linux distributions include a <tt class="backtick">compat</tt> version which includes this older library. On Cent OS platforms run the command (as root or sudo) <span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><span class="anchor" id="line-1-1"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-4d605c4e91a11b6d819b713cb6db66936ecfa3c8" lang="en"><span class="line"><span class="anchor" id="line-1-2"></span>yum install compat-libstdc++-33.</span>
+</pre></div></div><span class="anchor" id="line-30"></span><p class="line867">
+<h2 id="When_running_I_get_an_error_about_missing_libGL_version_info">When running I get an error about missing libGL version info</h2>
+<span class="anchor" id="line-31"></span><p class="line874">If you see an error like: <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><pre><span class="anchor" id="line-1-2"></span>.../fslview: /usr/X11R6/lib/libGL.so.1: no version information available (required by .../libvtkRendering.so.5.0)</pre><span class="anchor" id="line-35"></span><p class="line874">You can safely ignore this message. <span class="anchor" id="line-36"></span><hr /><p class="line874"> <span class="anchor" id="line-37"></span><a href="./CategoryFaq.html">CategoryFaq</a> <span class="anchor" id="line-38"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

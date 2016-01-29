@@ -1,0 +1,297 @@
+#!/bin/sh
+
+#   POSSUM
+#
+#   Ivana Drobnjak & Mark Jenkinson, FMRIB Analysis Group
+#
+#   Copyright (C) 2005-2007 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+Usage() {
+    echo ""
+    echo "Usage: possumX <subject directory> [options]"
+    echo ""
+    echo "Subject directory needs to contain:"
+    echo "1.  brain"
+    echo "2.  MRpar" 
+    echo "3.  motion "
+    echo "4.  slcprof"
+    echo "5.  pulse, pulse.info, pulse.readme, pulse.posx, pulse.posy, pulse.posz"
+    echo "optional"
+    echo "6.  T2"
+    echo "7.  T2timecourse"
+    echo "8.  b0z_dz and (in case of motion) b0x_dx, b0x_dy, ... b0z_dy"
+    echo "9.  b0extra"
+    echo "10. b0timecourse"
+    echo ""
+    echo "In case there is a cluster enviroment (e.g. SGE):"
+    echo "-n (number of processors, default 1)"   
+    echo "-t (estimated running time per processor (minutes), default 2000)"
+    echo "-s (marix segment size [default 10000], purely for memory efficiency)"
+    echo "-a (architecture [e.g., darwin or lx24-amd64])"
+# tejas-add 05.11.12
+    echo "-v verbose"
+    echo "-j (place hold for till this job finishes)"
+# tejas-end
+    exit 1
+}
+
+nargs=$#
+if [ $nargs -eq 0 ] ; then
+  Usage
+fi
+# For all the users POSSUMDIR will be empty and therefore automatically become FSLDIR
+# For me POSSUMDIR is my FSLDEVDIR directory. This allows me to run POSSUM on the cluster 
+# without having to make it stable and wait for a day or find way to run my binaries. 
+# It just seemed the easiest way to get around this. It is in all POSSUM scripts so please
+# leave it that way if possible.
+
+# tejas-edit 05.11.12
+# echo "POSSUMDIR (before)" $POSSUMDIR
+if [ x${POSSUMDIR} = x ] ; then
+   export POSSUMDIR=$FSLDIR
+fi
+# echo "POSSUMDIR (after)" $POSSUMDIR
+
+# tejas-end
+
+make_absolute(){
+    dir=$1;
+    if [ -d ${dir} ]; then
+	OLDWD=`pwd`
+	cd ${dir}
+	dir_all=`pwd`
+	cd $OLDWD
+    else
+	dir_all=${dir}
+    fi
+    echo ${dir_all}
+}
+
+run(){
+ echo "$1" >> $2/possum.com
+ echo "$1" >> $2/possum.log
+ date >> $2/possum.log
+ $1 >> $2/possum.log 2>&1
+ date >> $2/possum.log
+}
+
+subjdir=`make_absolute $1`
+# tejas-edit 05.11.12
+subjdir=`echo $subjdir | sed 's/\/$/$/g'` 1>/dev/null
+# tejas-end
+echo subjectdir is $subjdir
+
+nproc=1
+ntime=2000
+segs=1000
+#tejas:added option "-j" to hold jobs; secret option userf: -r
+while [ ! -z "$2" ]
+do
+  case "$2" in
+      -n) nproc=$3;shift;;
+      -t) ntime=$3;shift;;
+      -s) segs=$3;shift;;
+      -a) arch="-a $3";shift;;
+      -v) ver="-v";shift;;
+      -j) holdjb="$3";shift;;
+      -r) dontuserf="dontdoit";shift;;
+      *) break;;
+  esac
+  shift
+done
+
+#check that all required files exist
+
+if [ ! -d $subjdir ]; then
+	echo "subject directory $1 not found"
+fi
+
+if [ ! -e ${subjdir}/motion ]; then
+	echo "${subjdir}/motion not found"
+fi
+
+if [ ! -e ${subjdir}/MRpar ]; then
+	echo "${subjdir}/MRpar not found"
+fi
+
+if [ ! -e ${subjdir}/slcprof ]; then
+	echo "${subjdir}/slcprof not found"
+fi
+
+if [ ! -e ${subjdir}/pulse ]; then
+	echo "${subjdir}/pulse not found"
+fi
+
+if [ ! -e ${subjdir}/pulse.info ]; then
+	echo "${subjdir}/pulse.info not found"
+fi
+
+if [ `${FSLDIR}/bin/imtest ${subjdir}/brain` -eq 0 ]; then
+  if [  `${FSLDIR}/bin/imtest ${subjdir}/object` -eq 0 ]; then
+	echo "could not find ${subjdir}/brain or ${subjdir}/object"
+	exit 1
+  else
+        command="-i ${subjdir}/object"
+  fi
+else
+  command="-i ${subjdir}/brain"
+fi
+
+command="$command -x ${subjdir}/MRpar -f ${subjdir}/slcprof -p ${subjdir}/pulse -m ${subjdir}/motion $ver "
+
+if [ `${FSLDIR}/bin/imtest ${subjdir}/RFtrans` -eq 1 ]; then
+	command="$command -s ${subjdir}/RFtrans"
+fi
+
+if [ `${FSLDIR}/bin/imtest ${subjdir}/RFrec` -eq 1 ]; then
+	command="$command -r ${subjdir}/RFrec"
+fi
+
+if [ `${FSLDIR}/bin/imtest ${subjdir}/T2` -eq 1 ]; then
+	command="$command -a ${subjdir}/T2 -t ${subjdir}/T2timecourse"
+        if [ ! -e ${subjdir}/T2timecourse ]; then
+	   echo "${subjdir}/T2timecourse not found"
+        fi
+fi
+
+if [ `${FSLDIR}/bin/imtest ${subjdir}/T2_4D` -eq 1 ]; then
+	command="$command -q ${subjdir}/T2_4D -u ${subjdir}/T2_4Dtimecourse"
+        if [ ! -e ${subjdir}/T2_4Dtimecourse ]; then
+	   echo "${subjdir}/T2_4Dtimecourse not found"
+        fi
+fi
+
+if [ `${FSLDIR}/bin/imtest ${subjdir}/b0z_dz` -eq 1 ]; then
+	command="$command -b ${subjdir}/b0"
+fi
+
+if [ `${FSLDIR}/bin/imtest ${subjdir}/b0extra` -eq 1 ]; then
+	command="$command --b0extra=${subjdir}/b0extra --b0time=${subjdir}/b0timecourse -l 4"
+	if [ ! -e ${subjdir}/b0timecourse ]; then
+	   echo "${subjdir}/b0timecourse not found"
+        fi
+fi
+
+if [ -e ${subjdir}/nospeedup ]; then
+        command="$command --nospeedup"
+fi
+
+if [ -e ${subjdir}/kcoord.on ]; then
+        command="$command -k"
+fi
+
+if [ ! -e ${subjdir}/noise ]; then
+        echo "sigma" 0 > ${subjdir}/noise
+fi
+    
+echo Making possum directory structure
+mkdir -p ${subjdir}/diff_proc
+mkdir -p ${subjdir}/logs
+mkdir -p ${subjdir}/logs/pid_${$}
+mailto=`whoami`@fmrib.ox.ac.uk
+
+echo Preprocessing stage
+echo "${POSSUMDIR}/bin/possum_matrix -p ${subjdir}/pulse -m ${subjdir}/motion --seg=$segs -o ${subjdir}/matrix"
+# tejas-edit 05.11.12
+${POSSUMDIR}/bin/possum_matrix -p ${subjdir}/pulse -m ${subjdir}/motion --seg=$segs -o ${subjdir}/matrix >> ${subjdir}/possum_matrix.log 2>${subjdir}/possum_matrix.err
+# tejas-end
+
+echo Processing stage 
+date
+command="$command --nproc=${nproc}"
+[ -f ${subjdir}/possum.com ] && rm ${subjdir}/possum.com
+procnum=0
+if [ ! -z $dontuserf ]; then dontuserf="--rfavg";fi
+while [ $procnum -lt $nproc ]
+do
+    echo "${POSSUMDIR}/bin/possum $command -e ${subjdir}/matrix --procid=${procnum} -o ${subjdir}/diff_proc/signal_proc_${procnum} $dontuserf" >> ${subjdir}/possum.com
+    procnum=$(($procnum + 1))
+done
+
+#tejas-add
+if [ ! -z $holdjb ]; then hold="-j $holdjb "; fi
+
+echo "${FSLDIR}/bin/fsl_sub -T $ntime -l ${subjdir}/logs $arch -M $mailto -N possum -t ${subjdir}/possum.com"
+unset LD_LIBRARY_PATH DYLD_LIBRARY_PATH DYLD_FALLBACK_LIBRARY_PATH
+possumid=`${FSLDIR}/bin/fsl_sub -T $ntime ${hold}-l ${subjdir}/logs $arch -M $mailto -N possum -t ${subjdir}/possum.com` 
+#tejas-end
+
+
+echo Post processing stage
+date
+
+echo "${FSLDIR}/bin/fsl_sub -T 10 -j $possumid -F -l ${subjdir}/logs $arch ${POSSUMDIR}/bin/possumX_postproc.sh $subjdir $nproc"
+
+mergeid=`${FSLDIR}/bin/fsl_sub -T 10 -j $possumid -F -l ${subjdir}/logs $arch ${POSSUMDIR}/bin/possumX_postproc.sh $subjdir $nproc`
+
+## Tejas-edit 05.11.12 : CHANGE THIS!
+echo "possumX-possumID $possumid"
+echo "possumX-mergeID $mergeid"
+## Tejas-end
+
+echo Done
+date
+exit 0

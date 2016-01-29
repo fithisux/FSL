@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FslInstallation/ShellSetup</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FslInstallation/ShellSetup</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FslInstallation.html">Introduction</a></li><li><a href="./FslInstallation(2f)MacOsX.html">Mac Os X</a></li><li><a href="./FslInstallation(2f)Linux.html">Linux</a></li><li><a href="./FslInstallation(2f)Windows.html">Windows</a></li><li><a href="./FslInstallation(2f)SourceCode.html">Source Code</a></li><li>Shell Setup<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Configuring_your_shell">Configuring your shell</a><ol><li>
+<a href="#BASH.2BAC8-sh.2BAC8-ksh">BASH/sh/ksh</a></li><li>
+<a href="#csh.2BAC8-tcsh">csh/tcsh</a></li></ol></li><li>
+<a href="#Mac_OS_X_10.4_and_X11_setup">Mac OS X 10.4 and X11 setup</a></li><li>
+<a href="#System-wide_setup">System-wide setup</a></li><li>
+<a href="#Localisation_problems">Localisation problems</a></li></ol></div></div></li><li><a href="./FslInstallation(2f)Faq.html">FAQ</a></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="Configuring_your_shell">Configuring your shell</h1>
+<span class="anchor" id="line-4"></span><p class="line862">If you have used the FSL installer your shell will have already been setup for running the FSL tools. However, there are situations where you may need to carry out this configuration by hand, for example when installing FSL on a multi-user computer. How you do this will depend on what shell you are using (see <a href="./WhatShellAmIRunning.html">what shell am I using?</a>). <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867">
+<h2 id="BASH.2BAC8-sh.2BAC8-ksh">BASH/sh/ksh</h2>
+<span class="anchor" id="line-7"></span><p class="line862">User shell setup is stored in a file called .bash_profile (BASH) or .profile (SH, KSH and sometimes BASH) in your home folder (eg <tt class="backtick">~/.bash_profile</tt>), you need to <a href="./TextEditors.html">edit (or create)</a> this file to add the following lines: <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line867"><span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><span class="anchor" id="line-1-1"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-db2e6d2dc0a657ea19feeb5d9eeaaede8e8a0183" lang="en"><span class="line"><span class="anchor" id="line-1-2"></span><span class="ID">FSLDIR</span>=/usr/local/fsl</span>
+<span class="line"><span class="anchor" id="line-2-1"></span>. <span class="ResWord">${</span><span class="ID">FSLDIR</span><span class="ResWord">}</span>/etc/fslconf/fsl.sh</span>
+<span class="line"><span class="anchor" id="line-3-1"></span><span class="ID">PATH</span>=<span class="ResWord">${</span><span class="ID">FSLDIR</span><span class="ResWord">}</span>/bin:<span class="ResWord">${</span><span class="ID">PATH</span><span class="ResWord">}</span></span>
+<span class="line"><span class="anchor" id="line-4-1"></span><span class="ResWord">export </span>FSLDIR PATH</span>
+</pre></div></div><span class="anchor" id="line-15"></span><p class="line862">changing <tt class="backtick">/usr/local/fsl</tt> to the directory path you installed FSL to. <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line867">
+<h2 id="csh.2BAC8-tcsh">csh/tcsh</h2>
+<span class="anchor" id="line-18"></span><p class="line862">User shell setup is stored in a file called .cshrc (csh and tcsh) or .tcsh (tcsh only) in your home folder (eg <tt class="backtick">~/.cshrc</tt>), you need to <a href="./TextEditors.html">edit (or create)</a> this file to add the following lines: <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line867"><span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><span class="anchor" id="line-1-3"></span><div class="highlight tcsh"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-489fe9857a7c3a998a0db9ea9b3b68c0295e58a3" lang="en"><span class="line"><span class="anchor" id="line-1-4"></span><span class="ResWord">setenv </span>FSLDIR /usr/local/fsl</span>
+<span class="line"><span class="anchor" id="line-2-2"></span><span class="ResWord">source</span> <span class="ResWord">${</span><span class="ID">FSLDIR</span><span class="ResWord">}</span>/etc/fslconf/fsl.csh</span>
+<span class="line"><span class="anchor" id="line-3-2"></span><span class="ResWord">setenv </span>PATH <span class="ResWord">${</span><span class="ID">FSLDIR</span><span class="ResWord">}</span>/bin:<span class="ResWord">${</span><span class="ID">PATH</span><span class="ResWord">}</span></span>
+</pre></div></div><span class="anchor" id="line-25"></span><p class="line862">changing <tt class="backtick">/usr/local/fsl</tt> to the directory path you installed FSL to. <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line867">
+<h1 id="Mac_OS_X_10.4_and_X11_setup">Mac OS X 10.4 and X11 setup</h1>
+<span class="anchor" id="line-28"></span><p class="line862">By default Mac OS X 10.4's Terminal application cannot run X11 applications. To fix this, add the following to your <tt class="backtick">.bash_profile</tt> or <tt class="backtick">.cshrc</tt> files: <span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><ul><li><p class="line891"><tt class="backtick">.bash_profile</tt> <span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><span class="anchor" id="line-1-5"></span><div class="highlight bash"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-70248fe870d68f1c9a36a731c155fe596b33dcb3" lang="en"><span class="line"><span class="anchor" id="line-1-6"></span><span class="ResWord">if</span> [ -z <span class="String">"$DISPLAY"</span> -a <span class="String">"X$TERM_PROGRAM"</span> = <span class="String">"XApple_Terminal"</span> ]; <span class="ResWord">then</span></span>
+<span class="line"><span class="anchor" id="line-2-3"></span><span class="ResWord">  </span><span class="ID">X11_FOLDER</span>=/tmp/.X11-unix</span>
+<span class="line"><span class="anchor" id="line-3-3"></span>  <span class="ID">currentUser</span>=<span class="String">`</span>id -u<span class="String">`</span></span>
+<span class="line"><span class="anchor" id="line-4-2"></span>  <span class="ID">userX11folder</span>=<span class="String">`</span>find <span class="ID">$X11_FOLDER</span> -name <span class="String">'X*'</span> -user <span class="ID">$currentUser</span> -print 2&gt;&amp;1 | tail -n 1<span class="String">`</span></span>
+<span class="line"><span class="anchor" id="line-5-1"></span>  <span class="ResWord">if</span> [ -n <span class="String">"$userX11folder"</span> ]; <span class="ResWord">then</span></span>
+<span class="line"><span class="anchor" id="line-6-1"></span><span class="ResWord">    </span><span class="ID">displaynumber</span>=<span class="String">`</span>basename <span class="ResWord">${</span><span class="ID">userX11folder</span><span class="ResWord">}</span> | grep -o <span class="String">'[[:digit:]]\+'</span><span class="String">`</span></span>
+<span class="line"><span class="anchor" id="line-7-1"></span>    <span class="ResWord">if</span> [ -n <span class="String">"$displaynumber"</span> ]; <span class="ResWord">then</span></span>
+<span class="line"><span class="anchor" id="line-8-1"></span><span class="ResWord">      </span><span class="ID">DISPLAY</span>=localhost:<span class="ResWord">${</span><span class="ID">displaynumber</span><span class="ResWord">}</span></span>
+<span class="line"><span class="anchor" id="line-9-1"></span>      <span class="ResWord">export </span>DISPLAY</span>
+<span class="line"><span class="anchor" id="line-10-1"></span>    <span class="ResWord">else</span></span>
+<span class="line"><span class="anchor" id="line-11-1"></span><span class="ResWord">      </span><span class="ResWord">echo</span> <span class="String">"Warning: DISPLAY not configured as X11 is not running"</span></span>
+<span class="line"><span class="anchor" id="line-12-1"></span>    <span class="ResWord">fi</span></span>
+<span class="line"><span class="anchor" id="line-13-1"></span><span class="ResWord">  </span><span class="ResWord">else</span></span>
+<span class="line"><span class="anchor" id="line-14-1"></span><span class="ResWord">    </span><span class="ResWord">echo</span> <span class="String">"Warning: DISPLAY not configured as X11 is not running"</span></span>
+<span class="line"><span class="anchor" id="line-15-1"></span>  <span class="ResWord">fi</span></span>
+<span class="line"><span class="anchor" id="line-16-1"></span><span class="ResWord"></span><span class="ResWord">fi</span></span>
+</pre></div></div><span class="anchor" id="line-49"></span><p class="line862">changing <tt class="backtick">/usr/local/fsl</tt> to the directory path you installed FSL to. <span class="anchor" id="line-50"></span></li><li><p class="line891"><tt class="backtick">.cshrc</tt> <span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span><span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span><span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><span class="anchor" id="line-61"></span><span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><span class="anchor" id="line-66"></span><span class="anchor" id="line-1-7"></span><div class="highlight tcsh"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-173ddc633265e519b3a6e401070db346de11cb08" lang="en"><span class="line"><span class="anchor" id="line-1-8"></span><span class="ResWord">if</span> ( <span class="ID">$?</span>TERM_PROGRAM ) <span class="ResWord">then</span></span>
+<span class="line"><span class="anchor" id="line-2-4"></span><span class="ResWord">  </span><span class="ResWord">if</span> ( <span class="String">"X$TERM_PROGRAM"</span> == <span class="String">"XApple_Terminal"</span> ) <span class="ResWord">then</span>; <span class="ResWord">if</span> ( ! <span class="ID">$?</span>DISPLAY ) <span class="ResWord">then</span></span>
+<span class="line"><span class="anchor" id="line-3-4"></span><span class="ResWord">    </span><span class="ResWord">set </span><span class="ID">X11_FOLDER</span>=/tmp/.X11-unix; <span class="ResWord">set </span><span class="ID">currentUser</span>=<span class="String">`</span>id -u<span class="String">`</span>; <span class="ResWord">set </span><span class="ID">userX11folder</span>=<span class="String">`</span>find <span class="ID">$X11_FOLDER</span> -name <span class="String">'X*'</span> -user <span class="ID">$currentUser</span> -print | tail -n 1<span class="String">`</span></span>
+<span class="line"><span class="anchor" id="line-4-3"></span>    <span class="ResWord">if</span> ( <span class="String">"X$userX11folder"</span> != <span class="String">"X"</span> ) <span class="ResWord">then</span></span>
+<span class="line"><span class="anchor" id="line-5-2"></span><span class="ResWord">      </span><span class="ResWord">set </span><span class="ID">displaynumber</span>=<span class="String">`</span>basename <span class="ResWord">${</span><span class="ID">userX11folder</span><span class="ResWord">}</span> | grep -o <span class="String">'[[:digit:]]\+'</span><span class="String">`</span></span>
+<span class="line"><span class="anchor" id="line-6-2"></span>      <span class="ResWord">if</span> ( <span class="String">"X$displaynumber"</span> != <span class="String">"X"</span> ) <span class="ResWord">then</span></span>
+<span class="line"><span class="anchor" id="line-7-2"></span><span class="ResWord">        </span><span class="ResWord">setenv </span>DISPLAY localhost:<span class="ResWord">${</span><span class="ID">displaynumber</span><span class="ResWord">}</span></span>
+<span class="line"><span class="anchor" id="line-8-2"></span>      <span class="ResWord">else</span>; <span class="ResWord">echo</span> <span class="String">"Warning: DISPLAY not configured as X11 is not running"</span></span>
+<span class="line"><span class="anchor" id="line-9-2"></span>      <span class="ResWord">endif</span></span>
+<span class="line"><span class="anchor" id="line-10-2"></span><span class="ResWord">    </span><span class="ResWord">else</span></span>
+<span class="line"><span class="anchor" id="line-11-2"></span><span class="ResWord">      </span><span class="ResWord">echo</span> <span class="String">"Warning: DISPLAY not configured as X11 is not running"</span></span>
+<span class="line"><span class="anchor" id="line-12-2"></span>    <span class="ResWord">endif</span></span>
+<span class="line"><span class="anchor" id="line-13-2"></span><span class="ResWord">  </span><span class="ResWord">endif</span></span>
+<span class="line"><span class="anchor" id="line-14-2"></span><span class="ResWord"></span><span class="ResWord">endif</span></span>
+</pre></div></div><span class="anchor" id="line-67"></span><p class="line862">changing <tt class="backtick">/usr/local/fsl</tt> to the directory path you installed FSL to. <span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span></li></ul><p class="line867">
+<h1 id="System-wide_setup">System-wide setup</h1>
+<span class="anchor" id="line-70"></span><p class="line874">You have several options for automatically setting up FSL for all users on the computer, all beyond the scope of this document, but here are some suggestions on how you might go about this. <span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span><ol type="1"><li><p class="line862">Change the template used for new user accounts (look in <tt class="backtick">/etc/skel</tt> on Linux or <tt class="backtick">/System/Library/User&nbsp;Template/English.lproj/</tt> on Mac OS X). New users will then get a suitably modified settings file. <span class="anchor" id="line-73"></span></li><li>Store the settings in an NFS shared folder. You could ensure that the default settings file looks for and sources a settings file on an NFS server. This is useful for a compute cluster as you only have to edit one file to have it change everywhere. <span class="anchor" id="line-74"></span></li><li><p class="line862">Modify the system-wide .profile or .cscrc file. On Mac OS X the files <tt class="backtick">/etc/profile</tt> and <tt class="backtick">/etc/csh.cshrc</tt> control this for all users, on Linux you can create files <tt class="backtick">fsl.sh</tt> and <tt class="backtick">fsl.csh</tt> in <tt class="backtick">/etc/profile.d</tt> containing the settings. If you are using the fsl_installer.sh script then you can carry out this configuration by running the script with the <tt class="backtick">-E</tt> option (Linux only). <span class="anchor" id="line-75"></span><span class="anchor" id="line-76"></span></li></ol><p class="line867"><span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span><span class="anchor" id="line-80"></span><div class="caution"><span class="anchor" id="line-1-9"></span><p class="line867"><strong>Take Care</strong> <span class="anchor" id="line-2-5"></span><span class="anchor" id="line-3-5"></span><p class="line874">Be careful what you put in these files as you could stop people logging in! </div><span class="anchor" id="line-81"></span><p class="line867">
+<h1 id="Localisation_problems">Localisation problems</h1>
+<span class="anchor" id="line-82"></span><p class="line874">FSL programs generally require a period to be used as the decimal separator ( e.g. 10.4 0.235 etc ). If your environment is configured to use a different character such as a comma then this may cause problems. Two potential fixes are to change the LC_NUMERIC variable value by: (i) typing the following lines into a terminal locally each time you want to run FSL, or (ii) globally modifying all terminals by adding the following lines to the .bash_profile ( or equivalent ): <span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span><p class="line867"><span class="anchor" id="line-85"></span><span class="anchor" id="line-86"></span><span class="anchor" id="line-87"></span><pre><span class="anchor" id="line-1"></span>LC_NUMERIC=en_GB.UTF-8
+<span class="anchor" id="line-2"></span>export LC_NUMERIC</pre><span class="anchor" id="line-88"></span><p class="line867"><span class="anchor" id="line-89"></span><span class="anchor" id="line-90"></span><span class="anchor" id="line-91"></span><span class="anchor" id="line-92"></span><div class="caution"><span class="anchor" id="line-1-10"></span><p class="line867"><strong>Take Care</strong> <span class="anchor" id="line-2-6"></span><span class="anchor" id="line-3-6"></span><p class="line874">Modifying your locale globally (e.g. in .bash_profile) may result in issues with other scripts on your system - change with care! </div><span class="anchor" id="line-93"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

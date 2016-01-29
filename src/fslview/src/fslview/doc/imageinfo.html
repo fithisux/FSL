@@ -1,0 +1,95 @@
+<link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+<h3>Image Info</h3>
+
+<p>To view information about an image, select the image in the <a
+href="imagelist.html">Image List</a> and press the <i >Image
+Info</i>) button <img alt="picture" src="info.png">.
+
+<IMG ALIGN=RIGHT hspace=20 vspace=20 SRC="imageinfodialog.png">
+
+
+<p><table border="1" cellpadding="10">
+
+<tr>
+<td>Name:
+<td>Name of the image; can be edited (e.g. to disambiguate two image
+of the same name)
+</tr>
+
+<tr>
+<td>Filename:
+<td>Original filename of image
+</tr>
+
+<tr>
+<td>Voxels:
+<td>3D image matrix size (number of voxels in X, Y & Z)
+</tr>
+
+<tr>
+<td>Dimensions:
+<td>Dimensions (size) of a single voxel (mm)
+</tr>
+
+<tr>
+<td>Volumes:
+<td>Size of the image in the 4th dimension (e.g. time)
+</tr>
+
+<tr>
+<td>Data type:
+<td>Data type the voxel intensity is represented in (floating point,
+integer etc.)
+</tr>
+
+<tr>
+<td>Image type:
+<td>Type of image (e.g. z-statistic) - not many images have this flag
+set yet
+</tr>
+
+<tr>
+<td>Lookup table options
+<td>Controls the greyscale or colour-scale lookup table used. Press
+the file selector for a LUT file not already on the menus. If the
+second LUT is activated (by turning on the checkbox), this is used for
+negative values, and the first LUT is used for positive values. In
+this case the bricon controls are set wrt the first LUT and should
+therefore be positive values (the same range, but negative, is then
+used for the second LUT).
+</tr>
+
+<tr>
+<td>DTI display options
+<td>Selects <a href="dti.html">DTI image display mode</a>. Can be RGB or Lines.
+</tr>
+
+</table>
+
+<!-- <p>FSLView is able deal with LUTs of more than one type. If a LUT file -->
+<!-- has a .lut extension the loaded lut colours will be allocated to -->
+<!-- values between the minimum and maximum voxel intensity. If a LUT file -->
+<!-- has a .rgb extension the loaded lut colours will be allocated to -->
+<!-- absolute voxel values. Using .rgb types of LUTs allows anatomical -->
+<!-- features to be displayed in predefined colours. -->
+          
+<!--           <p> -->
+<!--             Examples of LUT files for users to download and edit:- -->
+          
+<!--           <p> -->
+<!--             The three numbers in the .lut file refer to red, green and blue intensities  -->
+<!--             where 0.0 is the minimum intensity and 1.0 is the maximum intensity. -->
+          
+<!--           <p> -->
+<!--             <a href="lut_linear.lut">lut_linear.lut</a> -->
+          
+<!--           <p> -->
+<!--             The first number in the .rgb file is the intensity the colour is paired with. -->
+<!--             Then there is a string for describing the feature, eg Hippocampus. -->
+<!--             There then follow three numbers expressing the RGB colour intensities where -->
+<!--             0 is the minimum and 255 is the maximum. The fourth number is not used in -->
+<!--             Fslview, it can just be set to zero. -->
+          
+<!--           <p> -->
+<!--             <a href="lut_absolute.rgb">lut_absolute.rgb</a> -->
+          

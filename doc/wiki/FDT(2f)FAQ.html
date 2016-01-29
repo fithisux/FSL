@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FDT/FAQ</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FDT/FAQ</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FDT.html">Introduction</a></li><li><a href="./FDT(2f)UserGuide.html">User Guide</a></li><li>FAQ<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#How_many_diffusion_encoding_directions_do_I_need_for_FDT_tractography.3F">How many diffusion encoding directions do I need for FDT tractography?</a></li><li>
+<a href="#What_resolution_do_I_need_for_tractography.3F">What resolution do I need for tractography?</a></li><li>
+<a href="#Do_I_need_isotropic_voxel_resolution_for_tractography.3F">Do I need isotropic voxel resolution for tractography?</a></li><li>
+<a href="#How_many_reference_.28b.3D0.29_scans_should_I_take.3F">How many reference (b=0) scans should I take?</a></li><li>
+<a href="#What_do_I_need_before_I_can_run_dtifit_or_bedpostx.3F">What do I need before I can run dtifit or bedpostx?</a></li><li>
+<a href="#How_do_I_know_the_gradient_information.3F">How do I know the gradient information?</a></li><li>
+<a href="#Do_I_have_to_put_an_entry_in_my_gradient_files_even_for_the_reference_.28b.3D0.29_scans.3F">Do I have to put an entry in my gradient files even for the reference (b=0) scans?</a></li><li>
+<a href="#If_something.27s_worth_saying.2C_should_I_say_it_three_times.3F">If something's worth saying, should I say it three times?</a></li><li>
+<a href="#Do_I_need_to_normalise_my_bvecs.3F">Do I need to normalise my bvecs?</a></li><li>
+<a href="#Before_I_run_dtifit.2C_qboot_or_bedpostx.2C_I_need_a_brain_mask_-_where_do_I_get_that_from.3F">Before I run dtifit, qboot or bedpostx, I need a brain mask - where do I get that from?</a></li><li>
+<a href="#dtifit_runs.2C_but_my_outputs_are_all_zero_-_what_is_wrong.3F">dtifit runs, but my outputs are all zero - what is wrong?</a></li><li>
+<a href="#dtifit_crashes_-_what_is_happening.3F">dtifit crashes - what is happening?</a></li><li>
+<a href="#Bedpostx_is_taking_ages_and_ages_and_ages_and_ages_to_finish.2C_and_I_can.27t_write_may_paper_because_my_computer_has_seized_up._Is_this_normal.3F">Bedpostx is taking ages and ages and ages and ages to finish, and I can't write may paper because my computer has seized up. Is this normal?</a></li><li>
+<a href="#Can_I_parallelise_bedpostx.3F">Can I parallelise bedpostx?</a></li><li>
+<a href="#When_I.27ve_got_my_bedposted_directory.2C_how_long_will_tractography_take.3F">When I've got my bedposted directory, how long will tractography take?</a></li><li>
+<a href="#How_should_I_threshold_the_path_distribution_estimates_from_ProbTrackx.3F">How should I threshold the path distribution estimates from ProbTrackx?</a></li></ol></div></div></li></ol></div> <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867">
+<h1 id="How_many_diffusion_encoding_directions_do_I_need_for_FDT_tractography.3F">How many diffusion encoding directions do I need for FDT tractography?</h1>
+<span class="anchor" id="line-4"></span><p class="line874">We would not recommend using fewer than 25 directions. <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867">
+<h1 id="What_resolution_do_I_need_for_tractography.3F">What resolution do I need for tractography?</h1>
+<span class="anchor" id="line-7"></span><p class="line874">It depends on what structures you're interested in, but everything we have published so far works well on data which is 2.5x2.5x2.5 mm^3 or better for the adult human brain. Imaging infants or non-human species would ideally require higher resolution. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line867">
+<h1 id="Do_I_need_isotropic_voxel_resolution_for_tractography.3F">Do I need isotropic voxel resolution for tractography?</h1>
+<span class="anchor" id="line-10"></span><p class="line874">It is not strictly necessary to have isotropic voxels, however we do strongly recommend it. If you do have anisotropic voxels, though, do not resample the data to make the voxels isotropic. Just use the data as it is. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line867">
+<h1 id="How_many_reference_.28b.3D0.29_scans_should_I_take.3F">How many reference (b=0) scans should I take?</h1>
+<span class="anchor" id="line-13"></span><p class="line874">It depends on what b-factor you use, but for middle of the range b-factors (b=1000) you should take something like 1 b=0 image for every 8 or 9 diffusion-weighted image. (see Jones et al. 1999) <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line867">
+<h1 id="What_do_I_need_before_I_can_run_dtifit_or_bedpostx.3F">What do I need before I can run dtifit or bedpostx?</h1>
+<span class="anchor" id="line-16"></span><p class="line874">You need raw diffusion-weighted data in a 4D volume (the 4th dimension indexes gradient dimensions). You also need to know the orientation of the diffusion-encoding gradient and the b-value applied during each diffusion weighted volume. Lastly, you need a binary mask of brain/non-brain. <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line867">
+<h1 id="How_do_I_know_the_gradient_information.3F">How do I know the gradient information?</h1>
+<span class="anchor" id="line-19"></span><p class="line862">Most modern scanners will output gradient information. If yours does not, you should ask your local physics team. NB, gradient information should be stored in bvecs and bvals files as described in the <a href="./FDT.html">FDT documentation</a>. NB2 - every volume in data requires an element in both bvals and bvecs. <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line867">
+<h1 id="Do_I_have_to_put_an_entry_in_my_gradient_files_even_for_the_reference_.28b.3D0.29_scans.3F">Do I have to put an entry in my gradient files even for the reference (b=0) scans?</h1>
+<span class="anchor" id="line-22"></span><p class="line862">Yes - you can put any direction in the <tt class="backtick">bvecs</tt> file, and you must put a zero in the correct location in the <tt class="backtick">bvals</tt> file. <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line867">
+<h1 id="If_something.27s_worth_saying.2C_should_I_say_it_three_times.3F">If something's worth saying, should I say it three times?</h1>
+<span class="anchor" id="line-25"></span><p class="line862">Yes - every volume in data requires an element in <tt class="backtick">bvecs</tt> and <tt class="backtick">bvals</tt>. If your input directory is in FDT standard form you can do a quick check for the correct dimensions of all your files using <tt class="backtick">bedpostx_datacheck</tt>. <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line867">
+<h1 id="Do_I_need_to_normalise_my_bvecs.3F">Do I need to normalise my bvecs?</h1>
+<span class="anchor" id="line-28"></span><p class="line862">No. All <a href="./FDT.html">FDT</a> programs that use bvecs (i.e. dtifit, bedpostx and qboot) will normalise the bvecs before fitting the models. <span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><p class="line867">
+<h1 id="Before_I_run_dtifit.2C_qboot_or_bedpostx.2C_I_need_a_brain_mask_-_where_do_I_get_that_from.3F">Before I run dtifit, qboot or bedpostx, I need a brain mask - where do I get that from?</h1>
+<span class="anchor" id="line-31"></span><p class="line862">The brain mask needs to be in the same space as the diffusion data. We tend to run <a href="./BET.html">BET</a> on one of our reference (b=0) scans. <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line867">
+<h1 id="dtifit_runs.2C_but_my_outputs_are_all_zero_-_what_is_wrong.3F">dtifit runs, but my outputs are all zero - what is wrong?</h1>
+<span class="anchor" id="line-34"></span><p class="line874">In most cases this is because your bvecs and bvals do not have carriage returns at the end. Make sure these files end in a new line, and rerun. <span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><p class="line867">
+<h1 id="dtifit_crashes_-_what_is_happening.3F">dtifit crashes - what is happening?</h1>
+<span class="anchor" id="line-37"></span><p class="line874">In most cases, dtifit is crashing because your bvectors or bvalues are stored wrong, or don't match your data. If you have run dtifit from a standard directory, you check the basics with <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line867"><tt class="backtick">bedpostx_datacheck&nbsp;&lt;dirname&gt;</tt> <span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><p class="line867">
+<h1 id="Bedpostx_is_taking_ages_and_ages_and_ages_and_ages_to_finish.2C_and_I_can.27t_write_may_paper_because_my_computer_has_seized_up._Is_this_normal.3F">Bedpostx is taking ages and ages and ages and ages to finish, and I can't write may paper because my computer has seized up. Is this normal?</h1>
+<span class="anchor" id="line-42"></span><p class="line874">Yep. (On a 2.4GHz pentium, bedpostx will take about 20 cpu hours to process a 2.5x2.5x2.5 mm^3 dataset - however, at any one time, the process is v. small, so it shouldn't overburden your machine (hopefully!!) ) <span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><p class="line867">
+<h1 id="Can_I_parallelise_bedpostx.3F">Can I parallelise bedpostx?</h1>
+<span class="anchor" id="line-45"></span><p class="line862">Bedpostx is sge-capable, see <a class="https" href="https://www.fmrib.ox.ac.uk/phpwiki/index.php/FslSge">here</a> for information on setting up sge on your local system. <span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><p class="line867">
+<h1 id="When_I.27ve_got_my_bedposted_directory.2C_how_long_will_tractography_take.3F">When I've got my bedposted directory, how long will tractography take?</h1>
+<span class="anchor" id="line-48"></span><p class="line874">This depends on a few things, but the main ones are: <span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><ul><li><p class="line891"><em>Number of seed voxels</em>: Apart from lots of data loading at the beginning, and data saving at the end, the actually tractography will take about 10-12 seconds per seed voxel on standard settings on a 2.4GHz Pentium IV. <span class="anchor" id="line-51"></span></li><li><p class="line891"><em>Number of samples</em>: The time taken for tractography scales linearly with the number of samples drawn from the distribution at each seed voxel. In our experience, the distribution is well sampled by after 5000 samples are drawn, hence this is the default number. However, when you are doing quick testing, you can reduce this number. e.g. you could test with 1000 samples (which would take 1/5 of the time) and then when it came to doing detailed quantitative analysis, you could go back to 5000 samples. <span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span></li></ul><p class="line867">
+<h1 id="How_should_I_threshold_the_path_distribution_estimates_from_ProbTrackx.3F">How should I threshold the path distribution estimates from ProbTrackx?</h1>
+<span class="anchor" id="line-54"></span><p class="line874">There is no right or wrong way to threshold these values. They form a continuous distribution which has been discretised in an arbitrary fashion (for example, if you double the voxel size, the probability of passing through each voxel will roughly double!). Note that this is NOT true for the "connectivity-based seed-voxel classification" mode where the discretisation is generally anatomically meaningful (the target masks are prespecified anatomical regions). In practice, thresholding at very low values (e.g., 10 out of 5000 samples) often tidies up path distribution estimates considerably. You will have to choose where to threshold based on your own specific question. <span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><p class="line874">I've checked my data carefully and I've run bedpost_datacheck. Something still isn't working and I'm really baffled. What can I do now? <span class="anchor" id="line-57"></span><span class="anchor" id="line-58"></span><p class="line862">Send an email to the FSL list (see <a href="./FSL(20)FAQ.html#How_do_I_best_report_problems_to_the_FSL_email_list">How do I best report problems to the FSL email list?</a>) <span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-61"></span>CategoryFAQ <a href="./CategoryFDT.html">CategoryFDT</a> <span class="anchor" id="line-62"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

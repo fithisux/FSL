@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#locate-label-centres labelimage xmlfile
+
+nlabels=`fslstats $1 -R | awk '{ printf("%d",$2) }'`
+
+for ((n=0; n<=$nlabels; n++)) ; do
+  fslmaths $1 -thr $n -uthr $n -bin -mul -1 -add 1 invroi
+  distancemap -i invroi -o distroi
+  coord=`fslstats distroi -x`
+  location=`grep 'index="'$n'"' $2 | sed -e "s/^.*\>\(.*\)\<.*$/\1/"`
+  echo $n $coord $location
+  X=`echo $coord | awk '{print $1}'`
+  Y=`echo $coord | awk '{print $2}'`
+  Z=`echo $coord | awk '{print $3}'`
+  cat $2 | sed -e 's?.*index="'$n'".*>\(.*\)<.*?<label index="'$n'" x="'$X'" y="'$Y'" z="'$Z'">\1</label>?' > temp
+  mv temp $2
+done
+imrm invroi distroi
+

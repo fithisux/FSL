@@ -1,0 +1,34 @@
+<link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+<h3>Opening Images</h3>
+      
+<p>FSLView can read Analyze and NIFTI files, either uncompressed or
+compressed, and either as a single file (e.g., <i>image.nii.gz</i>) or
+two files (e.g., <i>image.hdr</i> & <i>image.img</i>). To open an
+image, select the <i>Open</i> option from the <i>File</i> menu. A file
+opening dialog will appear. It will list all directories and all files
+with a suitable extension. Select the image file that you want to load
+and press the <i>Open</i> button.
+
+<p> The image will then be opened in <i>Ortho</i> view; coronal,
+sagittal and axial views are displayed simultaneously. If there is
+sufficient information present in the image header, <i>L, R, A, P, S,
+I</i> &nbsp; (Left, Right, Anterior=front, Posterior=back,
+Superior=top, Inferior=bottom) markers will be displayed, making the
+orientation clear. The image name will be displayed in the <a
+href="imagelist.html">Image List</a>. Because this is the first image
+to be loaded it will be the "<i>Main Image</i>"; in the
+<i>Image List</i> it will be marked with a small set of arrows <img
+src="mainimage.png">.
+
+<p>To load a second image (an "<i>overlay</i>"), select <i>File ->
+Add</i>. The image to be added must have the same dimensions as the
+<i>Main Image</i>, otherwise a message will appear saying <i>Cannot
+load incompatible overlay</i>.
+
+<p>When the second overlay is added, its name will appear in the <a
+href="imagelist.html">Image List</a>. Since it is not the
+<i>Main Image</i> it will not be marked with arrows. The <i>Image
+List</i> control can be used to change the transparency of images,
+change the order in which they are drawn, make them visible or
+invisible and lock or unlock them (for editing).
+

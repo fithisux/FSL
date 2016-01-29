@@ -1,0 +1,129 @@
+#!/usr/bin/env python
+
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+import sys
+from sys import argv
+from commands import getoutput
+from numpy import *
+
+def usage():
+    print "Usage: " + argv[0] + " <output mat> <input2standard mat> <input image> <x1> <y1> <z1> <x2> <y2> <z2>"
+    print " "
+    print "       First argument is the output matrix which will go from the input image to standard space,"
+    print "          with the desired linear structure aligned with the y-axis in standard space"
+    print "       Second argument is the FLIRT transform from the input image to standard"
+    print "       Third argument is the input image (e.g., the .nii.gz file)"
+    print "       The remaining arguments are two coordinates in the input image, chosen along the"
+    print "          linear structure that is to be aligned with the y-axis"
+    print "       All coordinates are in voxel coordinates (in the input image)"
+    print "       If the input image is already in standard space then use $FSLDIR/etc/flirtsch/ident.mat"
+    print "          as the second argument but still use voxel coordinates (not MNI/mm coords)"
+    print "       You can use the output matrix from this script in a simple resampling call to flirt:"
+    print "         e.g.  flirt -in input_image -ref standard_image -applyxfm -init outputfromhere.mat -out rotated_image"
+    print "         You can also use a higher resolution standard image as the -ref in the line above if you want better resolution"
+    sys.exit(1)
+
+if len(argv) <= 9:
+    usage()
+
+# Load in the necessary info
+a=loadtxt(argv[2])
+alldims=getoutput("$FSLDIR/bin/fslsize "+argv[3]+" -s")
+listdims=alldims.split()
+dx=float(listdims[12])
+dy=float(listdims[14])
+dz=float(listdims[16])
+#print [dx,dy,dz]
+x1=matrix([[dx*float(argv[4])],[dy*float(argv[5])],[dz*float(argv[6])],[1]])
+x2=matrix([[dx*float(argv[7])],[dy*float(argv[8])],[dz*float(argv[9])],[1]])
+
+# Calculate the desired rotation
+v=a*(x2-x1)
+# get rid of x-component as we are not interested in this
+vn=matrix([[v[1,0]],[v[2,0]]])
+norm=sqrt(vn.T * vn)
+vn=vn/norm
+# deal with angles greater than 90 degrees (only aligning undirected lines)
+if vn[0,0]<0:
+    vn=vn*-1.0 
+theta=arcsin(vn[1,0])
+
+r=matrix([[1,0,0,0],[0,cos(theta),sin(theta),0],[0,-sin(theta),cos(theta),0],[0,0,0,1]])
+newa=r*a
+
+# Fix the translation (keep COV in the same place)
+# The input image space COV is ...
+sx=float(listdims[2])
+sy=float(listdims[4])
+sz=float(listdims[6])
+#print [sx,sy,sz]
+incov=matrix([[dx*sx/2.0],[dy*sy/2.0],[dz*sz/2.0],[1]])
+# The standard image space *COV* (not origin) is ...
+stdcov=mat("91;109;91;1");
+trans=stdcov-newa*incov
+newa[0:3,3]+=trans[0:3]
+
+# Save out the result
+savetxt(argv[1],newa,fmt='%14.10f')
+

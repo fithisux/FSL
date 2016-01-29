@@ -1,0 +1,158 @@
+===========================================================
+FSLView Testcases
+===========================================================
+
+These manual testcases require several testfiles to verify 
+various aspects of Fslview.
+
+Currently these images are:
+test1_struct   : High resolution structural image
+test2_blendA   : Structural image
+test2_blendB   : Image that can be overlayed onto test2_blendA
+test3_blendC   : Image that can be overlayed onto test2_blendB
+test3_func     : Functional data that varies over time.
+test4_unreal   : Unreal data type image.
+test5_dtiFA    : Dti anisotropy image.
+test6_dtiV1    : Dti vector image.
+test7_noDims   : Image with dimensions set to 0mm for x,y,z.
+test8_avg152T1 : x Dimension set to -ve value.
+
+These files are currently stored at /usr/fs3/jim/test_cases
+
+===========================================================
+1.0 Basic Viewing Tasks
+===========================================================
+
+Purpose: To ensure software can view a single structural image 
+         and be used as a basic viewer.
+
+1.1 Open up image test1_struct in Orthoganol view
+    Move the cursor.
+    Zoom in and out with the toolbar combo box.
+    With three button mouse:
+         zoom in and out
+         translate image
+    With toolbar and one mouse button:
+         zoom in and out
+         translate
+    Turn the crosshairs on and off.
+    Reset all view changes with the toolbar reset button.
+
+1.2 Check bricon control
+    With test1_struct highlighted in overlaylist widget:
+        Change brightness slider 
+        Change contrast slider
+        Reset with brightness/contrast with buttons.
+        Change combo boxes at either end of sliders.
+
+1.3 Cursor Tool Bar
+    Change voxel coor combos
+    Change mm coor combos
+    Ensure intensity combo updates
+
+1.4 Overlay List Widget
+    Highlight test1_struct 
+    Change transparency
+    Turn image on/off via button and double click
+    
+1.5 Overlay Dialog
+    Highlight test1_struct 
+    Click info button.
+    Open new lookup table, set image to new LUT
+    
+1.6 Lightbox View
+    Open lightbox view
+    Without scrolling change zoom to 20%
+    Enable crosshairs, move cursor.
+    Try zoom, translate and reset
+    Scroll lightbox view
+
+1.7 Cursor Logic
+    Close orthoview.
+    Check lightbox still works.
+
+1.8 Movie View
+    Open movie view
+    Start movie
+    Turn on cross hairs
+    Move cursor
+    Change brightness/contrast
+    Pan, zoom and reset.
+
+1.9 Histogram
+    Opend histogram widget 
+
+===========================================================
+2.0 Blending tasks
+===========================================================
+
+Purpose: To ensure the correct operation of multiple overlay management
+         and presentation.
+
+2.1 Transparency and ordering
+    Open the 3 images test2_blendA, test2_blendB, test2_blendC
+    Vary the transparency on each image 
+    Turn random images on and off
+    Alter the order of the slices
+    Vary the brightness and contrast of the images
+        
+2.2 Multiwindow behaviour
+    Open the lightbox widget
+    Open the movie widget
+    Remove overlays - ensure remove option disables when no overlays
+
+2.3 Ensure luts transparent in correct places. Set bricon range
+    from 50 to 100 and ensure points from 0-50 are transparent.
+
+===========================================================
+3.0 Functional data tasks
+===========================================================
+
+Purpose: Confirm the operation of the functional data analysis
+         features.
+        
+3.1 Check animation
+    Load up test3_func into orthview
+    Press the movie tool button
+        
+3.2 Time series presentation
+    Open a time series widget
+    Add/remove several time plots
+    Open time series grid
+    Add/remove several time plots
+
+3.3 View the timeseries of a newly created mask.(#710)
+3.4 Display a movie loop with images of varying numbers of volumes.(#713)
+3.5 Use cursor timeseries function and dynamically change timeseries.
+
+
+===========================================================
+4.0 Masking tasks
+===========================================================
+4.1 Use new filling tool. Fill entire area of a large image
+    such as test1_struct.hdr (#662)
+4.2 Draw off the edge of the viewport.(#245)
+4.3 Perform masking operations on multivolume image.(#248)
+
+4.4 Ensure user is asked before file is overwritten.(#388)
+
+===========================================================
+5.0 Dti tasks
+===========================================================
+5.1 Load up test5_dtiFA with test6_dtiV1 and view images in
+    all modes. Modulate test6_dtiV1 with test5_dtiFA.
+
+===========================================================
+6.0 Image format tests
+===========================================================
+6.1 Try and load test4_unreal. It should fail to load and display
+    an unknown data type message.
+6.2 Load up an image with no dimensions such as test7_noDims.(#700)
+6.3 Load test8_avg152T1 and type values into x mm box.(#600)
+
+===========================================================
+7.0 GUI Operation
+===========================================================
+7.1 Rename an image. Delete middle characters of name.(#581)
+7.2 Close all images from menu option.(#668)        
+         

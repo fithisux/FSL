@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+    <title>View Toolbar</title>
+  </head>
+  <body>
+    <h3>View Toolbar</h3>
+
+    <table>
+      <tr valign="top">
+	<td>
+
+	  <p>These buttons can be used to control various aspects of
+	  the current view.</p>
+
+	  <ul>
+	    <li>
+	      Animate the timeseries. If the currently selected image
+	      is 4D then this will flip through each volume. When it
+	      reaches the max numbered volume it will go back to the
+	      begining again.</li>
+
+	    <li>
+	      Slice roll. Iterates over the slices in the current
+	      view. Only available in single view.</li>
+
+	    <li>
+	      View select. Toggles between available view
+	      configurations. In orthographic view this will switch
+	      between: "traditional"; three in a row; and three in a
+	      column orientations. In single view it will toggle
+	      between: axial; sagittal; and coronal views.</li>
+
+	    <li>
+	      View options. Click here to start
+	      the <a href="#dialog">View Options dialog</a>.</li>
+	    
+	    <li>
+	      Snapshot. Click on the camera icon to take a snapshot of
+	      the current view. This is literally a screengrab of the
+	      current view so make it big for better results.</li>
+	</td>
+
+	<td><img src="viewwidget.png"></td></tr>
+
+    </table>
+
+    <a id="dialog"><h4>View Options Dialog</h4></a>
+    
+    <table>
+      <tr valign="top">
+	<td>
+	  <p>The cursor panel allows you to determine how the cursor
+	    is linked in this view and with others. Use the Locally
+	    linked volume index checkbox to synchronise the volumes in
+	    this view. Globally link volume index and location will
+	    synchronise with any other views which also have these
+	    options selected.</p>
+	  <p>You can also adjust the size of displayed gap at the
+	  centre of the on-screen cursor.
+	</td>
+	<td><img src="view-options-cursor.png" width="400"></td></tr>
+
+      <tr valign="top">
+	<td>
+	  <p>The labels panel toggles display of the orientation
+	    labels and slice location: each slice will have it's fixed
+	    dimension location displayed in the top left of the
+	    slice. The location can be in either voxels or mm
+	    determined by the "Units" radio buttons .</p>
+	</td>
+	<td><img src="view-options-labels.png" width="400"></td></tr>
+
+      <tr valign="top">
+	<td>The miscellaneous panel currently allows you to change the
+	  frame rate used in animations such as slice-roll.
+	</td>
+	<td><img src="view-options-misc.png" width="400"></td></tr>
+
+    </table>
+  </body>
+</html>

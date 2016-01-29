@@ -1,0 +1,132 @@
+#!/bin/sh
+#   Copyright (C) 2012 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+if [ $# -lt 1 ]; then
+echo "Usage: facalc <basename> [-mode]"
+echo "e.g. facalc dti "
+echo "This will use dti_L1 dti_L2 and dti_L3 to compute dti_FA"
+echo "If -mode is set, the mode is calculated as well"
+echo "Usage: facalc basename outbase"
+echo "e.g. facalc dti test"
+echo "will write test_FA instead of dti_FA"
+exit
+fi
+
+bn=$1
+if [ $# -lt 2 ];then 
+ob=$bn
+else
+if [ "$2" != -mode ];then
+ob=$2
+else
+ob=$bn
+fi
+fi
+
+
+if [ `${FSLDIR}/bin/imtest ${bn}_L1` -eq 0 -o  `${FSLDIR}/bin/imtest ${bn}_L2` -eq 0 -o `${FSLDIR}/bin/imtest ${bn}_L3` -eq 0 ];
+then echo "Not all eigenvalue images exist"
+echo "stopping"
+exit
+fi
+
+
+${FSLDIR}/bin/fslmaths ${bn}_L1 -add ${bn}_L2 -add ${bn}_L3 -div 3 tmpMD
+${FSLDIR}/bin/fslmaths ${bn}_L1 -sqr tmpL1sq
+${FSLDIR}/bin/fslmaths ${bn}_L2 -sqr tmpL2sq
+${FSLDIR}/bin/fslmaths ${bn}_L3 -sqr tmpL3sq
+${FSLDIR}/bin/fslmaths ${bn}_L1 -sub tmpMD -sqr tmpl1subsq
+${FSLDIR}/bin/fslmaths ${bn}_L2 -sub tmpMD -sqr tmpl2subsq
+${FSLDIR}/bin/fslmaths ${bn}_L3 -sub tmpMD -sqr tmpl3subsq
+${FSLDIR}/bin/fslmaths tmpL1sq -add tmpL2sq -add tmpL3sq denom
+${FSLDIR}/bin/fslmaths tmpl1subsq -add tmpl2subsq -add tmpl3subsq -mul 1.5 numer
+${FSLDIR}/bin/fslmaths numer -div denom -sqrt ${ob}_FA
+
+if [ "$2" == -mode -o "$3" == -mode ];then
+    ${FSLDIR}/bin/fslmaths ${bn}_L1 -sub tmpMD tmpE1
+    ${FSLDIR}/bin/fslmaths ${bn}_L2 -sub tmpMD tmpE2
+    ${FSLDIR}/bin/fslmaths ${bn}_L3 -sub tmpMD tmpE3
+    ${FSLDIR}/bin/fslmaths tmpE3 -mul -2 -add tmpE1 -add tmpE2 tmpN1 
+    ${FSLDIR}/bin/fslmaths tmpE1 -mul -2 -add tmpE2 -add tmpE3 tmpN2 
+    ${FSLDIR}/bin/fslmaths tmpE2 -mul -2 -add tmpE1 -add tmpE3 tmpN3 
+    ${FSLDIR}/bin/fslmaths tmpN1 -mul tmpN2 -mul tmpN3 -mul -1 tmpN
+
+    ${FSLDIR}/bin/fslmaths tmpE1 -sub tmpE2 -sub tmpE3 -mul tmpE1 tmpD
+    ${FSLDIR}/bin/fslmaths tmpE2 -sub tmpE3 -mul tmpE2 -add tmpD tmpD
+    ${FSLDIR}/bin/fslmaths tmpE3 -mul tmpE3 -add tmpD
+    ${FSLDIR}/bin/fslmaths tmpD -thr 0 -sqrt tmpD
+    ${FSLDIR}/bin/fslmaths tmpD -mul tmpD -mul tmpD -mul 2 tmpD
+
+    ${FSLDIR}/bin/fslmaths tmpN -div tmpD -max -1 -min 1 ${ob}_MO
+fi
+
+${FSLDIR}/bin/imrm tmpMD tmpL1sq tmpL2sq tmpL3sq tmpl1subsq tmpl2subsq tmpl3subsq numer denom tmpE1 tmpE2 tmpE3 tmpD tmpN1 tmpN2 tmpN3
+
+
+
+
+
+

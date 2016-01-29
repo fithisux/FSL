@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML><HEAD><meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link REL="stylesheet" TYPE="text/css" href="../fsl.css">
+<TITLE>FSL</TITLE></HEAD><BODY>
+
+<IFRAME width="100%" scrolling="no" frameborder="0" src="top.html">Broken</IFRAME>
+ 
+<h3>NIFTI-1 Data Format and Orientation Conventions</h3>
+
+<p>FSL now uses the new <a href="http://nifti.nimh.nih.gov/dfwg/"
+target="_top">NIFTI-1</a> data format by default, though it can still
+read and, in limited cases, write "old" Analyze files. The options are:</UL>
+
+<LI> ANALYZE - traditional .hdr and .img file pair (header information
+and image data respectively) using the ANALYZE<sup>TM</sup>&nbsp;7.5
+file format
+
+<LI> ANALYZE_GZ - same but the files are written to disk already
+compressed using the gzip library (saves disk space)
+
+<LI> NIFTI_PAIR - the new NIFTI-1 format, still using a .hdr and .img
+file pair for each 3D/4D image
+
+<LI> NIFTI - the NIFTI-1 format but in a single .nii file (which has
+the header information at the start of the file, followed by the image
+data)
+
+<LI> NIFTI_GZ & NIFTI_PAIR_GZ - as above but with files written to
+disk already compressed.
+
+</UL><p>By default, FSL programs use the NIFTI_GZ format,
+i.e. single-file NIFTI-1 compressed images. You control which NIFTI 
+format FSL programs write using FSL setup files (see <a
+href="downloading.html" target="dynamic">downloading and
+installing</a> for more details).
+
+<p>FSL can automatically read any of the above formats, regardless of
+what output type has been set. However, FSL programs will generally
+complain and quit if you have an input image present in more than one
+format - for example, fmridata.hdr/fmridata.img <i>and</i>
+fmridata.nii.gz present in the same directory. If you want to bypass
+this safety-checking you can set the environment variable
+FSLMULTIFILEQUIT to FALSE (see above on FSL setup files).
+
+<p>NIFTI allows the left-right orientation of your data to be
+specified in the file.  This is separate from how it is displayed in FSLView.  However, the FSLView labels should <b>always</b> be in the correct places.  If they are wrong (or missing) then we suggest that the conversion to the NIfTI be investigated and fixed or a different method used such that the labels are correct.  There is no point in continuing with any analysis if the initial labels are incorrect.  Note that to distinguish left from right just by looking at the image is normally impossible and would require a marker (e.g. a vitamin capsule) to be present when acquiring the images.
+
+<p>
+The data stored on disk (in the NIfTI file) can be in either "radiological" or "neurological" order, depending on information stored in the qform and sform fields of the NIfTI header.  It is no longer necessary to be concerned what this order is.  All FSL tools will work regardless of the order.
+
+<p>
+Analyze images are treated as
+radiologically ordered in FSL but <b>should be avoided</b> whenever possible as they do not allow proper orientation information to be stored.
+
+<p> FSLView always <i>displays</i> images in radiological convention when possible.
+
+<p> NIFTI "sform" information (when present) is copied from the
+reference image when using Flirt to calculate or apply a registration.
+
+<p> NIFTI "qform" information (should be) transformed from the input
+image and not copied from the reference image.
+
+<p> All other programs should preserve the sform and qform information
+(or arbitrarily take it from one input if it is a process that
+combines many inputs)
+
+<p> fslcpgeom can be used to copy this info (plus voxel dims) from one
+image to another.
+
+</BODY></HTML>

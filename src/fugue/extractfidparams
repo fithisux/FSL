@@ -1,0 +1,124 @@
+#!/bin/sh
+
+#   extractfidparams - get dwell time (epi) and asym time (field map) 
+#                      from fid dirs
+#
+#   Stephen Smith and Mark Jenkinson, FMRIB Image Analysis Group
+#
+#   Copyright (C) 1999-2004 University of Oxford
+#
+#   Part of FSL - FMRIB's Software Library
+#   http://www.fmrib.ox.ac.uk/fsl
+#   fsl@fmrib.ox.ac.uk
+#   
+#   Developed at FMRIB (Oxford Centre for Functional Magnetic Resonance
+#   Imaging of the Brain), Department of Clinical Neurology, Oxford
+#   University, Oxford, UK
+#   
+#   
+#   LICENCE
+#   
+#   FMRIB Software Library, Release 5.0 (c) 2012, The University of
+#   Oxford (the "Software")
+#   
+#   The Software remains the property of the University of Oxford ("the
+#   University").
+#   
+#   The Software is distributed "AS IS" under this Licence solely for
+#   non-commercial use in the hope that it will be useful, but in order
+#   that the University as a charitable foundation protects its assets for
+#   the benefit of its educational and research purposes, the University
+#   makes clear that no condition is made or to be implied, nor is any
+#   warranty given or to be implied, as to the accuracy of the Software,
+#   or that it will be suitable for any particular purpose or for use
+#   under any specific conditions. Furthermore, the University disclaims
+#   all responsibility for the use which is made of the Software. It
+#   further disclaims any liability for the outcomes arising from using
+#   the Software.
+#   
+#   The Licensee agrees to indemnify the University and hold the
+#   University harmless from and against any and all claims, damages and
+#   liabilities asserted by third parties (including claims for
+#   negligence) which arise directly or indirectly from the use of the
+#   Software or the sale of any products based on the Software.
+#   
+#   No part of the Software may be reproduced, modified, transmitted or
+#   transferred in any form or by any means, electronic or mechanical,
+#   without the express permission of the University. The permission of
+#   the University is not required if the said reproduction, modification,
+#   transmission or transference is done without financial return, the
+#   conditions of this Licence are imposed upon the receiver of the
+#   product, and all original and amended source code is included in any
+#   transmitted product. You may be held legally responsible for any
+#   copyright infringement that is caused or encouraged by your failure to
+#   abide by these terms and conditions.
+#   
+#   You are not permitted under this Licence to use this Software
+#   commercially. Use for which any financial return is received shall be
+#   defined as commercial use, and includes (1) integration of all or part
+#   of the source code or the Software into a product for sale or license
+#   by or on behalf of Licensee to third parties or (2) use of the
+#   Software or any derivative of it for research with the final aim of
+#   developing software products for sale or license to a third party or
+#   (3) use of the Software or any derivative of it for research with the
+#   final aim of developing non-software products for sale or license to a
+#   third party, or (4) use of the Software to provide any service to an
+#   external organisation for which payment is received. If you are
+#   interested in using the Software commercially, please contact Isis
+#   Innovation Limited ("Isis"), the technology transfer company of the
+#   University, to negotiate a licence. Contact details are:
+#   innovation@isis.ox.ac.uk quoting reference DE/9564.
+export LC_ALL=C
+
+if [ $# -lt 1 -o X$1 = X-h -o X$1 = X-help -o X$1 = X--help ] ; then
+  echo "Script for extracting sequence parameters from Varian fid directories"
+  echo "It will give the dwell time (in seconds) for an epi acquisition"
+  echo "It will give the asym time (in seconds) for a fieldmap acquisition"
+  echo " "
+  echo "Usage: `basename $0` fid_directory"
+  exit -1
+fi
+
+epi=$1;
+if [ $# -eq 2 ] ; then
+ fmap=$2;
+else
+ fmap=$1;
+fi
+
+# for a fieldmap
+asym=`extracttxt '^asym[^a-z0-9]' $fmap/procpar 1 1 | cut -d' ' -f3`
+if [ X${asym}X != XX ] ; then
+ if [ $# -lt 2 ] ; then 
+   echo $asym;
+   exit 0; 
+ fi
+fi
+
+# otherwise it is a normal epi
+np=`extracttxt '^np[^a-z0-9]' $epi/procpar 1 1 | cut -d' ' -f2`
+sw=`extracttxt '^sw[^a-z0-9]' $epi/procpar 1 1 | cut -d' ' -f2`
+lro=`extracttxt '^lro[^a-z0-9]' $epi/procpar 1 1 | cut -d' ' -f2`
+gmax=`extracttxt '^gmax[^a-z0-9]' $epi/procpar 1 1 | cut -d' ' -f2`
+echo_del=`extracttxt '^echo_del[^a-z0-9]' $epi/procpar 1 1 | cut -d' ' -f2`
+num_ints=`extracttxt '^num_ints[^a-z0-9]' $epi/procpar 1 1 | cut -d' ' -f2`
+grise=`extracttxt '^grise_copy[^a-z0-9]' $epi/procpar 1 1 | cut -d' ' -f2`
+if [ X${grise}X = XX ] ; then grise=0; fi
+if [ $grise = 0 ] ; then grise=0.0002; fi
+
+# echo $np $sw $lro $gmax $echo_del $num_ints $grise
+
+tau_pe=`echo "12 k $np 2.0 / $sw / 2.0 $sw * $grise * $lro / 4257.5 / $gmax / $echo_del 1000000 / + + $num_ints / p" | dc`;
+
+if [ $# -lt 2 ] ; then 
+  echo $tau_pe;
+else
+  echo "12 k $tau_pe $asym / p" | dc ;
+fi
+
+exit 0
+
+
+
+
+

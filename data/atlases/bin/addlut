@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#usage:  addlut <image> <lutname>
+#e.g.: addlut Juelich-maxprob-thr25-1mm Random-Rainbow
+
+add_lut () {
+  fslhd -x $1 | sed -e "s?/>?  aux_file = \'$2\'\n/>?" > hdr.xml
+  fslcreatehd hdr.xml $1
+  rm hdr.xml
+}
+
+add_lut $1 $2
+

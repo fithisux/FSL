@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>TBSS</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">TBSS</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><img align="right" alt="TBSSrot.gif" class="attachment" src="attachments/TBSS/TBSSrot.gif" title="TBSSrot.gif" />  <span class="anchor" id="line-2"></span><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li>Introduction<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Research_Overview_-_Tract-Based_Spatial_Statistics">Research Overview - Tract-Based Spatial Statistics</a></li><li>
+<a href="#Referencing">Referencing</a></li></ol></div></div></li><li><a href="./TBSS(2f)UserGuide.html">User Guide</a></li><li><a href="./TBSS(2f)Faq.html">FAQ</a></li><li><a href="./TBSS(2f)FurtherInformation.html">Further Information</a></li></ol></div> <span class="anchor" id="line-3"></span><hr /><p class="line874"> <span class="anchor" id="line-4"></span>
+<h1 id="Research_Overview_-_Tract-Based_Spatial_Statistics">Research Overview - Tract-Based Spatial Statistics</h1>
+<span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line874">There is much recent interest in using magnetic resonance diffusion imaging to provide information about anatomical connectivity in the brain, by measuring the anisotropic diffusion of water in white matter tracts. One of the measures most commonly derived from diffusion data is fractional anisotropy (FA), which quantifies how strongly directional the local tract structure is. Many imaging studies are starting to use FA images in voxelwise statistical analyses, in order to localise brain changes related to development, degeneration and disease. However, optimal analysis is compromised by the use of standard registration algorithms; there has not been a satisfactory solution to the question of how to align FA images from multiple subjects in a way that allows for valid conclusions to be drawn from the subsequent voxelwise analysis. Furthermore, the arbitrariness of the choice of spatial smoothing extent has not been resolved. TBSS aims to solve these issues via a) carefully tuned nonlinear registration, followed by b) projection onto an alignment-invariant tract representation (the "mean FA skeleton"). TBSS aims to improve the sensitivity, objectivity and interpretability of analysis of multi-subject diffusion imaging studies. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><p class="line867"><hr /><p class="line874">  <span class="anchor" id="line-9"></span>
+<h1 id="Referencing">Referencing</h1>
+<span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line874">If you use TBSS in your research, please make sure that you reference at least the first of the articles listed below, and ideally the complete list. For your convenience, we provide example text (short and more detailed versions), which you are welcome to use in your methods description. <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><p class="line867"><em>Brief summary text:</em> "Voxelwise statistical analysis of the FA data was carried out using TBSS (Tract-Based Spatial Statistics, [Smith 2006]), part of FSL [Smith 2004]. TBSS projects all subjects' FA data onto a mean FA tract skeleton, before applying voxelwise cross-subject statistics." <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line867"><em>More detailed summary text:</em> "Voxelwise statistical analysis of the FA data was carried out using TBSS (Tract-Based Spatial Statistics, [Smith 2006]), part of FSL [Smith 2004]. First, FA images were created by fitting a tensor model to the raw diffusion data using FDT, and then brain-extracted using BET [Smith 2002]. All subjects' FA data were then aligned into a common space using the nonlinear registration tool FNIRT [Andersson 2007a, 2007b], which uses a b-spline representation of the registration warp field [Rueckert 1999]. Next, the mean FA image was created and thinned to create a mean FA skeleton which represents the centres of all tracts common to the group. Each subject's aligned FA data was then projected onto this skeleton and the resulting data fed into voxelwise cross-subject statistics." <span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line867"><span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><div class="references"><span class="anchor" id="line-1-1"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/16624579">[Smith 2006]</a> S.M. Smith, M. Jenkinson, H. Johansen-Berg, D. Rueckert, T.E. Nichols, C.E. Mackay, K.E. Watkins, O. Ciccarelli, M.Z. Cader, P.M. Matthews, and T.E.J. Behrens. Tract-based spatial statistics: Voxelwise analysis of multi-subject diffusion data. NeuroImage, 31:1487-1505, 2006. <span class="anchor" id="line-2-1"></span><span class="anchor" id="line-3-1"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/15501092">[Smith 2004]</a> S.M. Smith, M. Jenkinson, M.W. Woolrich, C.F. Beckmann, T.E.J. Behrens, H. Johansen-Berg, P.R. Bannister, M. De Luca, I. Drobnjak, D.E. Flitney, R. Niazy, J. Saunders, J. Vickers, Y. Zhang, N. De Stefano, J.M. Brady, and P.M. Matthews. Advances in functional and structural MR image analysis and implementation as FSL. NeuroImage, 23(S1):208-219, 2004. <span class="anchor" id="line-4-1"></span><span class="anchor" id="line-5-1"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/12391568">[Smith 2002]</a> S.M. Smith. Fast robust automated brain extraction. Human Brain Mapping, 17(3):143-155, November 2002. <span class="anchor" id="line-6-1"></span><span class="anchor" id="line-7-1"></span><p class="line867"><a class="http" href="http://www.fmrib.ox.ac.uk/analysis/techrep/#TR07JA1">[Andersson 2007a]</a> J.L.R. Andersson, M. Jenkinson and S. Smith. Non-linear optimisation. FMRIB technical report TR07JA1 from www.fmrib.ox.ac.uk/analysis/techrep <span class="anchor" id="line-8-1"></span><span class="anchor" id="line-9-1"></span><p class="line867"><a class="http" href="http://www.fmrib.ox.ac.uk/analysis/techrep/#TR07JA2">[Andersson 2007b]</a> J.L.R. Andersson, M. Jenkinson and S. Smith. Non-linear registration, aka Spatial normalisation FMRIB technical report TR07JA2 from www.fmrib.ox.ac.uk/analysis/techrep <span class="anchor" id="line-10-1"></span><span class="anchor" id="line-11-1"></span><p class="line867"><a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/10534053">[Rueckert 1999]</a> D. Rueckert, L. I. Sonoda, C. Hayes, D. L. G. Hill, M. O. Leach, and D. J. Hawkes. Non-rigid registration using free-form deformations: Application to breast MR images. IEEE Transactions on Medical Imaging, 18(8):712-721, 1999. </div><span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-32"></span><a href="./CategoryDiffusion.html">CategoryDiffusion</a> <a href="./CategoryTBSS.html">CategoryTBSS</a> <span class="anchor" id="line-33"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FSLMotionOutliers</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FSLMotionOutliers</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867"> <span class="anchor" id="line-5"></span>
+<h1 id="FSL_Motion_Outliers">FSL Motion Outliers</h1>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line862">The tool <tt>fsl_motion_outliers</tt> is designed to detect timepoints in an fMRI dataset that have been corrupted by large motion.  It creates a confound matrix that can be used in the GLM to completely remove the effects of these timepoints on the analysis, without any adverse affects in the statistics.  This is intended to deal with the effects of intermediate to large motions, which corrupt images beyond anything that the linear motion parameter regression methods can fix. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line874">It is strongly advised that "removal" of timepoints is only ever done using confound matrices, such as output by this script, as if timepoints are deleted then parts of the analysis are adversely affected, particularly the temporal filtering and autocorrelation estimation. <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><p class="line874">The current usage of the script is: <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><pre><span class="anchor" id="line-1"></span>Usage: fsl_motion_outliers -i &lt;input 4D image&gt; -o &lt;output confound file&gt; [options]
+<span class="anchor" id="line-2"></span> 
+<span class="anchor" id="line-3"></span>Options: -m &lt;mask image&gt;      use supplied mask image for calculating metric
+<span class="anchor" id="line-4"></span>         -s &lt;filename&gt;        save metric values (e.g. DVARS) as text into specified file
+<span class="anchor" id="line-5"></span>         -p &lt;filename&gt;        save metric values (e.g. DVARS) as a graphical plot (png format)
+<span class="anchor" id="line-6"></span>         --refrms             use RMS intensity difference to reference volume as metric [default metric]
+<span class="anchor" id="line-7"></span>         --dvars              use DVARS as metric
+<span class="anchor" id="line-8"></span>         --refmse             Mean Square Error version of --refrms (used in original version of fsl_motion_outliers)
+<span class="anchor" id="line-9"></span>         --fd                 use FD (framewise displacement) as metric
+<span class="anchor" id="line-10"></span>         --fdrms              use FD with RMS matrix calculation as metric
+<span class="anchor" id="line-11"></span>         --thresh=&lt;val&gt;       specify absolute threshold value (otherwise use box-plot cutoff = P75 + 1.5*IQR)
+<span class="anchor" id="line-12"></span>         --nomoco             do not run motion correction (assumed already done)
+<span class="anchor" id="line-13"></span>         --dummy=&lt;val&gt;        number of dummy scans to delete (before running anything and creating EVs)
+<span class="anchor" id="line-14"></span>         -v                   verbose mode</pre><span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line867">
+<h3 id="Basic_Operation">Basic Operation</h3>
+<span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><p class="line874">The simplest way to run this script is just to specify the input 4D dataset (prior to any processing, including motion correction) and the name of the output confound file.  The script will then: (i) perform motion correction, (ii) calculate metric values for each timepoint (that indicate how affected by motion it is), (iii) threshold the metric values to look for outliers, and (iv) generate a confound matrix.  The format of the confound matrix is a separate column for each timepoint that is deemed to be an outlier.  Within each column the values are all zeros except for a value of one at the timepoint that is considered to be the outlier.  The effect of adding this to the GLM is that it fully models all the influence of that timepoint with a separate parameter estimate (PE, or beta) which means that the intensities at that timepoint (in any voxel) have no influence on any of the other parameter estimates, effectively removing the effect of this timepoint from the estimation of all the effects of interest. <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line874">If no timepoints exceed the threshold, no confound matrix is output. <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><p class="line867">
+<h3 id="Using_the_output_in_FEAT">Using the output in FEAT</h3>
+<span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line862">The confound matrix should be entered on the <em>Stats</em> tab via the <em>Add additional confound EVs</em> button.   <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line862">The confounds generated by <tt>fsl_motion_outliers</tt> can be combined with other motion parameter regression in order to account for large and small motion effects, and can be advantageous.  This is because using motion parameter regressors only corrects for linear (and maybe quadratic) changes in intensity induced by small motions, whereas <tt>fsl_motion_outliers</tt> accounts for changes of any type, however strong, induced by large motions.  Therefore these confounds are able to deal with the non-linear artefacts and slice-by-slice movements generated when large, rapid motions take place.  However, the standard problem of motion parameter regression removing all activation in the case of strongly stimulus correlated motion may still exist, although adding outlier confounds <em>might</em> help in some cases. <span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><p class="line867">
+<h3 id="Metrics">Metrics</h3>
+<span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><p class="line874">There are several types of metrics available: <span class="anchor" id="line-44"></span><ul><li>refrms: RMS intensity difference of volume N to the reference volume <span class="anchor" id="line-45"></span></li><li><p class="line862">dvars: RMS intensity difference of volume N to volume N+1  (see Power et al, NeuroImage, 59(3), 2012) <span class="anchor" id="line-46"></span></li><li>refmse: square of the refrms metric (included for backward compatibility) <span class="anchor" id="line-47"></span></li><li>fd: frame displacement (average of rotation and translation parameter differences - using weighted scaling, as in Power et al.) <span class="anchor" id="line-48"></span></li><li><p class="line862">fdrms: frame displacement (average of rotation and translation parameter differences - use matrix RMS formulation, as in <a class="http" href="http://www.fmrib.ox.ac.uk/analysis/techrep/tr99mj1/tr99mj1/index.html">Jenkinson TR99MJ1</a>) <span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span></li></ul><p class="line874">The choice of metric is arbitrary and it is not known which is superior, and probably unlikely that one metric would be superior in all circumstances.   <span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><p class="line874">There is a big difference between the latter two metrics, which are based on the motion correction parameters, and the others, which are based on intensity differences within the realigned timeseries. In the case that the motion correction is not accurate, then using motion correction parameters (rotation angles and translations in mm) is a poor way to estimate the outliers.  Whenever there is large motion in the series it is possible that the motion correction will fail to be accurate (due to the presence of physics artefacts and significant slice-by-slice changes in motion).  For this reason it is generally recommended that one of the top two metrics (as refmse and refrms are equivalent) is used to estimate the presence of outliers. <span class="anchor" id="line-53"></span><span class="anchor" id="line-54"></span><p class="line867">
+<h3 id="Thresholding">Thresholding</h3>
+<span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><p class="line862">By default the threshold used to define an outlier is the upper one used in when creating boxplots (the 75th percentile + 1.5 times the InterQuartile Range).  The <tt>--threshold</tt> option can be used to specify an absolute value to be used as the threshold instead of the boxplot threshold.   <span class="anchor" id="line-57"></span><span class="anchor" id="line-58"></span><p class="line862">No other options are available at this time, although the unthresholded metric values can be saved with the <tt>-s</tt> option for alternative thresholding and confound matrix generation, if desired. <span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><p class="line867">
+<h3 id="Mask">Mask</h3>
+<span class="anchor" id="line-61"></span><span class="anchor" id="line-62"></span><p class="line874">It is possible to specify a mask to restrict the spatial region over which the calculations are done (for the top three metrics).  This, when used, is usually a brain mask to avoid calculations based on non-brain regions.  It is not necessary to use and results are usually very good without needing any masking. <span class="anchor" id="line-63"></span><span class="anchor" id="line-64"></span><p class="line867">
+<h3 id="Motion_Correction">Motion Correction</h3>
+<span class="anchor" id="line-65"></span><span class="anchor" id="line-66"></span><p class="line862">In order to calculate the top three metrics, the timeseries must be realigned (i.e. motion corrected).  This is usually done automatically by the script by running <a href="./MCFLIRT.html">mcflirt</a> (the original file is not changed).  However, if motion correction has already been done then the option <tt>--nomoco</tt> can be used. <span class="anchor" id="line-67"></span><span class="anchor" id="line-68"></span><p class="line862">Note that the option <tt>--nomoco</tt> <em>cannot</em> be used with either of the frame displacement metrics, as they require parameter values from the <a href="./mcflirt.html">mcflirt</a> run. <span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span><p class="line867">
+<h3 id="Dummy_Scans">Dummy Scans</h3>
+<span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span><p class="line862">If you are using an input timeseries that contains dummy scans then you should use the <tt>--dummy</tt> option to remove them from the calculations here.  The number of dummy scans you specify here should be the same as you would specify in the <a href="./FEAT.html">FEAT</a> GUI when analysing this same dataset. <span class="anchor" id="line-73"></span><span class="anchor" id="line-74"></span><p class="line867">
+<h3 id="Other_Outputs">Other Outputs</h3>
+<span class="anchor" id="line-75"></span><span class="anchor" id="line-76"></span><p class="line874">If desired, the script can also save plots of the metric values (useful for QA) or text files containing the numerical metric values (unthresholded) for other types of analysis. <span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

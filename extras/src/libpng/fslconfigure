@@ -1,0 +1,13 @@
+#!/bin/sh
+cppflags="-I${FSLEXTINC}"
+ldflags="-L${FSLEXTLIB}"
+
+configure_opts="--prefix=${FSLDEVDIR} --enable-static --disable-shared"
+
+configure_script=${FSLDIR}/config/${FSLMACHTYPE}/configure.sh
+if [ -f ${configure_script} ]; then
+    . ${configure_script}
+fi
+
+echo "CFLAGS=\"${cflags}\" CPPFLAGS=\"${cppflags}\" LDFLAGS=\"${ldflags}\" ./configure ${configure_opts}"
+CFLAGS="${cflags}" CPPFLAGS="${cppflags}" LDFLAGS="${ldflags}" ./configure ${configure_opts}

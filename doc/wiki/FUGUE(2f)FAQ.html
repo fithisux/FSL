@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FUGUE/FAQ</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FUGUE/FAQ</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FUGUE.html">Introduction</a></li><li><a href="./FUGUE(2f)Guide.html">Guide</a></li><li>FAQ<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#What_type_of_field_maps_do_I_need_for_.28PRELUDE_and.29_FUGUE.3F">What type of field maps do I need for (PRELUDE and) FUGUE?</a></li><li>
+<a href="#How_do_I_get_a_fieldmap_sequence_for_my_scanner.3F">How do I get a fieldmap sequence for my scanner?</a></li></ol></div></div></li></ol></div> <span class="anchor" id="line-2"></span>
+<h1 id="What_type_of_field_maps_do_I_need_for_.28PRELUDE_and.29_FUGUE.3F">What type of field maps do I need for (PRELUDE and) FUGUE?</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line874">The fieldmaps required by FUGUE must be in undistorted coordinates. That is, the field map should not have any geometric distortion in it (or negligible amounts) as can be obtained from a spin-echo sequence, or gradient-echo sequences if the echo time is sufficiently small. The distortion present in a sequence can readily be seen in the absolute (or magnitude) image and normally manifests itself as a depression or extension of the inferior frontal lobes (when the scans are acquired axially - it is different for other acquisition planes). <span class="anchor" id="line-5"></span>It is recommended that a symmetric-asymmetric spin-echo sequence is used for the field mapping. This sequence acquires one conventional spin-echo image and then another with the same settings except with the 180-degree RF pulse offset by a small delay, known as the asym-time. The difference in the phase of the two images is then proportional to the field offset. <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line862">Note that the input to PRELUDE, for phase unwrapping, must be a complex image either presented as a single 3D or 4D complex Analyze image or as a set of two 3D or 4D Analyze images - one for the phase and one for the absolute (or magnitude) part. The input to FUGUE must be a 4D Analyze image containing two unwrapped phase maps. To convert between 3D and 4D Analyze files the utilities fslmerge and fslsplit can be used (<a href="./FSL(20)FAQ.html#How_do_I_convert_between_3D_and_4D_NIFTI_images.3F">see above</a>). To convert between pairs of real images and complex images, the utility fslcomplex can be used. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line867">
+<h1 id="How_do_I_get_a_fieldmap_sequence_for_my_scanner.3F">How do I get a fieldmap sequence for my scanner?</h1>
+<span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line862">We cannot provide field-map sequences for different scanners. The recommended sequence is a symmetric-asymetric spin-echo sequence as described <a href="./FUGUE(2f)FAQ.html#What_type_of_field_maps_do_I_need_for_.28PRELUDE_and.29_FUGUE.3F">above</a>. If such a sequence is not available at your site, try contacting the FSL email list to see if others have a sequence for your scanner that could be used.  <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-15"></span>CategoryFAQ <a href="./CategoryFUGUE.html">CategoryFUGUE</a> <span class="anchor" id="line-16"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

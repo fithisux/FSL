@@ -1,0 +1,35 @@
+#!/bin/sh
+
+#   startup script for fslview
+#
+#   Dave Flitney and Mark Jenkinson
+#   FMRIB Image Analysis Group
+#
+#   Copyright (C) 1999-2004 University of Oxford
+#
+#   SHCOPYRIGHT
+
+FVBIN=${FSLDIR}/bin/fslview
+
+if [ $# -le 0 ] ; then
+  $FVBIN
+  exit ;
+fi
+
+fn=`${FSLDIR}/bin/remove_ext $1`;
+
+# determine if it is a complex image or not
+iscomplex=0;
+dtype=`$FSLDIR/bin/fslval $fn datatype`;
+if [ X$dtype =   X32 ] ; then iscomplex=1; fi
+if [ X$dtype = X1792 ] ; then iscomplex=1; fi
+if [ X$dtype = X2048 ] ; then iscomplex=1; fi
+
+if [ $iscomplex = 1 ] ; then
+  tmpfn=`${FSLDIR}/bin/tmpnam`
+  $FSLDIR/bin/fslcomplex -realpolar $fn ${tmpfn}_abs ${tmpfn}_ph ;
+  $FVBIN ${tmpfn}_abs ${tmpfn}_ph
+  $FSLDIR/bin/imrm ${tmpfn}_abs ${tmpfn}_ph
+else
+  $FVBIN ${fn}
+fi

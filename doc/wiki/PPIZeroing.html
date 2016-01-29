@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>PPIZeroing</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">PPIZeroing</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867">
+<h1 id="The_zero-ing_options_in_PPI">The zero-ing options in PPI</h1>
+<span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line874">When you create a regressor of type 'interaction' in the stats tab of the Feat <span class="anchor" id="line-5"></span>gui, you to select from a drop down list called 'zero' for each regressor <span class="anchor" id="line-6"></span>which is going into your PPI. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line867">
+<h2 id="A1._Min">1. Min</h2>
+<span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line874">Zero min makes the minimum value of the regressor zero. <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line874">If you do this to a task (PSY) EV, you will essentially be setting the value <span class="anchor" id="line-16"></span>of the PSY part of the PPI to zero during your rest blocks. Since multiplying <span class="anchor" id="line-17"></span>any number by zero gives zero, this means that your PPI regressor will be a <span class="anchor" id="line-18"></span>flat line in the rest blocks. In other words, your PPI regressor looks like <span class="anchor" id="line-19"></span>the timecourse of your seed ROI during the task, and zero otherwise. <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line867"><img alt="zeroing on minimum value" class="attachment" height="300" src="attachments/PPIZeroing/zeromin.png" title="zeroing on minimum value" /> <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line874">This type of PPI regressor is looking for voxels which are correlated with the <span class="anchor" id="line-24"></span>seed ROI during the task - but they don't actually have to be more correlated <span class="anchor" id="line-25"></span>during the task than elsewhere. <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><p class="line874">Think about it this way: imagine some voxel was always correlated with your <span class="anchor" id="line-29"></span>seed region. If you de-min the PSY part of your PPI, and create a PPI <span class="anchor" id="line-30"></span>regressor like the one above, then that PPI regressor will still 'pick up' <span class="anchor" id="line-31"></span>that voxel - even though the correlation is not task-specific. <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><p class="line867">
+<h4 id="When_would_you_use_this_option_for_the_PSY_component.3F">When would you use this option for the PSY component?</h4>
+<span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line874">In the case that you are doing a between-subjects or between-sessions design, <span class="anchor" id="line-38"></span>and you want to 'partial out' the any changes in the main effect of <span class="anchor" id="line-39"></span>subjects/sessions on your task. This is discussed further here. <span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><p class="line867">
+<h4 id="When_would_you_use_this_option_for_the_PHYS_component.3F">When would you use this option for the PHYS component?</h4>
+<span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><p class="line874">Don't. <span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><p class="line867">
+<h2 id="A2._Centre">2. Centre</h2>
+<span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><p class="line874">Zero centering sets zero to be halfway between the highest and lowest points of the regressor. <span class="anchor" id="line-53"></span><span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span><p class="line874">This means that the 'on' and 'off' periods of your design are treated equally <span class="anchor" id="line-56"></span>even if they have different durations - in effect it created a 1, -1 contrast <span class="anchor" id="line-57"></span>between the 'on' and 'off' blocks of your task. <span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><p class="line867">
+<h4 id="Why_is_this_different_from_de-meaning_.28option_3.29.3F">Why is this different from de-meaning (option 3)?</h4>
+<span class="anchor" id="line-61"></span><span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><p class="line874">Imagine that you have 'on' and 'off' blocks of un-equal length, say the 'off' <span class="anchor" id="line-64"></span>blocks are twice as long, and you de-mean this (literally, subtract the mean, <span class="anchor" id="line-65"></span>which is nearer to the height of the 'off' blocks, since these make up more of <span class="anchor" id="line-66"></span>the time). The resulting regressor will have higher blocks in the on period <span class="anchor" id="line-67"></span>than the off period - twice as high, in fact. Now you multiply this with your <span class="anchor" id="line-68"></span>ROI timecourse to get a PPI regressor. In other words, you are multiplying the <span class="anchor" id="line-69"></span>timecourse by -1 during the off blocks, and +2 during the on blocks. <span class="anchor" id="line-70"></span><span class="anchor" id="line-71"></span><p class="line867"><img alt="zeroing on centre value" class="attachment" height="300" src="attachments/PPIZeroing/zerocentre.png" title="zeroing on centre value" /> <span class="anchor" id="line-72"></span><span class="anchor" id="line-73"></span><p class="line874">This regressor is looking for voxels which are twice as correlated with your <span class="anchor" id="line-74"></span>seed ROI in the on block, as in the off block. This means you need double the <span class="anchor" id="line-75"></span>effect to get a significant result - obviously increasing the chance of a <span class="anchor" id="line-76"></span>false negative. <span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span><p class="line874">What you really want is to multiply the ROI timecourse by -1 diring the off <span class="anchor" id="line-80"></span>blocks and +1 during the on blocks. Using the zero-centre option does this for <span class="anchor" id="line-81"></span>you. <span class="anchor" id="line-82"></span><span class="anchor" id="line-83"></span><p class="line867">
+<h4 id="When_would_you_use_this_option_for_the_PSY_component.3F-1">When would you use this option for the PSY component?</h4>
+<span class="anchor" id="line-84"></span><span class="anchor" id="line-85"></span><span class="anchor" id="line-86"></span><p class="line874">Any time you are doing a within-subjects design <span class="anchor" id="line-87"></span><span class="anchor" id="line-88"></span><span class="anchor" id="line-89"></span><p class="line867">
+<h4 id="When_would_you_use_this_option_for_the_PHYS_component.3F-1">When would you use this option for the PHYS component?</h4>
+<span class="anchor" id="line-90"></span><span class="anchor" id="line-91"></span><span class="anchor" id="line-92"></span><p class="line874">Don't. <span class="anchor" id="line-93"></span><span class="anchor" id="line-94"></span><span class="anchor" id="line-95"></span><span class="anchor" id="line-96"></span><p class="line867">
+<h2 id="A3._Mean">3. Mean</h2>
+<span class="anchor" id="line-97"></span><span class="anchor" id="line-98"></span><span class="anchor" id="line-99"></span><p class="line874">This option literally subtracts the mean from the regressor. You want to do <span class="anchor" id="line-100"></span>this for your ROI timecourse (PHYS regressor). <span class="anchor" id="line-101"></span><span class="anchor" id="line-102"></span><p class="line867"><img alt="zeroing on mean value" class="attachment" height="300" src="attachments/PPIZeroing/zeromean.png" title="zeroing on mean value" /> <span class="anchor" id="line-103"></span><span class="anchor" id="line-104"></span><p class="line867">
+<h4 id="When_would_you_use_this_option_for_the_PSY_component.3F-2">When would you use this option for the PSY component?</h4>
+<span class="anchor" id="line-105"></span><span class="anchor" id="line-106"></span><span class="anchor" id="line-107"></span><p class="line874">Don't. Although if you have used this instead of zero-centring in a previous <span class="anchor" id="line-108"></span>analysis, it can only have increased the chance of a false negative. <span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span><span class="anchor" id="line-111"></span><p class="line867">
+<h4 id="When_would_you_use_this_option_for_the_PHYS_component.3F-2">When would you use this option for the PHYS component?</h4>
+<span class="anchor" id="line-112"></span><span class="anchor" id="line-113"></span><span class="anchor" id="line-114"></span><p class="line874">Always. <span class="anchor" id="line-115"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

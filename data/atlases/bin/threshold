@@ -1,0 +1,28 @@
+#!/bin/sh
+
+ECHO='echo -e'
+if [ ! `echo $FSLMACHTYPE | grep 'solaris|darwin9'` ]; then
+    # This is POSIX compliant sh, echo doesn't require -e
+    ECHO='echo'
+fi
+
+thr0=`echo $1 | sed -e 's/prob/maxprob-thr0/'`
+thr25=`echo $1 | sed -e 's/prob/maxprob-thr25/'`
+thr50=`echo $1 | sed -e 's/prob/maxprob-thr50/'`
+
+$ECHO "0%...\c"
+fslmaths $1 -Tmax -bin grot
+fslmaths $1 -Tmaxn -add 1 -mas grot $thr0
+$ECHO Done
+
+$ECHO "25%...\c"
+fslmaths $1 -thr 25 -Tmax -bin grot
+fslmaths $1 -thr 25 -Tmaxn -add 1 -mas grot $thr25
+$ECHO Done
+
+$ECHO "50%...\c"
+fslmaths $1 -thr 50 -Tmax -bin grot
+fslmaths $1 -thr 50 -Tmaxn -add 1 -mas grot $thr50
+$ECHO Done
+
+imrm grot

@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>TBSS/FurtherInformation</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">TBSS/FurtherInformation</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./TBSS.html">Introduction</a></li><li><a href="./TBSS(2f)UserGuide.html">User Guide</a></li><li><a href="./TBSS(2f)Faq.html">FAQ</a></li><li>Further Information<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Crossing-fibres_and_TBSS">Crossing-fibres and TBSS</a></li><li>
+<a href="#Nonstationarity_and_TBSS">Nonstationarity and TBSS</a></li><li>
+<a href="#TBSS_and_multivariate_testing">TBSS and multivariate testing</a></li></ol></div></div></li></ol></div> <span class="anchor" id="line-3"></span><hr /><p class="line874"> <span class="anchor" id="line-4"></span>
+<h1 id="Crossing-fibres_and_TBSS">Crossing-fibres and TBSS</h1>
+<span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line862">In <a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/19712743">[Jbabdi 2010]</a> we presented an approach for feeding in crossing-fibre partial volume fractions into TBSS, including a method for trying to make sure that the same tract (whether primary or secondary) is compared across all subjects.  <span class="anchor" id="line-7"></span>The script for using crossing fibre volume fractions in tbss is called <em>tbss_x</em>, and its usage is described in the main documentation. The script uses two commands, <em>swap_voxelwise</em> and <em>swap_subjectwise</em>, which can be run independently of <em>tbss_x</em> in order to ensure cross-subject correspondence of crossing-fibre values. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-10"></span>
+<h1 id="Nonstationarity_and_TBSS">Nonstationarity and TBSS</h1>
+<span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line862">In <a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/20955803">[Salimi-Khorshidi 2010]</a> we addressed the general question of nonstationarity for permutation testing. We hope that this can be used in TBSS to reduce causes of nonstationarity when testing on the skeleton, for example, caused by: varying spatial smoothness, varying cross-subject variance, and varying neighbourhood size on the skeleton (for example, when there are differently-sized disconnected skeleton chunks, or where the size of the local neighbourhood depends on local skeleton orientation). The two-stage correction process can be applied in <tt>randomise</tt> by using the <tt>--twopass</tt> option. <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-15"></span>
+<h1 id="TBSS_and_multivariate_testing">TBSS and multivariate testing</h1>
+<span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line862">In <a class="http" href="http://www.ncbi.nlm.nih.gov/pubmed/20932919">[Groves 2010]</a> we presented work on multivariate data-driven analysis across multiple modalities, including TBSS-preprocessed data (in this context, for example, FA and MD are "different" modalities). This both takes advantage of modelling across multiple voxels and multiple modalities in a single ICA-based analysis. The Bayesian framework automatically adjusts aspects of the modelling such as the relative weighting of the different modalities, and estimation of the number of distinct components that the data supports. Single-modality TBSS-preprocessed data (e.g. just the FA data in <tt>all_FA_skeletonised</tt>) can already be fed into <tt>melodic</tt>, while the <em>multi-modal</em> approach being developed by Groves et al is still in development, and will hopefully be released as part of FSL in the future. <span class="anchor" id="line-18"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

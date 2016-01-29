@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>topup/ExampleTopupFollowedByApplytopup</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">topup/ExampleTopupFollowedByApplytopup</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./topup.html">Introduction</a></li><li><a href="./topup(2f)TopupUsersGuide.html">Topup Users Guide</a></li><li><a href="./topup(2f)ApplytopupUsersGuide.html">Applytopup Users Guide</a></li><li>Example Topup Followed By Applytopup<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Example_of_running_topup_followed_by_applytopup">Example of running topup followed by applytopup</a></li></ol></div></div></li><li><a href="./topup(2f)Faq.html">FAQ</a></li><li><a href="./topup(2f)TopupFurtherInformation.html">Topup Further Information</a></li><li><a href="./topup(2f)ApplytopupFurtherInformation.html">Applytopup Further Information</a></li></ol></div> <span class="anchor" id="line-5"></span>
+<h1 id="Example_of_running_topup_followed_by_applytopup">Example of running topup followed by applytopup</h1>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line874">These examples pertains to the sequential use of topup and applytopup. <span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line862">The simplest, and typical use of topup is when you have two acquisitions and have manipulated your acquisitions so that the phase-encode direction is anterior&lt;-&gt;posterior and is anti-parallel in the two acquisitions (i.e. the phase-encode blips are reversed). Let us further assume that you have repeated your entire experiment with the two differene acquisition parameters, i.e. you have acquired your b0 and all your dwis with both blip polarities. Let us further assume that these data are contained in two 4D image files that you have named <tt class="backtick">blip_up.nii.gz</tt> and <tt class="backtick">blip_down.nii.gz</tt>. <span class="anchor" id="line-10"></span>The first thing we need to is to decide which of our data we want to use for the estimation of the field. This would typically be the b0 images from the two acquisitions. The reason for this is the these have higher SNR than the dwis, and because, unlike the dwis, they will be unafflicted by and additional source of distortions known as "eddy current-induced distortions". So, let us now say that the first volume of each of <tt class="backtick">blip_up.nii.gz</tt> and <tt class="backtick">blip_down.nii.gz</tt> is the b0 images for the respective acquisitions. We then extract these and put them into a single file using something like <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line867"><tt class="backtick">fslroi&nbsp;blip_up&nbsp;b0_blip_up&nbsp;0&nbsp;1</tt><br>
+ <span class="anchor" id="line-13"></span><tt class="backtick">fslroi&nbsp;blip_down&nbsp;b0_blip_down&nbsp;0&nbsp;1</tt><br>
+ <span class="anchor" id="line-14"></span><tt class="backtick">fslmerge&nbsp;-t&nbsp;both_b0&nbsp;b0_blip_up&nbsp;b0_blip_down</tt> <span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line862">which results in both_b0 being a 4D-file containing two volumes, the first acquired with positive phase-encode blips and the second with negative. The second thing to do is to create a text file that informs topup how the images were acquired. In this case the file, which we name <tt class="backtick">my_acq_param.txt</tt> would contain <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line867"><tt class="backtick">0&nbsp;1&nbsp;0&nbsp;0.087</tt><br>
+ <span class="anchor" id="line-19"></span><tt class="backtick">0&nbsp;-1&nbsp;0&nbsp;0.087</tt> <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line862">where the three first columns of each row is a signed, normalised "phase-encode direction vector" and the final column is the time (in seconds) between the readout of the centre of the first echo and the centre of the last echo (equal to dwell-time multiplied by # of phase-encode steps minus one). The [0 1 0] vector in the first row indicates that the first scan in the <tt class="backtick">both_b0</tt> file was acquired with phase-encoding in the <em>y</em>-direction (anterior&lt;-&gt;posterior) using positive phase-encode blips and correspondingly the [0 -1 0] in the second row that the second scan in <tt class="backtick">both_b0</tt> was acquired with negative blips. <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line874">The fourth column indicates that total readout times was 87ms for both acquisitons. When the readout time is identical for all acquisitions this simply serves to ensure that the estimated field is correctly scaled in Hz, but it doesn't affect the result in terms of undistorted images. If one e.g. sets it to 1 it simply means the field will be scaled as "voxels displacement" instead. When the different scans have different readout times it becomes crucial that they are entered correctly. <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><p class="line862">These two file are now used to execute <tt class="backtick">topup</tt> with the command <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line867"><tt class="backtick">topup&nbsp;--imain=both_b0&nbsp;--datain=my_acq_param.txt&nbsp;--config=b02b0.cnf&nbsp;--out=my_topup_results</tt> <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><p class="line862">which will upon completion create the two files <tt class="backtick">my_topup_results_fieldcoef.nii.gz</tt> and <tt class="backtick">my_topup_results_movpar.txt</tt>.  <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><p class="line862">As of yet no images have been corrected so the next step will be to use these results to run <tt class="backtick">applytopup</tt>. We want to correct all the images, not just the b=0 images, so we now return to the original files <tt class="backtick">blip_up.nii.gz</tt> and <tt class="backtick">blip_down.nii.gz</tt>. The command we use is <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line867"><tt class="backtick">applytopup&nbsp;--imain=blip_up,blip_down&nbsp;--inindex=1,2&nbsp;--datatin=my_acq_param.txt&nbsp;--topup=my_topup_results&nbsp;--out=my_hifi_images</tt> <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><p class="line862">where <tt class="backtick">--inindex=1,2</tt> specifies the relation between the list of files given by <tt class="backtick">--imain</tt> and the acquisition parameters in <tt class="backtick">my_acq_param.txt</tt> and the movement parameters in <tt class="backtick">my_topup_results_movpar.txt</tt>. The index 1 (from <tt class="backtick">--inindex=1,2</tt>) specifies that for the file <tt class="backtick">blip_up.nii.gz</tt> <tt class="backtick">applytopup</tt> should use the first line of <tt class="backtick">my_acq_param.txt</tt> when correcting the distortions and the first line of <tt class="backtick">my_topup_results_movpar.txt</tt> when correcting the movements. Correspondently the index 2 specifies that for the file <tt class="backtick">blip_down.nii.gz</tt> <tt class="backtick">applytopup</tt> should use the second line of <tt class="backtick">my_acq_param.txt</tt> and of <tt class="backtick">my_topup_results_movpar.txt</tt>. <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line874">It may be helpful to note (and understand) that  <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line867"><tt class="backtick">applytopup&nbsp;--imain=blip_down,blip_up&nbsp;--inindex=2,1&nbsp;--datatin=my_acq_param.txt&nbsp;--topup=my_topup_results&nbsp;--out=my_hifi_images</tt> <span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><p class="line862">is exactly analogous to the <tt class="backtick">applytopup</tt> command above. <span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><p class="line862">The output of this is a file named <tt class="backtick">my_hifi_images.nii.gz</tt> which will contain as many volumes as <tt class="backtick">blip_up.nii.gz</tt> (or <tt class="backtick">blip_down.nii.gz</tt> for that matter) where each pair of images in <tt class="backtick">blip_up.nii.gz</tt> and <tt class="backtick">blip_down.nii.gz</tt> has been combined into a single image in <tt class="backtick">my_hifi_images.nii.gz</tt> using the <a href="./topup(2f)ApplytopupFurtherInformation.html#Least-squares_restoration">"Least-Squares Restoration"</a> method. Because the pairs of images are combined into a single image it is of course crucial that the data in <tt class="backtick">blip_up</tt> and <tt class="backtick">blip_down</tt> has been collected using identical protocols, i.e. if volume <em>i</em> in <tt class="backtick">blip_up</tt> was acquired with a diffusion weighting given by the vector <strong>g</strong><sub>i</sub> then volume <em>i</em> in <tt class="backtick">blip_down</tt> must also have been acquired with <strong>g</strong><sub>i</sub>. It is the users responsibility to ensure this since there is no way for <tt class="backtick">applytopup</tt> to verify it. <span class="anchor" id="line-44"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

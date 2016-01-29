@@ -1,0 +1,43 @@
+h1{
+  font-size:30pt;
+  }
+h2{  
+  text-align: left;
+  font-size:24pt;
+  }
+h3{  
+  text-align: left;
+  font-size:20pt;
+  }
+
+body 
+  {
+  background-image: url("fsl-bg.jpg");
+  background-color: #fafafa;
+  font-family: ariel;
+  }
+
+.key
+  {
+  font-style: italic;
+  }
+.control
+  {
+  font-style: italic;
+  }
+.mode
+  {  
+  font-style: italic;
+  }
+.parameter
+  {   
+  font-style: italic;
+  font-family: serif;
+  font-weight: bold; 
+  }
+.tool
+  { 
+   font-style: italic;
+  }
+a { color: #004faf; text-decoration: none }
+

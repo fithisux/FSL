@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>HelpOnFormatting</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">HelpOnFormatting</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line867">
+<h1 id="Formatting">Formatting</h1>
+<span class="anchor" id="line-10"></span><p class="line867"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Formatting">Formatting</a><ol><li>
+<a href="#General">General</a></li><li>
+<a href="#Typeface">Typeface</a></li><li>
+<a href="#Colorize_text">Colorize text</a></li><li>
+<a href="#Colorize_code_.28Syntax_Highlighting.29">Colorize code (Syntax Highlighting)</a></li><li>
+<a href="#Examples">Examples</a><ol><li>
+<a href="#Mixing_.27.27italic.27.27_and_.27.27.27bold.27.27.27">Mixing ''italic'' and '''bold'''</a></li><li>
+<a href="#Superscript_.26_Subscript">Superscript &amp; Subscript</a></li><li>
+<a href="#Code_blocks">Code blocks</a><ol><li>
+<a href="#Nesting_curly_braces">Nesting curly braces</a></li><li>
+<a href="#Colorized_Code">Colorized Code</a></li></ol></li></ol></li></ol></li></ol></div> <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line862">This page describes using the <a href="./MoinMoin.html">MoinMoin</a> wiki syntax (which is the default syntax for a <a href="./MoinMoin.html">MoinMoin</a> based wiki, but not the only one). <span class="anchor" id="line-13"></span>For other parsers/syntaxes take a look at <a href="./HelpOnParsers.html">HelpOnParsers</a>. <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><p class="line867">
+<h2 id="General">General</h2>
+<span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><ul><li>Use one or more blank lines to separate paragraphs. <span class="anchor" id="line-18"></span></li><li><p class="line862">Use <tt class="backtick">&lt;&lt;BR&gt;&gt;</tt> <a href="./HelpOnMacros.html">macro</a> to insert linebreaks into paragraphs. <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span></li></ul><p class="line867">
+<h2 id="Typeface">Typeface</h2>
+<span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line867"><span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><div><table><tbody><tr style="background-color: #ffffcc">  <td><p class="line891"><strong> Name/Sample</strong> </td>
+  <td><p class="line862"> <strong> Markup </strong>   </td>
+  <td><p class="line862"> <strong> Notes </strong>          </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-25"></span><p class="line862">  <em>italic</em>     </td>
+  <td><p class="line862"> <tt class="backtick">''italic''</tt>       </td>
+  <td><p class="line862"> Double single quotes.  </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-26"></span><p class="line862">  <strong>bold</strong>     </td>
+  <td><p class="line862"> <tt class="backtick">'''bold'''</tt>       </td>
+  <td><p class="line862"> Triple single quotes.  </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-27"></span><p class="line862">  <tt class="backtick">monospace</tt>    </td>
+  <td><p class="line862"> <tt>`monospace`</tt>  </td>
+  <td><p class="line862"> Single backticks for inline monospaced text. If possible, try to avoid long monospaced texts, especially inside tables: sometimes they are not properly wrapped by the browsers. Wiki markup is ignored. </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-28"></span><p class="line862">  <tt class="backtick">monospace</tt>    </td>
+  <td><p class="line862"> <tt class="backtick">{{{monospace}}}</tt>  </td>
+  <td><p class="line862"> Same as backticks. Placing the braces in separate lines produces a <a href="./HelpOnFormatting.html#codeexample">code block</a>. </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-29"></span><p class="line862">  <span class="u">underline</span>  </td>
+  <td><p class="line862"> <tt class="backtick">__underline__</tt>    </td>
+  <td><p class="line862">                         </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-30"></span><p class="line862">  <sup>super</sup>script  </td>
+  <td><p class="line862"> <tt class="backtick">^super^script</tt>    </td>
+  <td><p class="line862">                         </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-31"></span><p class="line862">  <sub>sub</sub>script  </td>
+  <td><p class="line862"> <tt class="backtick">,,sub,,script</tt>    </td>
+  <td><p class="line862">                         </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-32"></span><p class="line862">  <small>smaller</small>    </td>
+  <td><p class="line862"> <tt class="backtick">~-smaller-~</tt>      </td>
+  <td><p class="line862">                         </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-33"></span><p class="line862">  <big>larger</big>     </td>
+  <td><p class="line862"> <tt class="backtick">~+larger+~</tt>       </td>
+  <td><p class="line862">                         </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-34"></span><p class="line862"> <span class="strike">stroke</span>    </td>
+  <td><p class="line862"> <tt class="backtick">--(stroke)--</tt>     </td>
+  <td><p class="line862">                         </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><p class="line867">
+<h2 id="Colorize_text">Colorize text</h2>
+<span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><p class="line862">Colorizing is enabled in tables without additional macros (see <a href="./HelpOnTables.html">HelpOnTables</a>).  <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><p class="line867"><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><p class="line867">
+<h2 id="Colorize_code_.28Syntax_Highlighting.29">Colorize code (Syntax Highlighting)</h2>
+<span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><p class="line874">There are several ways to highlight code: <span class="anchor" id="line-45"></span><ol type="1"><li><p class="line862">Start a special code block containing the parser's name: <tt class="backtick">{{{#!parsername</tt> <span class="anchor" id="line-46"></span></li><li><p class="line862">Embed a file attachment bearing a supported extension (such as <tt class="backtick">".py"</tt>) with <tt class="backtick">{{attachment:test.py}}</tt> <span class="anchor" id="line-47"></span></li><li><p class="line862">Begin a page with the <a href="./HelpOnProcessingInstructions.html">format processing instruction</a>: <tt class="backtick">#format&nbsp;parsername</tt> <span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span></li></ol><p class="line867"><a href="./HelpOnFormatting.html#SyntaxHighlighting">Example.</a> <span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span><p class="line867">MoinMoin comes with a special parser called <a href="./HelpOnParsers.html#The_highlight_parser">highlight</a> that is based on <a class="http" href="http://pygments.org/">Pygments</a> internally. <span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span><p class="line874">You can use it to highlight many sorts of programming source code, configuration files and other sorts of text files used on computers. <span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span><p class="line867">
+<h2 id="Examples">Examples</h2>
+<span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span><p class="line867">
+<h3 id="Mixing_.27.27italic.27.27_and_.27.27.27bold.27.27.27">Mixing ''italic'' and '''bold'''</h3>
+<span class="anchor" id="line-58"></span><p class="line867"><span class="anchor" id="italic_bold_example"></span> <span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><p class="line867"><span class="anchor" id="line-61"></span><span class="anchor" id="line-62"></span><div><table><tbody><tr style="background-color: #ffffcc">  <td><p class="line862"> <strong>Markup</strong> </td>
+  <td><p class="line862"> <strong>Result</strong>                    </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-63"></span><p class="line862"> <tt class="backtick">'''''Mix'''&nbsp;at&nbsp;the&nbsp;beginning''</tt>   </td>
+  <td><p class="line862">  <em><strong>Mix</strong> at the beginning</em>  </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-64"></span><p class="line862"> <tt class="backtick">'''''Mix''&nbsp;at&nbsp;the&nbsp;beginning'''</tt>   </td>
+  <td><p class="line862">  <strong><em>Mix</em> at the beginning</strong>  </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-65"></span><p class="line862"> <tt class="backtick">'''Mix&nbsp;at&nbsp;the&nbsp;''end'''''</tt>         </td>
+  <td><p class="line862">  <strong>Mix at the <em>end</em></strong>        </td>
+</tr>
+<tr>  <td><span class="anchor" id="line-66"></span><p class="line862"> <tt class="backtick">''Mix&nbsp;at&nbsp;the&nbsp;'''end'''''</tt>         </td>
+  <td><p class="line862">  <em>Mix at the <strong>end</strong></em>        </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-67"></span><span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span><p class="line867">
+<h3 id="Superscript_.26_Subscript">Superscript &amp; Subscript</h3>
+<span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span><p class="line867"><span class="anchor" id="line-73"></span><span class="anchor" id="line-74"></span><pre><span class="anchor" id="line-1"></span>You might recall ''a''^2^ `+` ''b''^2^ `=` ''c''^2^ from your math lessons, unless your head is filled with H,,2,,O.</pre><span class="anchor" id="line-75"></span><span class="anchor" id="line-76"></span><p class="line874">Result: <span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span><p class="line862">You might recall <em>a</em><sup>2</sup> <tt class="backtick">+</tt> <em>b</em><sup>2</sup> <tt class="backtick">=</tt> <em>c</em><sup>2</sup> from your math lessons, unless your head is filled with H<sub>2</sub>O. <span class="anchor" id="line-79"></span><span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span><p class="line867"><span class="anchor" id="codeexample"></span> <span class="anchor" id="line-82"></span>
+<h3 id="Code_blocks">Code blocks</h3>
+<span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span><p class="line874">Markup: <span class="anchor" id="line-85"></span><span class="anchor" id="line-86"></span><span class="anchor" id="line-87"></span><span class="anchor" id="line-88"></span><span class="anchor" id="line-89"></span><span class="anchor" id="line-90"></span><pre><span class="anchor" id="line-1-1"></span>{{{
+<span class="anchor" id="line-2"></span>10 PRINT "Hello, world!"
+<span class="anchor" id="line-3"></span>20 GOTO 10
+<span class="anchor" id="line-4"></span>}}}</pre><span class="anchor" id="line-91"></span><span class="anchor" id="line-92"></span><p class="line874">Result: <span class="anchor" id="line-93"></span><span class="anchor" id="line-94"></span><span class="anchor" id="line-95"></span><span class="anchor" id="line-96"></span><pre><span class="anchor" id="line-1-2"></span>10 PRINT "Hello, world!"
+<span class="anchor" id="line-2-1"></span>20 GOTO 10</pre><span class="anchor" id="line-97"></span><span class="anchor" id="line-98"></span><p class="line867">
+<h4 id="Nesting_curly_braces">Nesting curly braces</h4>
+<span class="anchor" id="line-99"></span><span class="anchor" id="line-100"></span><p class="line862">As pointed out on <a href="./HelpOnParsers.html">HelpOnParsers</a>, you can nest multiple levels of curly braces: <span class="anchor" id="line-101"></span><span class="anchor" id="line-102"></span><p class="line874">Markup: <span class="anchor" id="line-103"></span><span class="anchor" id="line-104"></span><span class="anchor" id="line-105"></span><span class="anchor" id="line-106"></span><span class="anchor" id="line-107"></span><span class="anchor" id="line-108"></span><pre><span class="anchor" id="line-1-3"></span>{{{{ 
+<span class="anchor" id="line-2-2"></span>This is a preformatted text block.
+<span class="anchor" id="line-3-1"></span>{{{ with curly braces inside }}}
+<span class="anchor" id="line-4-1"></span>}}}}</pre><span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span><p class="line874">Result: <span class="anchor" id="line-111"></span><span class="anchor" id="line-112"></span><span class="anchor" id="line-113"></span><span class="anchor" id="line-114"></span><pre><span class="anchor" id="line-1-4"></span>This is a preformatted text block.
+<span class="anchor" id="line-2-3"></span>{{{ with curly braces inside }}}</pre><span class="anchor" id="line-115"></span><span class="anchor" id="line-116"></span><p class="line867"><span class="anchor" id="SyntaxHighlighting"></span> <span class="anchor" id="line-117"></span>
+<h4 id="Colorized_Code">Colorized Code</h4>
+<span class="anchor" id="line-118"></span><span class="anchor" id="line-119"></span><p class="line874">Markup: <span class="anchor" id="line-120"></span><span class="anchor" id="line-121"></span><span class="anchor" id="line-122"></span><span class="anchor" id="line-123"></span><span class="anchor" id="line-124"></span><span class="anchor" id="line-125"></span><pre><span class="anchor" id="line-1-5"></span>{{{#!highlight python
+<span class="anchor" id="line-2-4"></span>from colors import palette
+<span class="anchor" id="line-3-2"></span>palette.colorize('python')
+<span class="anchor" id="line-4-2"></span>}}}</pre><span class="anchor" id="line-126"></span><span class="anchor" id="line-127"></span><p class="line874">Result: <span class="anchor" id="line-128"></span><span class="anchor" id="line-129"></span><span class="anchor" id="line-130"></span><span class="anchor" id="line-131"></span><span class="anchor" id="line-1-1"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+function isnumbered(obj) {
+  return obj.childNodes.length && obj.firstChild.childNodes.length && obj.firstChild.firstChild.className == 'LineNumber';
+}
+function nformat(num,chrs,add) {
+  var nlen = Math.max(0,chrs-(''+num).length), res = '';
+  while (nlen>0) { res += ' '; nlen-- }
+  return res+num+add;
+}
+function addnumber(did, nstart, nstep) {
+  var c = document.getElementById(did), l = c.firstChild, n = 1;
+  if (!isnumbered(c)) {
+    if (typeof nstart == 'undefined') nstart = 1;
+    if (typeof nstep  == 'undefined') nstep = 1;
+    var n = nstart;
+    while (l != null) {
+      if (l.tagName == 'SPAN') {
+        var s = document.createElement('SPAN');
+        var a = document.createElement('A');
+        s.className = 'LineNumber';
+        a.appendChild(document.createTextNode(nformat(n,4,'')));
+        a.href = '#' + did + '_' + n;
+        s.appendChild(a);
+        s.appendChild(document.createTextNode(' '));
+        n += nstep;
+        if (l.childNodes.length) {
+          l.insertBefore(s, l.firstChild);
+        }
+        else {
+          l.appendChild(s);
+        }
+      }
+      l = l.nextSibling;
+    }
+  }
+  return false;
+}
+function remnumber(did) {
+  var c = document.getElementById(did), l = c.firstChild;
+  if (isnumbered(c)) {
+    while (l != null) {
+      if (l.tagName == 'SPAN' && l.firstChild.className == 'LineNumber') l.removeChild(l.firstChild);
+      l = l.nextSibling;
+    }
+  }
+  return false;
+}
+function togglenumber(did, nstart, nstep) {
+  var c = document.getElementById(did);
+  if (isnumbered(c)) {
+    remnumber(did);
+  } else {
+    addnumber(did,nstart,nstep);
+  }
+  return false;
+}
+</script>
+
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-81034c0bf625acfaeadb1746b28f9bb3f866cf20\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-81034c0bf625acfaeadb1746b28f9bb3f866cf20" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-81034c0bf625acfaeadb1746b28f9bb3f866cf20_1">   1</a> </span><span class="LineAnchor" id="CA-81034c0bf625acfaeadb1746b28f9bb3f866cf20_1"></span><span class="anchor" id="line-1-2"></span><span class="ResWord">from</span> <span class="ID">colors</span> <span class="ResWord">import</span> <span class="ID">palette</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-81034c0bf625acfaeadb1746b28f9bb3f866cf20_2">   2</a> </span><span class="LineAnchor" id="CA-81034c0bf625acfaeadb1746b28f9bb3f866cf20_2"></span><span class="anchor" id="line-2-1"></span><span class="ID">palette</span>.<span class="ID">colorize</span>(<span class="String">'</span><span class="String">python</span><span class="String">'</span>)</span>
+</pre></div></div><span class="anchor" id="line-132"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:34
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>FEEDS/UsingData</title>
+<link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="fsl/css/common.css">
+<link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="fsl/css/screen.css">
+<link rel="stylesheet" type="text/css" media="print" charset="utf-8" href="fsl/css/print.css">
+<style type="text/css">
+ul.pagetitle{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+li.pagetitle{
+  display: inline;
+  margin: 0;
+}
+td.noborder {
+  border: 0;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td class="noborder">
+<img src="logo.png">
+</td>
+<td class="noborder">
+<ul class="pagetitle">
+<li class="pagetitle"><a class="backlink">FEEDS/UsingData</a>
+</ul>
+<br><br>
+[<a href="FSL.html">FSL</a>]&nbsp;[<a href="TitleIndex.html">TitleIndex</a>]&nbsp;[<a href="WordIndex.html">WordIndex</a>]&nbsp;
+</td>
+</tr>
+</table>
+<hr>
+<div id="page">
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867"><div class="FslToolContents">
+<h1>Contents</h1>
+<ol><li><a href="./FEEDS.html">Introduction</a></li><li><a href="./FEEDS(2f)Downloading.html">Downloading</a></li><li><a href="./FEEDS(2f)Running.html">Running</a></li><li><a href="./FEEDS(2f)TimingResults.html">Timing Results</a></li><li>Using Data<div class="contentslist"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Using_the_Example_Data_to_Learn_FSL">Using the Example Data to Learn FSL</a><ol><li>
+<a href="#Introduction">Introduction</a></li><li>
+<a href="#BET">BET</a></li><li>
+<a href="#SUSAN">SUSAN</a></li><li>
+<a href="#FAST">FAST</a></li><li>
+<a href="#FLIRT">FLIRT</a></li><li>
+<a href="#FUGUE">FUGUE</a></li><li>
+<a href="#SIENAX">SIENAX</a></li><li>
+<a href="#FEAT">FEAT</a></li><li>
+<a href="#MELODIC">MELODIC</a></li><li>
+<a href="#FIRST">FIRST</a></li><li>
+<a href="#FDT">FDT</a></li></ol></li></ol></div></div></li></ol></div> <span class="anchor" id="line-5"></span>
+<h1 id="Using_the_Example_Data_to_Learn_FSL">Using the Example Data to Learn FSL</h1>
+<span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><p class="line867">
+<h2 id="Introduction">Introduction</h2>
+<span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line862">We now explain how the different tools in FSL can be run on the example data provided in the data subdirectory. We strongly suggest that you work with a copy of data rather than the original, so that you can always go back to the original data if you need to. You can do this by typing (inside <tt class="backtick">feeds</tt>) <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><pre><span class="anchor" id="line-1"></span>cp -r data examples
+<span class="anchor" id="line-2"></span>cd examples</pre><span class="anchor" id="line-14"></span><p class="line862">and then work with the files inside <tt class="backtick">examples</tt>. <span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line862">The instructions given below should produce the same output as provided in <tt class="backtick">data</tt>. <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line862">Make sure your environment is setup correctly for using FSL - see the <a class="https" href="https://fsl.fmrib.ox.ac.uk/fsl/fsldev/FslInstallation#Running_FSL">Running FSL</a> section on the Downloading and Installing page. <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line862">To start the main FSL GUI, type <tt class="backtick">fsl</tt>. <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line862">To view the output of each tool, either load the output image(s) into your favourite NIFTI image viewer, or use the simple (non-interactive) display program <tt class="backtick">slices</tt> which is in the <tt class="backtick">fsl/bin</tt> directory (the setup commands above should have already added this to your program search path). Where links appear below, these mostly point to 2D PNG images created by running <tt class="backtick">slicer</tt> on the relevant NIFTI format 3D image. (<tt class="backtick">slicer</tt> is a command-line program which takes a 3D NIFTI format image and produces a 2D PNG image with various slices at various orientations from the input image; <tt class="backtick">slices</tt> is a script which calls <tt class="backtick">slicer</tt> and then starts up a 2D image viewer to show you the PNG image.)  <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line867">
+<h2 id="BET">BET</h2>
+<span class="anchor" id="line-25"></span><p class="line862">Set the <strong>Input image</strong> to be <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural.png" title="structural">structural</a> and press <strong>OK</strong>. The output will be <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_brain.png" title="structural_brain">structural_brain</a>. You will see a message on your terminal when BET has finished. <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line867">
+<h2 id="SUSAN">SUSAN</h2>
+<span class="anchor" id="line-28"></span><p class="line862">Set the <strong>Input image</strong> to be <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural.png" title="structural">structural</a>. Set the <strong>Brightness threshold</strong> to <tt class="backtick">2000</tt> (this is greater than the noise level and less than the grey-white contrast in the input image). Set the <strong>Mask SD</strong> to <tt class="backtick">2</tt> (this sets the mask half-width to be 2mm). Press <em>OK</em>. The output will be <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_susan.png" title="structural_susan">structural_susan</a>.  <span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><p class="line867">
+<h2 id="FAST">FAST</h2>
+<span class="anchor" id="line-31"></span><p class="line862">Set the <strong>Input image</strong> to be <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_brain.png" title="structural_brain">structural_brain</a> (i.e. it is important to have run BET first). Turn on the <strong>Partial volume maps</strong> optional output images. Press <strong>Go</strong>. The outputs will be <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_brain_seg.png" title="structural_brain_seg">structural_brain_seg</a>, <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_brain_pve_0.png" title="structural_brain_pve_0">structural_brain_pve_0</a>, <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_brain_pve_1.png" title="structural_brain_pve_1">structural_brain_pve_1</a> and <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_brain_pve_2.png" title="structural_brain_pve_2">structural_brain_pve_2</a>.  <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line867">
+<h2 id="FLIRT">FLIRT</h2>
+<span class="anchor" id="line-34"></span><p class="line862">Set the <strong>Input image</strong> to be <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_brain.png" title="structural_brain">structural_brain</a>. Set the <strong>Output image</strong> to be <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_brain2standard.png" title="structural_brain2standard">structural_brain2standard</a>. Press <strong>Go</strong>.  <span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><p class="line867">
+<h2 id="FUGUE">FUGUE</h2>
+<span class="anchor" id="line-37"></span><p class="line874">FUGUE does not have a GUI. On the command line type: <span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><pre><span class="anchor" id="line-1-1"></span>prelude -c fieldmap -u unwrapped_phase</pre><span class="anchor" id="line-41"></span><p class="line862">(<a class="attachment" href="attachments/FEEDS(2f)UsingData/fieldmap.png" title="fieldmap">fieldmap</a>, <a class="attachment" href="attachments/FEEDS(2f)UsingData/unwrapped_phase.png" title="unwrapped_phase">unwrapped_phase</a> images) <span class="anchor" id="line-42"></span>This runs the phase map unwrapping. Now type: <span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span><pre><span class="anchor" id="line-1-2"></span>fugue -i epi -p unwrapped_phase -d 0.295 -u unwarped_epi</pre><span class="anchor" id="line-46"></span><p class="line862">(<a class="attachment" href="attachments/FEEDS(2f)UsingData/epi.png" title="epi">epi</a>, <a class="attachment" href="attachments/FEEDS(2f)UsingData/unwarped_epi.png" title="unwarped_epi">unwarped_epi</a> images) <span class="anchor" id="line-47"></span>This runs the unwarping of the input epi image.  <span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><p class="line867">
+<h2 id="SIENAX">SIENAX</h2>
+<span class="anchor" id="line-50"></span><p class="line874">SIENAX does not have a GUI. On the command line type: <span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span><pre><span class="anchor" id="line-1-3"></span>sienax structural</pre><span class="anchor" id="line-54"></span><p class="line862">This runs the SIENAX cross-sectional (single-time-point) atrophy script, producing a web-page report <tt class="backtick">structural_sienax/report.html</tt>.  <span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><p class="line867">
+<h2 id="FEAT">FEAT</h2>
+<span class="anchor" id="line-57"></span><p class="line862">Press <strong>Select 4D data</strong> and select <a class="attachment" href="attachments/FEEDS(2f)UsingData/fmri.png" title="fmri">fmri</a>. <span class="anchor" id="line-58"></span>Press <strong>Stats and Full model setup</strong> to setup the GLM details. <span class="anchor" id="line-59"></span><ul><li><p class="line862">Change the <strong>Number of original EVs</strong> to 2. <span class="anchor" id="line-60"></span></li><li><p class="line862">Setup <strong>EV1</strong> (the visual stimulation timing): set <strong>Off</strong> to <tt class="backtick">30</tt>, <strong>On</strong> to <tt class="backtick">30</tt> and <strong>Phase</strong> to <tt class="backtick">30</tt>. This describes a square wave of total period 60s, starting with an ON period, hence the phase setting. <span class="anchor" id="line-61"></span></li><li><p class="line862">Setup <strong>EV2</strong> (the auditory stimulation timing): set <strong>Off</strong> to <tt class="backtick">45</tt>, <strong>On</strong> to <tt class="backtick">45</tt> and <strong>Phase</strong> to <tt class="backtick">45</tt>. This describes a square wave of total period 90s, starting with an ON period, hence the phase setting. <span class="anchor" id="line-62"></span></li><li><p class="line862">Now setup the Contrasts. Set the <strong>Number of contrasts</strong> to <tt class="backtick">2</tt>, set the first (OC1) to <tt class="backtick">[1&nbsp;0]</tt> and the second (OC2) to <tt class="backtick">[0&nbsp;1]</tt>. Thus the first output colour overlay image produced will show visual activation as only EV1 is used, and the second will show only auditory activation. <span class="anchor" id="line-63"></span></li><li><p class="line862">Now setup the F-tests. Set the <strong>Number of F-tests</strong> to <tt class="backtick">1</tt>. Select both contrasts. Thus the third output colour overlay image produced will show where either visual or auditory activation occurs (i.e. will show both on a single image). <span class="anchor" id="line-64"></span></li><li><p class="line862">Press <strong>Done</strong> to finish the model setup. <span class="anchor" id="line-65"></span></li><li><p class="line862">Set the <strong>High pass filter cutoff</strong> to <tt class="backtick">100</tt>. Although it is common to set this to 1.5 times the maximum stimulation period (in this case 90*1.5=135), the highpass filter used in FEAT has quite a slow roll-off above the cutoff frequency, so in fact setting this to just over the 90s period time is fine. <span class="anchor" id="line-66"></span></li><li><p class="line862">The default settings in Pre-stats and Thresholding &amp; rendering can be left as they are. <span class="anchor" id="line-67"></span></li><li><p class="line862">In the Registration section, select the <strong>Main structural image</strong>. Set this to <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_brain.png" title="structural_brain">structural_brain</a>. <span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span></li></ul><p class="line862">You are now ready to run FEAT. Press <strong>Go</strong>. As FEAT completes the different stages of processing, you will see messages appear on your terminal. When it has finished, the final messages will tell you the file name of a web page which you can view with your web browser to see the results. <span class="anchor" id="line-70"></span><span class="anchor" id="line-71"></span><p class="line867">
+<h2 id="MELODIC">MELODIC</h2>
+<span class="anchor" id="line-72"></span><p class="line862">Set the <strong>4D input data</strong> to be <tt class="backtick">fmri</tt>. Note that this is the same raw data as was input to FEAT - normally you would ideally want to have done some pre-processing to the data before running MELODIC - see the <a href="./MELODIC.html">MELODIC help page</a> for more information on this. Press <strong>Go</strong>. When MELODIC has finished, the final messages will tell you the file name of a web page which you can view with your web browser to see the results.  <span class="anchor" id="line-73"></span><span class="anchor" id="line-74"></span><p class="line867">
+<h2 id="FIRST">FIRST</h2>
+<span class="anchor" id="line-75"></span><p class="line874">First you must register your data to standard space; in a terminal type: <span class="anchor" id="line-76"></span><span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span><pre><span class="anchor" id="line-1-4"></span>first_flirt structural structural_to_std_sub</pre><span class="anchor" id="line-79"></span><p class="line862">(<a class="attachment" href="attachments/FEEDS(2f)UsingData/structural.png" title="structural">structural</a>, <a class="attachment" href="attachments/FEEDS(2f)UsingData/structural_to_std_sub.png" title="structural_to_std_sub">structural_to_std_sub</a> images.) <span class="anchor" id="line-80"></span>Now run a single structure's segmentation; type: <span class="anchor" id="line-81"></span><span class="anchor" id="line-82"></span><span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span><pre><span class="anchor" id="line-1-5"></span>run_first -i structural -t structural_to_std_sub.mat -n 20 -o structural_first_L_Hipp -m \
+<span class="anchor" id="line-2-1"></span>    ${FSLDIR}/data/first/models_317_bin/L_Hipp_bin.bmv</pre><span class="anchor" id="line-85"></span><p class="line862">(<a class="attachment" href="attachments/FEEDS(2f)UsingData/first.png" title="${FSLDIR}/data/first/models_317_bin/L_Hipp_bin.bmv">${FSLDIR}/data/first/models_317_bin/L_Hipp_bin.bmv</a> image.) <span class="anchor" id="line-86"></span><span class="anchor" id="line-87"></span><p class="line867">
+<h2 id="FDT">FDT</h2>
+<span class="anchor" id="line-88"></span><p class="line862">To reconstruct the example data, open the FDT GUI and change the top option to <strong>BEDPOSTX: Estimation of diffusion parameters</strong>. Select the input directory <tt class="backtick">fdt_subj1</tt> and pres <strong>Go</strong>. To load some of the output images into FSLView, type: <span class="anchor" id="line-89"></span><span class="anchor" id="line-90"></span><span class="anchor" id="line-91"></span><span class="anchor" id="line-92"></span><pre><span class="anchor" id="line-1-6"></span>cd fdt_subj1.bedpostX
+<span class="anchor" id="line-2-2"></span>fslview nodif_brain mean_f1samples dyads1</pre><span class="anchor" id="line-93"></span><p class="line862">then press the (i) near the bottom of FSLView, to bring up the <strong>Overlay Information</strong> dialog. Make sure <strong>dyads</strong> is highlighted in the overlay list, and change the <strong>Display as</strong> to <tt class="backtick">RGB</tt>. Change the <strong>Modulation</strong> to <tt class="backtick">mean_f1samples</tt> (this is similar to the fractional anisotropy). You can now see colour-coding of the principal diffusion direction vector. Now change the <strong>Display as</strong> to <tt class="backtick">Lines</tt> to see the same vectors represented as small red lines.  <span class="anchor" id="line-94"></span><span class="anchor" id="bottom"></span></div>
+</div>
+<hr>
+2014-07-08 15:33
+</body>
+</html>

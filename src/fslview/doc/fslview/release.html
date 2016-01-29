@@ -1,0 +1,75 @@
+<html><link rel="stylesheet" title="normal" type="text/css" href="fslview.css">
+<head><title>Release Notes</title></head>
+<body><hr>
+<table border="0"><tr>
+<td align="left"><a href="../index.html"><img align="left" border="0" src="fsl-logo.png"></a>
+<td align="middle"><h3>Release Notes</h3>
+</tr></table><hr>
+
+<h4>New Features</h4>
+
+<ul> 
+  <li>New "View Options Dialog" allows customization of the following behaviours:
+
+    <ol>
+      <li>Views now have an independent "cursor" which can optionally
+	be linked to other views via a "global cursor".</li>
+      <li>The volume index can locally be linked/unlinked across the
+	displayed images.</li>
+      <li>The onscreen cursor representation has a one voxel gap in
+	the centre. This can be changed using the dialog.</li>
+      <li>Orientation labels can be turned off/on.</li>
+      <li>Each slice plane can be annotated with it's voxel, or mm,
+	plane location.</li>
+      <li>The frame rate for "movie loops" or other animations can now
+	be adjusted.</li>
+    </ol>
+  </li>
+
+  <li>The layer restrictions which meant that 4D images needed to be
+    loaded before 3D ones is now lifted, i.e., you can now load a 3D
+    image, add a 4D layer, and still be able to navigate the time
+    dimension of the 4D layer.</li>
+  <li>Timeseries display and FEAT model plotting are now better
+    integrated so that you can choose which combinations of 4D layer
+    and compatible models get shown.</li>
+  <li>Lightbox mode only shows the cursor in the active slice view.</li>
+
+  <li>Printing and SnapShots
+    <ol>
+      <li>The main views can be snapshot to a PNG file - click on the
+	camera tool button. It's still just a snapshot so make your
+	image big on screen to improve the quality.</li>
+      <li>Timeseries plots now have a print button which works the same
+	as the histogram plot. </li> 
+    </ol></li>
+
+  <li>Improved command line options
+    <ol>
+      <li>Can now specify several startup views using, e.g, <kbd>fslview --mode=lightbox,3d ...</kbd></li>
+      <li>You can also specify the strating transparency value for each image</li>
+    </ol></li>
+
+  <li>In the ortho view one can now toggle slice arrangement between
+    the conventional layout, three-in-a-row, and three-in-a-column
+    layouts.  
+
+  <li>Newly cloned mask images always start with a Red-Yellow color
+    map.
+</ul>
+
+<h4>Bug Fixes</h4>
+
+<ul>
+  <li>Can now turn off second (negative) colourmap.</li>
+  <li>Image used for neg lut rendering not linked to current volume number.</li>
+  <li>Overlay layer widget correctly reflects which volume is being displayed.</li>
+  <li>4D timeseries FEAT model viewing showed filtered_func_data
+    timecourses regardless of which 4D image was selected and,
+    consequently, the wrong data for the reported image was being
+    displayed.</li>
+</ul>
+
+
+</body>
+

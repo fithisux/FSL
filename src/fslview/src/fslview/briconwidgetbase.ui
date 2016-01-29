@@ -1,0 +1,241 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>BriConWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>BriConWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>206</width>
+            <height>42</height>
+        </rect>
+    </property>
+    <property name="font">
+        <font>
+            <pointsize>11</pointsize>
+        </font>
+    </property>
+    <property name="caption">
+        <string>Bricon Widget</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout23</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>m_minBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>32767</width>
+                            <height>16</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <pointsize>10</pointsize>
+                        </font>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Minimum brightness value</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <pointsize>10</pointsize>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Max</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <pointsize>10</pointsize>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Min</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>m_maxBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>32767</width>
+                            <height>16</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <pointsize>10</pointsize>
+                        </font>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Maximum brightness value</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QToolButton">
+            <property name="name">
+                <cstring>m_resetBriCon</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>15</width>
+                    <height>32</height>
+                </size>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="iconSet">
+                <iconset>image0</iconset>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Reset contrast and brightness</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout13</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>0</number>
+                </property>
+                <widget class="QwtWheel">
+                    <property name="name">
+                        <cstring>m_briSlider</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>32767</width>
+                            <height>15</height>
+                        </size>
+                    </property>
+                    <property name="totalAngle">
+                        <number>2160</number>
+                    </property>
+                    <property name="tickCnt">
+                        <number>20</number>
+                    </property>
+                    <property name="internalBorder">
+                        <number>1</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Adjust brightness</string>
+                    </property>
+                </widget>
+                <widget class="QwtWheel">
+                    <property name="name">
+                        <cstring>m_conSlider</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>32767</width>
+                            <height>15</height>
+                        </size>
+                    </property>
+                    <property name="totalAngle">
+                        <number>2160</number>
+                    </property>
+                    <property name="tickCnt">
+                        <number>20</number>
+                    </property>
+                    <property name="internalBorder">
+                        <number>1</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Adjust contrast</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </hbox>
+</widget>
+<images>
+    <image name="image0">
+        <data format="XPM.GZ" length="634">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232345330b25030523054d2e152d2534856f0cbcf4b05b195816c65031310044ba10164316522c49491305c9d3204a0e8554690b8c560ba200cd2f462b717abfb88f41b9670514682f8d4e110833b0fc51fd8c28aaa62d8ec25dacd4862b5d65c0003016c89</data>
+    </image>
+</images>
+<tabstops>
+    <tabstop>m_minBox</tabstop>
+    <tabstop>m_maxBox</tabstop>
+    <tabstop>m_briSlider</tabstop>
+    <tabstop>m_conSlider</tabstop>
+</tabstops>
+<layoutdefaults spacing="1" margin="0"/>
+<includehints>
+    <includehint>qwt_wheel.h</includehint>
+    <includehint>qwt_wheel.h</includehint>
+</includehints>
+</UI>
